@@ -1,0 +1,25 @@
+server:
+  port: 8081
+#app:
+#  jwtSecret: asdfghjklpoiuytrewqzxcvbnmqazwsxedcrfvtgbyh
+#  jwtExpirationMs: 86400000
+spring:
+  datasource:
+   
+    url: jdbc:mysql://localhost:3306/azcarsdb
+    username: root
+    password: 1410
+  jpa:
+    hibernate:
+      ddl-auto: update
+  mail:
+    host: smtp.gmail.com
+    password: gjmvfnhtojikmrpa
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    username: leemarkyr@gmail.com
