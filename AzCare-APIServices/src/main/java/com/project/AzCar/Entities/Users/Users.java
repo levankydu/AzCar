@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.project.AzCar.Entities.Cars.CarModelList;
 import com.project.AzCar.Entities.Locations.Addreess;
 
 import jakarta.persistence.CascadeType;
@@ -18,6 +19,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
@@ -32,14 +34,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@Table(name="tbusers")
+@Table(name = "tbusers")
 @Entity
+
 public class Users implements Serializable{
+
 	private static final long serialVersionUID = -2727541742627038300L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Transient
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST,targetEntity = CarModelList.class)
+	private List<CarModelList> cars = new ArrayList<>();
 	private String firstName;
 	private String lastName;
 
@@ -47,12 +55,10 @@ public class Users implements Serializable{
 	private String email;
 	private String password;
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
-    )
-    private List<Roles> roles = new ArrayList<>();
+	@JoinTable(name = "users_roles", joinColumns = {
+			@JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {
+					@JoinColumn(name = "role_id", referencedColumnName = "id") })
+	private List<Roles> roles = new ArrayList<>();
 	private Date dob;
 	private boolean isEnabled;
 	private String gender;
@@ -61,16 +67,16 @@ public class Users implements Serializable{
 	@Column(length = 1024)
 	private String image;
 	@Transient
-	@ManyToMany(mappedBy = "users",fetch = FetchType.LAZY)
-    private List<Addreess> address;
-	
+	@ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+	private List<Addreess> address;
+
 	public Users(String firstName, String email, String password, List<Roles> roles) {
-        this.firstName = firstName;
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
-    }
-	
+		this.firstName = firstName;
+		this.email = email;
+		this.password = password;
+		this.roles = roles;
+	}
+
 	@Transient
 	public boolean hasRole(String roleName) {
 		if (roleName == null) {
