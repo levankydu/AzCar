@@ -10,6 +10,7 @@ import com.project.AzCar.Entities.Cars.CarModelList;
 import com.project.AzCar.Entities.Locations.Addreess;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -21,6 +22,9 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,24 +36,21 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @Table(name = "tbusers")
 @Entity
-public class Users implements Serializable {
 
-	/**
-	 * 
-	 */
+public class Users implements Serializable{
+
 	private static final long serialVersionUID = -2727541742627038300L;
 
 	@Id
-
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Transient
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST,targetEntity = CarModelList.class)
 	private List<CarModelList> cars = new ArrayList<>();
-
 	private String firstName;
 	private String lastName;
+
 	private String phone;
 	private String email;
 	private String password;
@@ -63,6 +64,8 @@ public class Users implements Serializable {
 	private String gender;
 	private BigDecimal balance;
 	private int score;
+	@Column(length = 1024)
+	private String image;
 	@Transient
 	@ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
 	private List<Addreess> address;

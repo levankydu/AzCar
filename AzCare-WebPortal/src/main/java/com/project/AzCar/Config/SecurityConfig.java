@@ -27,15 +27,15 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-		http.csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests((requests) -> requests.requestMatchers("/").permitAll().requestMatchers("/registeradmin").permitAll()
-						.requestMatchers("/register/**").permitAll().requestMatchers("/login/**").permitAll()
-						.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN").requestMatchers("/dashboard/**")
-						.hasAnyRole("ADMIN").anyRequest().authenticated())
+		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests((requests) -> requests.requestMatchers("/").permitAll()
+				.requestMatchers("/registeradmin").permitAll().requestMatchers("/register/**").permitAll()
+				.requestMatchers("/login/**").permitAll().requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+				.requestMatchers("/dashboard/**").hasAnyRole("ADMIN").anyRequest().authenticated())
 				.formLogin((form) -> form.loginPage("/login").usernameParameter("email").passwordParameter("password")
 						.loginProcessingUrl("/dologin").successHandler(new OnAuthenticationSuccessHandler())
 						.failureHandler(new OnAuthenticationFailedHandler()).permitAll())
-				.logout((logout) -> logout.permitAll())
+				.logout((logout) -> logout.permitAll().logoutUrl("/logout").logoutSuccessUrl("/login?logout")
+						.invalidateHttpSession(true).deleteCookies("JSESSIONID"))
 				.exceptionHandling(handling -> handling.accessDeniedPage("/access-denied"));
 		http.authenticationProvider(daoAuthen());
 		return http.build();
