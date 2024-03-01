@@ -38,12 +38,6 @@ public class HomeController {
 		model.addAttribute("user", new Users());
 		return "/authentications/login";
 	}
-//	@PostMapping(value = "/dologin")
-//	public String postLogin(@Valid @ModelAttribute("user") Users user,Model model) {
-//		Users existUser = uServices.findUserByEmail(user.getEmail());
-//
-//		return "/authentications/register";
-//		}
 
 	@GetMapping("/register")
 	public String registrationForm(Model model) {
