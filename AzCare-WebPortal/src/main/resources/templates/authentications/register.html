@@ -8,7 +8,7 @@
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-TAGID');</script> -->
 <!-- End Google Tag Manager -->
-<title>WAIN - Car Dealer HTML Template</title>
+<title>Az Car</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
 <!-- External CSS libraries -->
@@ -65,30 +65,41 @@ End Google Tag Manager (noscript)
 						<div class="details">
 							<!-- Name -->
 							<h3>Create an account</h3>
+							<div th:if="${param.success}">
+								<div class="alert alert-info">Registration successful !!!
+								</div>
+							</div>
 							<!-- Form start-->
 							<form method="post" role="form" th:action="@{/register}"
 								th:object="${user}">
 								<div class="form-group">
 									<input type="text" id="name" name="name" class="input-text"
 										placeholder="Full Name">
+									<p class="text-danger" th:errors="*{name}"></p>
 								</div>
 								<div class="form-group">
-									<input type="email" id="email" name="email" class="input-text"
+									<input type="text" id="email" name="email" class="input-text"
 										placeholder="Email Address">
+									<p class="text-danger" th:errors="*{email}"></p>
 								</div>
 								<div class="form-group">
 									<input type="password" id="password" name="password"
 										class="input-text" placeholder="Password">
+									<p class="text-danger" th:errors="*{password}"></p>
+
 								</div>
 								<div class="form-group">
 									<input type="password" id="confirmPassword"
 										name="confirmPassword" class="input-text"
 										placeholder="Confirm Password">
+									<p class="text-danger" th:errors="*{confirmPassword}"></p>
+
 								</div>
 								<div class="form-group mb-0">
 									<button type="submit" class="btn-md btn-theme"
 										onclick="return form.submit()">Signup</button>
 								</div>
+								
 							</form>
 							<!-- Form end-->
 						</div>

@@ -15,13 +15,15 @@ public class OnAuthenticationFailedHandler implements AuthenticationFailureHandl
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
 		String name = request.getParameter("email");
+//		String password = request.getParameter("password");
 
-		System.out.println("Failed to logged in user: " + name);
-		
 		request.getSession().setAttribute("signin_error", "Wrong email or password!");
 
-		//response.sendError(HttpServletResponse.SC_FORBIDDEN, "Wrong email or password!");
-		//response.sendRedirect("/login?error=" + Base64Helper.encodeUrlValue("Wrong email or password!"));
+		// response.sendError(HttpServletResponse.SC_FORBIDDEN, "Wrong email or
+		// password!");
+		// response.sendRedirect("/login?error=" + Base64Helper.encodeUrlValue("Wrong
+		// email or password!"));
 		response.sendRedirect("/login");
 	}
+
 }

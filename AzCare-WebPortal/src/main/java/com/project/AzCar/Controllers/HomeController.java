@@ -17,6 +17,7 @@ import com.project.AzCar.Dto.Users.UserDto;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Services.Users.UserServices;
 
+
 import jakarta.validation.Valid;
 import net.minidev.json.JSONObject;
 
@@ -35,15 +36,11 @@ public class HomeController {
 
 	@GetMapping("/login")
 	public String getLogin(Model model) {
+
 		model.addAttribute("user", new Users());
+
 		return "/authentications/login";
 	}
-//	@PostMapping(value = "/dologin")
-//	public String postLogin(@Valid @ModelAttribute("user") Users user,Model model) {
-//		Users existUser = uServices.findUserByEmail(user.getEmail());
-//
-//		return "/authentications/register";
-//		}
 
 	@GetMapping("/register")
 	public String registrationForm(Model model) {
@@ -58,6 +55,12 @@ public class HomeController {
 
 		if (existingUser != null) {
 			result.rejectValue("email", null, "User already registered !!!");
+
+		}
+
+		if (!userDto.isPasswordMatching()) {
+			result.rejectValue("confirmPassword", null, "Confirm Password do not match.");
+			return "/authentications/register";
 		}
 
 		if (result.hasErrors()) {
@@ -66,20 +69,20 @@ public class HomeController {
 		}
 
 		uServices.saveUser(userDto);
-		return "/authentications/login";
+//		return "/authentications/login";
+		return "redirect:/register?success";
+
 	}
 
-
-	@GetMapping(path = "/registeradmin" ,produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/registeradmin", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<JSONObject> registrationAdmin(@ModelAttribute UserDto userDto) {
 
 		uServices.saveAdmin(new UserDto());
 
-            JSONObject entity = new JSONObject();
-            entity.put("Code 1", "Created Admin Account");
+		JSONObject entity = new JSONObject();
+		entity.put("Code 1", "Created Admin Account");
 
-
-        return ResponseEntity.ok(entity);
+		return ResponseEntity.ok(entity);
 	}
 }

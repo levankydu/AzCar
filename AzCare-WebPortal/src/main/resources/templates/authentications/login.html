@@ -8,7 +8,7 @@
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-TAGID');</script> -->
 <!-- End Google Tag Manager -->
-<title>WAIN - Car Dealer HTML Template</title>
+<title>Az Car</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
 <!-- External CSS libraries -->
@@ -58,23 +58,37 @@ End Google Tag Manager (noscript)
 					<!-- Form content box start -->
 					<div class="form-content-box">
 						<!-- Logo -->
-						<a href="index.html"> <img src="assets/img/logos/logo.png"
+						<a href="/"> <img src="assets/img/logos/logo.png"
 							class="cm-logo" alt="logo">
 						</a>
 						<!-- details -->
 						<div class="details">
 							<!-- Name -->
 							<h3>Sign into your account</h3>
+	
+							<div th:if="${session.signin_error}">
+								<p class="text-danger" th:text="${session.signin_error}"></p>								<!-- Sau khi hiển thị, xóa thông báo để tránh hiển thị lỗi cũ khi trang được làm mới -->
+								<script th:inline="javascript">
+									
+									setTimeout(
+											function() {
+												document.querySelector('.text-danger').innerText = '';
+											}, 5000); 
+									// 5 seconds
+								</script>
+							</div>
 							<!-- Form start -->
 							<form method="post" role="form" th:action="@{/dologin}"
 								th:object="${user}">
 								<div class="form-group">
 									<input type="email" id="email" name="email" class="input-text"
 										placeholder="Email Address">
+									<p class="text-danger" th:errors="*{email}"></p>
 								</div>
 								<div class="form-group">
 									<input type="password" id="password" name="password"
 										class="input-text" placeholder="Password">
+									<p class="text-danger" th:errors="*{password}"></p>
 								</div>
 								<div class="checkbox">
 									<div class="ez-checkbox pull-left">
@@ -95,7 +109,7 @@ End Google Tag Manager (noscript)
 						</div>
 						<!-- Footer -->
 						<div class="footer">
-							<span> Don't have an account? <a href="register.html">Register
+							<span> Don't have an account? <a href="/register">Register
 									here</a>
 							</span>
 						</div>
