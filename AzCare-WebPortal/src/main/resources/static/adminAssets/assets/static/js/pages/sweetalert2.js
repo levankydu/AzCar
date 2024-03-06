@@ -19,7 +19,7 @@ const Toast = Swal.mixin({
 
 
 
-document.getElementById("basic").addEventListener("click", (e) => {
+/*document.getElementById("basic").addEventListener("click", (e) => {
   Swal2.fire("Any fool can use a computer")
 })
 document.getElementById("footer").addEventListener("click", (e) => {
@@ -160,16 +160,50 @@ document.getElementById("select").addEventListener("click", async (e) => {
   if (fruit) {
     Swal2.fire(`You selected: ${fruit}`)
   }
-})
+})*/
 
 // Toasts
-document.getElementById('toast-success').addEventListener('click', () => {
+/*document.getElementById('toast-success').addEventListener('click', () => {
   Toast.fire({
     icon: 'success',
     title: 'Signed in successfully'
   })
+})*/
+
+if(document.getElementById('toast-success-updated-data')){
+	document.getElementById('toast-success-updated-data').addEventListener('click', () => {
+  Toast.fire({
+    icon: 'success',
+    title: 'Updated successfully'
+  })
 })
-document.getElementById('toast-warning').addEventListener('click', () => {
+}
+if(document.getElementById('toast-failed-updated_data')){
+	document.getElementById('toast-failed-updated_data').addEventListener('click', () => {
+  Toast.fire({
+    icon: 'error',
+    title: 'Images error. Please try again'
+  })
+})
+}
+if(document.getElementById('toast-failed-create_data')){
+	document.getElementById('toast-failed-create_data').addEventListener('click', () => {
+  Toast.fire({
+    icon: 'error',
+    title: 'Input error. Please try again'
+  })
+})
+}
+
+if(document.getElementById('toast-success-created-data')){
+	document.getElementById('toast-success-created-data').addEventListener('click', () => {
+  Toast.fire({
+    icon: 'success',
+    title: 'Created successfully'
+  })
+})
+}
+/*document.getElementById('toast-warning').addEventListener('click', () => {
   Toast.fire({
     icon: 'warning',
     title: 'Please input your email'
@@ -180,4 +214,4 @@ document.getElementById('toast-failed').addEventListener('click', () => {
     icon: 'error',
     title: 'Transaction error. Please try again later'
   })
-})
+})*/

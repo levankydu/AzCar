@@ -49,15 +49,23 @@ public class UserServicesImpl implements UserServices {
 
 
 	@Override
-	public void saveAdmin(UserDto userDto) {
+	public boolean saveAdmin(UserDto userDto) {
 		Roles role = roleRepo.findByName(Constants.Roles.ADMIN);
 
         if (role == null)
             role = roleRepo.save(new Roles(Constants.Roles.ADMIN));
+        Users existingUser = userRepo.findByEmail("admin@admin");
 
-        Users user = new Users("Admin","admin@admin", passwordEncoder.encode("123"),
-                Arrays.asList(role));
-        userRepo.save(user);
+		if (existingUser != null) {
+			return false;
+
+		}else {
+			Users user = new Users("Admin","admin@admin", passwordEncoder.encode("123"),
+	                Arrays.asList(role));
+	        userRepo.save(user);
+	        return true;
+		}
+        
 		
 	}
 

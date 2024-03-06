@@ -2012,9 +2012,10 @@ select.form-control:focus::-ms-value {
 
 .custom-select.is-valid ~ .valid-feedback, .custom-select.is-valid ~
 	.valid-tooltip, .form-control.is-valid ~ .valid-feedback, .form-control.is-valid 
-	~ .valid-tooltip, .was-validated .custom-select:valid ~ .valid-feedback,
-	.was-validated .custom-select:valid ~ .valid-tooltip, .was-validated .form-control:valid 
-	~ .valid-feedback, .was-validated .form-control:valid ~ .valid-tooltip
+	 ~ .valid-tooltip, .was-validated .custom-select:valid ~
+	.valid-feedback, .was-validated .custom-select:valid ~ .valid-tooltip,
+	.was-validated .form-control:valid 
+	 ~ .valid-feedback, .was-validated .form-control:valid ~ .valid-tooltip
 	{
 	display: block
 }
@@ -2037,7 +2038,7 @@ select.form-control:focus::-ms-value {
 }
 
 .custom-file-input.is-valid ~ .custom-file-control, .was-validated .custom-file-input:valid 
-	~ .custom-file-control {
+	 ~ .custom-file-control {
 	border-color: #28a745
 }
 
@@ -2086,9 +2087,9 @@ select.form-control:focus::-ms-value {
 }
 
 .custom-select.is-invalid ~ .invalid-feedback, .custom-select.is-invalid 
-	~ .invalid-tooltip, .form-control.is-invalid ~ .invalid-feedback,
+	 ~ .invalid-tooltip, .form-control.is-invalid ~ .invalid-feedback,
 	.form-control.is-invalid ~ .invalid-tooltip, .was-validated .custom-select:invalid 
-	~ .invalid-feedback, .was-validated .custom-select:invalid ~
+	 ~ .invalid-feedback, .was-validated .custom-select:invalid ~
 	.invalid-tooltip, .was-validated .form-control:invalid ~
 	.invalid-feedback, .was-validated .form-control:invalid ~
 	.invalid-tooltip {
@@ -2113,7 +2114,7 @@ select.form-control:focus::-ms-value {
 }
 
 .custom-file-input.is-invalid ~ .custom-file-control, .was-validated .custom-file-input:invalid 
-	~ .custom-file-control {
+	 ~ .custom-file-control {
 	border-color: #dc3545
 }
 

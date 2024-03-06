@@ -29,9 +29,7 @@ public class BrandImages implements Serializable{/**
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	private String ImageUrl;
+	private String ImageUrl= null;
+	private String brandName;
 	
-	@Transient
-	@OneToMany(mappedBy = "brandImages", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-	private int brandId;
 }

@@ -1,4 +1,4 @@
-@charset "UTF-8"; 
+@charset "UTF-8";
 
 html[data-bs-theme=dark] {
 	--bs-blue: #435ebe;
@@ -855,13 +855,13 @@ html[data-bs-theme=dark] div:where(.swal2-container) .swal2-progress-steps .swal
 }
 
 html[data-bs-theme=dark] div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step.swal2-active-progress-step
-	~.swal2-progress-step {
+	 ~.swal2-progress-step {
 	background: #58585b;
 	color: #fff
 }
 
 html[data-bs-theme=dark] div:where(.swal2-container) .swal2-progress-steps .swal2-progress-step.swal2-active-progress-step
-	~.swal2-progress-step-line {
+	 ~.swal2-progress-step-line {
 	background: #58585b
 }
 
@@ -1123,28 +1123,68 @@ keyframes swal2-toast-show { 0%{
 }
 
 33
+
+
 %
 {
 transform
+
+
 :
-translateY(
+
+
+translateY
+(
+
+
 0
+
+
 )
-rotate(
+
+
+rotate
+(
+
+
 2deg
+
+
 )
+
+
 }
 66
+
+
 %
 {
 transform
+
+
 :
-translateY(
+
+
+translateY
+(
+
+
 .3125em
+
+
 )
-rotate(
+
+
+rotate
+(
+
+
 -2deg
+
+
 )
+
+
 }
 to {
 	transform: translateY(0) rotate(0)
@@ -1166,43 +1206,112 @@ keyframes swal2-toast-animate-success-line-tip { 0%{
 }
 
 54
+
+
 %
 {
 top
+
+
 :
-.125em;
+
+
+.125em
+;
+
+
 right
+
+
 :
-.125em;
+
+
+.125em
+;
+
+
 width
+
+
 :
+
+
 0
+
+
 }
 70
+
+
 %
 {
 top
+
+
 :
-.625em;
+
+
+.625em
+;
+
+
 right
+
+
 :
--.25em;
+
+
+-
+.25em
+;
+
+
 width
+
+
 :
-1.625em
+
+
+1
+.625em
+
+
 }
 84
+
+
 %
 {
 top
+
+
 :
-1.0625em;
+
+
+1
+.0625em
+;
+
+
 right
+
+
 :
-.75em;
+
+
+.75em
+;
+
+
 width
+
+
 :
+
+
 .5em
+
+
 }
 to {
 	top: 1.125em;
@@ -1219,30 +1328,76 @@ keyframes swal2-toast-animate-success-line-long { 0%{
 }
 
 65
+
+
 %
 {
 top
+
+
 :
-1.25em;
+
+
+1
+.25em
+;
+
+
 left
+
+
 :
-.9375em;
+
+
+.9375em
+;
+
+
 width
+
+
 :
+
+
 0
+
+
 }
 84
+
+
 %
 {
 top
+
+
 :
-.9375em;
+
+
+.9375em
+;
+
+
 left
+
+
 :
-0;
+
+
+0
+;
+
+
 width
+
+
 :
-1.125em
+
+
+1
+.125em
+
+
 }
 to {
 	top: .9375em;
@@ -1257,22 +1412,49 @@ keyframes swal2-show { 0%{
 }
 
 45
+
+
 %
 {
 transform
+
+
 :
-scale(
-1.05
+
+
+scale
+(
+
+
+1
+.05
+
+
 )
+
+
 }
 80
+
+
 %
 {
 transform
+
+
 :
-scale(
+
+
+scale
+(
+
+
 .95
+
+
 )
+
+
 }
 to {
 	transform: scale(1)
@@ -1299,43 +1481,115 @@ keyframes swal2-animate-success-line-tip { 0%{
 }
 
 54
+
+
 %
 {
 top
+
+
 :
-1.0625em;
+
+
+1
+.0625em
+;
+
+
 right
+
+
 :
-.125em;
+
+
+.125em
+;
+
+
 width
+
+
 :
+
+
 0
+
+
 }
 70
+
+
 %
 {
 top
+
+
 :
-2.1875em;
+
+
+2
+.1875em
+;
+
+
 right
+
+
 :
--.375em;
+
+
+-
+.375em
+;
+
+
 width
+
+
 :
-3.125em
+
+
+3
+.125em
+
+
 }
 84
+
+
 %
 {
 top
+
+
 :
-3em;
+
+
+3em
+;
+
+
 right
+
+
 :
-1.3125em;
+
+
+1
+.3125em
+;
+
+
 width
+
+
 :
-1.0625em
+
+
+1
+.0625em
+
+
 }
 to {
 	top: 2.8125em;
@@ -1352,30 +1606,78 @@ keyframes swal2-animate-success-line-long { 0%{
 }
 
 65
+
+
 %
 {
 top
+
+
 :
-3.375em;
+
+
+3
+.375em
+;
+
+
 left
+
+
 :
-2.875em;
+
+
+2
+.875em
+;
+
+
 width
+
+
 :
+
+
 0
+
+
 }
 84
+
+
 %
 {
 top
+
+
 :
-2.1875em;
+
+
+2
+.1875em
+;
+
+
 left
+
+
 :
-0;
+
+
+0
+;
+
+
 width
+
+
 :
-3.4375em
+
+
+3
+.4375em
+
+
 }
 to {
 	top: 2.375em;
@@ -1390,22 +1692,48 @@ keyframes swal2-rotate-success-circular-line { 0%{
 }
 
 5
+
+
 %
 {
 transform
+
+
 :
-rotate(
+
+
+rotate
+(
+
+
 45deg
+
+
 )
+
+
 }
 12
+
+
 %
 {
 transform
+
+
 :
-rotate(
+
+
+rotate
+(
+
+
 405deg
+
+
 )
+
+
 }
 to {
 	transform: rotate(405deg)
@@ -1420,31 +1748,81 @@ keyframes swal2-animate-error-x-mark { 0%{
 }
 
 50
+
+
 %
 {
 margin-top
+
+
 :
-1.625em;
+
+
+1
+.625em
+;
+
+
 transform
+
+
 :
-scale(
+
+
+scale
+(
+
+
 .4
-);
+
+
+)
+;
+
+
 opacity
+
+
 :
+
+
 0
+
+
 }
 80
+
+
 %
 {
 margin-top
+
+
 :
--.375em;
+
+
+-
+.375em
+;
+
+
 transform
+
+
 :
-scale(
-1.15
+
+
+scale
+(
+
+
+1
+.15
+
+
 )
+
+
 }
 to {
 	margin-top: 0;
@@ -1492,40 +1870,100 @@ keyframes swal2-animate-i-mark { 0%{
 }
 
 25
+
+
 %
 {
 transform
+
+
 :
-rotate(
+
+
+rotate
+(
+
+
 25deg
-);
+
+
+)
+;
+
+
 opacity
+
+
 :
+
+
 .4
+
+
 }
 50
+
+
 %
 {
 transform
+
+
 :
-rotate(
+
+
+rotate
+(
+
+
 -15deg
-);
+
+
+)
+;
+
+
 opacity
+
+
 :
+
+
 .8
+
+
 }
 75
+
+
 %
 {
 transform
+
+
 :
-rotate(
+
+
+rotate
+(
+
+
 5deg
-);
+
+
+)
+;
+
+
 opacity
+
+
 :
+
+
 1
+
+
 }
 to {
 	transform: rotateX(0);
@@ -4108,16 +4546,16 @@ html[data-bs-theme=dark] .form-floating>.form-select {
 }
 
 html[data-bs-theme=dark] .form-floating>.form-control:focus ~label, html[data-bs-theme=dark] .form-floating>.form-control:not(:placeholder-shown)
-	~label, html[data-bs-theme=dark] .form-floating>.form-control-plaintext
-	~label, html[data-bs-theme=dark] .form-floating>.form-select ~label {
+	 ~label, html[data-bs-theme=dark] .form-floating>.form-control-plaintext
+	 ~label, html[data-bs-theme=dark] .form-floating>.form-select ~label {
 	color: rgba(var(--bs-body-color-rgb), .65);
 	transform: scale(.85) translateY(-.5rem) translate(-0.15rem)
 }
 
 html[data-bs-theme=dark] .form-floating>.form-control:focus ~label:after,
 	html[data-bs-theme=dark] .form-floating>.form-control:not(:placeholder-shown)
-	~label:after, html[data-bs-theme=dark] .form-floating>.form-control-plaintext
-	~label:after, html[data-bs-theme=dark] .form-floating>.form-select ~label:after
+	 ~label:after, html[data-bs-theme=dark] .form-floating>.form-control-plaintext
+	 ~label:after, html[data-bs-theme=dark] .form-floating>.form-select ~label:after
 	{
 	position: absolute;
 	inset: 1rem .375rem;
@@ -4128,8 +4566,8 @@ html[data-bs-theme=dark] .form-floating>.form-control:focus ~label:after,
 	border-radius: .25rem
 }
 
-html[data-bs-theme=dark] .form-floating>.form-control:-webkit-autofill ~label
-	{
+html[data-bs-theme=dark] .form-floating>.form-control:-webkit-autofill 
+	~label {
 	color: rgba(var(--bs-body-color-rgb), .65);
 	transform: scale(.85) translateY(-.5rem) translate(-0.15rem)
 }
@@ -4139,12 +4577,12 @@ html[data-bs-theme=dark] .form-floating>.form-control-plaintext ~label {
 }
 
 html[data-bs-theme=dark] .form-floating>:disabled ~label, html[data-bs-theme=dark] .form-floating>.form-control:disabled
-	~label {
+	 ~label {
 	color: #6c757d
 }
 
 html[data-bs-theme=dark] .form-floating>:disabled ~label:after, html[data-bs-theme=dark] .form-floating>.form-control:disabled
-	~label:after {
+	 ~label:after {
 	background-color: #40404d
 }
 
@@ -4270,7 +4708,7 @@ html[data-bs-theme=dark] .valid-tooltip {
 
 .was-validated html[data-bs-theme=dark]:valid ~.valid-feedback,
 	.was-validated html[data-bs-theme=dark]:valid ~.valid-tooltip, html[data-bs-theme=dark].is-valid
-	~.valid-feedback, html[data-bs-theme=dark].is-valid ~.valid-tooltip {
+	 ~.valid-feedback, html[data-bs-theme=dark].is-valid ~.valid-tooltip {
 	display: block
 }
 
@@ -4386,7 +4824,7 @@ html[data-bs-theme=dark] .invalid-tooltip {
 
 .was-validated html[data-bs-theme=dark]:invalid ~.invalid-feedback,
 	.was-validated html[data-bs-theme=dark]:invalid ~.invalid-tooltip, html[data-bs-theme=dark].is-invalid
-	~.invalid-feedback, html[data-bs-theme=dark].is-invalid ~.invalid-tooltip
+	 ~.invalid-feedback, html[data-bs-theme=dark].is-invalid ~.invalid-tooltip
 	{
 	display: block
 }
@@ -8114,14 +8552,29 @@ keyframes spinner-grow { 0%{
 }
 
 50
+
+
 %
 {
 opacity
+
+
 :
-1;
+
+
+1
+;
+
+
 transform
+
+
 :
+
+
 none
+
+
 }
 }
 html[data-bs-theme=dark] .spinner-grow {
@@ -9427,8 +9880,8 @@ html[data-bs-theme=dark] .form-group.with-title .form-control, html[data-bs-them
 }
 
 html[data-bs-theme=dark] .form-group.with-title .form-control:focus ~label,
-	html[data-bs-theme=dark] .form-group.with-title dataTable-input:focus ~label
-	{
+	html[data-bs-theme=dark] .form-group.with-title dataTable-input:focus 
+	~label {
 	border-right: 1px solid #435ebe;
 	border-top: 1px solid #435ebe;
 	border-left: 1px solid #435ebe
@@ -9455,8 +9908,8 @@ html[data-bs-theme=dark] .form-group[class*=has-icon-].has-icon-right .form-cont
 }
 
 html[data-bs-theme=dark] .form-group[class*=has-icon-] .form-control:focus
-	~.form-control-icon i, html[data-bs-theme=dark] .form-group[class*=has-icon-] .form-control:focus
-	~.form-control-icon svg {
+	 ~.form-control-icon i, html[data-bs-theme=dark] .form-group[class*=has-icon-] .form-control:focus
+	 ~.form-control-icon svg {
 	color: #5a8dee
 }
 
@@ -9466,12 +9919,12 @@ html[data-bs-theme=dark] .form-group[class*=has-icon-] .form-control.form-contro
 }
 
 html[data-bs-theme=dark] .form-group[class*=has-icon-] .form-control.form-control-xl
-	~.form-control-icon i {
+	 ~.form-control-icon i {
 	font-size: 1.6rem
 }
 
 html[data-bs-theme=dark] .form-group[class*=has-icon-] .form-control.form-control-xl
-	~.form-control-icon i:before {
+	 ~.form-control-icon i:before {
 	color: #a6a8aa
 }
 
@@ -11082,7 +11535,7 @@ html[data-bs-theme=dark] .dataTable-input:focus {
 }
 
 html[data-bs-theme=dark] .was-validated :valid ~.valid-feedback, html[data-bs-theme=dark] .was-validated :valid
-	~.valid-tooltip, html[data-bs-theme=dark] .is-valid ~.valid-feedback,
+	 ~.valid-tooltip, html[data-bs-theme=dark] .is-valid ~.valid-feedback,
 	html[data-bs-theme=dark] .is-valid ~.valid-tooltip {
 	display: block
 }
@@ -11090,6 +11543,6 @@ html[data-bs-theme=dark] .was-validated :valid ~.valid-feedback, html[data-bs-th
 html[data-bs-theme=dark] .was-validated :invalid ~.invalid-feedback,
 	html[data-bs-theme=dark] .was-validated :invalid ~.invalid-tooltip,
 	html[data-bs-theme=dark] .is-invalid ~.invalid-feedback, html[data-bs-theme=dark] .is-invalid
-	~.invalid-tooltip {
+	 ~.invalid-tooltip {
 	display: block
 }
