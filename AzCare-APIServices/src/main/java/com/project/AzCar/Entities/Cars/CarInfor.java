@@ -14,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -57,7 +58,7 @@ public class CarInfor implements Serializable {
 	private List<CarImages> carImages = new ArrayList<>();
 	
 	@Transient
-	@OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST,mappedBy = "carModelList")
+	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST,mappedBy = "cars")
 	private int modelId;
 
 	private BigDecimal price;

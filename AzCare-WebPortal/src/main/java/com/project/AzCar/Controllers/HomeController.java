@@ -78,11 +78,21 @@ public class HomeController {
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<JSONObject> registrationAdmin(@ModelAttribute UserDto userDto) {
 
-		uServices.saveAdmin(new UserDto());
+		if(uServices.saveAdmin(new UserDto())) {
+			JSONObject entity = new JSONObject();
+			entity.put("Code 1", "Created Admin Account");
 
-		JSONObject entity = new JSONObject();
-		entity.put("Code 1", "Created Admin Account");
+			return ResponseEntity.ok(entity);
+		}
+		else {
+			JSONObject entity = new JSONObject();
+			entity.put("Code 0", "Created Admin Account Fail, Addmin Account already created");
 
-		return ResponseEntity.ok(entity);
+			return ResponseEntity.ok(entity);
+		}
+		
+		
+
+		
 	}
 }

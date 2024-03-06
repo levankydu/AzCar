@@ -685,14 +685,29 @@
 }
 
 75
+
+
 %
 {
 opacity
+
+
 :
-.5;
+
+
+.5
+;
+
+
 top
+
+
 :
+
+
 0
+
+
 }
 to {
 	opacity: 1
@@ -706,14 +721,29 @@ keyframes fadeIn { 0%{
 }
 
 75
+
+
 %
 {
 opacity
+
+
 :
-.5;
+
+
+.5
+;
+
+
 top
+
+
 :
+
+
 0
+
+
 }
 to {
 	opacity: 1

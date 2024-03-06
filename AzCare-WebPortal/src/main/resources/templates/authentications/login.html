@@ -65,9 +65,10 @@ End Google Tag Manager (noscript)
 						<div class="details">
 							<!-- Name -->
 							<h3>Sign into your account</h3>
-	
+
 							<div th:if="${session.signin_error}">
-								<p class="text-danger" th:text="${session.signin_error}"></p>								<!-- Sau khi hiển thị, xóa thông báo để tránh hiển thị lỗi cũ khi trang được làm mới -->
+								<p class="text-danger" th:text="${session.signin_error}"></p>
+								<!-- Sau khi hiển thị, xóa thông báo để tránh hiển thị lỗi cũ khi trang được làm mới -->
 								<script th:inline="javascript">
 									
 									setTimeout(
