@@ -5,19 +5,19 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.annotation.Generated;
+import com.project.AzCar.Entities.Locations.Addreess;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -59,10 +59,17 @@ public class CarInfor implements Serializable {
 	
 	@Transient
 	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST,mappedBy = "cars")
-	private int modelId;
+	private String modelId;
 
 	private BigDecimal price;
 	private String description;
-	private int maxDistance;
-
+	private boolean isCarPlus;
+	private boolean isExtraFee;
+	private boolean isFastBooking;
+	private int discount;
+	private String rules;
+	@Transient
+	@ManyToMany(mappedBy = "cars", fetch = FetchType.EAGER)
+	private List<Addreess> address;
+	
 }
