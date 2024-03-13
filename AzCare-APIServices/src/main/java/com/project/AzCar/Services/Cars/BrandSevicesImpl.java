@@ -54,6 +54,26 @@ public class BrandSevicesImpl implements BrandServices{
 		return brandRepo.getCategoryList();
 	}
 
+	@Override
+	public List<String> getCategoryListByBrand(String brandName) {
+		return brandRepo.getCategoryListByBrand(brandName);
+	}
+
+	@Override
+	public List<String> getModelListByCateAndBrand(String brandName, String cateName) {
+		return brandRepo.getModelListByCateAndBrand(brandName, cateName);
+	}
+
+	@Override
+	public List<String> getYear(String brandName, String cateName, String modelName) {
+		return brandRepo.getYearList(brandName, cateName, modelName);
+	}
+
+	@Override
+	public String getModelId(String brandName, String cateName, String modelName, int year) {
+		return brandRepo.getModelId(brandName, cateName, modelName, year);
+	}
+
 	
 
 }
