@@ -75,26 +75,22 @@ public class UserServicesImpl implements UserServices {
 
 			userRepo.save(existingUser);
 
-			return convertToDto(existingUser);
-		} else {
-
-			return null;
-		}
-	}
-
-	private UserDto convertToDto(Users userEntity) {
-		UserDto userDto = new UserDto();
-		BeanUtils.copyProperties(userEntity, userDto);
-		return userDto;
-	}
-
 	@Override
-	public void changePassword(String email, String newPassword) {
-		Users user = userRepo.findByEmail(email);
-		user.setPassword(newPassword);
-		userRepo.save(user);
-		
+	public boolean saveAdmin(UserDto userDto) {
+		Roles role = roleRepo.findByName(Constants.Roles.ADMIN);
+
+        if (role == null)
+            role = roleRepo.save(new Roles(Constants.Roles.ADMIN));
+        Users existingUser = userRepo.findByEmail("admin@admin");
+
+		if (existingUser != null) {
+			return false;
+
+		}else {
+			Users user = new Users("Admin","admin@admin", passwordEncoder.encode("123"),
+	                Arrays.asList(role));
+	        userRepo.save(user);
+	        return true;
+		}   		
 	}
-
-
 }

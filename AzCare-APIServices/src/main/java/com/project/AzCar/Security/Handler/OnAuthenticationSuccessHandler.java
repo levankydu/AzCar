@@ -21,14 +21,6 @@ public class OnAuthenticationSuccessHandler implements AuthenticationSuccessHand
 
 		request.getSession().removeAttribute("signin_error");
 
-//		if (authentication.getAuthorities().toString().contains(Constants.Roles.USER)) {
-//			request.getSession().setAttribute("user", name);
-//			request.getSession().setAttribute("role", "user");
-//			response.sendRedirect("/");
-//		} else {
-//			request.getSession().setAttribute("admin", name);
-//			response.sendRedirect("dashboard/");
-//		}
 		if (authentication.getAuthorities().toString().contains(Constants.Roles.USER)) {
 			// User role
 			request.getSession().setAttribute("isAuthen", "a");

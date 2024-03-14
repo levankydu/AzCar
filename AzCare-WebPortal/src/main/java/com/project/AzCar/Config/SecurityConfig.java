@@ -27,7 +27,7 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests((requests) -> requests.requestMatchers("/").permitAll()
+		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests((requests) -> requests.requestMatchers("/").permitAll().requestMatchers("/home/carregister/**").permitAll()
 				.requestMatchers("/registeradmin").permitAll().requestMatchers("/register/**").permitAll()
 				.requestMatchers("/login/**").permitAll().requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
 				.requestMatchers("/dashboard/**").hasAnyRole("ADMIN").anyRequest().authenticated())
@@ -62,4 +62,7 @@ public class SecurityConfig {
 		return authProvider;
 
 	}
+	
+	
+	
 }

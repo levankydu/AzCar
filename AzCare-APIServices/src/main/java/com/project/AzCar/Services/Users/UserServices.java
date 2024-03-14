@@ -9,11 +9,8 @@ import com.project.AzCar.Entities.Users.Users;
 
 @Service
 public interface UserServices {
-
 	void saveUser(UserDto userDto);
-
-	void saveAdmin(UserDto userDto);
-
+	boolean saveAdmin(UserDto userDto);
 	UserDto editProfile(String email, UserDto updatedUserDto);
 	void changePassword(String email, String newPassword);
 

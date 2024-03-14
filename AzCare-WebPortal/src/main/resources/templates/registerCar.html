@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+<title>Az CAR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<!-- External CSS libraries -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/magnific-popup.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.selectBox.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/rangeslider.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/animate.min.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/slick.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.mCustomScrollbar.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/flaticon/font/flaticon.css">
+
+<!-- Favicon icon -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico"
+	type="image/x-icon">
+
+<!-- Google fonts -->
+<link rel="stylesheet" type="text/css"
+	href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
+
+<!-- Custom Stylesheet -->
+<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" type="text/css" id="style_sheet"
+	href="/assets/css/skins/default.css">
+
+</head>
+<style>
+.selected {
+	border: 1px solid blue;
+}
+
+.img-container {
+	position: relative;
+	display: inline-block;
+}
+
+.img-container button {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+
+.img-thumbnail {
+	width: 150px;
+	height: 150px;
+	margin: 5px;
+}
+</style>
+<body id="top">
+	<!-- main header start -->
+	<header class="main-header sticky-header header-with-top"
+		id="main-header-2">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<nav class="navbar navbar-expand-lg navbar-light rounded">
+						<a class="navbar-brand logo navbar-brand d-flex w-50 mr-auto"
+							href="index.html"> <img src="assets/img/logos/black-logo.png"
+							alt="logo">
+						</a>
+						<button class="navbar-toggler" type="button"
+							data-toggle="collapse" data-target="#navbar"
+							aria-controls="navbar" aria-expanded="false"
+							aria-label="Toggle navigation">
+							<span class="fa fa-bars"></span>
+						</button>
+						<div class="navbar-collapse collapse w-100" id="navbar">
+							<ul class="navbar-nav ml-auto">
+								<li class="nav-item dropdown"><a
+									class="nav-link dropdown-toggle" href="#"
+									id="navbarDropdownMenuLink" data-toggle="dropdown"
+									aria-haspopup="true" aria-expanded="false"> Index </a>
+									<ul class="dropdown-menu"
+										aria-labelledby="navbarDropdownMenuLink">
+										<li><a class="dropdown-item" href="index.html">Index
+												1</a></li>
+										<li><a class="dropdown-item" href="index-2.html">Index
+												2</a></li>
+										<li><a class="dropdown-item" href="index-3.html">Index
+												3</a></li>
+										<li><a class="dropdown-item" href="index-4.html">Index
+												4</a></li>
+										<li><a class="dropdown-item" href="index-5.html">Index
+												5</a></li>
+										<li><a class="dropdown-item" href="index-6.html">Index
+												6</a></li>
+										<li><a class="dropdown-item" href="index-7.html">Index
+												7 (Video)</a></li>
+									</ul></li>
+								<li class="nav-item dropdown"><a
+									class="nav-link dropdown-toggle" href="#"
+									id="navbarDropdownMenuLink2" data-toggle="dropdown"
+									aria-haspopup="true" aria-expanded="false"> Vehicle </a>
+									<ul class="dropdown-menu"
+										aria-labelledby="navbarDropdownMenuLink">
+										<li class="dropdown-submenu"><a
+											class="dropdown-item dropdown-toggle" href="#">List
+												Layout</a>
+											<ul class="dropdown-menu">
+												<li><a class="dropdown-item"
+													href="car-list-rightside.html">Right Sidebar</a></li>
+												<li><a class="dropdown-item"
+													href="car-list-leftside.html">Left Sidebar</a></li>
+												<li><a class="dropdown-item"
+													href="car-list-fullwidth.html">Fullwidth</a></li>
+											</ul></li>
+										<li class="dropdown-submenu"><a
+											class="dropdown-item dropdown-toggle" href="#">Grid
+												Layout</a>
+											<ul class="dropdown-menu">
+												<li><a class="dropdown-item"
+													href="car-grid-rightside.html">Right Sidebar</a></li>
+												<li><a class="dropdown-item"
+													href="car-grid-leftside.html">Left Sidebar</a></li>
+												<li><a class="dropdown-item"
+													href="car-grid-fullwidth.html">Fullwidth</a></li>
+											</ul></li>
+										<li class="dropdown-submenu"><a
+											class="dropdown-item dropdown-toggle" href="#">Car
+												Details</a>
+											<ul class="dropdown-menu">
+												<li><a class="dropdown-item" href="car-details.html">Car
+														Detail 1</a></li>
+												<li><a class="dropdown-item" href="car-details-2.html">Car
+														Detail 2</a></li>
+											</ul></li>
+									</ul></li>
+								<li class="nav-item dropdown megamenu-li active"><a
+									class="nav-link dropdown-toggle" href="" id="dropdown01"
+									data-toggle="dropdown" aria-haspopup="true"
+									aria-expanded="false">Pages</a>
+									<div class="dropdown-menu megamenu"
+										aria-labelledby="dropdown01">
+										<div class="megamenu-area">
+											<div class="row">
+												<div class="col-sm-6 col-lg-3">
+													<div class="megamenu-section">
+														<h6 class="megamenu-title">Pages</h6>
+														<a class="dropdown-item" href="about-1.html">About 1</a> <a
+															class="dropdown-item" href="about-2.html">About 2</a> <a
+															class="dropdown-item" href="car-comparison.html">Car
+															Comparison</a> <a class="dropdown-item"
+															href="search-brand.html">Car Brands</a> <a
+															class="dropdown-item" href="services-1.html">Services
+															1</a> <a class="dropdown-item" href="services-2.html">Services
+															2</a> <a class="dropdown-item" href="coming-soon.html">Coming
+															Soon</a>
+													</div>
+												</div>
+												<div class="col-sm-6 col-lg-3">
+													<div class="megamenu-section">
+														<h6 class="megamenu-title">Pages</h6>
+														<a class="dropdown-item" href="agent-list.html">Agent
+															List 1</a> <a class="dropdown-item" href="agent-list-2.html">Agent
+															List 2</a> <a class="dropdown-item" href="agent-grid.html">Agent
+															Grid 1</a> <a class="dropdown-item" href="agent-grid-2.html">Agent
+															Grid 2</a> <a class="dropdown-item" href="agent-grid-3.html">Agent
+															Grid 3</a> <a class="dropdown-item" href="agent-detail.html">Agent
+															Detail</a> <a class="dropdown-item" href="typography.html">Typography</a>
+													</div>
+												</div>
+												<div class="col-sm-6 col-lg-3">
+													<div class="megamenu-section">
+														<h6 class="megamenu-title">Pages</h6>
+														<a class="dropdown-item" href="pricing-tables-1.html">Pricing
+															Tables 1</a> <a class="dropdown-item"
+															href="pricing-tables-2.html">Pricing Tables 2</a> <a
+															class="dropdown-item" href="pricing-tables-3.html">Pricing
+															Tables 3</a> <a class="dropdown-item"
+															href="gallery-2column.html">Gallery 2 column</a> <a
+															class="dropdown-item" href="gallery-3column.html">Gallery
+															3 column</a> <a class="dropdown-item"
+															href="gallery-4column.html">Gallery 4 column</a> <a
+															class="dropdown-item" href="typography-2.html">Typography
+															2</a>
+													</div>
+												</div>
+												<div class="col-sm-6 col-lg-3">
+													<div class="megamenu-section">
+														<h6 class="megamenu-title">Pages</h6>
+														<a class="dropdown-item" href="faq-1.html">Faq 1</a> <a
+															class="dropdown-item" href="faq-2.html">Faq 2</a> <a
+															class="dropdown-item" href="pages-404.html">Pages 404</a>
+														<a class="dropdown-item" href="login.html">Login</a> <a
+															class="dropdown-item" href="forgot-password.html">Forgot
+															Password</a> <a class="dropdown-item" href="register.html">Register</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div></li>
+								<li class="nav-item dropdown"><a
+									class="nav-link dropdown-toggle" href="#"
+									id="navbarDropdownMenuLink5" data-toggle="dropdown"
+									aria-haspopup="true" aria-expanded="false"> Blog </a>
+									<ul class="dropdown-menu"
+										aria-labelledby="navbarDropdownMenuLink">
+										<li class="dropdown-submenu"><a
+											class="dropdown-item dropdown-toggle" href="#">Classic</a>
+											<ul class="dropdown-menu">
+												<li><a class="dropdown-item"
+													href="blog-classic-sidebar-right.html">Right Sidebar</a></li>
+												<li><a class="dropdown-item"
+													href="blog-classic-sidebar-left.html">Left Sidebar</a></li>
+												<li><a class="dropdown-item"
+													href="blog-classic-fullwidth.html">FullWidth</a></li>
+											</ul></li>
+										<li class="dropdown-submenu"><a
+											class="dropdown-item dropdown-toggle" href="#">Columns</a>
+											<ul class="dropdown-menu">
+												<li><a class="dropdown-item"
+													href="blog-columns-2col.html">2 Columns</a></li>
+												<li><a class="dropdown-item"
+													href="blog-columns-3col.html">3 Columns</a></li>
+											</ul></li>
+										<li class="dropdown-submenu"><a
+											class="dropdown-item dropdown-toggle" href="#">Masonry</a>
+											<ul class="dropdown-menu">
+												<li><a class="dropdown-item"
+													href="blog-masonry-2col.html">2 Masonry</a></li>
+												<li><a class="dropdown-item"
+													href="blog-masonry-3col.html">3 Masonry</a></li>
+											</ul></li>
+										<li class="dropdown-submenu"><a
+											class="dropdown-item dropdown-toggle" href="#">Blog
+												Details</a>
+											<ul class="dropdown-menu">
+												<li><a class="dropdown-item"
+													href="blog-single-sidebar-right.html">Right Sidebar</a></li>
+												<li><a class="dropdown-item"
+													href="blog-single-sidebar-left.html">Left Sidebar</a></li>
+												<li><a class="dropdown-item"
+													href="blog-single-fullwidth.html">Fullwidth</a></li>
+											</ul></li>
+									</ul></li>
+								<li class="nav-item dropdown"><a
+									class="nav-link dropdown-toggle" href="#" id="navbarDropdown4"
+									role="button" data-toggle="dropdown" aria-haspopup="true"
+									aria-expanded="false"> Shop </a>
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown3">
+										<a class="dropdown-item" href="shop-list.html">Shop List</a> <a
+											class="dropdown-item" href="shop-cart.html">Shop Cart</a> <a
+											class="dropdown-item" href="shop-checkout.html">Shop
+											Checkout</a> <a class="dropdown-item" href="shop-single.html">Shop
+											Details</a>
+									</div></li>
+								<li class="nav-item dropdown"><a
+									class="nav-link dropdown-toggle" href="#" id="navbarDropdown3"
+									role="button" data-toggle="dropdown" aria-haspopup="true"
+									aria-expanded="false"> Contact </a>
+									<div class="dropdown-menu" aria-labelledby="navbarDropdown3">
+										<a class="dropdown-item" href="contact-1.html">Contact 1</a> <a
+											class="dropdown-item" href="contact-2.html">Contact 2</a> <a
+											class="dropdown-item" href="contact-3.html">Contact 3</a>
+									</div></li>
+								<li class="nav-item dropdown"><a href="#full-page-search"
+									class="nav-link"> <i class="fa fa-search"></i>
+								</a></li>
+							</ul>
+						</div>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- main header end -->
+
+	<!-- Sub banner start -->
+	<div class="sub-banner overview-bgi">
+		<div class="container">
+			<div class="page-name">
+				<h1>Car Register</h1>
+			</div>
+		</div>
+		<div class="page-info">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-5">
+						<div class="breadcrumb-area">
+							<ul>
+								<li><a href="index.html">Index</a></li>
+								<li><span>/</span>Car Register</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-7">
+						<div class="contact-info">
+							<ul>
+								<li><i class="fa fa-phone"></i> +1-8X0-666-8X88</li>
+								<li><a href="contact-1.html" class="btn btn-md btn-theme">Contact
+										us</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Sub banner end -->
+
+	<!-- Agent page start -->
+	<div class="agent-page content-area-2">
+		<!-- Agent detail start -->
+		<div class="agent-detail">
+			<div class="container">
+				<div class="row ">
+					<h4 class="col-8 offset-md-2"
+						style="text-align: center; font-weight: bold;">Register Car
+						Step-by-Step</h4>
+					<div class="col-8 offset-md-2">
+						<div class="agent-description">
+							<div class="tabbing tabbing-box mb-30">
+								<ul class="nav nav-tabs" id="carTab" role="tablist"
+									style="pointer-events: none;">
+									<li class="nav-item"><a class="nav-link active show"
+										id="one-tab" data-toggle="tab" href="#one" role="tab"
+										aria-controls="one" aria-selected="false">Information</a></li>
+									<li class="nav-item"><a class="nav-link" id="two-tab"
+										data-toggle="tab" href="#two" role="tab" aria-controls="two"
+										aria-selected="false">Rent Information</a></li>
+									<li class="nav-item"><a class="nav-link" id="three-tab"
+										data-toggle="tab" href="#three" role="tab"
+										aria-controls="three" aria-selected="true">Attachments</a></li>
+								</ul>
+
+								<form action="#" method="post" enctype="multipart/form-data">
+									<div class="tab-content" id="carTabContent">
+										<div class="tab-pane fade active show" id="one"
+											role="tabpanel" aria-labelledby="one-tab">
+
+											<div class="contact-2 contact-agent widget">
+
+												<h5 style="font-weight: bold;">License Plate</h5>
+												<span class="text-danger">Note: The license plate
+													cannot be changed after registration. </span>
+												<div class="row">
+													<div class="form-group col-6">
+														<input type="text" id="car-plate-number"
+															name="licensePlates" class="form-control"
+															placeholder="Car plate number">
+													</div>
+												</div>
+												<br> <br>
+
+												<h5 style="font-weight: bold;">Basic information</h5>
+												<span class="text-danger">Note: Basic information
+													cannot be changed after registration. </span>
+												<div class="row">
+													<input type="hidden" value="" id="modelIdSelect"
+														name="modelId">
+													<div class="form-group col-6">
+														<label for="car-brand">Brand</label> <select
+															id="brandSelect" class="form-control" name="brand"
+															onchange="return brandSubmit();">
+															<option value="">Select Brand</option>
+
+															<option th:each="brand : ${brandList}"
+																th:value="${brand}" th:text="${brand}"></option>
+														</select>
+													</div>
+													<div class="form-group col-6">
+														<label for="car-category">Category</label> <select
+															disabled="disabled" id="categorySelect"
+															class="form-control" onchange="return categorySubmit()"
+															name="categorySelect">
+
+
+														</select>
+
+													</div>
+
+													<div class="form-group col-6">
+														<label for="car-model">Model</label> <select
+															disabled="disabled" id="modelSelect" class="form-control"
+															name="modelSelect" onchange="return modelSubmit();">
+
+
+														</select>
+													</div>
+
+													<div class="form-group col-6">
+														<label for="car-seat-qty">Number of seat</label> <input
+															type="number" id="car-seat-qty" name="seatQty"
+															class="form-control" placeholder="">
+													</div>
+
+													<div class="form-group col-6">
+														<label for="car-year">Year of production</label> <select
+															onchange="return yearSubmit();" disabled="disabled"
+															id="yearSelect" class="form-control" name="yearSelect"></select>
+													</div>
+													<div class="form-group col-6">
+														<label for="car-fuel-type">Fuel Type</label> <select
+															id="fuelCheck" class="form-control" name="fuelType">
+															<option value="">---Select Fuel Type---</option>
+															<option value="Gasoline">Gasoline</option>
+															<option value="Diesel">Diesel Oil</option>
+															<option value="Electric">Electric</option>
+														</select>
+
+													</div>
+													<div class="form-group col-6" style="display: none"
+														id="fuelResponse">
+														<label for="car-transmission">Transmission</label> <select
+															id="transmissionCheck" class="form-control"
+															name="engineInformationTranmission">
+															<option value="">---Select Transmission Type---</option>
+															<option value="0">Manual Transmission</option>
+															<option value="1">Auto Transmission</option>
+
+														</select>
+													</div>
+
+
+												</div>
+												<br> <br>
+
+												<h5>Description</h5>
+												<div class="form-group">
+
+													<textarea id="car-description" name="description"
+														class="form-control"
+														placeholder="Toyota Fortuner, automatic transmission, registered in June 2018. Well-maintained by the family, it's in great condition with regular maintenance. The interior is spacious and clean. Safety and convenience features include parking sensors, automatic wipers, automatic headlights, and a dashcam. Suitable for family use, with free shuttle services. The Fortuner is ready for new journeys with you."></textarea>
+												</div>
+
+												<br> <br>
+
+												<h5 style="font-weight: bold;">Features</h5>
+												<input type="hidden" id="resultFeatures" value=""
+													name="services">
+												<div class="row">
+													<div class="col-3 mx-4 my-2 car-services" id="map-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/map-icon.png" alt="Map">
+														<span style="display: block;">Map</span> <input
+															class="d-none" id="car-features-temp1"
+															name="features[map]" type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services"
+														id="bluetooth-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/bluetooth-icon.png"
+															alt="Bluetooth"> <span style="display: block;">Bluetooth</span>
+														<input class="d-none" id="car-features-temp1"
+															name="features[bluetooth]" type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services"
+														id="camera360-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/360_camera-icon.png"
+															alt="Camera 360"> <span style="display: block;">Camera
+															360</span> <input class="d-none" id="car-features-temp1"
+															name="features[camera360]" type="checkbox">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-3 mx-4 my-2 car-services"
+														id="parkingCamera-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/parking_camera-icon.png"
+															alt="Parking camera"> <span style="display: block;">Parking
+															camera</span> <input class="d-none" id="car-features-temp1"
+															name="features[map]" type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services"
+														id="dashCamera-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/dash_camera-icon.png"
+															alt="Dash camera"> <span style="display: block;">Dash
+															camera</span> <input class="d-none" id="car-features-temp1"
+															name="features[bluetooth]" type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services"
+														id="reverseCamera-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/reverse_camera-icon.png"
+															alt="Reverse camera"> <span style="display: block;">Reverse
+															Camera</span> <input class="d-none" id="car-features-temp1"
+															name="features[camera360]" type="checkbox">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-3 mx-4 my-2 car-services"
+														id="tireSensor-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/tpms-v2-icon.png"
+															alt="Tire Sensor"> <span style="display: block;">Tire
+															Sensor</span> <input class="d-none" id="car-features-temp1"
+															name="features[map]" type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services"
+														id="impactSensor-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/impact_sensor-icon.png"
+															alt="Impact Sensor"> <span style="display: block;">Impact
+															Sensor</span> <input class="d-none" id="car-features-temp1"
+															name="features[bluetooth]" type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services"
+														id="headUp-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/head_up-icon.png"
+															alt="Head Up"> <span style="display: block;">Head
+															Up</span> <input class="d-none" id="car-features-temp1"
+															name="features[camera360]" type="checkbox">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-3 mx-4 my-2 car-services"
+														id="sunRoof-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/sunroof-icon.png"
+															alt="Sunroof"> <span style="display: block;">Sun
+															roof</span> <input class="d-none" id="car-features-temp1"
+															name="features[map]" type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services" id="gps-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/gps-icon.png" alt="Gps">
+														<span style="display: block;">Gps</span> <input
+															class="d-none" id="car-features-temp1"
+															name="features[bluetooth]" type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services"
+														id="babySeat-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/babyseat-icon.png"
+															alt="Baby seat"> <span style="display: block;">Baby
+															seat</span> <input class="d-none" id="car-features-temp1"
+															name="features[camera360]" type="checkbox">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-3 mx-4 my-2 car-services" id="usb-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/usb-icon.png" alt="Usb">
+														<span style="display: block;">USB</span> <input
+															class="d-none" id="car-features-temp1"
+															name="features[map]" type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services"
+														id="spareTire-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/spare_tire-icon.png"
+															alt="Spare Tire"> <span style="display: block;">Spare
+															Tire-</span> <input class="d-none" id="car-features-temp1"
+															name="features[bluetooth]" type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services" id="dvd-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/dvd-icon.png" alt="dvd">
+														<span style="display: block;">DVD </span> <input
+															class="d-none" id="car-features-temp1"
+															name="features[camera360]" type="checkbox">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-3 mx-4 my-2 car-services"
+														id="bonnet-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/bonnet-icon.png"
+															alt="Bonnet"> <span style="display: block;">Bonnet</span>
+														<input class="d-none" id="car-features-temp1"
+															name="features[map]" type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services" id="etc-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/etc-icon.png" alt="etc">
+														<span style="display: block;">ETC </span> <input
+															class="d-none" id="car-features-temp1"
+															name="features[camera360]" type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2  car-services"
+														id="airBags-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/airbags-icon.png"
+															alt="Airbags"> <span style="display: block;">Airbags</span>
+														<input class="d-none" id="car-features-temp1"
+															name="features[bluetooth]" type="checkbox">
+													</div>
+
+												</div>
+
+
+											</div>
+											<div class="col-4">
+												<a onclick="return moveStep2();" class="btn btn-primary"
+													style="background-color: #3c5bfc;">Next step</a>
+											</div>
+										</div>
+										<div class="tab-pane fade" id="two" role="tabpanel"
+											aria-labelledby="two-tab">
+											<div class="contact-2 contact-agent widget">
+												<div class="row">
+													<div class="form-group col-12">
+														<h5 style="font-weight: bold;">Default Price</h5>
+														<p>This price is applied for all days.</p>
+														<div class="row">
+															<div class="col-6">
+																<label class="sr-only">Recommend price: $100/day</label>
+
+																<div class="input-group-prepend">
+																	<div class="input-group-text">$</div>
+																	<input type="number" class="form-control" value="100"
+																		placeholder="100" name="price">
+																</div>
+															</div>
+
+														</div>
+													</div>
+													<br> <br>
+													<div class="form-group col-12">
+														<div class="row">
+															<h5 style="font-weight: bold;" class="col-6">Discount</h5>
+															<div class="col-6">
+
+																<label class="switch"> <input type="checkbox"
+																	id="discountCheck" class="primary check-box"> <span
+																	class="slider round"></span>
+																</label>
+
+
+
+															</div>
+														</div>
+														<div class="row">
+															<div class="col-6">
+																<div id="discountCheckResponse" style="display: none;">
+																	<h6>Weekly discount (% on bill)</h6>
+																	<input type="range" class="form-control-range" min="1"
+																		disabled max="100" value="20" id="discountRange"
+																		name="discount"> <span>Recommend
+																		discount: 20%</span>
+																</div>
+
+															</div>
+															<div class="col-6">
+																<span id="discountValue" class="float-right text-danger"></span>
+															</div>
+														</div>
+													</div>
+
+													<div class="form-group col-12">
+														<div class="row">
+															<h5 style="font-weight: bold;" class="col-6">Fast
+																Booking</h5>
+															<div class="col-6">
+																<label class="switch"> <input type="checkbox"
+																	id="fastBookingCheck" class="primary"> <span
+																	class="slider round"></span>
+																</label>
+															</div>
+														</div>
+
+														<div class="row">
+															<div class="col-6">
+																<div id="fastBookingResponse" style="display: none;">
+																	<div class="form-group">
+																		<label>Estimate time arrival(hours)</label> <input
+																			type="number" class="form-control">
+																	</div>
+																</div>
+
+
+															</div>
+
+														</div>
+													</div>
+
+													<div class="form-group mb-3 col-12">
+														<h5 style="font-weight: bold;">Car address</h5>
+
+														<div class="input-group-prepend">
+															<input type="text" readonly class="form-control"
+																placeholder="Click to enter address"
+																onclick="return openModal.click();"> <a href="#"
+																data-toggle="modal" data-target="#addressModal"
+																id="openModal" hidden="true">Click me</a>
+
+														</div>
+
+													</div>
+
+													<div class="form-group mb-3 col-12">
+														<div class="row">
+
+															<h5 style="font-weight: bold;" class="col-6">Delivery
+																of the car to the place</h5>
+															<div class="col-6">
+																<label class="switch "> <input type="checkbox"
+																	id="deliveryCheck" class="primary"> <span
+																	class="slider round"></span>
+																</label>
+															</div>
+
+															<div class="row col-12" id="deliveryResponse"
+																style="display: none;">
+																<div class="col-6 mb-3">
+																	<h6>Maximum delivery distance</h6>
+																	<input type="range" class="form-control-range" min="1"
+																		max="50" value="7" id="deliveryDistanceRange" disabled>
+																	<span>Recommended distance: 7km</span>
+																</div>
+																<div class="col-6">
+																	<span id="deliveryDistanceValue"
+																		class="float-right text-danger"></span>
+																</div>
+																<div class="col-6 mb-3">
+																	<h6>Car delivery fee per kilometer</h6>
+																	<input type="range" class="form-control-range" min="1"
+																		max="30" value="10" id="deliveryFeeRange" disabled>
+																	<span>Recommended fee: $10</span>
+																</div>
+																<div class="col-6">
+																	<span id="deliveryFeeValue"
+																		class="float-right text-danger"></span>
+																</div>
+																<div class="col-6 mb-3">
+																	<h6>Free car delivery within</h6>
+																	<input type="range" class="form-control-range" min="1"
+																		max="50" value="0" id="freeDeliveryRange" disabled>
+																	<span>Recommended distance: 0km</span>
+																</div>
+																<div class="col-6">
+																	<span id="freeDeliveryValue"
+																		class="float-right text-danger"></span>
+																</div>
+															</div>
+														</div>
+
+													</div>
+
+
+													<div class="form-group mb-3 col-12">
+														<div class="row">
+															<h5 class="col-6" style="font-weight: bold;">Limit
+																the number of kilometers</h5>
+															<div class="col-6">
+																<label class="switch "> <input type="checkbox"
+																	id="limitKmCheck" class="primary"> <span
+																	class="slider round"></span>
+																</label>
+															</div>
+															<div class="row col-12" id="limitKmResponse"
+																style="display: none;">
+																<div class="col-6 mb-3">
+																	<h6>Maximum number of km in 1 day</h6>
+																	<input type="range" class="form-control-range"
+																		min="300" max="500" value="400" id="maxKmRange"
+																		disabled> <span>Recommended kilometers:
+																		400km</span>
+																</div>
+																<div class="col-6">
+																	<span id="maxKmValue" class="float-right text-danger"></span>
+																</div>
+																<div class="col-6 mb-3">
+																	<h6>Over-limit fee (per km)</h6>
+																	<input type="range" class="form-control-range" min="3"
+																		max="10" value="5" id="overLimitFeeRange" disabled>
+																	<span>Recommended fee: $5</span>
+																</div>
+																<div class="col-6">
+																	<span id="overLimitFeeValue"
+																		class="float-right text-danger"></span>
+
+																</div>
+															</div>
+														</div>
+
+														<div class="form-group mb-3 col-12">
+															<div class="row">
+																<h5 class="col-6" style="font-weight: bold;">Some
+																	Requirements Description</h5>
+															</div>
+
+															<p>Specify the requirements so that guests can rent a
+																car.</p>
+															<textarea cols="100" rows="1" name="rules"
+																placeholder="Do not use the vehicle for illegal purposes. Drive carefully, keep the car clean, return the car on time. Surcharge 500k if smoking in the car."></textarea>
+
+														</div>
+													</div>
+												</div>
+												<div class="col-4">
+													<a onclick="return backStep1();" class="btn btn-primary"
+														style="background-color: #3c5bfc;">Back </a> <a
+														onclick="return moveStep3();" class="btn btn-primary"
+														style="background-color: #3c5bfc;">Next step</a>
+
+												</div>
+											</div>
+										</div>
+										<div class="tab-pane fade " id="three" role="tabpanel"
+											aria-labelledby="three-tab">
+											<div class="form-group mb-3 col-12">
+												<div class="row">
+													<h5 class="col-12" style="font-weight: bold;">Upload
+														Images</h5>
+													<div class="col-12" id="imageInputContainer">
+														<input type="file" name="images[]" class="image-input"
+															accept="image/*" multiple>
+													</div>
+													<div class="col-12 mt-3 d-flex" id="imagePreviewContainer"></div>
+													<!-- <div class="col-12 mt-3">
+														<button type="button" id="addImageButton" onclick="return imageInputContainer.click();"
+															class="btn btn-primary">Add More Images</button>
+													</div> -->
+												</div>
+											</div>
+											<div class="col-4">
+												<a onclick="return backStep2();" class="btn btn-primary"
+													style="background-color: #3c5bfc;">Back </a>
+												<button onclick="return form.submit();"
+													class="btn btn-primary" style="background-color: #3c5bfc;">Submit
+												</button>
+
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!-- Agent detail end -->
+	</div>
+	<!-- Agent page end -->
+
+	<div class="modal car-modal fade" id="addressModal" tabindex="-1"
+		role="dialog" aria-labelledby="addressModal" style="display: none;"
+		aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-6 modal-left">
+							<div class="modal-left-content">
+								<div id="modalCarousel" class="carousel slide"
+									data-ride="carousel">
+									<div class="carousel-inner" role="listbox">
+										<div class="carousel-item active">
+											<img src="/assets/img/icon-services/address.jpg" alt="">
+										</div>
+									</div>
+								</div>
+								<div class="description">
+									<h3>Description</h3>
+									<p>Select your default address</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6 modal-right">
+							<div class="modal-right-content bg-white">
+								<section class="form-group row">
+
+									<label class="col-3 col-form-label" for="province">Province:</label>
+									<div class="col-7">
+										<select id="provinceSelect" class="form-control"
+											name="province" onchange="return provinceSubmit();">
+											<option value="">Select Province</option>
+
+											<option th:each="item : ${provinceList}"
+												th:value="${item.code}" th:text="${item.full_name}"></option>
+										</select>
+									</div>
+
+
+
+								</section>
+								<section class="form-group row">
+
+									<label class="col-3 col-form-label" for="district">District:</label>
+
+									<div class="col-7">
+										<select disabled="disabled" id="districtSelect"
+											class="form-control" onchange="return districtSubmit()"
+											name="districtSelect">
+										</select>
+									</div>
+
+
+
+								</section>
+								<section class="form-group row">
+									<label class="col-3 col-form-label" for="ward">Ward:</label>
+									<div class="col-7">
+										<select disabled="disabled" id="wardSelect"
+											class="form-control" onchange="return wardSubmit()"
+											name="wardSelect">
+										</select>
+									</div>
+
+								</section>
+								<section class="form-group row">
+									<label class="col-3 col-form-label" for="street">Street:</label>
+									<div class="col-7">
+										<input class="form-control" id="street" type="text">
+									</div>
+								</section>
+								<section class="form-group row">
+									<label class="col-3 col-form-label" for="houseNo">House
+										No:</label>
+									<div class="col-7">
+										<input class="form-control" id="houseNo" type="text">
+									</div>
+								</section>
+
+
+								<a href="car-details.html" class="btn btn-theme">Save</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Footer start -->
+	<footer class="footer">
+		<div class="container footer-inner">
+			<div class="row">
+				<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+					<div class="footer-item">
+						<h4>Contact Us</h4>
+						<div class="f-border"></div>
+						<ul class="contact-info">
+							<li>Address: 20/F Green Road, Dhanmondi, Dhaka</li>
+							<li>Email: <a href="mailto:info@themevessel.com">info@themevessel.com</a>
+							</li>
+							<li>Phone: <a href="tel:+0477-85x6-552">+XXXX XXXX XXX</a>
+							</li>
+							<li>Fax: +XXXX XXXX XXX</li>
+						</ul>
+
+						<ul class="social-list clearfix">
+							<li><a href="#" class="facebook-bgh"><i
+									class="fa fa-facebook"></i></a></li>
+							<li><a href="#" class="twitter-bgh"><i
+									class="fa fa-twitter"></i></a></li>
+							<li><a href="#" class="google-bgh"><i
+									class="fa fa-google-plus"></i></a></li>
+							<li><a href="#" class="rss-bgh"><i class="fa fa-rss"></i></a></li>
+							<li><a href="#" class="linkedin-bgh"><i
+									class="fa fa-linkedin"></i></a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+					<div class="footer-item">
+						<h4>Useful Links</h4>
+						<div class="f-border"></div>
+						<ul class="links">
+							<li><a href="#"><i class="flaticon-arrows"></i>About us</a>
+							</li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Service</a></li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Car
+									Listing</a></li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Car Grid</a>
+							</li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Contact
+									Us</a></li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Blog</a></li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Car
+									Details</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+					<div class="recent-posts footer-item">
+						<h4>Recent Posts</h4>
+						<div class="f-border"></div>
+						<div class="media mb-4">
+							<a class="pr-3" href="car-details.html"> <img
+								src="assets/img/sub-car/sub-car.jpg" alt="car">
+							</a>
+							<div class="media-body align-self-center">
+								<h5>
+									<a href="car-details.html">2016 Audi S5 Coupe</a>
+								</h5>
+								<p>February 27, 2022</p>
+								<p>
+									<strong>$245,000</strong>
+								</p>
+							</div>
+						</div>
+						<div class="media mb-4">
+							<a class="pr-3" href="car-details.html"> <img
+								src="assets/img/sub-car/sub-car-2.jpg" alt="car">
+							</a>
+							<div class="media-body align-self-center">
+								<h5>
+									<a href="car-details.html">2016 Audi R8</a>
+								</h5>
+								<p>February 27, 2022</p>
+								<p>
+									<strong>$245,000</strong>
+								</p>
+							</div>
+						</div>
+						<div class="media">
+							<a class="pr-3" href="car-details.html"> <img
+								src="assets/img/sub-car/sub-car-3.jpg" alt="car">
+							</a>
+							<div class="media-body align-self-center">
+								<h5>
+									<a href="car-details.html">Read Audi A7 TDI</a>
+								</h5>
+								<p>February 27, 2022</p>
+								<p>
+									<strong>$245,000</strong>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+					<div class="footer-item clearfix">
+						<h4>Subscribe</h4>
+						<div class="f-border"></div>
+						<div class="Subscribe-box">
+							<p>Excepteur sint occaecat cupidatat non proident, sunt in
+								culpa qui officia deserunt mollit.</p>
+							<form action="#" method="GET">
+								<p>
+									<input type="text" class="form-contact" name="email"
+										placeholder="Enter Address">
+								</p>
+								<p>
+									<button type="submit" name="submitNewsletter"
+										class="btn btn-block btn-color">Subscribe</button>
+								</p>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xl-12">
+					<p class="copy">
+						&copy; 2022 <a href="http://themevessel.com/" target="_blank">Theme
+							Vessel</a>. Trademarks and brands are the car of their respective
+						owners.
+					</p>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- Footer end -->
+
+	<!-- Full Page Search -->
+	<div id="full-page-search">
+		<button type="button" class="close">×</button>
+		<form action="#">
+			<input type="search" value="" placeholder="type keyword(s) here" />
+			<button type="button" class="btn btn-sm btn-color">Search</button>
+		</form>
+	</div>
+
+	<!-- Off-canvas sidebar -->
+	<div class="off-canvas-sidebar">
+		<div class="off-canvas-sidebar-wrapper">
+			<div class="off-canvas-header">
+				<a class="close-offcanvas" href="#"><span class="fa fa-times"></span></a>
+			</div>
+			<div class="off-canvas-content">
+				<aside class="canvas-widget">
+					<div class="logo text-center">
+						<img src="assets/img/logos/logo.png" alt="logo">
+					</div>
+				</aside>
+				<aside class="canvas-widget">
+					<ul class="menu">
+						<li class="menu-item menu-item-has-children"><a
+							href="index.html">Home</a></li>
+						<li class="menu-item"><a href="car-grid-leftside.html">Car
+								List</a></li>
+						<li class="menu-item"><a href="car-details.html">Car
+								Detail</a></li>
+						<li class="menu-item"><a
+							href="blog-single-sidebar-right.html">Blog</a></li>
+						<li class="menu-item"><a href="about-1.html">About US</a></li>
+						<li class="menu-item"><a href="contact-1.html">Contact US</a></li>
+					</ul>
+				</aside>
+				<aside class="canvas-widget">
+					<ul class="social-icons">
+						<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+						<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+						<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+						<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+						<li><a href="#"><i class="fa fa-vk"></i></a></li>
+					</ul>
+				</aside>
+			</div>
+		</div>
+	</div>
+
+	<script src="/assets/js/jquery-2.2.0.min.js"></script>
+	<script src="/assets/js/popper.min.js"></script>
+	<script src="/assets/js/bootstrap.min.js"></script>
+	<!-- <script src="/assets/js/jquery.selectBox.js"></script> -->
+	<script src="/assets/js/rangeslider.js"></script>
+	<script src="/assets/js/jquery.magnific-popup.min.js"></script>
+	<script src="/assets/js/jquery.filterizr.js"></script>
+	<script src="/assets/js/wow.min.js"></script>
+	<script src="/assets/js/backstretch.js"></script>
+	<script src="/assets/js/jquery.countdown.js"></script>
+	<script src="/assets/js/jquery.scrollUp.js"></script>
+	<script src="/assets/js/particles.min.js"></script>
+	<script src="/assets/js/typed.min.js"></script>
+	<script src="/assets/js/dropzone.js"></script>
+	<script src="/assets/js/jquery.mb.YTPlayer.js"></script>
+	<script src="/assets/js/slick.min.js"></script>
+	<script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
+	<script
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0N5pbJN10Y1oYFRd0MJ_v2g8W2QT74JE"></script>
+	<script src="/assets/js/ie-emulation-modes-warning.js"></script>
+	<!-- Custom JS Script -->
+	<script src="/assets/js/app.js"></script>
+
+	<script>
+	function provinceSubmit() {
+		const districtSelect = $("#districtSelect").get(0);
+		const wardSelect = $("#wardSelect").get(0);
+	
+		$.ajax({
+			url: "/home/carregister/getDistrict",
+			type: "get",
+			data: { provinceCode: $("#provinceSelect").val() },
+			success: function (res) {
+				$(districtSelect).removeAttr('disabled');
+				$(districtSelect).html('<option value ="">--Select District--</option>');
+				$.each(res.districtList, function (key, value) {
+					$(districtSelect).append('<option value="' + value.code + '">' + value.full_name + '</option>');
+				});
+				$(wardSelect).html('<option value="" >--Select Ward--</option>');
+
+
+
+			}
+		});
+	};
+	function districtSubmit() {
+		
+	const districtSelect = $("#districtSelect").get(0);
+		const wardSelect = $("#wardSelect").get(0);
+	
+		$.ajax({
+			url: "/home/carregister/getWard",
+			type: "get",
+			data: { districtCode: $("#districtSelect").val() },
+			success: function (res) {
+				$(wardSelect).removeAttr('disabled');
+				$(wardSelect).html('<option value ="">--Select Ward--</option>');
+				$.each(res.wardList, function (key, value) {
+					$(wardSelect).append('<option value="' + value.code + '">' + value.full_name + '</option>');
+				});
+				
+
+
+
+			}
+		}); 
+	};
+	function brandSubmit() {
+		const categorySelect = $("#categorySelect").get(0);
+		const modelSelect = $("#modelSelect").get(0);
+	
+		$.ajax({
+			url: "/home/carregister/getCategory",
+			type: "get",
+			data: { brandName: $("#brandSelect").val() },
+			success: function (res) {
+				$(categorySelect).removeAttr('disabled');
+				$(categorySelect).html('<option value ="">--Select Category--</option>');
+				$.each(res.categoryList, function (key, value) {
+					$(categorySelect).append('<option value="' + value + '">' + value + '</option>');
+				});
+				$(modelSelect).html('<option value="" >--Select Model--</option>');
+
+
+
+			}
+		});
+	};
+	function categorySubmit() {
+		const categorySelect = $("#categorySelect").get(0);
+		const modelSelect = $("#modelSelect").get(0);
+
+		
+		$.ajax({
+			url: "/home/carregister/getModel",
+			type: "get",
+			data: { brandName: $("#brandSelect").val(),cateName: $("#categorySelect").val()},
+			success: function (res) {
+				$(modelSelect).removeAttr('disabled');
+				$(modelSelect).html('<option value ="">--Select Model--</option>');
+				$.each(res.modelList, function (key, value) {
+					$(modelSelect).append('<option value="' + value + '">' + value + '</option>');
+				});
+				
+			}
+		});
+	};
+	function modelSubmit() {
+		const categorySelect = $("#categorySelect").get(0);
+		const modelSelect = $("#modelSelect").get(0);
+		const yearSelect = $("#yearSelect").get(0);
+		
+		$.ajax({
+			url: "/home/carregister/getYear",
+			type: "get",
+			data: { brandName: $("#brandSelect").val(),cateName: $("#categorySelect").val(),modelName:$("#modelSelect").val()},
+			success: function (res) {
+				$(yearSelect).removeAttr('disabled');
+				$(yearSelect).html('<option value ="">--Select Year--</option>');
+				$.each(res.yearList, function (key, value) {
+					$(yearSelect).append('<option value="' + value + '">' + value + '</option>');
+				});
+				
+			}
+		});
+	};
+	function yearSubmit() {
+		const categorySelect = $("#categorySelect").get(0);
+		const modelSelect = $("#modelSelect").get(0);
+		const yearSelect = $("#yearSelect").get(0);
+		const modelIdSelect = $("#modelIdSelect").get(0);
+		
+		$.ajax({
+			url: "/home/carregister/getModelId",
+			type: "get",
+			data: { brandName: $("#brandSelect").val(),cateName: $("#categorySelect").val(),modelName:$("#modelSelect").val(),year:$("#yearSelect").val()},
+			success: function (res) {
+				
+				
+					$(modelIdSelect).val(res.modelId);
+				
+				
+			}
+		});
+	};
+	
+	
+		var boxes = document.querySelectorAll(".car-services");
+		var numSelected = 0;
+		var maxSelected = 18;
+		var result =[];
+		for (var i = 0; i < boxes.length; i++) {
+			boxes[i].addEventListener("click", function() {
+				if (this.classList.contains("selected")) {
+					this.classList.remove("selected");
+					numSelected--;
+					result =result.filter(item => item !== this.id);
+					resultFeatures.value= result.join(',');
+					console.log(result);
+					
+					
+				} else if (numSelected < maxSelected) {
+					this.classList.add("selected");
+					numSelected++;
+					result.push(this.id);
+					resultFeatures.value= result.join(',');
+					console.log(result);
+				}
+			});
+			
+		}
+		
+		const scrollingElement = (document.scrollingElement || document.body);
+
+		const scrollToBottom = () => {
+		   scrollingElement.scrollTop = scrollingElement.scrollHeight;
+		}
+
+		const scrollToTop = () => {
+		   scrollingElement.scrollTop = 0;
+		}
+		function backStep1() {
+			document.getElementById("one-tab").click();
+			scrollToTop();
+
+		}
+		function backStep2() {
+			document.getElementById("two-tab").click();
+			scrollToTop();
+
+		}
+		function moveStep3() {
+			document.getElementById("three-tab").click();
+			scrollToTop();
+
+		}
+		function moveStep2() {
+			document.getElementById("two-tab").click();
+			scrollToTop();
+
+		}
+
+		const discountCheck = document.getElementById('discountCheck');
+		const discountCheckResponse = document
+				.getElementById('discountCheckResponse');
+
+		discountCheck.addEventListener('change', function() {
+			if (this.checked) {
+				discountCheckResponse.style.display = 'block';
+				discountRange.removeAttribute("disabled");
+				discountCheckResponse.style.animation = "5s slide-right";
+			} else {
+				discountCheckResponse.style.animation = "5s slide-left";
+				discountCheckResponse.style.display = 'none';
+				discountRange.setAttribute("disabled",true);
+			}
+		});
+		const fastBookingCheck = document.getElementById('fastBookingCheck');
+		const fastBookingResponse = document
+				.getElementById('fastBookingResponse');
+
+		fastBookingCheck.addEventListener('change', function() {
+			if (this.checked) {
+				fastBookingResponse.style.display = 'block';
+				
+				fastBookingResponse.style.animation = "5s slide-right";
+			} else {
+				fastBookingResponse.style.animation = "5s slide-left";
+				fastBookingResponse.style.display = 'none';
+			}
+		});
+		const deliveryCheck = document.getElementById('deliveryCheck');
+		const deliveryResponse = document.getElementById('deliveryResponse');
+
+		deliveryCheck.addEventListener('change', function() {
+			if (this.checked) {
+				deliveryResponse.style.display = 'flex';
+				deliveryDistanceRange.removeAttribute("disabled");
+				deliveryFeeRange.removeAttribute("disabled");
+				freeDeliveryRange.removeAttribute("disabled");
+				deliveryResponse.style.animation = "5s slide-right";
+			} else {
+				deliveryResponse.style.animation = "5s slide-left";
+				deliveryResponse.style.display = 'none';
+				deliveryDistanceRange.setAttribute("disabled",true);
+				deliveryFeeRange.setAttribute("disabled",true);
+				freeDeliveryRange.setAttribute("disabled",true);
+			}
+		});
+		const limitKmCheck = document.getElementById('limitKmCheck');
+		const limitKmResponse = document.getElementById('limitKmResponse');
+
+		limitKmCheck.addEventListener('change', function() {
+			if (this.checked) {
+				limitKmResponse.style.display = 'flex';
+				overLimitFeeRange.removeAttribute("disabled");
+				maxKmRange.removeAttribute("disabled");
+				limitKmResponse.style.animation = "5s slide-right";
+			} else {
+				limitKmResponse.style.animation = "5s slide-left";
+				limitKmResponse.style.display = 'none';
+				overLimitFeeRange.setAttribute("disabled",true);
+				maxKmRange.setAttribute("disabled",true);
+			}
+		});
+		const fuelCheck = document.getElementById('fuelCheck');
+		const fuelResponse = document.getElementById('fuelResponse');
+
+		fuelCheck.addEventListener('change', function() {
+			if (this.value == "Gasoline"|| this.value =="Diesel") {
+				fuelResponse.style.display = 'block';
+				fuelResponse.style.animation = "5s slide-right";
+				for(var item of document.getElementById('transmissionCheck').querySelectorAll('option')){
+						
+				item.hidden= false;
+				}
+			}else if(this.value == "Electric"){
+				fuelResponse.style.display = 'block';
+				
+				document.getElementById('transmissionCheck').value= "1";
+				for(var item of document.getElementById('transmissionCheck').querySelectorAll('option')){
+					if(item.value != "1"){
+						
+						item.hidden= true;
+					}
+				}
+				
+			} 
+			else {
+				fuelResponse.style.animation = "5s slide-left";
+				fuelResponse.style.display = 'none';
+			}
+		});
+		
+		var rangeInput = document.getElementById('discountRange');
+		var valueSpan = document.getElementById('discountValue');
+		var deliveryDistanceRange = document.getElementById('deliveryDistanceRange');
+		var deliveryDistanceValue = document.getElementById('deliveryDistanceValue');
+		var deliveryFeeRange = document.getElementById('deliveryFeeRange');
+		var deliveryFeeValue = document.getElementById('deliveryFeeValue');
+		var freeDeliveryRange = document.getElementById('freeDeliveryRange');
+		var freeDeliveryValue = document.getElementById('freeDeliveryValue');
+		var maxKmRange = document.getElementById('maxKmRange');
+		var maxKmValue = document.getElementById('maxKmValue');
+		var overLimitFeeRange = document.getElementById('overLimitFeeRange');
+		var overLimitFeeValue = document.getElementById('overLimitFeeValue');
+	
+		rangeInput.addEventListener('input', function() {
+		    valueSpan.textContent = "Discount: "+this.value + "%";
+		});
+		deliveryDistanceRange.addEventListener('input', function() {
+			deliveryDistanceValue.textContent = "Delivery Distance: "+this.value + "km";
+		});
+		deliveryFeeRange.addEventListener('input', function() {
+			deliveryFeeValue.textContent = "Delivery Fee/km: "+this.value + "$";
+		});
+		freeDeliveryRange.addEventListener('input', function() {
+			freeDeliveryValue.textContent = "Free Fee With in: "+this.value + "km";
+		});
+		maxKmRange.addEventListener('input', function() {
+			maxKmValue.textContent = "Maximum km in 1 day: "+this.value + "km";
+		});
+		overLimitFeeRange.addEventListener('input', function() {
+			overLimitFeeValue.textContent = "Fee over-limit /km: "+this.value + "$";
+		});
+		
+		// Function to handle file selection and display image preview
+		function handleFileSelect(event) {
+		    const files = event.target.files;
+		    const previewContainer = document.getElementById('imagePreviewContainer');
+
+		    previewContainer.innerHTML = ''; // Clear previous previews
+
+		    for (const file of files) {
+		        const reader = new FileReader();
+
+		        reader.onload = function (e) {
+		            const imgContainer = document.createElement('div');
+		            imgContainer.classList.add('img-container');
+		            
+		            const img = document.createElement('img');
+		            img.src = e.target.result;
+		            img.height = 150;
+		            img.classList.add('img-thumbnail');
+		            imgContainer.appendChild(img);
+		            
+		            const clearButton = document.createElement('button');
+		            clearButton.textContent = 'Clear';
+		            clearButton.classList.add('btn', 'btn-danger', 'btn-sm', 'mx-1');
+		            clearButton.addEventListener('click', function() {
+		                imgContainer.remove(); // Remove the image container
+		            });
+		            imgContainer.appendChild(clearButton);
+
+		            previewContainer.appendChild(imgContainer);
+		        };
+
+		        reader.readAsDataURL(file);
+		    }
+		}
+
+		// Add event listener to input file elements
+		document.addEventListener('change', function(event) {
+		    if (event.target.classList.contains('image-input')) {
+		        handleFileSelect(event);
+		    }
+		});
+
+		// Function to add more image upload fields
+		function addImageInput() {
+		    const imageInputContainer = document.getElementById('imageInputContainer');
+		    const newInput = document.createElement('input');
+		    newInput.type = 'file';
+		    newInput.name = 'images[]';
+		    newInput.classList.add('image-input');
+		    newInput.accept = 'image/*';
+		    newInput.multiple = true;
+		    imageInputContainer.appendChild(newInput);
+		}
+
+	
+
+	</script>
+</body>
+
+</html>
