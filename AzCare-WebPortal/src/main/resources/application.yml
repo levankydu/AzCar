@@ -13,13 +13,13 @@ spring:
    
     url: jdbc:mysql://localhost:3306/azcarsdb
     username: root
-    password: 1410
+    password: tincute1
   jpa:
     hibernate:
       ddl-auto: update
   mail:
     host: smtp.gmail.com
-    password: gjmvfnhtojikmrpa
+    password: hyyk pxbj frpa uofl
     port: 587
     properties:
       mail:
@@ -27,4 +27,4 @@ spring:
           auth: true
           starttls:
             enable: true
-    username: leemarkyr@gmail.com
+    username: dn169240@gmail.com

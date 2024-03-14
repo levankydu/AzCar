@@ -10,13 +10,15 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.project.AzCar.Dto.Users.UserDto;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Services.Users.UserServices;
-
 
 import jakarta.validation.Valid;
 import net.minidev.json.JSONObject;
@@ -26,6 +28,7 @@ public class HomeController {
 
 	@Autowired
 	private UserServices uServices;
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -84,5 +87,72 @@ public class HomeController {
 		entity.put("Code 1", "Created Admin Account");
 
 		return ResponseEntity.ok(entity);
+	}
+
+	@GetMapping("/user/profile/{email}")
+	public String profile(@PathVariable("email") String email, Model model) {
+
+		Users user = uServices.findUserByEmail(email);
+
+		model.addAttribute("user", user);
+		return "/authentications/profile";
+	}
+
+	@GetMapping("/user/profile/edit/{email}")
+	public String editProfile(@PathVariable("email") String email, Model model) {
+
+		Users user = uServices.findUserByEmail(email);
+
+		if (user != null) {
+			model.addAttribute("user", user);
+
+			model.addAttribute("uDto", new UserDto());
+			model.addAttribute("uDto", new Users());
+
+			return "authentications/edit";
+		}
+		return "/user/profile/{email}" + email;
+
+	}
+
+	@PostMapping("/user/profile/edit/{email}")
+	public String editProfile(@PathVariable("email") String email, @ModelAttribute("uDto") UserDto uDto, Model model) {
+
+		uServices.editProfile(email, uDto);
+
+		return "redirect:/user/profile/{email}";
+
+	}
+
+	@GetMapping("/user/profile/changePassword/{email}")
+	public String changePasswordForm(@PathVariable("email") String email, Model model) {
+		Users user = uServices.findUserByEmail(email);
+		model.addAttribute("user", user);
+		return "/authentications/changePassword";
+	}
+
+	@PostMapping("/user/profile/changePassword/{email}")
+	public String changePassword(@PathVariable("email") String email,@RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword, RedirectAttributes redirectAttributes) {
+
+		 if (!newPassword.equals(confirmPassword)) {
+		        redirectAttributes.addFlashAttribute("error", "Passwords do not match.");
+		        return "redirect:/user/profile/changePassword/{email}";
+		    }
+		 if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
+			 redirectAttributes.addFlashAttribute("error", "newPasswords or ConfirmPassword not blank.");
+		        return "redirect:/user/profile/changePassword/{email}";
+		}
+		    // Encode the new password before saving
+		    String encodedPassword = passwordEncoder.encode(newPassword);
+
+		    // Check if user exists before changing password
+		    if (uServices.findUserByEmail(email) != null) {
+		        uServices.changePassword(email, encodedPassword);
+		        redirectAttributes.addFlashAttribute("success", "Password changed successfully.");
+		    } else {
+		        redirectAttributes.addFlashAttribute("error", "User with email " + email + " not found.");
+		    }
+		    return "redirect:/user/profile/{email}";
 	}
 }
