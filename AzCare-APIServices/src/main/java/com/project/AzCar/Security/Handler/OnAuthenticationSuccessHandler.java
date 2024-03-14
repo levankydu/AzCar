@@ -20,6 +20,7 @@ public class OnAuthenticationSuccessHandler implements AuthenticationSuccessHand
 		System.out.println("Success logged in user: " + name);
 
 		request.getSession().removeAttribute("signin_error");
+
 		if (authentication.getAuthorities().toString().contains(Constants.Roles.USER)) {
 			// User role
 			request.getSession().setAttribute("isAuthen", "a");

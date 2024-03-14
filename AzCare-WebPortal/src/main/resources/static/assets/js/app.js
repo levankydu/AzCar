@@ -52,7 +52,7 @@ $(function () {
                 }
             }
         } else {
-            $('.logo img').attr('src', 'assets/img/logos/black-logo.png');
+            $('.logo img').attr('src', '/assets/img/logos/black-logo.png');
         }
     }
 

@@ -36,16 +36,17 @@ public class SecurityConfig {
 						.failureHandler(new OnAuthenticationFailedHandler()).permitAll())
 				.logout((logout) -> logout.permitAll().logoutUrl("/logout").logoutSuccessUrl("/login?logout")
 						.invalidateHttpSession(true).deleteCookies("JSESSIONID"))
+
 				.exceptionHandling(handling -> handling.accessDeniedPage("/access-denied"));
 		http.authenticationProvider(daoAuthen());
 		return http.build();
 
 	}
 
-	@Bean
-	WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().requestMatchers("/assets/**");
-	}
+	
+	  @Bean WebSecurityCustomizer webSecurityCustomizer() { return (web) ->
+	  web.ignoring().requestMatchers("/assets/**"); }
+	 
 
 	@Bean
 	PasswordEncoder passwordEncoder() {

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.project.AzCar.Entities.Cars.CarModelList;
 import com.project.AzCar.Entities.Locations.Addreess;
 
@@ -59,6 +61,7 @@ public class Users implements Serializable{
 			@JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(name = "role_id", referencedColumnName = "id") })
 	private List<Roles> roles = new ArrayList<>();
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dob;
 	private boolean isEnabled;
 	private String gender;
