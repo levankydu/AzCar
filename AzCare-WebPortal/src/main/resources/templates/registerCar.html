@@ -88,7 +88,11 @@
 								<li class="nav-item dropdown"><a
 									class="nav-link dropdown-toggle" href="#"
 									id="navbarDropdownMenuLink2" data-toggle="dropdown"
-									aria-haspopup="true" aria-expanded="false"> My Plan </a></li>
+									aria-haspopup="true" aria-expanded="false">Available Cars</a></li>
+								<li class="nav-item dropdown" th:if="${session.user}"><a
+									class="nav-link dropdown-toggle" href="#"
+									id="navbarDropdownMenuLink2" data-toggle="dropdown"
+									aria-haspopup="true" aria-expanded="false">My Plan</a></li>
 								<li class="nav-item dropdown"><a
 									class="nav-link dropdown-toggle" href="#"
 									id="navbarDropdownMenuLink2" data-toggle="dropdown"
@@ -98,16 +102,16 @@
 									class="nav-link dropdown-toggle" href="#"
 									id="navbarDropdownMenuLink2" data-toggle="dropdown"
 									aria-haspopup="true" aria-expanded="false"> Contact Us </a></li>
-								
-								
-								
+
+
+
 								<li class="nav-item dropdown" th:if="${session.user}"><a
 									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
 									href="/profile" th:text="Hello+', ' +${session.user}"></a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
 									href="/logout">LogOut</a></li>
-									
-									
+
+
 								<li class="nav-item dropdown" th:if="${session.admin}"><a
 									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
 									href="/profile" th:text="Hello+', ' +${session.admin}"></a> <a
@@ -556,7 +560,8 @@
 
 															</div>
 															<div class="col-6">
-																<span id="discountValue" class="float-right text-success"></span>
+																<span id="discountValue"
+																	class="float-right text-success"></span>
 															</div>
 														</div>
 													</div>
@@ -729,8 +734,8 @@
 											aria-labelledby="three-tab">
 											<div class="form-group mb-3 col-12">
 												<div class="row">
-													<h5 class="col-12" style="font-weight: bold;">Upload Your
-														Car Images</h5>
+													<h5 class="col-12" style="font-weight: bold;">Upload
+														Your Car Images</h5>
 
 													<div class="form-group">
 														<label for="frontImg">Front Image: </label> <input

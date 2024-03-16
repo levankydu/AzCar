@@ -102,3 +102,6 @@ Binding(CTRL+SHIFT+C,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.ui.textEditorScope,,,system)
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 00:44:52.112
+!MESSAGE Classpath changed for project: AzCare-WebPortal
