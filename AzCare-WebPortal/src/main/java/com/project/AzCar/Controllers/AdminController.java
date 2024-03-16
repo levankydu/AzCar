@@ -9,17 +9,12 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEnt
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +26,8 @@ import com.project.AzCar.Dto.Brands.BrandsDto;
 import com.project.AzCar.Dto.Categories.CategoriesDto;
 import com.project.AzCar.Entities.Cars.BrandImages;
 import com.project.AzCar.Entities.Cars.CarModelList;
+import com.project.AzCar.Entities.Users.Users;
+import com.project.AzCar.Repositories.Users.UserRepository;
 import com.project.AzCar.Services.Cars.BrandImageServices;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
@@ -39,11 +36,6 @@ import com.project.AzCar.Utilities.Constants;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import org.springframework.web.bind.annotation.PathVariable;
-
-import com.project.AzCar.Entities.Users.Users;
-import com.project.AzCar.Repositories.Users.UserRepository;
 
 
 @Controller

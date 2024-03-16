@@ -40,18 +40,6 @@ public class UserServicesImpl implements UserServices {
 	}
 
 	@Override
-	public void saveAdmin(UserDto userDto) {
-		Roles role = roleRepo.findByName(Constants.Roles.ADMIN);
-
-		if (role == null)
-			role = roleRepo.save(new Roles(Constants.Roles.ADMIN));
-
-		Users user = new Users("Admin", "admin@admin", passwordEncoder.encode("123"), Arrays.asList(role));
-		userRepo.save(user);
-
-	}
-
-	@Override
 	public List<Users> findAllUsers() {
 		return userRepo.findAllUsers();
 	}
@@ -74,23 +62,31 @@ public class UserServicesImpl implements UserServices {
 			existingUser.setGender(updatedUserDto.getGender());
 
 			userRepo.save(existingUser);
+		}
+		return null;
+	}
 
 	@Override
 	public boolean saveAdmin(UserDto userDto) {
 		Roles role = roleRepo.findByName(Constants.Roles.ADMIN);
 
-        if (role == null)
-            role = roleRepo.save(new Roles(Constants.Roles.ADMIN));
-        Users existingUser = userRepo.findByEmail("admin@admin");
+		if (role == null)
+			role = roleRepo.save(new Roles(Constants.Roles.ADMIN));
+		Users existingUser = userRepo.findByEmail("admin@admin");
 
 		if (existingUser != null) {
 			return false;
 
-		}else {
-			Users user = new Users("Admin","admin@admin", passwordEncoder.encode("123"),
-	                Arrays.asList(role));
-	        userRepo.save(user);
-	        return true;
-		}   		
+		} else {
+			Users user = new Users("Admin", "admin@admin", passwordEncoder.encode("123"), Arrays.asList(role));
+			userRepo.save(user);
+			return true;
+		}
+	}
+
+	@Override
+	public void changePassword(String email, String newPassword) {
+		// TODO Auto-generated method stub
+		
 	}
 }

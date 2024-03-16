@@ -38,8 +38,8 @@
 <link type="text/css" rel="stylesheet" href="/assets/css/style.css">
 <link rel="stylesheet" type="text/css" id="style_sheet"
 	href="/assets/css/skins/default.css">
-
-</head>
+<link rel="stylesheet"
+	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
 <style>
 .selected {
 	border: 1px solid blue;
@@ -62,7 +62,10 @@
 	margin: 5px;
 }
 </style>
+</head>
+
 <body id="top">
+
 	<!-- main header start -->
 	<header class="main-header sticky-header header-with-top"
 		id="main-header-2">
@@ -70,9 +73,9 @@
 			<div class="row">
 				<div class="col-12">
 					<nav class="navbar navbar-expand-lg navbar-light rounded">
-						<a class="navbar-brand logo navbar-brand d-flex w-50 mr-auto"
-							href="index.html"> <img src="assets/img/logos/black-logo.png"
-							alt="logo">
+						<a class="navbar-brand logo navbar-brand d-flex mr-auto"
+							href="index.html"> <img
+							src="/assets/img/logos/black-logo.png" alt="logo">
 						</a>
 						<button class="navbar-toggler" type="button"
 							data-toggle="collapse" data-target="#navbar"
@@ -84,194 +87,34 @@
 							<ul class="navbar-nav ml-auto">
 								<li class="nav-item dropdown"><a
 									class="nav-link dropdown-toggle" href="#"
-									id="navbarDropdownMenuLink" data-toggle="dropdown"
-									aria-haspopup="true" aria-expanded="false"> Index </a>
-									<ul class="dropdown-menu"
-										aria-labelledby="navbarDropdownMenuLink">
-										<li><a class="dropdown-item" href="index.html">Index
-												1</a></li>
-										<li><a class="dropdown-item" href="index-2.html">Index
-												2</a></li>
-										<li><a class="dropdown-item" href="index-3.html">Index
-												3</a></li>
-										<li><a class="dropdown-item" href="index-4.html">Index
-												4</a></li>
-										<li><a class="dropdown-item" href="index-5.html">Index
-												5</a></li>
-										<li><a class="dropdown-item" href="index-6.html">Index
-												6</a></li>
-										<li><a class="dropdown-item" href="index-7.html">Index
-												7 (Video)</a></li>
-									</ul></li>
+									id="navbarDropdownMenuLink2" data-toggle="dropdown"
+									aria-haspopup="true" aria-expanded="false"> My Plan </a></li>
 								<li class="nav-item dropdown"><a
 									class="nav-link dropdown-toggle" href="#"
 									id="navbarDropdownMenuLink2" data-toggle="dropdown"
-									aria-haspopup="true" aria-expanded="false"> Vehicle </a>
-									<ul class="dropdown-menu"
-										aria-labelledby="navbarDropdownMenuLink">
-										<li class="dropdown-submenu"><a
-											class="dropdown-item dropdown-toggle" href="#">List
-												Layout</a>
-											<ul class="dropdown-menu">
-												<li><a class="dropdown-item"
-													href="car-list-rightside.html">Right Sidebar</a></li>
-												<li><a class="dropdown-item"
-													href="car-list-leftside.html">Left Sidebar</a></li>
-												<li><a class="dropdown-item"
-													href="car-list-fullwidth.html">Fullwidth</a></li>
-											</ul></li>
-										<li class="dropdown-submenu"><a
-											class="dropdown-item dropdown-toggle" href="#">Grid
-												Layout</a>
-											<ul class="dropdown-menu">
-												<li><a class="dropdown-item"
-													href="car-grid-rightside.html">Right Sidebar</a></li>
-												<li><a class="dropdown-item"
-													href="car-grid-leftside.html">Left Sidebar</a></li>
-												<li><a class="dropdown-item"
-													href="car-grid-fullwidth.html">Fullwidth</a></li>
-											</ul></li>
-										<li class="dropdown-submenu"><a
-											class="dropdown-item dropdown-toggle" href="#">Car
-												Details</a>
-											<ul class="dropdown-menu">
-												<li><a class="dropdown-item" href="car-details.html">Car
-														Detail 1</a></li>
-												<li><a class="dropdown-item" href="car-details-2.html">Car
-														Detail 2</a></li>
-											</ul></li>
-									</ul></li>
-								<li class="nav-item dropdown megamenu-li active"><a
-									class="nav-link dropdown-toggle" href="" id="dropdown01"
-									data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false">Pages</a>
-									<div class="dropdown-menu megamenu"
-										aria-labelledby="dropdown01">
-										<div class="megamenu-area">
-											<div class="row">
-												<div class="col-sm-6 col-lg-3">
-													<div class="megamenu-section">
-														<h6 class="megamenu-title">Pages</h6>
-														<a class="dropdown-item" href="about-1.html">About 1</a> <a
-															class="dropdown-item" href="about-2.html">About 2</a> <a
-															class="dropdown-item" href="car-comparison.html">Car
-															Comparison</a> <a class="dropdown-item"
-															href="search-brand.html">Car Brands</a> <a
-															class="dropdown-item" href="services-1.html">Services
-															1</a> <a class="dropdown-item" href="services-2.html">Services
-															2</a> <a class="dropdown-item" href="coming-soon.html">Coming
-															Soon</a>
-													</div>
-												</div>
-												<div class="col-sm-6 col-lg-3">
-													<div class="megamenu-section">
-														<h6 class="megamenu-title">Pages</h6>
-														<a class="dropdown-item" href="agent-list.html">Agent
-															List 1</a> <a class="dropdown-item" href="agent-list-2.html">Agent
-															List 2</a> <a class="dropdown-item" href="agent-grid.html">Agent
-															Grid 1</a> <a class="dropdown-item" href="agent-grid-2.html">Agent
-															Grid 2</a> <a class="dropdown-item" href="agent-grid-3.html">Agent
-															Grid 3</a> <a class="dropdown-item" href="agent-detail.html">Agent
-															Detail</a> <a class="dropdown-item" href="typography.html">Typography</a>
-													</div>
-												</div>
-												<div class="col-sm-6 col-lg-3">
-													<div class="megamenu-section">
-														<h6 class="megamenu-title">Pages</h6>
-														<a class="dropdown-item" href="pricing-tables-1.html">Pricing
-															Tables 1</a> <a class="dropdown-item"
-															href="pricing-tables-2.html">Pricing Tables 2</a> <a
-															class="dropdown-item" href="pricing-tables-3.html">Pricing
-															Tables 3</a> <a class="dropdown-item"
-															href="gallery-2column.html">Gallery 2 column</a> <a
-															class="dropdown-item" href="gallery-3column.html">Gallery
-															3 column</a> <a class="dropdown-item"
-															href="gallery-4column.html">Gallery 4 column</a> <a
-															class="dropdown-item" href="typography-2.html">Typography
-															2</a>
-													</div>
-												</div>
-												<div class="col-sm-6 col-lg-3">
-													<div class="megamenu-section">
-														<h6 class="megamenu-title">Pages</h6>
-														<a class="dropdown-item" href="faq-1.html">Faq 1</a> <a
-															class="dropdown-item" href="faq-2.html">Faq 2</a> <a
-															class="dropdown-item" href="pages-404.html">Pages 404</a>
-														<a class="dropdown-item" href="login.html">Login</a> <a
-															class="dropdown-item" href="forgot-password.html">Forgot
-															Password</a> <a class="dropdown-item" href="register.html">Register</a>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div></li>
+									aria-haspopup="true" aria-expanded="false"> About Us </a></li>
+
 								<li class="nav-item dropdown"><a
 									class="nav-link dropdown-toggle" href="#"
-									id="navbarDropdownMenuLink5" data-toggle="dropdown"
-									aria-haspopup="true" aria-expanded="false"> Blog </a>
-									<ul class="dropdown-menu"
-										aria-labelledby="navbarDropdownMenuLink">
-										<li class="dropdown-submenu"><a
-											class="dropdown-item dropdown-toggle" href="#">Classic</a>
-											<ul class="dropdown-menu">
-												<li><a class="dropdown-item"
-													href="blog-classic-sidebar-right.html">Right Sidebar</a></li>
-												<li><a class="dropdown-item"
-													href="blog-classic-sidebar-left.html">Left Sidebar</a></li>
-												<li><a class="dropdown-item"
-													href="blog-classic-fullwidth.html">FullWidth</a></li>
-											</ul></li>
-										<li class="dropdown-submenu"><a
-											class="dropdown-item dropdown-toggle" href="#">Columns</a>
-											<ul class="dropdown-menu">
-												<li><a class="dropdown-item"
-													href="blog-columns-2col.html">2 Columns</a></li>
-												<li><a class="dropdown-item"
-													href="blog-columns-3col.html">3 Columns</a></li>
-											</ul></li>
-										<li class="dropdown-submenu"><a
-											class="dropdown-item dropdown-toggle" href="#">Masonry</a>
-											<ul class="dropdown-menu">
-												<li><a class="dropdown-item"
-													href="blog-masonry-2col.html">2 Masonry</a></li>
-												<li><a class="dropdown-item"
-													href="blog-masonry-3col.html">3 Masonry</a></li>
-											</ul></li>
-										<li class="dropdown-submenu"><a
-											class="dropdown-item dropdown-toggle" href="#">Blog
-												Details</a>
-											<ul class="dropdown-menu">
-												<li><a class="dropdown-item"
-													href="blog-single-sidebar-right.html">Right Sidebar</a></li>
-												<li><a class="dropdown-item"
-													href="blog-single-sidebar-left.html">Left Sidebar</a></li>
-												<li><a class="dropdown-item"
-													href="blog-single-fullwidth.html">Fullwidth</a></li>
-											</ul></li>
-									</ul></li>
-								<li class="nav-item dropdown"><a
-									class="nav-link dropdown-toggle" href="#" id="navbarDropdown4"
-									role="button" data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false"> Shop </a>
-									<div class="dropdown-menu" aria-labelledby="navbarDropdown3">
-										<a class="dropdown-item" href="shop-list.html">Shop List</a> <a
-											class="dropdown-item" href="shop-cart.html">Shop Cart</a> <a
-											class="dropdown-item" href="shop-checkout.html">Shop
-											Checkout</a> <a class="dropdown-item" href="shop-single.html">Shop
-											Details</a>
-									</div></li>
-								<li class="nav-item dropdown"><a
-									class="nav-link dropdown-toggle" href="#" id="navbarDropdown3"
-									role="button" data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false"> Contact </a>
-									<div class="dropdown-menu" aria-labelledby="navbarDropdown3">
-										<a class="dropdown-item" href="contact-1.html">Contact 1</a> <a
-											class="dropdown-item" href="contact-2.html">Contact 2</a> <a
-											class="dropdown-item" href="contact-3.html">Contact 3</a>
-									</div></li>
-								<li class="nav-item dropdown"><a href="#full-page-search"
-									class="nav-link"> <i class="fa fa-search"></i>
-								</a></li>
+									id="navbarDropdownMenuLink2" data-toggle="dropdown"
+									aria-haspopup="true" aria-expanded="false"> Contact Us </a></li>
+								
+								
+								
+								<li class="nav-item dropdown" th:if="${session.user}"><a
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									href="/profile" th:text="Hello+', ' +${session.user}"></a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/logout">LogOut</a></li>
+									
+									
+								<li class="nav-item dropdown" th:if="${session.admin}"><a
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									href="/profile" th:text="Hello+', ' +${session.admin}"></a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/dashboard/">Dash board</a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/logout">Logout</a></li>
 							</ul>
 						</div>
 					</nav>
@@ -296,6 +139,7 @@
 							<ul>
 								<li><a href="index.html">Index</a></li>
 								<li><span>/</span>Car Register</li>
+
 							</ul>
 						</div>
 					</div>
@@ -320,6 +164,12 @@
 		<div class="agent-detail">
 			<div class="container">
 				<div class="row ">
+					<p id="toast-success-registered-car" hidden="true"
+						class="btn btn-outline-primary btn-lg btn-block">Success
+						Example</p>
+					<p id="toast-failed-register-car" hidden="true"
+						class="btn btn-outline-primary btn-lg btn-block">Failed
+						Example</p>
 					<h4 class="col-8 offset-md-2"
 						style="text-align: center; font-weight: bold;">Register Car
 						Step-by-Step</h4>
@@ -339,7 +189,8 @@
 										aria-controls="three" aria-selected="true">Attachments</a></li>
 								</ul>
 
-								<form action="#" method="post" enctype="multipart/form-data">
+								<form th:action="@{/home/carregister}" method="post"
+									enctype="multipart/form-data" id="registerRentCar">
 									<div class="tab-content" id="carTabContent">
 										<div class="tab-pane fade active show" id="one"
 											role="tabpanel" aria-labelledby="one-tab">
@@ -347,19 +198,25 @@
 											<div class="contact-2 contact-agent widget">
 
 												<h5 style="font-weight: bold;">License Plate</h5>
-												<span class="text-danger">Note: The license plate
+												<span class="text-success">Note: The license plate
 													cannot be changed after registration. </span>
 												<div class="row">
-													<div class="form-group col-6">
+													<div class="form-group col-8">
 														<input type="text" id="car-plate-number"
 															name="licensePlates" class="form-control"
-															placeholder="Car plate number">
+															onkeyup="return validatePlate();"
+															placeholder="Car plate number, example: 12A-12345">
+
+
+													</div>
+													<div class="col-12 text-danger text-center">
+														<span id="validation-plate" class="text-danger"></span>
 													</div>
 												</div>
 												<br> <br>
 
 												<h5 style="font-weight: bold;">Basic information</h5>
-												<span class="text-danger">Note: Basic information
+												<span class="text-success">Note: Basic information
 													cannot be changed after registration. </span>
 												<div class="row">
 													<input type="hidden" value="" id="modelIdSelect"
@@ -395,16 +252,20 @@
 													</div>
 
 													<div class="form-group col-6">
-														<label for="car-seat-qty">Number of seat</label> <input
-															type="number" id="car-seat-qty" name="seatQty"
-															class="form-control" placeholder="">
-													</div>
-
-													<div class="form-group col-6">
 														<label for="car-year">Year of production</label> <select
 															onchange="return yearSubmit();" disabled="disabled"
 															id="yearSelect" class="form-control" name="yearSelect"></select>
 													</div>
+													<div class="form-group col-6">
+														<label for="car-seat-qty">Number of seat</label> <input
+															type="number" id="car-seat-qty" name="seatQty"
+															onkeyup="return validateCarbasic()" class="form-control"
+															placeholder=""> <span
+															id="validation-numberOfSeat-result" class="text-danger"></span>
+
+													</div>
+
+
 													<div class="form-group col-6">
 														<label for="car-fuel-type">Fuel Type</label> <select
 															id="fuelCheck" class="form-control" name="fuelType">
@@ -413,11 +274,11 @@
 															<option value="Diesel">Diesel Oil</option>
 															<option value="Electric">Electric</option>
 														</select>
-
 													</div>
 													<div class="form-group col-6" style="display: none"
 														id="fuelResponse">
 														<label for="car-transmission">Transmission</label> <select
+															onchange="return validateCarbasic();"
 															id="transmissionCheck" class="form-control"
 															name="engineInformationTranmission">
 															<option value="">---Select Transmission Type---</option>
@@ -425,6 +286,9 @@
 															<option value="1">Auto Transmission</option>
 
 														</select>
+													</div>
+													<div class="col-12 text-danger text-center">
+														<span id="validation-result-final"></span>
 													</div>
 
 
@@ -435,10 +299,12 @@
 												<div class="form-group">
 
 													<textarea id="car-description" name="description"
-														class="form-control"
+														onkeyup="return carDesciptionCheck()" class="form-control"
 														placeholder="Toyota Fortuner, automatic transmission, registered in June 2018. Well-maintained by the family, it's in great condition with regular maintenance. The interior is spacious and clean. Safety and convenience features include parking sensors, automatic wipers, automatic headlights, and a dashcam. Suitable for family use, with free shuttle services. The Fortuner is ready for new journeys with you."></textarea>
 												</div>
-
+												<div class="col-12 text-danger text-center">
+													<span id="validation-carDescription" class="text-danger"></span>
+												</div>
 												<br> <br>
 
 												<h5 style="font-weight: bold;">Features</h5>
@@ -636,7 +502,7 @@
 
 											</div>
 											<div class="col-4">
-												<a onclick="return moveStep2();" class="btn btn-primary"
+												<a onclick="return moveStep2()" class="btn btn-primary"
 													style="background-color: #3c5bfc;">Next step</a>
 											</div>
 										</div>
@@ -653,11 +519,14 @@
 
 																<div class="input-group-prepend">
 																	<div class="input-group-text">$</div>
-																	<input type="number" class="form-control" value="100"
+																	<input type="number" class="form-control"
+																		id="priceRent" onkeyup="return priceRentCheck()"
 																		placeholder="100" name="price">
 																</div>
 															</div>
-
+															<div class="col-12 text-danger text-center">
+																<span id="validation-priceRent"></span>
+															</div>
 														</div>
 													</div>
 													<br> <br>
@@ -675,19 +544,19 @@
 
 															</div>
 														</div>
-														<div class="row">
+														<div class="row" id="discountCheckResponse"
+															style="display: none;">
 															<div class="col-6">
-																<div id="discountCheckResponse" style="display: none;">
-																	<h6>Weekly discount (% on bill)</h6>
-																	<input type="range" class="form-control-range" min="1"
-																		disabled max="100" value="20" id="discountRange"
-																		name="discount"> <span>Recommend
-																		discount: 20%</span>
-																</div>
+
+																<h6>Weekly discount (% on bill)</h6>
+																<input type="range" class="form-control-range" min="1"
+																	disabled max="100" value="20" id="discountRange"
+																	name="discount"> <span>Recommend
+																	discount: 20%</span>
 
 															</div>
 															<div class="col-6">
-																<span id="discountValue" class="float-right text-danger"></span>
+																<span id="discountValue" class="float-right text-success"></span>
 															</div>
 														</div>
 													</div>
@@ -698,7 +567,8 @@
 																Booking</h5>
 															<div class="col-6">
 																<label class="switch"> <input type="checkbox"
-																	id="fastBookingCheck" class="primary"> <span
+																	id="fastBookingCheck" class="primary"
+																	name="isFastBooking"> <span
 																	class="slider round"></span>
 																</label>
 															</div>
@@ -709,13 +579,17 @@
 																<div id="fastBookingResponse" style="display: none;">
 																	<div class="form-group">
 																		<label>Estimate time arrival(hours)</label> <input
-																			type="number" class="form-control">
+																			type="number" class="form-control" id="estimateTime"
+																			name="estimateTime"
+																			onkeyup="return checkEstimateTime();">
 																	</div>
 																</div>
 
 
 															</div>
-
+															<div class="col-12 text-danger text-center">
+																<span id="validation-estimateTime"></span>
+															</div>
 														</div>
 													</div>
 
@@ -724,10 +598,11 @@
 
 														<div class="input-group-prepend">
 															<input type="text" readonly class="form-control"
-																placeholder="Click to enter address"
-																onclick="return openModal.click();"> <a href="#"
-																data-toggle="modal" data-target="#addressModal"
-																id="openModal" hidden="true">Click me</a>
+																name="address" placeholder="Click to enter address"
+																onclick="return openModal.click();" id="carAddress"
+																value=""> <a href="#" data-toggle="modal"
+																data-target="#addressModal" id="openModal" hidden="true">Click
+																me</a>
 
 														</div>
 
@@ -740,8 +615,8 @@
 																of the car to the place</h5>
 															<div class="col-6">
 																<label class="switch "> <input type="checkbox"
-																	id="deliveryCheck" class="primary"> <span
-																	class="slider round"></span>
+																	id="deliveryCheck" class="primary" name="isCarPlus">
+																	<span class="slider round"></span>
 																</label>
 															</div>
 
@@ -750,32 +625,35 @@
 																<div class="col-6 mb-3">
 																	<h6>Maximum delivery distance</h6>
 																	<input type="range" class="form-control-range" min="1"
-																		max="50" value="7" id="deliveryDistanceRange" disabled>
-																	<span>Recommended distance: 7km</span>
+																		max="50" value="7" id="deliveryDistanceRange"
+																		name="maxDeliveryDistance" disabled> <span>Recommended
+																		distance: 7km</span>
 																</div>
 																<div class="col-6">
 																	<span id="deliveryDistanceValue"
-																		class="float-right text-danger"></span>
+																		class="float-right text-success"></span>
 																</div>
 																<div class="col-6 mb-3">
 																	<h6>Car delivery fee per kilometer</h6>
 																	<input type="range" class="form-control-range" min="1"
-																		max="30" value="10" id="deliveryFeeRange" disabled>
-																	<span>Recommended fee: $10</span>
+																		max="30" value="10" id="deliveryFeeRange"
+																		name="feePerKm" disabled> <span>Recommended
+																		fee: $10</span>
 																</div>
 																<div class="col-6">
 																	<span id="deliveryFeeValue"
-																		class="float-right text-danger"></span>
+																		class="float-right text-success"></span>
 																</div>
 																<div class="col-6 mb-3">
 																	<h6>Free car delivery within</h6>
 																	<input type="range" class="form-control-range" min="1"
-																		max="50" value="0" id="freeDeliveryRange" disabled>
-																	<span>Recommended distance: 0km</span>
+																		name="freeDeliveryWithin" max="50" value="0"
+																		id="freeDeliveryRange" disabled> <span>Recommended
+																		distance: 1km</span>
 																</div>
 																<div class="col-6">
 																	<span id="freeDeliveryValue"
-																		class="float-right text-danger"></span>
+																		class="float-right text-success"></span>
 																</div>
 															</div>
 														</div>
@@ -789,8 +667,8 @@
 																the number of kilometers</h5>
 															<div class="col-6">
 																<label class="switch "> <input type="checkbox"
-																	id="limitKmCheck" class="primary"> <span
-																	class="slider round"></span>
+																	id="limitKmCheck" class="primary" name="isExtraFee">
+																	<span class="slider round"></span>
 																</label>
 															</div>
 															<div class="row col-12" id="limitKmResponse"
@@ -799,37 +677,42 @@
 																	<h6>Maximum number of km in 1 day</h6>
 																	<input type="range" class="form-control-range"
 																		min="300" max="500" value="400" id="maxKmRange"
-																		disabled> <span>Recommended kilometers:
-																		400km</span>
+																		name="maximunKmPerDay" disabled> <span>Recommended
+																		kilometers: 400km</span>
 																</div>
 																<div class="col-6">
-																	<span id="maxKmValue" class="float-right text-danger"></span>
+																	<span id="maxKmValue" class="float-right text-success"></span>
 																</div>
 																<div class="col-6 mb-3">
 																	<h6>Over-limit fee (per km)</h6>
 																	<input type="range" class="form-control-range" min="3"
-																		max="10" value="5" id="overLimitFeeRange" disabled>
-																	<span>Recommended fee: $5</span>
+																		name="overLimitFee" max="10" value="5"
+																		id="overLimitFeeRange" disabled> <span>Recommended
+																		fee: $5</span>
 																</div>
 																<div class="col-6">
 																	<span id="overLimitFeeValue"
-																		class="float-right text-danger"></span>
+																		class="float-right text-success"></span>
 
 																</div>
 															</div>
 														</div>
 
-														<div class="form-group mb-3 col-12">
-															<div class="row">
-																<h5 class="col-6" style="font-weight: bold;">Some
-																	Requirements Description</h5>
-															</div>
 
-															<p>Specify the requirements so that guests can rent a
-																car.</p>
-															<textarea cols="100" rows="1" name="rules"
-																placeholder="Do not use the vehicle for illegal purposes. Drive carefully, keep the car clean, return the car on time. Surcharge 500k if smoking in the car."></textarea>
+													</div>
+													<div class="form-group mb-3 col-12">
+														<div class="row">
+															<h5 class="col-6" style="font-weight: bold;">Some
+																Requirements Description</h5>
+														</div>
 
+														<p>Specify the requirements so that guests can rent a
+															car.</p>
+														<textarea cols="100" rows="1" name="rules" id="rules"
+															onkeyup="return ruleCheck()"
+															placeholder="Do not use the vehicle for illegal purposes. Drive carefully, keep the car clean, return the car on time. Surcharge 500k if smoking in the car."></textarea>
+														<div class="col-12 text-danger text-center">
+															<span id="validation-rules"></span>
 														</div>
 													</div>
 												</div>
@@ -846,23 +729,74 @@
 											aria-labelledby="three-tab">
 											<div class="form-group mb-3 col-12">
 												<div class="row">
-													<h5 class="col-12" style="font-weight: bold;">Upload
-														Images</h5>
-													<div class="col-12" id="imageInputContainer">
-														<input type="file" name="images[]" class="image-input"
-															accept="image/*" multiple>
+													<h5 class="col-12" style="font-weight: bold;">Upload Your
+														Car Images</h5>
+
+													<div class="form-group">
+														<label for="frontImg">Front Image: </label> <input
+															type="file" class="form-control-file imgCars"
+															id="frontImg" name="frontImg"
+															onchange="previewImage('frontImg','frontImgPre')">
+
+														<div class="col-md-8">
+															<br> <img src="" id="frontImgPre" height="100px" />
+														</div>
 													</div>
-													<div class="col-12 mt-3 d-flex" id="imagePreviewContainer"></div>
-													<!-- <div class="col-12 mt-3">
-														<button type="button" id="addImageButton" onclick="return imageInputContainer.click();"
-															class="btn btn-primary">Add More Images</button>
-													</div> -->
+
+													<div class="form-group">
+														<label for="BehindImg">Behind Image: </label> <input
+															type="file" class="form-control-file imgCars"
+															id="behindImg" name="behindImg"
+															onchange="previewImage('behindImg','behindImgPre')">
+														<div class="col-md-8">
+															<br> <img src="" id="behindImgPre" height="100px" />
+														</div>
+
+													</div>
+													<div class="form-group">
+														<label for="lefImg">Left Image: </label> <input
+															type="file" class="form-control-file imgCars"
+															id="leftImg" name="leftImg"
+															onchange="previewImage('leftImg','leftImgPre')">
+														<div class="col-md-8">
+															<br> <img src="" id="leftImgPre" height="100px" />
+														</div>
+													</div>
+													<div class="form-group">
+														<label for="rightImg">Right Image: </label> <input
+															type="file" class="form-control-file imgCars"
+															id="rightImg" name="rightImg"
+															onchange="previewImage('rightImg','rightImgPre')">
+														<div class="col-md-8">
+															<br> <img src="" id="rightImgPre" height="100px" />
+														</div>
+
+													</div>
+													<div class="form-group">
+														<label for="insideImg">Inside Image: </label> <input
+															type="file" class="form-control-file imgCars"
+															id="insideImg" name="insideImg"
+															onchange="previewImage('insideImg','insideImgPre')">
+														<div class="col-md-8">
+															<br> <img src="" id="insideImgPre" height="100px" />
+														</div>
+
+													</div>
+													<div class="col-12 text-danger text-center">
+														<span id="validation-image"></span>
+													</div>
+													<div class="col-12 text-danger text-center">
+														<span id="validation-NUll-img"></span>
+													</div>
+													<div class="col-12 text-danger text-center">
+														<span id="validation-Duplicate-image"></span>
+													</div>
 												</div>
 											</div>
 											<div class="col-4">
 												<a onclick="return backStep2();" class="btn btn-primary"
 													style="background-color: #3c5bfc;">Back </a>
-												<button onclick="return form.submit();"
+												<button onclick="return checkSubmitRegister();"
 													class="btn btn-primary" style="background-color: #3c5bfc;">Submit
 												</button>
 
@@ -889,7 +823,7 @@
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
-						<span aria-hidden="true">×</span>
+						<span aria-hidden="true" id="offModal">×</span>
 					</button>
 				</div>
 				<div class="modal-body">
@@ -946,8 +880,7 @@
 									<label class="col-3 col-form-label" for="ward">Ward:</label>
 									<div class="col-7">
 										<select disabled="disabled" id="wardSelect"
-											class="form-control" onchange="return wardSubmit()"
-											name="wardSelect">
+											class="form-control" name="wardSelect">
 										</select>
 									</div>
 
@@ -966,8 +899,11 @@
 									</div>
 								</section>
 
-
-								<a href="car-details.html" class="btn btn-theme">Save</a>
+								<section class="form-group row">
+									<span id="validation-address" class="text-danger text-center"></span>
+								</section>
+								<a href="#" class="btn btn-theme"
+									onclick="return addressSubmit();">Save</a>
 							</div>
 						</div>
 					</div>
@@ -1033,7 +969,7 @@
 						<div class="f-border"></div>
 						<div class="media mb-4">
 							<a class="pr-3" href="car-details.html"> <img
-								src="assets/img/sub-car/sub-car.jpg" alt="car">
+								src="/assets/img/sub-car/sub-car.jpg" alt="car">
 							</a>
 							<div class="media-body align-self-center">
 								<h5>
@@ -1047,7 +983,7 @@
 						</div>
 						<div class="media mb-4">
 							<a class="pr-3" href="car-details.html"> <img
-								src="assets/img/sub-car/sub-car-2.jpg" alt="car">
+								src="/assets/img/sub-car/sub-car-2.jpg" alt="car">
 							</a>
 							<div class="media-body align-self-center">
 								<h5>
@@ -1061,7 +997,7 @@
 						</div>
 						<div class="media">
 							<a class="pr-3" href="car-details.html"> <img
-								src="assets/img/sub-car/sub-car-3.jpg" alt="car">
+								src="/assets/img/sub-car/sub-car-3.jpg" alt="car">
 							</a>
 							<div class="media-body align-self-center">
 								<h5>
@@ -1128,7 +1064,7 @@
 			<div class="off-canvas-content">
 				<aside class="canvas-widget">
 					<div class="logo text-center">
-						<img src="assets/img/logos/logo.png" alt="logo">
+						<img src="/assets/img/logos/logo.png" alt="logo">
 					</div>
 				</aside>
 				<aside class="canvas-widget">
@@ -1175,13 +1111,36 @@
 	<script src="/assets/js/jquery.mb.YTPlayer.js"></script>
 	<script src="/assets/js/slick.min.js"></script>
 	<script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
-	<script
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0N5pbJN10Y1oYFRd0MJ_v2g8W2QT74JE"></script>
+
 	<script src="/assets/js/ie-emulation-modes-warning.js"></script>
 	<!-- Custom JS Script -->
 	<script src="/assets/js/app.js"></script>
+	<script
+		th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
 
+	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 	<script>
+	function backStep1() {
+		document.getElementById("one-tab").click();
+		scrollToTop();
+
+	}
+	function backStep2() {
+		document.getElementById("two-tab").click();
+		scrollToTop();
+
+	};
+	function moveStep3() {
+		document.getElementById("three-tab").click();
+		scrollToTop();
+
+	};
+	function moveStep2() {
+		document.getElementById("two-tab").click();
+		scrollToTop();
+
+	};	
+
 	function provinceSubmit() {
 		const districtSelect = $("#districtSelect").get(0);
 		const wardSelect = $("#wardSelect").get(0);
@@ -1225,6 +1184,25 @@
 			}
 		}); 
 	};
+	function addressSubmit(){
+		const houseNo=document.getElementById('houseNo').value;
+		const street =document.getElementById('street').value;
+		if(houseNo =="" || street ==""){
+			document.getElementById('validation-address').textContent = "Address is not valid";
+			return false;
+		}else{
+			
+		        document.getElementById('validation-address').textContent = "";
+		        var address = $("#houseNo").val() + ", "+$("#street").val()+", " + $("#wardSelect option:selected").text() + ", " + $("#districtSelect option:selected").text() + ", " + $("#provinceSelect option:selected").text();
+				$("#carAddress").val(address);
+				console.log(address);
+				console.log($("#carAddress").val());
+				
+				carAddress.setAttribute("value",address);
+				
+				offModal.click();
+	}	
+	}
 	function brandSubmit() {
 		const categorySelect = $("#categorySelect").get(0);
 		const modelSelect = $("#modelSelect").get(0);
@@ -1296,7 +1274,7 @@
 			data: { brandName: $("#brandSelect").val(),cateName: $("#categorySelect").val(),modelName:$("#modelSelect").val(),year:$("#yearSelect").val()},
 			success: function (res) {
 				
-				
+					
 					$(modelIdSelect).val(res.modelId);
 				
 				
@@ -1339,35 +1317,16 @@
 		const scrollToTop = () => {
 		   scrollingElement.scrollTop = 0;
 		}
-		function backStep1() {
-			document.getElementById("one-tab").click();
-			scrollToTop();
-
-		}
-		function backStep2() {
-			document.getElementById("two-tab").click();
-			scrollToTop();
-
-		}
-		function moveStep3() {
-			document.getElementById("three-tab").click();
-			scrollToTop();
-
-		}
-		function moveStep2() {
-			document.getElementById("two-tab").click();
-			scrollToTop();
-
-		}
-
+		
 		const discountCheck = document.getElementById('discountCheck');
 		const discountCheckResponse = document
 				.getElementById('discountCheckResponse');
 
 		discountCheck.addEventListener('change', function() {
 			if (this.checked) {
-				discountCheckResponse.style.display = 'block';
+				discountCheckResponse.style.display = 'flex';
 				discountRange.removeAttribute("disabled");
+				document.getElementById('discountValue').textContent = "Discount: "+discountRange.value + "%";
 				discountCheckResponse.style.animation = "5s slide-right";
 			} else {
 				discountCheckResponse.style.animation = "5s slide-left";
@@ -1382,13 +1341,25 @@
 		fastBookingCheck.addEventListener('change', function() {
 			if (this.checked) {
 				fastBookingResponse.style.display = 'block';
-				
+				checkEstimateTime();
 				fastBookingResponse.style.animation = "5s slide-right";
 			} else {
 				fastBookingResponse.style.animation = "5s slide-left";
 				fastBookingResponse.style.display = 'none';
+				document.getElementById('validation-estimateTime').textContent = "";
+				
 			}
 		});
+		function checkEstimateTime(){
+			const estimateTime = document.getElementById('estimateTime').value;
+			if(estimateTime <1){
+				document.getElementById('validation-estimateTime').textContent = "Estimate time is not valid";
+			}else{
+				
+			        document.getElementById('validation-estimateTime').textContent = "";
+		}
+			
+		}
 		const deliveryCheck = document.getElementById('deliveryCheck');
 		const deliveryResponse = document.getElementById('deliveryResponse');
 
@@ -1398,13 +1369,21 @@
 				deliveryDistanceRange.removeAttribute("disabled");
 				deliveryFeeRange.removeAttribute("disabled");
 				freeDeliveryRange.removeAttribute("disabled");
+				document.getElementById('deliveryDistanceValue').textContent = "Delivery Distance: "+deliveryDistanceRange.value + "km";
+				document.getElementById('deliveryFeeValue').textContent = "Delivery Fee/km: "+deliveryFeeRange.value + "$";
+				document.getElementById('freeDeliveryValue').textContent = "Free Fee With in: "+freeDeliveryRange.value + "km";
 				deliveryResponse.style.animation = "5s slide-right";
+				
+				
 			} else {
 				deliveryResponse.style.animation = "5s slide-left";
 				deliveryResponse.style.display = 'none';
 				deliveryDistanceRange.setAttribute("disabled",true);
 				deliveryFeeRange.setAttribute("disabled",true);
 				freeDeliveryRange.setAttribute("disabled",true);
+				document.getElementById('deliveryDistanceValue').textContent = "";
+				document.getElementById('deliveryFeeValue').textContent = "";
+				document.getElementById('freeDeliveryValue').textContent = "";
 			}
 		});
 		const limitKmCheck = document.getElementById('limitKmCheck');
@@ -1415,12 +1394,16 @@
 				limitKmResponse.style.display = 'flex';
 				overLimitFeeRange.removeAttribute("disabled");
 				maxKmRange.removeAttribute("disabled");
+				document.getElementById('maxKmValue').textContent = "Maximum km in 1 day: "+maxKmRange.value + "km";
+				document.getElementById('overLimitFeeValue').textContent = "Fee over-limit /km: "+overLimitFeeRange.value + "$";
 				limitKmResponse.style.animation = "5s slide-right";
 			} else {
 				limitKmResponse.style.animation = "5s slide-left";
 				limitKmResponse.style.display = 'none';
 				overLimitFeeRange.setAttribute("disabled",true);
 				maxKmRange.setAttribute("disabled",true);
+				document.getElementById('maxKmValue').textContent = "";
+				document.getElementById('overLimitFeeValue').textContent = "";
 			}
 		});
 		const fuelCheck = document.getElementById('fuelCheck');
@@ -1484,62 +1467,145 @@
 			overLimitFeeValue.textContent = "Fee over-limit /km: "+this.value + "$";
 		});
 		
-		// Function to handle file selection and display image preview
-		function handleFileSelect(event) {
-		    const files = event.target.files;
-		    const previewContainer = document.getElementById('imagePreviewContainer');
-
-		    previewContainer.innerHTML = ''; // Clear previous previews
-
-		    for (const file of files) {
-		        const reader = new FileReader();
-
-		        reader.onload = function (e) {
-		            const imgContainer = document.createElement('div');
-		            imgContainer.classList.add('img-container');
-		            
-		            const img = document.createElement('img');
-		            img.src = e.target.result;
-		            img.height = 150;
-		            img.classList.add('img-thumbnail');
-		            imgContainer.appendChild(img);
-		            
-		            const clearButton = document.createElement('button');
-		            clearButton.textContent = 'Clear';
-		            clearButton.classList.add('btn', 'btn-danger', 'btn-sm', 'mx-1');
-		            clearButton.addEventListener('click', function() {
-		                imgContainer.remove(); // Remove the image container
-		            });
-		            imgContainer.appendChild(clearButton);
-
-		            previewContainer.appendChild(imgContainer);
-		        };
-
-		        reader.readAsDataURL(file);
-		    }
+		
+		
+	function validateCarbasic(){
+		const modelIdSelect = document.getElementById("modelIdSelect").value;
+		const carSeatQty = document.getElementById("car-seat-qty").value;
+		const transmissionCheck = document.getElementById("transmissionCheck").value;
+		if(carSeatQty >7 || carSeatQty<2){
+			document.getElementById('validation-numberOfSeat-result').textContent = "Seat quantity not valid";
+		}else{
+			document.getElementById('validation-numberOfSeat-result').textContent = "";
 		}
-
-		// Add event listener to input file elements
-		document.addEventListener('change', function(event) {
-		    if (event.target.classList.contains('image-input')) {
-		        handleFileSelect(event);
-		    }
-		});
-
-		// Function to add more image upload fields
-		function addImageInput() {
-		    const imageInputContainer = document.getElementById('imageInputContainer');
-		    const newInput = document.createElement('input');
-		    newInput.type = 'file';
-		    newInput.name = 'images[]';
-		    newInput.classList.add('image-input');
-		    newInput.accept = 'image/*';
-		    newInput.multiple = true;
-		    imageInputContainer.appendChild(newInput);
+		if(modelIdSelect == "" ||carSeatQty =="" || transmissionCheck ==""){
+			document.getElementById('validation-result-final').textContent = "Car basic infor must be declared";
+		}else{
+			
+		        document.getElementById('validation-result-final').textContent = "";
+		  
 		}
-
+		
+	}
 	
+	function carDesciptionCheck(){
+		const carDescription = document.getElementById("car-description").value;
+		if(carDescription == ""){
+			document.getElementById('validation-carDescription').textContent = "Car description must be declared";
+		}else{
+			
+		        document.getElementById('validation-carDescription').textContent = "";
+	}
+	}
 
+	function priceRentCheck(){
+		const priceRent = document.getElementById("priceRent").value;
+		if(priceRent <1){
+			document.getElementById('validation-priceRent').textContent = "Price is not valid";
+		}else{
+			
+		        document.getElementById('validation-priceRent').textContent = "";
+	}
+	}
+	
+	function ruleCheck(){
+		const rules = document.getElementById("rules").value;
+		if(rules ==""){
+			document.getElementById('validation-rules').textContent = "Rule must be declared";
+		}else{
+			
+		        document.getElementById('validation-rules').textContent = "";
+	}
+	};
+	function validatePlate(){
+		const plateNumber = document.getElementById("car-plate-number").value;
+		var pattern = /\b\d{2}[A-Z]{1}-\d{4,5}\b/;
+		if(plateNumber==""){
+			document.getElementById('validation-plate').textContent = "Plate License must be declared";
+		}
+		else if(!pattern.test(plateNumber)){
+			document.getElementById('validation-plate').textContent = "Plate License is not valid";
+		}else{
+			
+		        document.getElementById('validation-plate').textContent = "";
+	}
+	}
+	validateCarbasic();
+	carDesciptionCheck();
+	priceRentCheck();
+	ruleCheck();
+	validatePlate();
+	validateImg();
+	function validateImg(){
+		var frontImg =document.getElementById('frontImg').value;
+		var behindImg =document.getElementById('behindImg').value;
+		var leftImg =document.getElementById('leftImg').value;
+		var rightImg =document.getElementById('rightImg').value;
+		var insideImg =document.getElementById('insideImg').value;
+		
+		
+		if(frontImg ==""|| behindImg=="" ||leftImg=="" || rightImg==""||insideImg==""){
+			document.getElementById('validation-NUll-img').textContent = "All neccessary images must be uploaded";
+		}
+		else{
+			document.getElementById('validation-NUll-img').textContent = "";
+		}
+		if(frontImg==behindImg || frontImg==leftImg||frontImg==rightImg||frontImg==insideImg||behindImg==leftImg||behindImg==rightImg||behindImg==insideImg||leftImg==rightImg||leftImg==insideImg||rightImg==insideImg){
+        	console.log($('#frontImg').val())
+			document.getElementById('validation-Duplicate-image').textContent = "Some Images are duplicated name, Please try again";
+		}else{
+			document.getElementById('validation-Duplicate-image').textContent = "";
+		}
+	}
+	function previewImage(inputId, previewId){
+		
+		validateImg();
+		var input = document.getElementById(inputId);
+        var preview = document.getElementById(previewId);
+        var value =input.value;
+        
+		if (!value.match(/\.(jpg|jpeg|png|gif)$/i)){
+		
+			input.setAttribute('value', '');
+			preview.setAttribute('src', '');
+			document.getElementById('validation-image').textContent = "Some Images are not valid";
+		}else{
+			
+		        document.getElementById('validation-image').textContent = "";
+		        if (input && input.files && input.files[0]) {
+		            var reader = new FileReader();
+
+		            reader.onload = function (e) {
+		                preview.src = e.target.result;
+		            }
+
+		            reader.readAsDataURL(input.files[0]);
+		        }
+			}
+        }
+
+	function checkSubmitRegister(){
+		validateImg();
+		var plateCheck= document.getElementById('validation-plate').textContent.trim().length;
+		var carBasicCheck = document.getElementById('validation-result-final').textContent.trim().length;
+		var descriptionCheck =document.getElementById('validation-carDescription').textContent.trim().length;
+		var priceCheck =document.getElementById('validation-priceRent').textContent.trim().length;
+		var addressCheck = document.getElementById('carAddress').textContent.trim().length;
+		var fastBookingCheck=document.getElementById('validation-estimateTime').textContent.trim().length;
+		var ruleCheck =document.getElementById('validation-rules').textContent.trim().length;
+		var ImgCheck =document.getElementById('validation-image').textContent.trim().length;
+		var ImgCheckNull =document.getElementById('validation-NUll-img').textContent.trim().length;
+		const sum = plateCheck+carBasicCheck+descriptionCheck+priceCheck+addressCheck+fastBookingCheck+ruleCheck+ImgCheck+ImgCheckNull;
+		if(sum>0){
+			console.log(sum);
+			document.getElementById('toast-failed-register-car').click();
+			return false;
+		}else{
+			document.getElementById('toast-success-registered-car').click();
+			return registerRentCar.submit();
+		}
+	}
+	  
 	</script>
 </body>
 

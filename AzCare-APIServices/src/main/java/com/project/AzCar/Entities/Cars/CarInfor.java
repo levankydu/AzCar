@@ -34,7 +34,6 @@ public class CarInfor implements Serializable {
 	private static final long serialVersionUID = 7180110793287986682L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int Id;
 
 	private int seatQty;
@@ -42,6 +41,8 @@ public class CarInfor implements Serializable {
 	private String fuelType;
 
 	private boolean engineInformationTranmission;
+	//false: manual
+	//true :auto
 
 	private String services;
 
@@ -68,8 +69,7 @@ public class CarInfor implements Serializable {
 	private boolean isFastBooking;
 	private int discount;
 	private String rules;
-	@Transient
-	@ManyToMany(mappedBy = "cars", fetch = FetchType.EAGER)
-	private List<Addreess> address;
+
+	private String address;
 	
 }

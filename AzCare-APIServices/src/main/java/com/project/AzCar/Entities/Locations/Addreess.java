@@ -32,7 +32,7 @@ public class Addreess implements Serializable{/**
 
 	@Id
 	private int id;
-	private String Street;
+	private String street;
 	private String houseNo;
 	private String idCtiy;
 	private String idDistrict;
@@ -48,6 +48,6 @@ public class Addreess implements Serializable{/**
 	@JoinTable(name = "address_car")
 	private List<CarInfor> cars;
 	
-	
+	private int idCarRegister;
 	
 }

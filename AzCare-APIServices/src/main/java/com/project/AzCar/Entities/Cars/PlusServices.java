@@ -10,22 +10,27 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tbbrandimages")
-public class BrandImages implements Serializable{/**
+@Table(name = "tbplusservices")
+public class PlusServices implements Serializable{
+
+	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4404387433056113055L;
+	private static final long serialVersionUID = -57193474630692460L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private int id;
 	
-	private String ImageUrl= null;
-	private String brandName;
+	private long maxDeliveryDistance;
+	private long feePerKm;
+	private long freeDeliveryWithin;
+	private long fee;
+	
+	private int carRegisterId;
 	
 }

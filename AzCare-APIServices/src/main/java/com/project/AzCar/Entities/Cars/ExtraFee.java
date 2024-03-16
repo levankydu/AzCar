@@ -15,17 +15,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tbbrandimages")
-public class BrandImages implements Serializable{/**
+@Table(name="tbextrafee")
+public class ExtraFee implements Serializable{
+
+	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4404387433056113055L;
+	private static final long serialVersionUID = -6591198605083296869L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	private String ImageUrl= null;
-	private String brandName;
+	private int id;
+	private long maximunKmPerDay;
+	private long overLimitFee;
+	private int carRegisterId;
 	
 }

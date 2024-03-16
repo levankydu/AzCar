@@ -28,7 +28,6 @@ public class HomeController {
 
 	@Autowired
 	private UserServices uServices;
-
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 

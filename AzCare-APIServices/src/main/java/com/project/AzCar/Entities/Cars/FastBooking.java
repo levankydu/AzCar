@@ -15,17 +15,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tbbrandimages")
-public class BrandImages implements Serializable{/**
+@Table(name="tbfastbooking")
+public class FastBooking implements Serializable {
+	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -4404387433056113055L;
+	private static final long serialVersionUID = 1676654435517427978L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private int id;
 	
-	private String ImageUrl= null;
-	private String brandName;
+	private long fee;
+	
+	private long estimateTime;
+	
+	private int carRegisterdId;
+	
 	
 }
