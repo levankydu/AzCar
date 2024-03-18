@@ -42,6 +42,7 @@ dependencies {
 	
 	implementation group: 'javax.mail', name: 'mail', version: '1.4'
 	
+	
 }
 
 tasks.named('test') {

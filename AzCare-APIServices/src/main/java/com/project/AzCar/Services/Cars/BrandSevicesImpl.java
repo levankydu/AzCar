@@ -73,6 +73,11 @@ public class BrandSevicesImpl implements BrandServices{
 		return brandRepo.getModelId(brandName, cateName, modelName, year);
 	}
 
+	@Override
+	public CarModelList getModel(String modelId) {
+		return brandRepo.getModelById(modelId);
+	}
+
 	
 
 }

@@ -74,7 +74,7 @@
 				<div class="col-12">
 					<nav class="navbar navbar-expand-lg navbar-light rounded">
 						<a class="navbar-brand logo navbar-brand d-flex mr-auto"
-							href="index.html"> <img
+							href="/"> <img
 							src="/assets/img/logos/black-logo.png" alt="logo">
 						</a>
 						<button class="navbar-toggler" type="button"
@@ -85,23 +85,15 @@
 						</button>
 						<div class="navbar-collapse collapse w-100" id="navbar">
 							<ul class="navbar-nav ml-auto">
-								<li class="nav-item dropdown"><a
-									class="nav-link dropdown-toggle" href="#"
-									id="navbarDropdownMenuLink2" data-toggle="dropdown"
-									aria-haspopup="true" aria-expanded="false">Available Cars</a></li>
-								<li class="nav-item dropdown" th:if="${session.user}"><a
-									class="nav-link dropdown-toggle" href="#"
-									id="navbarDropdownMenuLink2" data-toggle="dropdown"
-									aria-haspopup="true" aria-expanded="false">My Plan</a></li>
-								<li class="nav-item dropdown"><a
-									class="nav-link dropdown-toggle" href="#"
-									id="navbarDropdownMenuLink2" data-toggle="dropdown"
-									aria-haspopup="true" aria-expanded="false"> About Us </a></li>
+								<li class="nav-item"><a class="nav-link"
+									th:href="@{/home/availablecars/}">Available Cars</a></li>
+								<li class="nav-item" th:if="${session.user}"><a
+									class="nav-link" href="#">My Plan</a></li>
+								<li class="nav-item "><a class="nav-link" href="#">
+										About Us </a></li>
 
-								<li class="nav-item dropdown"><a
-									class="nav-link dropdown-toggle" href="#"
-									id="navbarDropdownMenuLink2" data-toggle="dropdown"
-									aria-haspopup="true" aria-expanded="false"> Contact Us </a></li>
+								<li class="nav-item"><a class="nav-link" href="#">
+										Contact Us </a></li>
 
 
 
@@ -119,6 +111,11 @@
 									href="/dashboard/">Dash board</a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
 									href="/logout">Logout</a></li>
+								<li class="nav-item dropdown" th:unless="${session.isAuthen}"><a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/login">Login</a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/register">Register</a></li>
 							</ul>
 						</div>
 					</nav>
@@ -151,7 +148,7 @@
 						<div class="contact-info">
 							<ul>
 								<li><i class="fa fa-phone"></i> +1-8X0-666-8X88</li>
-								<li><a href="contact-1.html" class="btn btn-md btn-theme">Contact
+								<li><a href="tel:+84-3939-7979" class="btn btn-md btn-theme">Contact
 										us</a></li>
 							</ul>
 						</div>
@@ -1600,7 +1597,9 @@
 		var ruleCheck =document.getElementById('validation-rules').textContent.trim().length;
 		var ImgCheck =document.getElementById('validation-image').textContent.trim().length;
 		var ImgCheckNull =document.getElementById('validation-NUll-img').textContent.trim().length;
-		const sum = plateCheck+carBasicCheck+descriptionCheck+priceCheck+addressCheck+fastBookingCheck+ruleCheck+ImgCheck+ImgCheckNull;
+		var ImgChecDuplicate =document.getElementById('validation-Duplicate-image').textContent.trim().length;
+		
+		const sum = plateCheck+carBasicCheck+descriptionCheck+priceCheck+addressCheck+fastBookingCheck+ruleCheck+ImgCheck+ImgCheckNull+ImgChecDuplicate;
 		if(sum>0){
 			console.log(sum);
 			document.getElementById('toast-failed-register-car').click();

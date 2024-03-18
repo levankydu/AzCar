@@ -170,23 +170,15 @@ h2 {
 						</button>
 						<div class="navbar-collapse collapse w-100" id="navbar">
 							<ul class="navbar-nav ml-auto">
-									<li class="nav-item dropdown"><a
-									class="nav-link dropdown-toggle" href="#"
-									id="navbarDropdownMenuLink2" data-toggle="dropdown"
-									aria-haspopup="true" aria-expanded="false">Available Cars</a></li>
-								<li class="nav-item dropdown" th:if="${session.user}"><a
-									class="nav-link dropdown-toggle" href="#"
-									id="navbarDropdownMenuLink2" data-toggle="dropdown"
-									aria-haspopup="true" aria-expanded="false">My Plan</a></li>
-								<li class="nav-item dropdown"><a
-									class="nav-link dropdown-toggle" href="#"
-									id="navbarDropdownMenuLink2" data-toggle="dropdown"
-									aria-haspopup="true" aria-expanded="false"> About Us </a></li>
+									<li class="nav-item"><a class="nav-link"
+									th:href="@{/home/availablecars/}">Available Cars</a></li>
+								<li class="nav-item" th:if="${session.user}"><a
+									class="nav-link" href="#">My Plan</a></li>
+								<li class="nav-item "><a class="nav-link" href="#">
+										About Us </a></li>
 
-								<li class="nav-item dropdown"><a
-									class="nav-link dropdown-toggle" href="#"
-									id="navbarDropdownMenuLink2" data-toggle="dropdown"
-									aria-haspopup="true" aria-expanded="false"> Contact Us </a></li>
+								<li class="nav-item"><a class="nav-link" href="#">
+										Contact Us </a></li>
 
 
 
@@ -204,6 +196,11 @@ h2 {
 									href="/dashboard/">Dash board</a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
 									href="/logout">Logout</a></li>
+								<li class="nav-item dropdown" th:unless="${session.isAuthen}"><a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/login">Login</a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/register">Register</a></li>
 
 							</ul>
 						</div>

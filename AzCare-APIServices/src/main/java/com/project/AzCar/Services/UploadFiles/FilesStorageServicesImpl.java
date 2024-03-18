@@ -47,8 +47,10 @@ public class FilesStorageServicesImpl implements FilesStorageServices {
 
 	@Override
 	public void save(MultipartFile file, String dirName) throws Exception {
-
+		
+		
 		try {
+			
 			Files.copy(file.getInputStream(),Paths.get(dirName).resolve(file.getOriginalFilename()));
 			
 			
@@ -72,9 +74,12 @@ public class FilesStorageServicesImpl implements FilesStorageServices {
 		      Resource resource = new UrlResource(file.toUri());
 
 		      if (resource.exists() || resource.isReadable()) {
+		    	  System.out.println(filename+"and"+dirName+" ok found");
 		        return resource;
 		      } else {
-		        throw new RuntimeException("Could not read the file!");
+		    	  
+		       System.out.println(filename+"and"+dirName+" not found");
+		       return null;
 		      }
 		    } catch (MalformedURLException e) {
 		      throw new RuntimeException("Error: " + e.getMessage());
