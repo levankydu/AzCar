@@ -36,7 +36,7 @@ public class UserDto {
 	private String firstName;
 	private String lastName;
 	private String gender;
-	@DateTimeFormat(pattern = "yyyy-MM-dd ")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dob;
 	private boolean isEnabled;
 	
