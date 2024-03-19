@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.project.AzCar.Dto.Brands.BrandsDto;
 import com.project.AzCar.Entities.Cars.CarModelList;
 import com.project.AzCar.Repositories.Cars.BrandRepository;
 
@@ -72,6 +71,11 @@ public class BrandSevicesImpl implements BrandServices{
 	@Override
 	public String getModelId(String brandName, String cateName, String modelName, int year) {
 		return brandRepo.getModelId(brandName, cateName, modelName, year);
+	}
+
+	@Override
+	public CarModelList getModel(String modelId) {
+		return brandRepo.getModelById(modelId);
 	}
 
 	

@@ -285,13 +285,13 @@ $(function () {
         $(this).children(".current-min").val(currentMin);
         $(this).children(".current-max").val(currentMax);
     });
-
+/*
     // Select picket activation
     $('select').selectBox(
         {
             mobile: true,
         }
-    );
+    );*/
 
 
     // Dropdown activation

@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.project.AzCar.Dto.Brands.BrandsDto;
 import com.project.AzCar.Entities.Cars.CarModelList;
 
 @Repository
@@ -36,4 +35,7 @@ public interface BrandRepository extends JpaRepository<CarModelList, String> {
 	
 	@Query("SELECT DISTINCT c.objectId FROM CarModelList c WHERE c.brand = ?1 AND c.category = ?2 AND c.model = ?3 AND c.year= ?4")
 	String getModelId(String brandName, String cateName, String modelName, int year);
+	
+	@Query("SELECT DISTINCT c FROM CarModelList c WHERE c.objectId = ?1")
+	CarModelList getModelById (String id);
 }
