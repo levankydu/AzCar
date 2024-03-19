@@ -80,22 +80,18 @@ public class HomeController {
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<JSONObject> registrationAdmin(@ModelAttribute UserDto userDto) {
 
-		if(uServices.saveAdmin(new UserDto())) {
+		if (uServices.saveAdmin(new UserDto())) {
 			JSONObject entity = new JSONObject();
 			entity.put("Code 1", "Created Admin Account");
 
 			return ResponseEntity.ok(entity);
-		}
-		else {
+		} else {
 			JSONObject entity = new JSONObject();
 			entity.put("Code 0", "Created Admin Account Fail, Addmin Account already created");
 
 			return ResponseEntity.ok(entity);
 		}
-		
-		
 
-		
 	}
 
 	@GetMapping("/user/profile/{email}")
@@ -141,27 +137,25 @@ public class HomeController {
 	}
 
 	@PostMapping("/user/profile/changePassword/{email}")
-	public String changePassword(@PathVariable("email") String email,@RequestParam("newPassword") String newPassword,
-            @RequestParam("confirmPassword") String confirmPassword, RedirectAttributes redirectAttributes) {
+	public String changePassword(@PathVariable("email") String email, @RequestParam("newPassword") String newPassword,
+			@RequestParam("confirmPassword") String confirmPassword, RedirectAttributes redirectAttributes) {
 
-		 if (!newPassword.equals(confirmPassword)) {
-		        redirectAttributes.addFlashAttribute("error", "Passwords do not match.");
-		        return "redirect:/user/profile/changePassword/{email}";
-		    }
-		 if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
-			 redirectAttributes.addFlashAttribute("error", "newPasswords or ConfirmPassword not blank.");
-		        return "redirect:/user/profile/changePassword/{email}";
+		if (!newPassword.equals(confirmPassword)) {
+			redirectAttributes.addFlashAttribute("error", "Passwords do not match.");
+			return "redirect:/user/profile/changePassword/{email}";
 		}
-		    // Encode the new password before saving
-		    String encodedPassword = passwordEncoder.encode(newPassword);
+		if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
+			redirectAttributes.addFlashAttribute("error", "newPasswords or ConfirmPassword not blank.");
+			return "redirect:/user/profile/changePassword/{email}";
+		}
+		String encodedPassword = passwordEncoder.encode(newPassword);
 
-		    // Check if user exists before changing password
-		    if (uServices.findUserByEmail(email) != null) {
-		        uServices.changePassword(email, encodedPassword);
-		        redirectAttributes.addFlashAttribute("success", "Password changed successfully.");
-		    } else {
-		        redirectAttributes.addFlashAttribute("error", "User with email " + email + " not found.");
-		    }
-		    return "redirect:/user/profile/{email}";
+		if (uServices.findUserByEmail(email) != null) {
+			uServices.changePassword(email, encodedPassword);
+			redirectAttributes.addFlashAttribute("success", "Password changed successfully.");
+		} else {
+			redirectAttributes.addFlashAttribute("error", "User with email " + email + " not found.");
+		}
+		return "redirect:/user/profile/{email}";
 	}
 }

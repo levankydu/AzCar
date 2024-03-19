@@ -12,6 +12,7 @@ public class EmailService {
 //
 //	void sendMessageUsingThymeleafTemplate(String to, String subject, Map<String, Object> templateModel);
 	
-
+//	@Autowired
+//	private JavaMailSender mailSender;
 	
 }

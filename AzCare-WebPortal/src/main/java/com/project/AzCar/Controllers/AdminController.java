@@ -31,6 +31,7 @@ import com.project.AzCar.Repositories.Users.UserRepository;
 import com.project.AzCar.Services.Cars.BrandImageServices;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
+import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
 
 import jakarta.servlet.ServletException;
@@ -49,8 +50,8 @@ public class AdminController {
 
 	@Autowired
 	private FilesStorageServices fileStorageServices;
-
-	private UserRepository userRepo;
+	@Autowired
+	private UserServices userRepo;
 
 
 	@GetMapping("/dashboard/")
@@ -183,14 +184,14 @@ Users loginedUser = new Users();
 	@GetMapping("/dashboard/ListAccount")
 	public String getfindAll(Model model) {
 
-		List<Users> userlists = userRepo.findAll();
+		List<Users> userlists = userRepo.findAllUsers();
 		model.addAttribute("userlists", userlists);
 		return "admin/ListAccount";
 	}
 	
 	@GetMapping("/dashboard/ListAccount/profile/{email}")
 	public String profile(@PathVariable("email") String email, Model model) {
-		Users user = userRepo.findByEmail(email);
+		Users user = userRepo.findUserByEmail(email);
 
 		user.getEmail();
 		model.addAttribute("user", user);

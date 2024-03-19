@@ -61,10 +61,19 @@ public class UserServicesImpl implements UserServices {
 			existingUser.setGender(updatedUserDto.getGender());
 
 			userRepo.save(existingUser);
+			return convertToDto(existingUser);
+		}else {
+			return null;
 		}
-		return null;
 	}
 
+	private UserDto convertToDto(Users userEntity) {
+		UserDto userDto = new UserDto();
+		BeanUtils.copyProperties(userEntity, userDto);
+		return userDto;
+	}	
+	
+	
 	@Override
 	public boolean saveAdmin(UserDto userDto) {
 		Roles role = roleRepo.findByName(Constants.Roles.ADMIN);
@@ -85,7 +94,9 @@ public class UserServicesImpl implements UserServices {
 
 	@Override
 	public void changePassword(String email, String newPassword) {
-		// TODO Auto-generated method stub
+		Users user = userRepo.findByEmail(email);
+		user.setPassword(newPassword);
+		userRepo.save(user);
 		
 	}
 }
