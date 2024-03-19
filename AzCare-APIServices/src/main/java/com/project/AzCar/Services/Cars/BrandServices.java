@@ -21,4 +21,6 @@ public interface BrandServices {
 	List<String> getModelListByCateAndBrand(String brandName, String cateName);
 	List<String> getYear(String brandName,String cateName,String modelName);
 	String getModelId(String brandName, String cateName, String modelName,int year);
+	
+	CarModelList getModel (String modelId);
 }

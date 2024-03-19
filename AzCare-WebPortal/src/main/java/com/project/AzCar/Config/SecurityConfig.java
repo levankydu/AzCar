@@ -27,25 +27,39 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests((requests) -> requests.requestMatchers("/").permitAll().requestMatchers("/home/carregister/**").permitAll()
-				.requestMatchers("/registeradmin").permitAll().requestMatchers("/register/**").permitAll()
-				.requestMatchers("/login/**").permitAll().requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
-				.requestMatchers("/dashboard/**").hasAnyRole("ADMIN").anyRequest().authenticated())
-				.formLogin((form) -> form.loginPage("/login").usernameParameter("email").passwordParameter("password")
-						.loginProcessingUrl("/dologin").successHandler(new OnAuthenticationSuccessHandler())
-						.failureHandler(new OnAuthenticationFailedHandler()).permitAll())
-				.logout((logout) -> logout.permitAll().logoutUrl("/logout").logoutSuccessUrl("/login?logout")
-						.invalidateHttpSession(true).deleteCookies("JSESSIONID"))
+
+		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests((requests) -> requests
+				.requestMatchers("/").permitAll()
+				.requestMatchers("/register/**").permitAll()
+				.requestMatchers("/login/**").permitAll()
+				.requestMatchers("/registeradmin").permitAll()
+				.requestMatchers("/home/carregister/**").hasAnyRole("USER", "ADMIN")
+				.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+				.requestMatchers("/dashboard/**").hasAnyRole("ADMIN")
+				.anyRequest().authenticated())
+				.formLogin((form) -> form
+						.loginPage("/login")
+						.usernameParameter("email")
+						.passwordParameter("password")
+						.loginProcessingUrl("/dologin")
+						.successHandler(new OnAuthenticationSuccessHandler())
+						.failureHandler(new OnAuthenticationFailedHandler())
+						.permitAll())
+				.logout((logout) -> logout.permitAll()
+						.logoutUrl("/logout")
+						.logoutSuccessUrl("/")
+						.invalidateHttpSession(true)
+						.deleteCookies("JSESSIONID"))
 				.exceptionHandling(handling -> handling.accessDeniedPage("/access-denied"));
 		http.authenticationProvider(daoAuthen());
 		return http.build();
 
 	}
 
-	@Bean
-	WebSecurityCustomizer webSecurityCustomizer() {
-		return (web) -> web.ignoring().requestMatchers("/assets/**");
-	}
+	
+	  @Bean WebSecurityCustomizer webSecurityCustomizer() { return (web) ->
+	  web.ignoring().requestMatchers("/assets/**"); }
+	 
 
 	@Bean
 	PasswordEncoder passwordEncoder() {
@@ -61,7 +75,6 @@ public class SecurityConfig {
 		return authProvider;
 
 	}
-	
 	
 	
 }

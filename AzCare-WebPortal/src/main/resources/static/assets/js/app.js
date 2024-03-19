@@ -52,7 +52,7 @@ $(function () {
                 }
             }
         } else {
-            $('.logo img').attr('src', 'assets/img/logos/black-logo.png');
+            $('.logo img').attr('src', '/assets/img/logos/black-logo.png');
         }
     }
 
@@ -285,13 +285,13 @@ $(function () {
         $(this).children(".current-min").val(currentMin);
         $(this).children(".current-max").val(currentMax);
     });
-
+/*
     // Select picket activation
     $('select').selectBox(
         {
             mobile: true,
         }
-    );
+    );*/
 
 
     // Dropdown activation

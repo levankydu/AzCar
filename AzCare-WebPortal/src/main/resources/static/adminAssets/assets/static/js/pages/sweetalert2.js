@@ -203,6 +203,22 @@ if(document.getElementById('toast-success-created-data')){
   })
 })
 }
+if(document.getElementById('toast-failed-register-car')){
+	document.getElementById('toast-failed-register-car').addEventListener('click', () => {
+  Toast.fire({
+    icon: 'error',
+    title: 'Input error. Please try again'
+  })
+})
+}
+if(document.getElementById('toast-success-registered-car')){
+	document.getElementById('toast-success-registered-car').addEventListener('click', () => {
+  Toast.fire({
+    icon: 'success',
+    title: 'Registered successfully'
+  })
+})
+}
 /*document.getElementById('toast-warning').addEventListener('click', () => {
   Toast.fire({
     icon: 'warning',

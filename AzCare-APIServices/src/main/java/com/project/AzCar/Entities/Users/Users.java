@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.project.AzCar.Entities.Cars.CarModelList;
 import com.project.AzCar.Entities.Locations.Addreess;
 
@@ -22,9 +24,6 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -59,6 +58,7 @@ public class Users implements Serializable{
 			@JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(name = "role_id", referencedColumnName = "id") })
 	private List<Roles> roles = new ArrayList<>();
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dob;
 	private boolean isEnabled;
 	private String gender;

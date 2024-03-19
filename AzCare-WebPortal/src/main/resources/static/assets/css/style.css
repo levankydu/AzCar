@@ -430,8 +430,7 @@ input[type=checkbox]:checked+label:before {
 	-webkit-animation: bgburnsWest 25s linear infinite alternate
 }
 
-@
-keyframes bgburnsEast {from { transform:scale(1)translateX(0);
+@keyframes bgburnsEast {from { transform:scale(1)translateX(0);
 	-webkit-transform: scale(1) translateX(0)
 }
 
@@ -441,8 +440,7 @@ to {
 }
 
 }
-@
--webkit-keyframes bgburnsEast {from { transform:scale(1)translateX(0);
+@-webkit-keyframes bgburnsEast {from { transform:scale(1)translateX(0);
 	-webkit-transform: scale(1) translateX(0)
 }
 
@@ -452,8 +450,7 @@ to {
 }
 
 }
-@
-keyframes bgburnsWest {from { transform:scale(1)translateX(0);
+@keyframes bgburnsWest {from { transform:scale(1)translateX(0);
 	-webkit-transform: scale(1) translateX(0)
 }
 
@@ -463,8 +460,7 @@ to {
 }
 
 }
-@
--webkit-keyframes bgburnsWest {from { transform:scale(1)translateX(0);
+@-webkit-keyframes bgburnsWest {from { transform:scale(1)translateX(0);
 	-webkit-transform: scale(1) translateX(0)
 }
 
@@ -3372,7 +3368,7 @@ a {
 	border: 1px solid #cdcbcb;
 	background: #fff;
 	outline: 0;
-	color: #f6f6f6;
+	color: #495057;
 	height: 45px;
 	border-radius: 3px;
 }

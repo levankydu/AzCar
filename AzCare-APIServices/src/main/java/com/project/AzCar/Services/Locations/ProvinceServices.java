@@ -9,4 +9,5 @@ import com.project.AzCar.Entities.Locations.City;
 @Service
 public interface ProvinceServices {
  List<City> getListCity();
+ List<String> getListCityString();
 }

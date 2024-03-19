@@ -6,6 +6,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Random;
 import java.util.stream.Stream;
 
 import org.springframework.core.io.Resource;
@@ -45,13 +46,20 @@ public class FilesStorageServicesImpl implements FilesStorageServices {
 	}
 
 	@Override
-	public void save(MultipartFile file, String dirName) {
-
+	public void save(MultipartFile file, String dirName) throws Exception {
+		
+		
 		try {
+			
 			Files.copy(file.getInputStream(),Paths.get(dirName).resolve(file.getOriginalFilename()));
+			
+			
 		} catch (Exception e) {
 			if (e instanceof FileAlreadyExistsException) {
-				throw new RuntimeException("A file of that name already exists.");
+	            String newName = generateUniqueFilename(file);
+	            Path targetPath = Paths.get(dirName).resolve(newName);
+	     
+	            Files.copy(file.getInputStream(), targetPath);
 			}
 
 			throw new RuntimeException(e.getMessage());
@@ -66,9 +74,12 @@ public class FilesStorageServicesImpl implements FilesStorageServices {
 		      Resource resource = new UrlResource(file.toUri());
 
 		      if (resource.exists() || resource.isReadable()) {
+		    	  System.out.println(filename+"and"+dirName+" ok found");
 		        return resource;
 		      } else {
-		        throw new RuntimeException("Could not read the file!");
+		    	  
+		       System.out.println(filename+"and"+dirName+" not found");
+		       return null;
 		      }
 		    } catch (MalformedURLException e) {
 		      throw new RuntimeException("Error: " + e.getMessage());
@@ -100,5 +111,23 @@ public class FilesStorageServicesImpl implements FilesStorageServices {
 		    }
 		  }
 	
-
+	private String generateUniqueFilename(MultipartFile file) {
+	    // Extract the file extension
+	    String originalFilename = file.getOriginalFilename();
+	    String extension = "";
+	    int dotIndex = originalFilename.lastIndexOf('.');
+	    if (dotIndex > 0) {
+	        extension = originalFilename.substring(dotIndex);
+	    }
+	    
+	    // Generate a random number
+	    int min = 0; // Minimum value
+	    int max = 999999999; // Maximum value
+	    int rand = new Random().nextInt(max - min + 1) + min;
+	    
+	    // Construct the new filename
+	    String newName = originalFilename.substring(0, dotIndex) + "_duplicated_" + rand + extension;
+	    return newName;
+	}
 }
+

@@ -26,6 +26,8 @@ import com.project.AzCar.Dto.Brands.BrandsDto;
 import com.project.AzCar.Dto.Categories.CategoriesDto;
 import com.project.AzCar.Entities.Cars.BrandImages;
 import com.project.AzCar.Entities.Cars.CarModelList;
+import com.project.AzCar.Entities.Users.Users;
+import com.project.AzCar.Repositories.Users.UserRepository;
 import com.project.AzCar.Services.Cars.BrandImageServices;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
@@ -35,10 +37,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+
 @Controller
 public class AdminController {
 
 	@Autowired
+
 	private BrandServices brandServices;
 	@Autowired
 	BrandImageServices brandImageServices;
@@ -46,9 +50,15 @@ public class AdminController {
 	@Autowired
 	private FilesStorageServices fileStorageServices;
 
+	private UserRepository userRepo;
+
+
 	@GetMapping("/dashboard/")
 	public String getDashboard(Model model, Authentication authentication) {
+Users loginedUser = new Users();
 
+		loginedUser.setFirstName(authentication.getName());
+		model.addAttribute("user", loginedUser);
 		return "admin/dashboard";
 	}
 
@@ -167,7 +177,24 @@ public class AdminController {
 
 		request.getSession().setAttribute("update_brandLogo", "error");
 		return "redirect:/dashboard/brands/updateBrandLogo/" + brandName + "?error";
+		
+	}
 
+	@GetMapping("/dashboard/ListAccount")
+	public String getfindAll(Model model) {
+
+		List<Users> userlists = userRepo.findAll();
+		model.addAttribute("userlists", userlists);
+		return "admin/ListAccount";
+	}
+	
+	@GetMapping("/dashboard/ListAccount/profile/{email}")
+	public String profile(@PathVariable("email") String email, Model model) {
+		Users user = userRepo.findByEmail(email);
+
+		user.getEmail();
+		model.addAttribute("user", user);
+		return "admin/profile/{email}";
 	}
 
 }

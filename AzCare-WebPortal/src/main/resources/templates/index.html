@@ -3,36 +3,32 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-<!-- Google Tag Manager -->
-<!-- <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-TAGID');</script> -->
-<!-- End Google Tag Manager -->
+
 <title>Az CAR</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
 <!-- External CSS libraries -->
 <link type="text/css" rel="stylesheet"
-	href="assets/css/bootstrap.min.css">
+	href="/assets/css/bootstrap.min.css">
 <link type="text/css" rel="stylesheet"
-	href="assets/css/magnific-popup.css">
+	href="/assets/css/magnific-popup.css">
 <link type="text/css" rel="stylesheet"
-	href="assets/css/jquery.selectBox.css">
-<link type="text/css" rel="stylesheet" href="assets/css/dropzone.css">
-<link type="text/css" rel="stylesheet" href="assets/css/rangeslider.css">
-<link type="text/css" rel="stylesheet" href="assets/css/animate.min.css">
-<link type="text/css" rel="stylesheet" href="assets/css/slick.css">
+	href="/assets/css/jquery.selectBox.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
 <link type="text/css" rel="stylesheet"
-	href="assets/css/jquery.mCustomScrollbar.css">
+	href="/assets/css/rangeslider.css">
 <link type="text/css" rel="stylesheet"
-	href="assets/fonts/font-awesome/css/font-awesome.min.css">
+	href="/assets/css/animate.min.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/slick.css">
 <link type="text/css" rel="stylesheet"
-	href="assets/fonts/flaticon/font/flaticon.css">
+	href="/assets/css/jquery.mCustomScrollbar.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/flaticon/font/flaticon.css">
 
 <!-- Favicon icon -->
-<link rel="shortcut icon" href="assets/img/favicon.ico"
+<link rel="shortcut icon" href="/assets/img/favicon.ico"
 	type="image/x-icon">
 
 <!-- Google fonts -->
@@ -40,18 +36,13 @@
 	href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
 
 <!-- Custom Stylesheet -->
-<link type="text/css" rel="stylesheet" href="assets/css/style.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
 <link rel="stylesheet" type="text/css" id="style_sheet"
-	href="assets/css/skins/default.css">
+	href="/assets/css/skins/default.css">
 
 </head>
 <body id="top">
-	<!-- Google Tag Manager (noscript) -->
-	<noscript>
-		<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TAGID"
-			height="0" width="0" style="display: none; visibility: hidden"></iframe>
-	</noscript>
-	<!-- End Google Tag Manager (noscript) -->
+
 	<div class="page_loader"></div>
 
 	<!-- main header start -->
@@ -60,9 +51,8 @@
 			<div class="row">
 				<div class="col-12">
 					<nav class="navbar navbar-expand-lg navbar-light rounded">
-						<a class="navbar-brand logo navbar-brand d-flex mr-auto"
-							href="index.html"> <img src="assets/img/logos/black-logo.png"
-							alt="logo">
+						<a class="navbar-brand logo navbar-brand d-flex mr-auto" href="/">
+							<img src="assets/img/logos/black-logo1212.png" alt="logo">
 						</a>
 						<button class="navbar-toggler" type="button"
 							data-toggle="collapse" data-target="#navbar"
@@ -72,217 +62,37 @@
 						</button>
 						<div class="navbar-collapse collapse w-100" id="navbar">
 							<ul class="navbar-nav ml-auto">
-								<li class="nav-item dropdown active"><a
-									class="nav-link dropdown-toggle" href="#"
-									id="navbarDropdownMenuLink" data-toggle="dropdown"
-									aria-haspopup="true" aria-expanded="false"> Index </a>
-									<ul class="dropdown-menu"
-										aria-labelledby="navbarDropdownMenuLink">
-										<li><a class="dropdown-item" href="index.html">Index
-												1</a></li>
-										<li><a class="dropdown-item" href="index-2.html">Index
-												2</a></li>
-										<li><a class="dropdown-item" href="index-3.html">Index
-												3</a></li>
-										<li><a class="dropdown-item" href="index-4.html">Index
-												4</a></li>
-										<li><a class="dropdown-item" href="index-5.html">Index
-												5</a></li>
-										<li><a class="dropdown-item" href="index-6.html">Index
-												6</a></li>
-										<li><a class="dropdown-item" href="index-7.html">Index
-												7 (Video)</a></li>
-									</ul></li>
-								<li class="nav-item dropdown"><a
-									class="nav-link dropdown-toggle" href="#"
-									id="navbarDropdownMenuLink2" data-toggle="dropdown"
-									aria-haspopup="true" aria-expanded="false"> Vehicle </a>
-									<ul class="dropdown-menu"
-										aria-labelledby="navbarDropdownMenuLink">
-										<li class="dropdown-submenu"><a
-											class="dropdown-item dropdown-toggle" href="#">List
-												Layout</a>
-											<ul class="dropdown-menu">
-												<li><a class="dropdown-item"
-													href="car-list-rightside.html">Right Sidebar</a></li>
-												<li><a class="dropdown-item"
-													href="car-list-leftside.html">Left Sidebar</a></li>
-												<li><a class="dropdown-item"
-													href="car-list-fullwidth.html">Fullwidth</a></li>
-											</ul></li>
-										<li class="dropdown-submenu"><a
-											class="dropdown-item dropdown-toggle" href="#">Grid
-												Layout</a>
-											<ul class="dropdown-menu">
-												<li><a class="dropdown-item"
-													href="car-grid-rightside.html">Right Sidebar</a></li>
-												<li><a class="dropdown-item"
-													href="car-grid-leftside.html">Left Sidebar</a></li>
-												<li><a class="dropdown-item"
-													href="car-grid-fullwidth.html">Fullwidth</a></li>
-											</ul></li>
-										<li class="dropdown-submenu"><a
-											class="dropdown-item dropdown-toggle" href="#">Car
-												Details</a>
-											<ul class="dropdown-menu">
-												<li><a class="dropdown-item" href="car-details.html">Car
-														Detail 1</a></li>
-												<li><a class="dropdown-item" href="car-details-2.html">Car
-														Detail 2</a></li>
-											</ul></li>
-									</ul></li>
-								<li class="nav-item dropdown megamenu-li"><a
-									class="nav-link dropdown-toggle" href="" id="dropdown01"
-									data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false">Pages</a>
-									<div class="dropdown-menu megamenu"
-										aria-labelledby="dropdown01">
-										<div class="megamenu-area">
-											<div class="row">
-												<div class="col-sm-6 col-lg-3">
-													<div class="megamenu-section">
-														<h6 class="megamenu-title">Pages</h6>
-														<a class="dropdown-item" href="about-1.html">About 1</a> <a
-															class="dropdown-item" href="about-2.html">About 2</a> <a
-															class="dropdown-item" href="car-comparison.html">Car
-															Comparison</a> <a class="dropdown-item"
-															href="search-brand.html">Car Brands</a> <a
-															class="dropdown-item" href="services-1.html">Services
-															1</a> <a class="dropdown-item" href="services-2.html">Services
-															2</a> <a class="dropdown-item" href="coming-soon.html">Coming
-															Soon</a>
-													</div>
-												</div>
-												<div class="col-sm-6 col-lg-3">
-													<div class="megamenu-section">
-														<h6 class="megamenu-title">Pages</h6>
-														<a class="dropdown-item" href="agent-list.html">Agent
-															List 1</a> <a class="dropdown-item" href="agent-list-2.html">Agent
-															List 2</a> <a class="dropdown-item" href="agent-grid.html">Agent
-															Grid 1</a> <a class="dropdown-item" href="agent-grid-2.html">Agent
-															Grid 2</a> <a class="dropdown-item" href="agent-grid-3.html">Agent
-															Grid 3</a> <a class="dropdown-item" href="agent-detail.html">Agent
-															Detail</a> <a class="dropdown-item" href="typography.html">Typography</a>
-													</div>
-												</div>
-												<div class="col-sm-6 col-lg-3">
-													<div class="megamenu-section">
-														<h6 class="megamenu-title">Pages</h6>
-														<a class="dropdown-item" href="pricing-tables-1.html">Pricing
-															Tables 1</a> <a class="dropdown-item"
-															href="pricing-tables-2.html">Pricing Tables 2</a> <a
-															class="dropdown-item" href="pricing-tables-3.html">Pricing
-															Tables 3</a> <a class="dropdown-item"
-															href="gallery-2column.html">Gallery 2 column</a> <a
-															class="dropdown-item" href="gallery-3column.html">Gallery
-															3 column</a> <a class="dropdown-item"
-															href="gallery-4column.html">Gallery 4 column</a> <a
-															class="dropdown-item" href="typography-2.html">Typography
-															2</a>
-													</div>
-												</div>
-												<div class="col-sm-6 col-lg-3">
-													<div class="megamenu-section">
-														<h6 class="megamenu-title">Pages</h6>
-														<a class="dropdown-item" href="faq-1.html">Faq 1</a> <a
-															class="dropdown-item" href="faq-2.html">Faq 2</a> <a
-															class="dropdown-item" href="pages-404.html">Pages 404</a>
-														<a class="dropdown-item" href="/login">Login</a> <a
-															class="dropdown-item" href="forgot-password.html">Forgot
-															Password</a> <a class="dropdown-item" href="/register">Register</a>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div></li>
-								<li class="nav-item dropdown"><a
-									class="nav-link dropdown-toggle" href="#"
-									id="navbarDropdownMenuLink5" data-toggle="dropdown"
-									aria-haspopup="true" aria-expanded="false"> Blog </a>
-									<ul class="dropdown-menu"
-										aria-labelledby="navbarDropdownMenuLink">
-										<li class="dropdown-submenu"><a
-											class="dropdown-item dropdown-toggle" href="#">Classic</a>
-											<ul class="dropdown-menu">
-												<li><a class="dropdown-item"
-													href="blog-classic-sidebar-right.html">Right Sidebar</a></li>
-												<li><a class="dropdown-item"
-													href="blog-classic-sidebar-left.html">Left Sidebar</a></li>
-												<li><a class="dropdown-item"
-													href="blog-classic-fullwidth.html">FullWidth</a></li>
-											</ul></li>
-										<li class="dropdown-submenu"><a
-											class="dropdown-item dropdown-toggle" href="#">Columns</a>
-											<ul class="dropdown-menu">
-												<li><a class="dropdown-item"
-													href="blog-columns-2col.html">2 Columns</a></li>
-												<li><a class="dropdown-item"
-													href="blog-columns-3col.html">3 Columns</a></li>
-											</ul></li>
-										<li class="dropdown-submenu"><a
-											class="dropdown-item dropdown-toggle" href="#">Masonry</a>
-											<ul class="dropdown-menu">
-												<li><a class="dropdown-item"
-													href="blog-masonry-2col.html">2 Masonry</a></li>
-												<li><a class="dropdown-item"
-													href="blog-masonry-3col.html">3 Masonry</a></li>
-											</ul></li>
-										<li class="dropdown-submenu"><a
-											class="dropdown-item dropdown-toggle" href="#">Blog
-												Details</a>
-											<ul class="dropdown-menu">
-												<li><a class="dropdown-item"
-													href="blog-single-sidebar-right.html">Right Sidebar</a></li>
-												<li><a class="dropdown-item"
-													href="blog-single-sidebar-left.html">Left Sidebar</a></li>
-												<li><a class="dropdown-item"
-													href="blog-single-fullwidth.html">Fullwidth</a></li>
-											</ul></li>
-									</ul></li>
-								<li class="nav-item dropdown"><a
-									class="nav-link dropdown-toggle" href="#" id="navbarDropdown4"
-									role="button" data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false"> Shop </a>
-									<div class="dropdown-menu" aria-labelledby="navbarDropdown3">
-										<a class="dropdown-item" href="shop-list.html">Shop List</a> <a
-											class="dropdown-item" href="shop-cart.html">Shop Cart</a> <a
-											class="dropdown-item" href="shop-checkout.html">Shop
-											Checkout</a> <a class="dropdown-item" href="shop-single.html">Shop
-											Details</a>
-									</div></li>
-								<li class="nav-item dropdown"><a
-									class="nav-link dropdown-toggle" href="#" id="navbarDropdown3"
-									role="button" data-toggle="dropdown" aria-haspopup="true"
-									aria-expanded="false"> Contact </a>
-									<div class="dropdown-menu" aria-labelledby="navbarDropdown3">
-										<a class="dropdown-item" href="contact-1.html">Contact 1</a> <a
-											class="dropdown-item" href="contact-2.html">Contact 2</a> <a
-											class="dropdown-item" href="contact-3.html">Contact 3</a>
-									</div></li>
-								<div th:if="${session.user}">
-									<li class="nav-item dropdown"><a
-										class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-										href="/profile" th:text="Hello+', ' +${session.user}"></a> <a
-										class="btn btn-sm btn-theme btn-round signup-link"
-										href="/logout">LogOut</a></li>
-								</div>
-								<div th:if="${session.admin}">
-									<li class="nav-item dropdown"><a
-										class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-										href="/profile" th:text="Hello+', ' +${session.admin}"></a> <a
-										class="btn btn-sm btn-theme btn-round signup-link"
-										href="/dashboard/">Dashboard</a> <a
-										class="btn btn-sm btn-theme btn-round signup-link"
-										href="/logout">Logout</a></li>
-								</div>
+								<li class="nav-item"><a class="nav-link"
+									th:href="@{/home/availablecars/}">Available Cars</a></li>
+								<li class="nav-item" th:if="${session.user}"><a
+									class="nav-link" href="#">My Plan</a></li>
+								<li class="nav-item "><a class="nav-link" href="#">
+										About Us </a></li>
+
+								<li class="nav-item"><a class="nav-link" href="#">
+										Contact Us </a></li>
 
 
+
+								<li class="nav-item dropdown" th:if="${session.user}"><a
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									href="/profile" th:text="Hello+', ' +${session.user}"></a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/logout">LogOut</a></li>
+
+
+								<li class="nav-item dropdown" th:if="${session.admin}"><a
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									href="/profile" th:text="Hello+', ' +${session.admin}"></a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/dashboard/">Dash board</a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/logout">Logout</a></li>
 								<li class="nav-item dropdown" th:unless="${session.isAuthen}"><a
 									class="btn btn-sm btn-theme btn-round signup-link"
 									href="/login">Login</a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
 									href="/register">Register</a></li>
-
 
 							</ul>
 						</div>
@@ -305,56 +115,19 @@
 						<div class="carousel-content container">
 							<div class="text-left max-w">
 								<h3 data-animation="animated fadeInDown delay-05s">
-									We love make things <br />amazing and simple
+									Driving Made Simple <br />
 								</h3>
-								<p data-animation="animated fadeInUp delay-10s">This is Car
-									Dealer website template based on Bootstrap 4 framework.</p>
-								<a data-animation="animated fadeInUp delay-10s" th:href="@{/home/carregister/}"
-									class="btn btn-lg btn-round btn-theme">Get Started Now</a> 
+								<p data-animation="animated fadeInUp delay-10s">Ride with
+									Ease, Book with Confidence.</p>
+								<a data-animation="animated fadeInUp delay-10s"
+									th:href="@{/home/carregister/}"
+									class="btn btn-lg btn-round btn-theme">Want rent your Car ?</a>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<div class="carousel-item item-bg">
-					<div
-						class="carousel-caption banner-slider-inner d-flex h-100 text-left">
-						<div class="carousel-content container">
-							<div class="text-left max-w">
-								<h3 data-animation="animated fadeInDown delay-05s">
-									We love make things <br />amazing and simple
-								</h3>
-								<p data-animation="animated fadeInUp delay-10s">This is Car
-									Dealer website template based on Bootstrap 4 framework.</p>
-								<a data-animation="animated fadeInUp delay-10s" href="#"
-									class="btn btn-lg btn-round btn-theme">Get Started Now</a> <a
-									data-animation="animated fadeInUp delay-12s" href="#"
-									class="btn btn-lg btn-round btn-white-lg-outline">Free
-									Download</a>
-							</div>
-						</div>
-					</div>
-				</div>
 
-				<div class="carousel-item item-bg">
-					<div
-						class="carousel-caption banner-slider-inner d-flex h-100 text-left">
-						<div class="carousel-content container">
-							<div class="text-left max-w">
-								<h3 data-animation="animated fadeInDown delay-05s">
-									We love make things <br />amazing and simple
-								</h3>
-								<p data-animation="animated fadeInUp delay-10s">This is Car
-									Dealer website template based on Bootstrap 4 framework.</p>
-								<a data-animation="animated fadeInUp delay-10s" href="#"
-									class="btn btn-lg btn-round btn-theme">Get Started Now</a> <a
-									data-animation="animated fadeInUp delay-12s" href="#"
-									class="btn btn-lg btn-round btn-white-lg-outline">Free
-									Download</a>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
 			<a class="carousel-control-prev" href="#carouselExampleIndicators"
 				role="button" data-slide="prev"> <span class="slider-mover-left"
@@ -1412,8 +1185,7 @@
 				</aside>
 				<aside class="canvas-widget">
 					<ul class="menu">
-						<li class="menu-item menu-item-has-children"><a
-							href="index.html">Home</a></li>
+						<li class="menu-item menu-item-has-children"><a href="/">Home</a></li>
 						<li class="menu-item"><a href="car-grid-leftside.html">Car
 								List</a></li>
 						<li class="menu-item"><a href="car-details.html">Car
@@ -1438,27 +1210,25 @@
 	</div>
 
 	<!-- External JS libraries -->
-	<script src="assets/js/jquery-2.2.0.min.js"></script>
-	<script src="assets/js/popper.min.js"></script>
-	<script src="assets/js/bootstrap.min.js"></script>
-	<script src="assets/js/jquery.selectBox.js"></script>
-	<script src="assets/js/rangeslider.js"></script>
-	<script src="assets/js/jquery.magnific-popup.min.js"></script>
-	<script src="assets/js/jquery.filterizr.js"></script>
-	<script src="assets/js/wow.min.js"></script>
-	<script src="assets/js/backstretch.js"></script>
-	<script src="assets/js/jquery.countdown.js"></script>
-	<script src="assets/js/jquery.scrollUp.js"></script>
-	<script src="assets/js/particles.min.js"></script>
-	<script src="assets/js/typed.min.js"></script>
-	<script src="assets/js/dropzone.js"></script>
-	<script src="assets/js/jquery.mb.YTPlayer.js"></script>
-	<script src="assets/js/slick.min.js"></script>
-	<script src="assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
-	<script
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0N5pbJN10Y1oYFRd0MJ_v2g8W2QT74JE"></script>
-	<script src="assets/js/ie-emulation-modes-warning.js"></script>
+	<script src="/assets/js/jquery-2.2.0.min.js"></script>
+	<script src="/assets/js/popper.min.js"></script>
+	<script src="/assets/js/bootstrap.min.js"></script>
+	<script src="/assets/js/jquery.selectBox.js"></script>
+	<script src="/assets/js/rangeslider.js"></script>
+	<script src="/assets/js/jquery.magnific-popup.min.js"></script>
+	<script src="/assets/js/jquery.filterizr.js"></script>
+	<script src="/assets/js/wow.min.js"></script>
+	<script src="/assets/js/backstretch.js"></script>
+	<script src="/assets/js/jquery.countdown.js"></script>
+	<script src="/assets/js/jquery.scrollUp.js"></script>
+	<script src="/assets/js/particles.min.js"></script>
+	<script src="/assets/js/typed.min.js"></script>
+	<script src="/assets/js/dropzone.js"></script>
+	<script src="/assets/js/jquery.mb.YTPlayer.js"></script>
+	<script src="/assets/js/slick.min.js"></script>
+	<script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
+
 	<!-- Custom JS Script -->
-	<script src="assets/js/app.js"></script>
+	<script src="/assets/js/app.js"></script>
 </body>
 </html>
