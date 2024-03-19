@@ -13,13 +13,13 @@ spring:
    
     url: jdbc:mysql://localhost:3306/azcarsdb
     username: root
-    password:
+    password: tincute1
   jpa:
     hibernate:
       ddl-auto: update
   mail:
     host: smtp.gmail.com
-    password: hyyk pxbj frpa uofl
+    password: pblt rtjz jdps zobm
     port: 587
     properties:
       mail:

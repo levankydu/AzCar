@@ -1,4 +1,4 @@
-!SESSION 2024-03-17 00:15:04.551 -----------------------------------------------
+!SESSION 2024-03-19 22:18:59.392 -----------------------------------------------
 eclipse.buildId=4.21.0.202312011804
 java.version=17.0.9
 java.vendor=Eclipse Adoptium
@@ -6,119 +6,12 @@ BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
 Framework arguments:  -product org.springframework.boot.ide.branding.sts4
 Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.springframework.boot.ide.branding.sts4
 
-This is a continuation of log file D:\project\AzCar\.metadata\.bak_0.log
-Created Time: 2024-03-17 00:15:18.559
-
-!ENTRY org.eclipse.jface 2 0 2024-03-17 00:15:18.559
-!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2024-03-17 00:15:18.559
-!MESSAGE A conflict occurred for CTRL+SHIFT+T:
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
-		Open a type in a Java editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.navigate.open.type"),
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.contexts.window,,,system)
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
-		,
-		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
-		WorkbenchHandlerServiceHandler("org.eclipse.lsp4e.symbolinworkspace"),
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.contexts.window,,,system)
-
-!ENTRY org.eclipse.egit.ui 2 0 2024-03-17 00:15:25.702
-!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
-user global configuration and to define the default location to store repositories: 'C:\Users\Le Du'. If this is
-not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
-EGit might behave differently since they see different configuration options.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 00:15:26.223
-!MESSAGE Boot project ADDED: AzCare-APIServices
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 00:15:26.225
-!MESSAGE Starting Boot LS...
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 00:15:26.233
-!MESSAGE Started Boot LS process
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 00:15:26.240
-!MESSAGE Boot project ADDED: AzCare-WebPortal
-
-!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-03-17 00:15:26.305
-!MESSAGE Command list starting LS: org.springframework.tooling.boot.ls
-START:
-D:\Program Files\SpringToolSuite-4.21.0.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.9.v20231028-0858\jre\bin\javaw.exe
--cp
-D:\Program Files\SpringToolSuite-4.21.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.51.0.202312011752\servers\spring-boot-language-server\BOOT-INF\classes;D:\Program Files\SpringToolSuite-4.21.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.51.0.202312011752\servers\spring-boot-language-server\BOOT-INF\lib\*
--Dsts.lsp.client=eclipse
--Dlsp.completions.indentation.enable=true
--Xmx1024m
--XX:+HeapDumpOnOutOfMemoryError
--XX:TieredStopAtLevel=1
--Xlog:jni+resolve=off
--Dspring.config.location=file:D:\Program Files\SpringToolSuite-4.21.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.51.0.202312011752\servers\spring-boot-language-server\BOOT-INF\classes\application.properties
--XX:ErrorFile=D:/project/AzCar/.metadata/.plugins/org.springframework.tooling.boot.ls/fatal-error-spring-boot_1710609326302
-org.springframework.ide.vscode.boot.app.BootLanguageServerBootApp
---languageserver.hover-timeout=225
-END
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 00:15:26.306
-!MESSAGE DelegatingStreamConnectionProvider - Starting Boot LS
-
-!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-03-17 00:15:26.317
-!MESSAGE Started org.springframework.tooling.boot.ls LS process 24408
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 00:15:26.425
-!MESSAGE Boot project ADDED: spring-boot-image-upload-master_spring-boot-image-upload-master
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 00:15:26.437
-!MESSAGE Boot project ADDED: spring-project-mazer-template-master_spring-project-mazer-template-master
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 00:15:26.452
-!MESSAGE Boot project ADDED: spring-security-form-login-main
-
-!ENTRY org.eclipse.jface 2 0 2024-03-17 00:16:46.204
-!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2024-03-17 00:16:46.204
-!MESSAGE A conflict occurred for CTRL+SHIFT+C:
-Binding(CTRL+SHIFT+C,
-	ParameterizedCommand(Command(org.eclipse.tm4e.languageconfiguration.toggleLineCommentCommand,Toggle Line Comment,
-		,
-		Category(org.eclipse.tm4e.languageconfiguration.category,TM4E Language Configuration,null,true),
-		WorkbenchHandlerServiceHandler("org.eclipse.tm4e.languageconfiguration.toggleLineCommentCommand"),
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.textEditorScope,,,system)
-Binding(CTRL+SHIFT+C,
-	ParameterizedCommand(Command(org.springframework.tooling.boot.ls.ToggleComment,Toggle Comment,
-		,
-		Category(org.springframework.ide.eclipse.commands,Spring Generic Text Editor,Spring Language Server Commands,true),
-		WorkbenchHandlerServiceHandler("org.springframework.tooling.boot.ls.ToggleComment"),
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.textEditorScope,,,system)
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 00:44:52.112
-!MESSAGE Classpath changed for project: AzCare-WebPortal
-!SESSION 2024-03-17 14:44:16.383 -----------------------------------------------
-eclipse.buildId=4.21.0.202312011804
-java.version=17.0.9
-java.vendor=Eclipse Adoptium
-BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
-Framework arguments:  -product org.springframework.boot.ide.branding.sts4
-Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.springframework.boot.ide.branding.sts4
-
-!ENTRY org.eclipse.emf.ecore 2 0 2024-03-17 14:44:18.634
+!ENTRY org.eclipse.emf.ecore 2 0 2024-03-19 22:19:00.540
 !MESSAGE Both 'org.eclipse.jst.j2ee.core' and 'org.eclipse.jst.j2ee.core' register a package for 'application.xmi'
 
-!ENTRY org.eclipse.jface 2 0 2024-03-17 14:44:33.666
+!ENTRY org.eclipse.jface 2 0 2024-03-19 22:19:18.849
 !MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2024-03-17 14:44:33.666
+!SUBENTRY 1 org.eclipse.jface 2 0 2024-03-19 22:19:18.849
 !MESSAGE A conflict occurred for CTRL+SHIFT+T:
 Binding(CTRL+SHIFT+T,
 	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
@@ -137,73 +30,9 @@ Binding(CTRL+SHIFT+T,
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.ui.contexts.window,,,system)
 
-!ENTRY org.eclipse.egit.ui 2 0 2024-03-17 14:44:53.111
-!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
-user global configuration and to define the default location to store repositories: 'C:\Users\Le Du'. If this is
-not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
-EGit might behave differently since they see different configuration options.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 14:44:53.518
-!MESSAGE Boot project ADDED: AzCare-APIServices
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 14:44:53.519
-!MESSAGE Starting Boot LS...
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 14:44:53.526
-!MESSAGE Started Boot LS process
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 14:44:53.527
-!MESSAGE Boot project ADDED: AzCare-WebPortal
-
-!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-03-17 14:44:53.571
-!MESSAGE Command list starting LS: org.springframework.tooling.boot.ls
-START:
-D:\Program Files\SpringToolSuite-4.21.0.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.9.v20231028-0858\jre\bin\javaw.exe
--cp
-D:\Program Files\SpringToolSuite-4.21.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.51.0.202312011752\servers\spring-boot-language-server\BOOT-INF\classes;D:\Program Files\SpringToolSuite-4.21.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.51.0.202312011752\servers\spring-boot-language-server\BOOT-INF\lib\*
--Dsts.lsp.client=eclipse
--Dlsp.completions.indentation.enable=true
--Xmx1024m
--XX:+HeapDumpOnOutOfMemoryError
--XX:TieredStopAtLevel=1
--Xlog:jni+resolve=off
--Dspring.config.location=file:D:\Program Files\SpringToolSuite-4.21.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.51.0.202312011752\servers\spring-boot-language-server\BOOT-INF\classes\application.properties
--XX:ErrorFile=D:/project/AzCar/.metadata/.plugins/org.springframework.tooling.boot.ls/fatal-error-spring-boot_1710661493569
-org.springframework.ide.vscode.boot.app.BootLanguageServerBootApp
---languageserver.hover-timeout=225
-END
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 14:44:53.574
-!MESSAGE DelegatingStreamConnectionProvider - Starting Boot LS
-
-!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-03-17 14:44:53.652
-!MESSAGE Started org.springframework.tooling.boot.ls LS process 20684
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 14:44:53.654
-!MESSAGE Boot project ADDED: spring-boot-image-upload-master_spring-boot-image-upload-master
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 14:44:53.676
-!MESSAGE Boot project ADDED: spring-project-mazer-template-master_spring-project-mazer-template-master
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-17 14:44:53.701
-!MESSAGE Boot project ADDED: spring-security-form-login-main
-
-!ENTRY org.eclipse.lsp4e 2 0 2024-03-17 18:42:11.562
-!MESSAGE Javadoc unavailable. Failed to obtain it.
-!STACK 0
-java.lang.InterruptedException
-	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
-	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
-	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.getHoverInfo2(LSJavaHoverProvider.java:65)
-	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
-	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
-	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
-	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
-
-!ENTRY org.eclipse.jface 2 0 2024-03-17 18:42:34.104
+!ENTRY org.eclipse.jface 2 0 2024-03-19 22:19:22.650
 !MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2024-03-17 18:42:34.104
+!SUBENTRY 1 org.eclipse.jface 2 0 2024-03-19 22:19:22.650
 !MESSAGE A conflict occurred for CTRL+SHIFT+C:
 Binding(CTRL+SHIFT+C,
 	ParameterizedCommand(Command(org.eclipse.tm4e.languageconfiguration.toggleLineCommentCommand,Toggle Line Comment,
@@ -222,258 +51,103 @@ Binding(CTRL+SHIFT+C,
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.ui.textEditorScope,,,system)
 
-!ENTRY org.eclipse.lsp4e 2 0 2024-03-17 18:57:27.721
-!MESSAGE Javadoc unavailable. Failed to obtain it.
-!STACK 0
-java.lang.InterruptedException
-	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
-	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
-	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.getHoverInfo2(LSJavaHoverProvider.java:65)
-	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
-	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
-	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
-	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
-
-!ENTRY org.eclipse.lsp4e 2 0 2024-03-17 18:57:34.170
-!MESSAGE Javadoc unavailable. Failed to obtain it.
-!STACK 0
-java.lang.InterruptedException
-	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
-	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
-	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.getHoverInfo2(LSJavaHoverProvider.java:65)
-	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
-	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
-	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
-	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
-!SESSION 2024-03-18 09:14:03.761 -----------------------------------------------
-eclipse.buildId=4.21.0.202312011804
-java.version=17.0.9
-java.vendor=Eclipse Adoptium
-BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
-Framework arguments:  -product org.springframework.boot.ide.branding.sts4
-Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.springframework.boot.ide.branding.sts4
-
-!ENTRY org.eclipse.emf.ecore 2 0 2024-03-18 09:14:05.536
-!MESSAGE Both 'org.eclipse.jst.j2ee.core' and 'org.eclipse.jst.j2ee.core' register a package for 'application.xmi'
-
-!ENTRY org.eclipse.jface 2 0 2024-03-18 09:14:19.658
-!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2024-03-18 09:14:19.658
-!MESSAGE A conflict occurred for CTRL+SHIFT+T:
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
-		Open a type in a Java editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.navigate.open.type"),
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.contexts.window,,,system)
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
-		,
-		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
-		WorkbenchHandlerServiceHandler("org.eclipse.lsp4e.symbolinworkspace"),
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.contexts.window,,,system)
-
-!ENTRY org.eclipse.egit.ui 2 0 2024-03-18 09:14:29.306
+!ENTRY org.eclipse.egit.ui 2 0 2024-03-19 22:19:22.942
 !MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
-user global configuration and to define the default location to store repositories: 'C:\Users\Le Du'. If this is
+user global configuration and to define the default location to store repositories: 'C:\Users\NGUYEN NGOC DIEP'. If this is
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-18 09:14:29.570
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-19 22:19:23.159
 !MESSAGE Boot project ADDED: AzCare-APIServices
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-18 09:14:29.571
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-19 22:19:23.160
 !MESSAGE Starting Boot LS...
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-18 09:14:29.578
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-19 22:19:23.183
 !MESSAGE Started Boot LS process
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-18 09:14:29.579
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-19 22:19:23.183
 !MESSAGE Boot project ADDED: AzCare-WebPortal
 
-!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-03-18 09:14:29.630
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-03-19 22:19:23.204
 !MESSAGE Command list starting LS: org.springframework.tooling.boot.ls
 START:
-D:\Program Files\SpringToolSuite-4.21.0.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.9.v20231028-0858\jre\bin\javaw.exe
+D:\Spring\sts-4.21.0.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.9.v20231028-0858\jre\bin\javaw.exe
 -cp
-D:\Program Files\SpringToolSuite-4.21.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.51.0.202312011752\servers\spring-boot-language-server\BOOT-INF\classes;D:\Program Files\SpringToolSuite-4.21.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.51.0.202312011752\servers\spring-boot-language-server\BOOT-INF\lib\*
+D:\Spring\sts-4.21.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.51.0.202312011752\servers\spring-boot-language-server\BOOT-INF\classes;D:\Spring\sts-4.21.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.51.0.202312011752\servers\spring-boot-language-server\BOOT-INF\lib\*
 -Dsts.lsp.client=eclipse
 -Dlsp.completions.indentation.enable=true
 -Xmx1024m
 -XX:+HeapDumpOnOutOfMemoryError
 -XX:TieredStopAtLevel=1
 -Xlog:jni+resolve=off
--Dspring.config.location=file:D:\Program Files\SpringToolSuite-4.21.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.51.0.202312011752\servers\spring-boot-language-server\BOOT-INF\classes\application.properties
--XX:ErrorFile=D:/project/AzCar/.metadata/.plugins/org.springframework.tooling.boot.ls/fatal-error-spring-boot_1710728069629
+-Dspring.config.location=file:D:\Spring\sts-4.21.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.51.0.202312011752\servers\spring-boot-language-server\BOOT-INF\classes\application.properties
+-XX:ErrorFile=C:/AzCar/AzCar/.metadata/.plugins/org.springframework.tooling.boot.ls/fatal-error-spring-boot_1710861563203
 org.springframework.ide.vscode.boot.app.BootLanguageServerBootApp
 --languageserver.hover-timeout=225
 END
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-18 09:14:29.631
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-19 22:19:23.205
 !MESSAGE DelegatingStreamConnectionProvider - Starting Boot LS
 
-!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-03-18 09:14:29.643
-!MESSAGE Started org.springframework.tooling.boot.ls LS process 17868
+!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-03-19 22:19:23.218
+!MESSAGE Started org.springframework.tooling.boot.ls LS process 17320
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-18 09:14:29.696
-!MESSAGE Boot project ADDED: spring-boot-image-upload-master_spring-boot-image-upload-master
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-18 09:14:29.702
-!MESSAGE Boot project ADDED: spring-project-mazer-template-master_spring-project-mazer-template-master
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-18 09:14:29.711
-!MESSAGE Boot project ADDED: spring-security-form-login-main
-
-!ENTRY org.eclipse.jface 2 0 2024-03-18 10:57:57.817
-!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2024-03-18 10:57:57.817
-!MESSAGE A conflict occurred for CTRL+SHIFT+C:
-Binding(CTRL+SHIFT+C,
-	ParameterizedCommand(Command(org.eclipse.tm4e.languageconfiguration.toggleLineCommentCommand,Toggle Line Comment,
-		,
-		Category(org.eclipse.tm4e.languageconfiguration.category,TM4E Language Configuration,null,true),
-		WorkbenchHandlerServiceHandler("org.eclipse.tm4e.languageconfiguration.toggleLineCommentCommand"),
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.textEditorScope,,,system)
-Binding(CTRL+SHIFT+C,
-	ParameterizedCommand(Command(org.springframework.tooling.boot.ls.ToggleComment,Toggle Comment,
-		,
-		Category(org.springframework.ide.eclipse.commands,Spring Generic Text Editor,Spring Language Server Commands,true),
-		WorkbenchHandlerServiceHandler("org.springframework.tooling.boot.ls.ToggleComment"),
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.textEditorScope,,,system)
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-18 10:59:15.195
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-19 22:20:36.279
 !MESSAGE Classpath changed for project: AzCare-APIServices
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-18 11:11:44.634
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-19 22:20:38.199
+!MESSAGE Classpath changed for project: AzCare-APIServices
+
+!ENTRY org.eclipse.lsp4e 2 0 2024-03-19 22:46:19.783
+!MESSAGE Could not detect hyperlinks due to timeout after 800 milliseconds
+!STACK 0
+java.util.concurrent.TimeoutException
+	at java.base/java.util.concurrent.CompletableFuture.timedGet(CompletableFuture.java:1960)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2095)
+	at org.eclipse.lsp4e.operations.declaration.OpenDeclarationHyperlinkDetector.detectHyperlinks(OpenDeclarationHyperlinkDetector.java:68)
+	at org.eclipse.ui.texteditor.HyperlinkDetectorRegistry$HyperlinkDetectorDelegate.detectHyperlinks(HyperlinkDetectorRegistry.java:81)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.findHyperlinks(HyperlinkManager.java:289)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.findHyperlinks(HyperlinkManager.java:262)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.mouseMove(HyperlinkManager.java:457)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:216)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4273)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1066)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4071)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3659)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:648)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:555)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:173)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:208)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:651)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:588)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1459)
+
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-19 22:48:13.759
 !MESSAGE Classpath changed for project: AzCare-WebPortal
 
-!ENTRY org.eclipse.lsp4e 4 0 2024-03-18 11:11:46.260
-!MESSAGE Marker id 112549 not found.
-!STACK 1
-org.eclipse.core.internal.resources.ResourceException(/AzCare-WebPortal/src/main/java/com/project/AzCar/Config/SecurityConfig.java)[376]: java.lang.IllegalStateException
-	at org.eclipse.core.internal.resources.Marker.checkInfo(Marker.java:63)
-	at org.eclipse.core.internal.resources.Marker.setAttributes(Marker.java:330)
-	at org.eclipse.lsp4e.operations.diagnostics.LSPDiagnosticsToMarkers.updateMarker(LSPDiagnosticsToMarkers.java:200)
-	at org.eclipse.lsp4e.operations.diagnostics.LSPDiagnosticsToMarkers$1.runInWorkspace(LSPDiagnosticsToMarkers.java:174)
-	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:43)
-	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
-!SUBENTRY 1 org.eclipse.core.resources 4 376 2024-03-18 11:11:46.262
-!MESSAGE Marker id 112549 not found.
-!STACK 0
-java.lang.IllegalStateException
-	at org.eclipse.core.internal.resources.Marker.checkInfo(Marker.java:63)
-	at org.eclipse.core.internal.resources.Marker.setAttributes(Marker.java:330)
-	at org.eclipse.lsp4e.operations.diagnostics.LSPDiagnosticsToMarkers.updateMarker(LSPDiagnosticsToMarkers.java:200)
-	at org.eclipse.lsp4e.operations.diagnostics.LSPDiagnosticsToMarkers$1.runInWorkspace(LSPDiagnosticsToMarkers.java:174)
-	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:43)
-	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-19 22:49:40.696
+!MESSAGE Classpath changed for project: AzCare-APIServices
 
-!ENTRY org.eclipse.lsp4e 4 0 2024-03-18 11:11:46.263
-!MESSAGE Marker id 112549 not found.
-!STACK 1
-org.eclipse.core.internal.resources.ResourceException(/AzCare-WebPortal/src/main/java/com/project/AzCar/Config/SecurityConfig.java)[376]: java.lang.IllegalStateException
-	at org.eclipse.core.internal.resources.Marker.checkInfo(Marker.java:63)
-	at org.eclipse.core.internal.resources.Marker.setAttributes(Marker.java:330)
-	at org.eclipse.lsp4e.operations.diagnostics.LSPDiagnosticsToMarkers.updateMarker(LSPDiagnosticsToMarkers.java:200)
-	at org.eclipse.lsp4e.operations.diagnostics.LSPDiagnosticsToMarkers$1.runInWorkspace(LSPDiagnosticsToMarkers.java:174)
-	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:43)
-	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
-!SUBENTRY 1 org.eclipse.core.resources 4 376 2024-03-18 11:11:46.263
-!MESSAGE Marker id 112549 not found.
-!STACK 0
-java.lang.IllegalStateException
-	at org.eclipse.core.internal.resources.Marker.checkInfo(Marker.java:63)
-	at org.eclipse.core.internal.resources.Marker.setAttributes(Marker.java:330)
-	at org.eclipse.lsp4e.operations.diagnostics.LSPDiagnosticsToMarkers.updateMarker(LSPDiagnosticsToMarkers.java:200)
-	at org.eclipse.lsp4e.operations.diagnostics.LSPDiagnosticsToMarkers$1.runInWorkspace(LSPDiagnosticsToMarkers.java:174)
-	at org.eclipse.core.internal.resources.InternalWorkspaceJob.run(InternalWorkspaceJob.java:43)
-	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
 
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-18 11:13:00.458
-!MESSAGE Classpath changed for project: AzCare-WebPortal
-!SESSION 2024-03-18 11:25:10.437 -----------------------------------------------
-eclipse.buildId=4.21.0.202312011804
-java.version=17.0.9
-java.vendor=Eclipse Adoptium
-BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
-Framework arguments:  -product org.springframework.boot.ide.branding.sts4
-Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.springframework.boot.ide.branding.sts4
-
-!ENTRY org.eclipse.emf.ecore 2 0 2024-03-18 11:25:11.984
-!MESSAGE Both 'org.eclipse.jst.j2ee.core' and 'org.eclipse.jst.j2ee.core' register a package for 'application.xmi'
-
-!ENTRY org.eclipse.jface 2 0 2024-03-18 11:25:24.143
-!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2024-03-18 11:25:24.144
-!MESSAGE A conflict occurred for CTRL+SHIFT+T:
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
-		Open a type in a Java editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		WorkbenchHandlerServiceHandler("org.eclipse.jdt.ui.navigate.open.type"),
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.contexts.window,,,system)
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
-		,
-		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
-		WorkbenchHandlerServiceHandler("org.eclipse.lsp4e.symbolinworkspace"),
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.contexts.window,,,system)
-
-!ENTRY org.eclipse.egit.ui 2 0 2024-03-18 11:25:30.126
-!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
-user global configuration and to define the default location to store repositories: 'C:\Users\Le Du'. If this is
-not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
-EGit might behave differently since they see different configuration options.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-18 11:25:30.453
-!MESSAGE Boot project ADDED: AzCare-APIServices
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-18 11:25:30.454
-!MESSAGE Starting Boot LS...
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-18 11:25:30.516
-!MESSAGE Started Boot LS process
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-18 11:25:30.519
-!MESSAGE Boot project ADDED: AzCare-WebPortal
-
-!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-03-18 11:25:30.576
-!MESSAGE Command list starting LS: org.springframework.tooling.boot.ls
-START:
-D:\Program Files\SpringToolSuite-4.21.0.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.9.v20231028-0858\jre\bin\javaw.exe
--cp
-D:\Program Files\SpringToolSuite-4.21.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.51.0.202312011752\servers\spring-boot-language-server\BOOT-INF\classes;D:\Program Files\SpringToolSuite-4.21.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.51.0.202312011752\servers\spring-boot-language-server\BOOT-INF\lib\*
--Dsts.lsp.client=eclipse
--Dlsp.completions.indentation.enable=true
--Xmx1024m
--XX:+HeapDumpOnOutOfMemoryError
--XX:TieredStopAtLevel=1
--Xlog:jni+resolve=off
--Dspring.config.location=file:D:\Program Files\SpringToolSuite-4.21.0.RELEASE\plugins\org.springframework.tooling.boot.ls_1.51.0.202312011752\servers\spring-boot-language-server\BOOT-INF\classes\application.properties
--XX:ErrorFile=D:/project/AzCar/.metadata/.plugins/org.springframework.tooling.boot.ls/fatal-error-spring-boot_1710735930572
-org.springframework.ide.vscode.boot.app.BootLanguageServerBootApp
---languageserver.hover-timeout=225
-END
-
-!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-18 11:25:30.577
-!MESSAGE DelegatingStreamConnectionProvider - Starting Boot LS
-
-!ENTRY org.springframework.tooling.ls.eclipse.commons 1 0 2024-03-18 11:25:30.615
-!MESSAGE Started org.springframework.tooling.boot.ls LS process 16720
+!ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-19 22:49:41.438
+!MESSAGE Classpath changed for project: AzCare-APIServices
 
 !ENTRY org.springframework.tooling.boot.ls 1 0 2024-03-18 11:25:30.666
 !MESSAGE Boot project ADDED: spring-boot-image-upload-master_spring-boot-image-upload-master
@@ -5353,3 +5027,4 @@ Binding(CTRL+R,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.debug.ui.console,,,system)
+

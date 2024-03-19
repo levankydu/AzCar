@@ -3,6 +3,7 @@ package com.project.AzCar.Services.Users;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -61,8 +62,16 @@ public class UserServicesImpl implements UserServices {
 			existingUser.setGender(updatedUserDto.getGender());
 
 			userRepo.save(existingUser);
+			return convertToDto(existingUser);
+		} else {
+			return null;
 		}
-		return null;
+	}
+
+	private UserDto convertToDto(Users userEntity) {
+		UserDto userDto = new UserDto();
+		BeanUtils.copyProperties(userEntity, userDto);
+		return userDto;
 	}
 
 	@Override
@@ -84,8 +93,52 @@ public class UserServicesImpl implements UserServices {
 	}
 
 	@Override
-	public void changePassword(String email, String newPassword) {
-		// TODO Auto-generated method stub
+	public void changePassword(String email, String newPassword, String oldPassword) throws IllegalArgumentException {
+	    Users user = userRepo.findByEmail(email);
+
+	    if (user == null) {
+	        throw new IllegalArgumentException("User with email " + email + " not found.");
+	    }
+
+	    if (oldPassword == null || oldPassword.isEmpty()) {
+	        throw new IllegalArgumentException("Please provide your current password.");
+	    }
+
+	    if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+	        throw new IllegalArgumentException("Current password is incorrect.");
+	    }
+
+	    if (newPassword == null || newPassword.isEmpty()) {
+	        throw new IllegalArgumentException("Please provide a new password.");
+	    }
+
+	    String encodedNewPassword = passwordEncoder.encode(newPassword);
+	    user.setPassword(encodedNewPassword);
+	    user.setChangePassword(false);
+	    userRepo.save(user);
+	}
+
+	@Override
+	public void updateResetPasswordToken(String token, String email) {
+		Users user = userRepo.findByEmail(email);
+		
+		if(user != null) {
+			user.setResetPasswordToken(token);
+			userRepo.save(user);
+		}
+	}
+	
+	public Users getResetPassword(String token) {
+		return userRepo.findByResetPasswordToken(token);
+	}
+	
+	public void updatePassword(Users user, String newPassword) {
+		String encodedNewPassword = passwordEncoder.encode(newPassword);
+		user.setPassword(encodedNewPassword);
+		user.setResetPasswordToken(null);
+		userRepo.save(user);
 		
 	}
+
 }
+
