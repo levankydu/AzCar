@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+
+
+<title>Az CAR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<!-- External CSS libraries -->
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/bootstrap.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/magnific-popup.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.selectBox.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/rangeslider.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/animate.min.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/slick.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.mCustomScrollbar.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/flaticon/font/flaticon.css">
+
+<!-- Favicon icon -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico"
+	type="image/x-icon">
+
+<!-- Google fonts -->
+<link rel="stylesheet" type="text/css"
+	href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
+
+<!-- Custom Stylesheet -->
+<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" type="text/css" id="style_sheet"
+	href="/assets/css/skins/default.css">
+
+</head>
+<body id="top">
+
+	<div class="page_loader"></div>
+
+	<!-- main header start -->
+	<header class="main-header sticky-header header-with-top"
+		id="main-header-2">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<nav class="navbar navbar-expand-lg navbar-light rounded">
+						<a class="navbar-brand logo navbar-brand d-flex mr-auto" href="/">
+							<img src="assets/img/logos/black-logo.png" alt="logo">
+						</a>
+						<button class="navbar-toggler" type="button"
+							data-toggle="collapse" data-target="#navbar"
+							aria-controls="navbar" aria-expanded="false"
+							aria-label="Toggle navigation">
+							<span class="fa fa-bars"></span>
+						</button>
+						<div class="navbar-collapse collapse w-100" id="navbar">
+							<ul class="navbar-nav ml-auto">
+								<li class="nav-item"><a class="nav-link"
+									th:href="@{/home/availablecars/}">Available Cars</a></li>
+								<li class="nav-item" th:if="${session.user}"><a
+									class="nav-link" href="#">My Plan</a></li>
+								<li class="nav-item "><a class="nav-link" href="#">
+										About Us </a></li>
+
+								<li class="nav-item"><a class="nav-link" href="#">
+										Contact Us </a></li>
+
+
+
+								<li class="nav-item dropdown" th:if="${session.user}"><a
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									href="/profile" th:text="Hello+', ' +${session.user}"></a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/logout">LogOut</a></li>
+
+
+								<li class="nav-item dropdown" th:if="${session.admin}"><a
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									href="/profile" th:text="Hello+', ' +${session.admin}"></a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/dashboard/">Dash board</a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/logout">Logout</a></li>
+								<li class="nav-item dropdown" th:unless="${session.isAuthen}"><a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/login">Login</a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/register">Register</a></li>
+							</ul>
+						</div>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- main header end -->
+
+	<!-- Sub banner start -->
+	<div class="sub-banner overview-bgi">
+		<div class="container">
+			<div class="page-name">
+				<h1>Car Detail</h1>
+			</div>
+		</div>
+		<div class="page-info">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-5">
+						<div class="breadcrumb-area">
+							<ul>
+								<li><a href="/">Index</a></li>
+								<li><span>/</span>Car Detail</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-7">
+						<div class="contact-info">
+							<ul>
+								<li><i class="fa fa-phone"></i> +84-3939-7979</li>
+								<li><a href="tel:+84-3939-7979"
+									class="btn btn-md btn-theme">Contact us</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Sub banner end -->
+
+	<!-- Car details page start -->
+	<div class="car-details-page content-area-2">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-md-12">
+					<div id="carDetailsSlider"
+						class="carousel car-details-sliders slide mb-60">
+						<div class="heading-car">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="pull-left">
+										<h3 th:text="${carDetails.carmodel.model}"></h3>
+										<p th:text="${carDetails.address}">
+											<i class="fa fa-map-marker"></i>
+										</p>
+									</div>
+									<div class="p-r">
+										<h3>$420,00</h3>
+										<p>
+											<i class="fa fa-star"></i><i class="fa fa-star"></i><i
+												class="fa fa-star"></i><i class="fa fa-star"></i><i
+												class="fa fa-star"></i>
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- main slider carousel items -->
+						<div class="carousel-inner">
+							<div class="active item carousel-item" data-slide-number="0">
+								<img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(0).urlImage}"
+									class="img-fluid" alt="car-Slider">
+							</div>
+							<div class="item carousel-item" data-slide-number="1">
+								<img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(1).urlImage}"
+									class="img-fluid" alt="car-Slider">
+							</div>
+							<div class="item carousel-item" data-slide-number="2">
+								<img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(2).urlImage}"
+									class="img-fluid" alt="car-Slider">
+							</div>
+							<div class="item carousel-item" data-slide-number="4">
+								<img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(3).urlImage}"
+									class="img-fluid" alt="car-Slider">
+							</div>
+							<div class="item carousel-item" data-slide-number="5">
+								<img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(4).urlImage}"
+									class="img-fluid" alt="car-Slider">
+							</div>
+						</div>
+						<!-- main slider carousel nav controls -->
+						<ul
+							class="carousel-indicators smail-car list-inline nav nav-justified">
+							<li class="list-inline-item active"><a
+								id="carousel-selector-0" class="selected" data-slide-to="0"
+								data-target="#carDetailsSlider"> <img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(0).urlImage}"
+									class="img-fluid" alt="sub-car">
+							</a></li>
+							<li class="list-inline-item"><a id="carousel-selector-1"
+								data-slide-to="1" data-target="#carDetailsSlider"> <img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(1).urlImage}"
+									class="img-fluid" alt="sub-car">
+							</a></li>
+							<li class="list-inline-item"><a id="carousel-selector-2"
+								data-slide-to="2" data-target="#carDetailsSlider"> <img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(2).urlImage}"
+									class="img-fluid" alt="sub-car">
+							</a></li>
+							<li class="list-inline-item"><a id="carousel-selector-3"
+								data-slide-to="3" data-target="#carDetailsSlider"> <img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(3).urlImage}"
+									class="img-fluid" alt="sub-car">
+							</a></li>
+							<li class="list-inline-item"><a id="carousel-selector-4"
+								data-slide-to="4" data-target="#carDetailsSlider"> <img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(4).urlImage}"
+									class="img-fluid" alt="sub-car">
+							</a></li>
+						</ul>
+					</div>
+					<div class="heading-car-2 mb-60">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="pull-left">
+									<h3 th:text="${carDetails.carmodel.model}"></h3>
+									<p th:text="${carDetails.address}">
+										<i class="fa fa-map-marker"></i>
+									</p>
+								</div>
+								<div class="pull-right">
+									<h3>
+										<span class="text-right" th:text="${carDetails.price}+'$'"></span>
+									</h3>
+									<p>
+										<i class="fa fa-star-half-o"></i> <i class="fa fa-star"></i> <i
+											class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+											class="fa fa-star"></i>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Specifications start -->
+					<div class="specifications widget-2 d-lg-none d-xl-none mb-60">
+						<h5 class="sidebar-title">Specifications</h5>
+						<ul>
+							<li><span>Model</span>Maxima</li>
+							<li><span>Body Style</span>Convertible</li>
+							<li><span>Condition</span>Brand New</li>
+							<li><span>Year</span>2018</li>
+							<li><span>Mileage</span>37,000 mi</li>
+							<li><span>Transmission</span>6-speed Manual</li>
+							<li><span>Interior Color</span>Dark Grey</li>
+							<li><span>Engine</span>3.4L Mid-Engine V6</li>
+							<li><span>Fuel Type</span>Gasoline Fuel</li>
+							<li><span>No. of Gears:</span>5</li>
+							<li><span>Location</span>Toronto</li>
+						</ul>
+					</div>
+					<!-- Car vedio start -->
+					<div class="car-video mb-60">
+						<h3 class="heading">Car Description</h3>
+						<p th:text="${carDetails.description}"></p>
+					</div>
+					<!-- Features opions start -->
+					<div class="features-opions mb-60">
+						<h3 class="heading">Features</h3>
+						<div class="row">
+							<div class="col-md-4 col-sm-6">
+								<ul>
+									<li><i class="flaticon-vehicle"></i> Top Speed: 260</li>
+									<li><i class="flaticon-petrol"></i> Fuel Type: Diesel</li>
+									<li><i class="flaticon-road"></i> Mileage: 40,200 KM</li>
+									<li><i class="flaticon-car"></i> Engine: 2901</li>
+									<li><i class="flaticon-car-1"></i> Gear: 5</li>
+								</ul>
+							</div>
+							<div class="col-md-4 col-sm-6">
+								<ul>
+									<li><i class="flaticon-transport-4"></i> Body Style: Sedan
+									</li>
+									<li><i class="flaticon-time"></i> Year:2018</li>
+									<li><i class="flaticon-paint"></i> Interior Color: White</li>
+									<li><i class="flaticon-transport-2"></i> Horse Power: 310
+									</li>
+									<li><i class="flaticon-repair"></i> Doors: 4</li>
+								</ul>
+							</div>
+							<div class="col-md-4 col-sm-6">
+								<ul>
+									<li><i class="flaticon-location"></i> Location: Florisa,
+										USA</li>
+									<li><i class="flaticon-car-2"></i> Free Services</li>
+									<li><i class="flaticon-paint"></i> Interior Color: Black</li>
+									<li><i class="flaticon-transport-3"></i> Electric Range</li>
+									<li><i class="flaticon-transport-3"></i> Oll Changes</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- Car vedio start -->
+					<div class="car-video mb-60">
+						<h3 class="heading">Car Rules</h3>
+						<p th:text="${carDetails.rules}"></p>
+					</div>
+					<!-- Section Location start -->
+
+					<!-- Comments section start -->
+					<div class="comments-section">
+						<h3 class="heading">Comments Section</h3>
+						<ul class="comments">
+							<li>
+								<div class="comment">
+									<div class="comment-author">
+										<a href="#"> <img src="/assets/img/avatar/avatar-13.jpg"
+											class="rounded-circle" alt="avatar-13">
+										</a>
+									</div>
+									<div class="comment-content">
+										<div class="comment-meta">
+											<div class="comment-meta-author">Jane Doe</div>
+											<div class="comment-meta-reply">
+												<a href="#">Reply</a>
+											</div>
+											<div class="comment-meta-date">
+												<span>8:42 PM 10/3/2022</span>
+											</div>
+										</div>
+										<div class="clearfix"></div>
+										<div class="comment-body">
+											<div class="comment-rating">
+												<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+													class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+													class="fa fa-star-o"></i>
+											</div>
+											<p>Lorem ipsum dolor sit amet, consectetur adipiscing
+												elit. Donec luctus tincidunt aliquam. Aliquam gravida massa
+												at sem vulputate interdum et vel eros. Maecenas eros enim,
+												tincidunt vel turpis vel, dapibus tempus nulla. Donec vel
+												nulla dui. Pellentesque sed ante sed.</p>
+										</div>
+									</div>
+								</div>
+								<ul>
+									<li>
+										<div class="comment">
+											<div class="comment-author">
+												<a href="#"> <img src="/assets/img/avatar/avatar-13.jpg"
+													class="rounded-circle" alt="avatar-13">
+												</a>
+											</div>
+
+											<div class="comment-content">
+												<div class="comment-meta">
+													<div class="comment-meta-author">Jane Doe</div>
+
+													<div class="comment-meta-reply">
+														<a href="#">Reply</a>
+													</div>
+
+													<div class="comment-meta-date">
+														<span>8:42 PM 10/3/2022</span>
+													</div>
+												</div>
+												<div class="clearfix"></div>
+												<div class="comment-body">
+													<div class="comment-rating">
+														<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+															class="fa fa-star"></i> <i class="fa fa-star-half-o"></i>
+														<i class="fa fa-star-o"></i>
+													</div>
+													<p>Lorem ipsum dolor sit amet, consectetur adipiscing
+														elit. Donec luctus tincidunt aliquam. Aliquam gravida
+														massa at sem vulputate interdum et vel eros. Maecenas eros
+														enim, tincidunt vel turpis vel, dapibus tempus nulla.
+														Donec vel nulla dui.</p>
+												</div>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<div class="comment">
+									<div class="comment-author">
+										<a href="#"> <img src="/assets/img/avatar/avatar-13.jpg"
+											class="rounded-circle" alt="avatar-13">
+										</a>
+									</div>
+									<div class="comment-content">
+										<div class="comment-meta">
+											<div class="comment-meta-author">Jane Doe</div>
+											<div class="comment-meta-reply">
+												<a href="#">Reply</a>
+											</div>
+											<div class="comment-meta-date">
+												<span>8:42 PM 10/3/2022</span>
+											</div>
+										</div>
+										<div class="clearfix"></div>
+										<div class="comment-body">
+											<div class="comment-rating">
+												<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+													class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+													class="fa fa-star-o"></i>
+											</div>
+											<p>Lorem ipsum dolor sit amet, consectetur adipiscing
+												elit. Donec luctus tincidunt aliquam. Aliquam gravida massa
+												at sem vulputate interdum et vel eros. Maecenas eros enim,
+												tincidunt vel turpis vel, dapibus tempus nulla. Donec vel
+												nulla dui. Pellentesque.</p>
+										</div>
+									</div>
+								</div>
+
+							</li>
+						</ul>
+					</div>
+					<!-- Contact 1 start -->
+					<div class="contact-3 mb-30">
+						<h3 class="heading">Leave a Comment</h3>
+						<div class="container">
+							<div class="row">
+								<form action="#" method="GET" enctype="multipart/form-data">
+									<div class="row">
+										<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+											<div class="form-group name">
+												<input type="text" name="name" class="form-control"
+													placeholder="Name">
+											</div>
+										</div>
+										<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+											<div class="form-group email">
+												<input type="email" name="email" class="form-control"
+													placeholder="Email">
+											</div>
+										</div>
+										<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+											<div class="form-group subject">
+												<input type="text" name="subject" class="form-control"
+													placeholder="Subject">
+											</div>
+										</div>
+										<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+											<div class="form-group number">
+												<input type="text" name="phone" class="form-control"
+													placeholder="Number">
+											</div>
+										</div>
+										<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+											<div class="form-group message">
+												<textarea class="form-control" name="message"
+													placeholder="Write message"></textarea>
+											</div>
+										</div>
+										<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+											<div class="send-btn">
+												<button type="submit"
+													class="btn btn-color btn-md btn-message">Send
+													Message</button>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-12">
+					<div class="sidebar mbl">
+						<!-- Specifications start -->
+						<div class="specifications widget d-none d-xl-block d-lg-block">
+							<h5 class="sidebar-title">Specifications</h5>
+							<ul>
+								<li><span>Brand: </span>
+									<p class="mb-0" th:text="${carDetails.carmodel.brand}"></p></li>
+
+								<li><span>Model:</span>
+									<p class="mb-0" th:text="${carDetails.carmodel.model}"></p></li>
+								<li><span>Body Style:</span>
+									<p class="mb-0" th:text="${carDetails.carmodel.category}"></p></li>
+
+								<li><span>Year:</span>
+									<p class="mb-0" th:text="${carDetails.carmodel.year}"></p></li>
+
+								<li><span>Transmission:</span>
+									<p class="mb-0"
+										th:text="${carDetails.engineInformationTranmission}? 'Automatic' :'Manual'"></p></li>
+
+
+								<li><span>Fuel Type: </span>
+									<p class="mb-0" th:text="${carDetails.fuelType}"></p></li>
+
+								<li><span>Location</span>
+									<p class="mb-0" th:text="${address}"></p></li>
+
+								<li th:if="${fastBooking}!= null"><span>Auto Accept
+										Booking in: </span>
+									<p class="mb-0"
+										th:text="${fastBooking.estimateTime}+' hour(s)'"></p></li>
+								<li th:if="${plusService}!= null"><span>Max Delivery
+										Distance: </span>
+									<p class="mb-0"
+										th:text="${plusService.maxDeliveryDistance}+' km(s)'"></p></li>
+								<li th:if="${plusService}!= null"><span>Fee Delivery
+										per km: </span>
+									<p class="mb-0" th:text="${plusService.feePerKm}+' $'"></p></li>
+								<li th:if="${plusService}!= null"><span>Fee Delivery
+										in: </span>
+									<p class="mb-0" th:text="${plusService.freeDeliveryWithin}+' km(s)'"></p></li>
+								<li th:if="${extraFee}!= null"><span>Maximum Km per day:
+										</span>
+									<p class="mb-0" th:text="${extraFee.maximunKmPerDay}+' km(s)'"></p></li>
+									<li th:if="${extraFee}!= null"><span>Over litmit Fee:
+										</span>
+									<p class="mb-0" th:text="${extraFee.overLimitFee}+' $/1km'"></p></li>
+							</ul>
+						</div>
+						<!-- Sell your car -->
+						<div class="sell-your-car">
+							<h3>Book This Car</h3>
+							<p></p>
+							<a href="" class="btn btn-md btn-color">Book Now Now</a>
+						</div>
+						<!-- Recent posts start -->
+						<div class="widget recent-posts">
+							<h5 class="sidebar-title">Another cars in same address</h5>
+							<div class="media mb-4">
+								<a class="pr-3" href="car-details.html"> <img
+									src="/assets/img/sub-car/sub-car.jpg" alt="car">
+								</a>
+								<div class="media-body align-self-center">
+									<h5>
+										<a href="car-details.html">2016 Audi S5 Coupe</a>
+									</h5>
+									<p>February 27, 2022</p>
+									<p>
+										<strong>$245,000</strong>
+									</p>
+								</div>
+							</div>
+							<div class="media mb-4">
+								<a class="pr-3" href="car-details.html"> <img
+									src="/assets/img/sub-car/sub-car-2.jpg" alt="car">
+								</a>
+								<div class="media-body align-self-center">
+									<h5>
+										<a href="car-details.html">2016 Audi R8</a>
+									</h5>
+									<p>February 27, 2022</p>
+									<p>
+										<strong>$245,000</strong>
+									</p>
+								</div>
+							</div>
+							<div class="media">
+								<a class="pr-3" href="car-details.html"> <img
+									src="/assets/img/sub-car/sub-car-3.jpg" alt="car">
+								</a>
+								<div class="media-body align-self-center">
+									<h5>
+										<a href="car-details.html">Read Audi A7 TDI</a>
+									</h5>
+									<p>February 27, 2022</p>
+									<p>
+										<strong>$245,000</strong>
+									</p>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Car details page start -->
+
+	<!-- Footer start -->
+	<footer class="footer">
+		<div class="container footer-inner">
+			<div class="row">
+				<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+					<div class="footer-item">
+						<h4>Contact Us</h4>
+						<div class="f-border"></div>
+						<ul class="contact-info">
+							<li>Address: 20/F Green Road, Dhanmondi, Dhaka</li>
+							<li>Email: <a href="mailto:info@themevessel.com">info@themevessel.com</a>
+							</li>
+							<li>Phone: <a href="tel:+0477-85x6-552">+XXXX XXXX XXX</a>
+							</li>
+							<li>Fax: +XXXX XXXX XXX</li>
+						</ul>
+
+						<ul class="social-list clearfix">
+							<li><a href="#" class="facebook-bgh"><i
+									class="fa fa-facebook"></i></a></li>
+							<li><a href="#" class="twitter-bgh"><i
+									class="fa fa-twitter"></i></a></li>
+							<li><a href="#" class="google-bgh"><i
+									class="fa fa-google-plus"></i></a></li>
+							<li><a href="#" class="rss-bgh"><i class="fa fa-rss"></i></a></li>
+							<li><a href="#" class="linkedin-bgh"><i
+									class="fa fa-linkedin"></i></a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+					<div class="footer-item">
+						<h4>Useful Links</h4>
+						<div class="f-border"></div>
+						<ul class="links">
+							<li><a href="#"><i class="flaticon-arrows"></i>About us</a>
+							</li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Service</a></li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Car
+									Listing</a></li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Car Grid</a>
+							</li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Contact
+									Us</a></li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Blog</a></li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Car
+									Details</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+					<div class="recent-posts footer-item">
+						<h4>Recent Posts</h4>
+						<div class="f-border"></div>
+						<div class="media mb-4">
+							<a class="pr-3" href="car-details.html"> <img
+								src="/assets/img/sub-car/sub-car.jpg" alt="car">
+							</a>
+							<div class="media-body align-self-center">
+								<h5>
+									<a href="car-details.html">2016 Audi S5 Coupe</a>
+								</h5>
+								<p>February 27, 2022</p>
+								<p>
+									<strong>$245,000</strong>
+								</p>
+							</div>
+						</div>
+						<div class="media mb-4">
+							<a class="pr-3" href="car-details.html"> <img
+								src="/assets/img/sub-car/sub-car-2.jpg" alt="car">
+							</a>
+							<div class="media-body align-self-center">
+								<h5>
+									<a href="car-details.html">2016 Audi R8</a>
+								</h5>
+								<p>February 27, 2022</p>
+								<p>
+									<strong>$245,000</strong>
+								</p>
+							</div>
+						</div>
+						<div class="media">
+							<a class="pr-3" href="car-details.html"> <img
+								src="/assets/img/sub-car/sub-car-3.jpg" alt="car">
+							</a>
+							<div class="media-body align-self-center">
+								<h5>
+									<a href="car-details.html">Read Audi A7 TDI</a>
+								</h5>
+								<p>February 27, 2022</p>
+								<p>
+									<strong>$245,000</strong>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+					<div class="footer-item clearfix">
+						<h4>Subscribe</h4>
+						<div class="f-border"></div>
+						<div class="Subscribe-box">
+							<p>Excepteur sint occaecat cupidatat non proident, sunt in
+								culpa qui officia deserunt mollit.</p>
+							<form action="#" method="GET">
+								<p>
+									<input type="text" class="form-contact" name="email"
+										placeholder="Enter Address">
+								</p>
+								<p>
+									<button type="submit" name="submitNewsletter"
+										class="btn btn-block btn-color">Subscribe</button>
+								</p>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xl-12">
+					<p class="copy">
+						&copy; 2022 <a href="http://themevessel.com/" target="_blank">Theme
+							Vessel</a>. Trademarks and brands are the car of their respective
+						owners.
+					</p>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- Footer end -->
+
+
+
+
+
+	<!-- Off-canvas sidebar -->
+	<div class="off-canvas-sidebar">
+		<div class="off-canvas-sidebar-wrapper">
+			<div class="off-canvas-header">
+				<a class="close-offcanvas" href="#"><span class="fa fa-times"></span></a>
+			</div>
+			<div class="off-canvas-content">
+				<aside class="canvas-widget">
+					<div class="logo text-center">
+						<img src="/assets/img/logos/logo.png" alt="logo">
+					</div>
+				</aside>
+				<aside class="canvas-widget">
+					<ul class="menu">
+						<li class="menu-item menu-item-has-children"><a
+							href="index.html">Home</a></li>
+						<li class="menu-item"><a href="car-grid-leftside.html">Car
+								List</a></li>
+						<li class="menu-item"><a href="car-details.html">Car
+								Detail</a></li>
+						<li class="menu-item"><a
+							href="blog-single-sidebar-right.html">Blog</a></li>
+						<li class="menu-item"><a href="about-1.html">About US</a></li>
+						<li class="menu-item"><a href="contact-1.html">Contact US</a></li>
+					</ul>
+				</aside>
+				<aside class="canvas-widget">
+					<ul class="social-icons">
+						<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+						<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+						<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+						<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+						<li><a href="#"><i class="fa fa-vk"></i></a></li>
+					</ul>
+				</aside>
+			</div>
+		</div>
+	</div>
+
+	<!-- External JS libraries -->
+	<script src="/assets/js/jquery-2.2.0.min.js"></script>
+	<script src="/assets/js/popper.min.js"></script>
+	<script src="/assets/js/bootstrap.min.js"></script>
+	<script src="/assets/js/jquery.selectBox.js"></script>
+	<script src="/assets/js/rangeslider.js"></script>
+	<script src="/assets/js/jquery.magnific-popup.min.js"></script>
+	<script src="/assets/js/jquery.filterizr.js"></script>
+	<script src="/assets/js/wow.min.js"></script>
+	<script src="/assets/js/backstretch.js"></script>
+	<script src="/assets/js/jquery.countdown.js"></script>
+	<script src="/assets/js/jquery.scrollUp.js"></script>
+	<script src="/assets/js/particles.min.js"></script>
+	<script src="/assets/js/typed.min.js"></script>
+	<script src="/assets/js/dropzone.js"></script>
+	<script src="/assets/js/jquery.mb.YTPlayer.js"></script>
+	<script src="/assets/js/slick.min.js"></script>
+	<script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
+	<script src="/assets/js/ie-emulation-modes-warning.js"></script>
+	<script src="https://kit.fontawesome.com/56c961acc9.js"
+		crossorigin="anonymous"></script>
+
+	<!-- Custom JS Script -->
+	<script src="/assets/js/app.js"></script>
+</body>
+</html>

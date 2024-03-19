@@ -12,4 +12,5 @@ public interface CarServices {
 	void saveCarRegister(CarInfor model);
 	List<CarInfor> findAll();
 	CarInforDto mapToDto(int id);
+	CarInfor findById(int id);
 }

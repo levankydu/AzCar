@@ -37,4 +37,9 @@ public class CarServicesImpl implements CarServices {
 		return carDto;
 	}
 
+	@Override
+	public CarInfor findById(int id) {
+		return carRepository.getById(id);
+	}
+
 }

@@ -10,4 +10,6 @@ import com.project.AzCar.Entities.Locations.Ward;
 public interface WardServices {
 
 	List<Ward> getWardByDistrictCode(String code);
+
+	List<String> getWardListString();
 }
