@@ -17,5 +17,9 @@ public class WardServiceImpl implements WardServices {
 	public List<Ward> getWardByDistrictCode(String code) {
 		return wardRepository.getWardByDistrictCode(code);
 	}
+	@Override
+	public List<String> getWardListString() {
+		return wardRepository.getListString();
+	}
 
 }

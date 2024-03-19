@@ -1,18 +1,12 @@
 package com.project.AzCar.Mailer;
 
-import org.springframework.stereotype.Service;
+import java.io.IOException;
+import java.util.Map;
 
-@Service
-public class EmailService {
-//	void sendSimpleMessage(String to, String subject, String text);
-//
-//	void sendSimpleMessageUsingTemplate(String to, String subject, Object... templateModel);
-//
-//	void sendMessageWithAttachment(String to, String subject, String text, String pathToAttachment);
-//
-//	void sendMessageUsingThymeleafTemplate(String to, String subject, Map<String, Object> templateModel);
-	
-//	@Autowired
-//	private JavaMailSender mailSender;
+import javax.mail.MessagingException;
+
+public interface EmailService {
+	void sendMessageUsingThymeleafTemplate(String to, String subject, Map<String, Object> templateModel)
+			throws IOException, MessagingException;
 	
 }

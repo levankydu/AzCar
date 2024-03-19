@@ -10,4 +10,6 @@ import com.project.AzCar.Entities.Locations.District;
 public interface DistrictServices {
 
 	List<District> getDistricByProvinceCode(String code);
+
+	List<String> getListDistrictString();
 }

@@ -16,5 +16,9 @@ public class PlusServiceServicesImpl implements PlusServiceServices {
 		plusServicesRepository.save(model);
 		
 	}
+	@Override
+	public PlusServices findByCarId(int id) {
+		return plusServicesRepository.findByCarId(id);
+	}
 
 }

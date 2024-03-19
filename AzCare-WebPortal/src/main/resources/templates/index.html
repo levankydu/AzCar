@@ -74,20 +74,24 @@
 
 
 
-								<li class="nav-item dropdown" th:if="${session.user}"><a
-									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-									href="/profile" th:text="Hello+', ' +${session.user}"></a> <a
-									class="btn btn-sm btn-theme btn-round signup-link"
-									href="/logout">LogOut</a></li>
+								<div th:if="${session.user}">
+									<li class="nav-item dropdown"><a
+										class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+										th:href="@{/user/profile/} + ${session.user}" th:text="Hello+', ' +${session.user}"></a> <a
+										class="btn btn-sm btn-theme btn-round signup-link"
+										href="/logout">LogOut</a></li>
+								</div>
+								<div th:if="${session.admin}">
+									<li class="nav-item dropdown"><a
+										class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+										href="#" th:text="Hello+', ' +${session.admin}"></a> <a
+										class="btn btn-sm btn-theme btn-round signup-link"
+										href="/dashboard/">Dashboard</a> <a
+										class="btn btn-sm btn-theme btn-round signup-link"
+										href="/logout">Logout</a></li>
+								</div>
 
 
-								<li class="nav-item dropdown" th:if="${session.admin}"><a
-									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-									href="/profile" th:text="Hello+', ' +${session.admin}"></a> <a
-									class="btn btn-sm btn-theme btn-round signup-link"
-									href="/dashboard/">Dash board</a> <a
-									class="btn btn-sm btn-theme btn-round signup-link"
-									href="/logout">Logout</a></li>
 								<li class="nav-item dropdown" th:unless="${session.isAuthen}"><a
 									class="btn btn-sm btn-theme btn-round signup-link"
 									href="/login">Login</a> <a
@@ -118,7 +122,7 @@
 									Driving Made Simple <br />
 								</h3>
 								<p data-animation="animated fadeInUp delay-10s">Ride with
-									Ease, Book with Confidence.</p>
+									Easy, Book with Confidence.</p>
 								<a data-animation="animated fadeInUp delay-10s"
 									th:href="@{/home/carregister/}"
 									class="btn btn-lg btn-round btn-theme">Want rent your Car ?</a>

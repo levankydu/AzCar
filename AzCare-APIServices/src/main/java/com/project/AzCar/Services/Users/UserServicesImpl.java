@@ -3,6 +3,7 @@ package com.project.AzCar.Services.Users;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -62,7 +63,7 @@ public class UserServicesImpl implements UserServices {
 
 			userRepo.save(existingUser);
 			return convertToDto(existingUser);
-		}else {
+		} else {
 			return null;
 		}
 	}
@@ -71,9 +72,8 @@ public class UserServicesImpl implements UserServices {
 		UserDto userDto = new UserDto();
 		BeanUtils.copyProperties(userEntity, userDto);
 		return userDto;
-	}	
-	
-	
+	}
+
 	@Override
 	public boolean saveAdmin(UserDto userDto) {
 		Roles role = roleRepo.findByName(Constants.Roles.ADMIN);
@@ -93,10 +93,52 @@ public class UserServicesImpl implements UserServices {
 	}
 
 	@Override
-	public void changePassword(String email, String newPassword) {
+	public void changePassword(String email, String newPassword, String oldPassword) throws IllegalArgumentException {
+	    Users user = userRepo.findByEmail(email);
+
+	    if (user == null) {
+	        throw new IllegalArgumentException("User with email " + email + " not found.");
+	    }
+
+	    if (oldPassword == null || oldPassword.isEmpty()) {
+	        throw new IllegalArgumentException("Please provide your current password.");
+	    }
+
+	    if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+	        throw new IllegalArgumentException("Current password is incorrect.");
+	    }
+
+	    if (newPassword == null || newPassword.isEmpty()) {
+	        throw new IllegalArgumentException("Please provide a new password.");
+	    }
+
+	    String encodedNewPassword = passwordEncoder.encode(newPassword);
+	    user.setPassword(encodedNewPassword);
+	    user.setChangePassword(false);
+	    userRepo.save(user);
+	}
+
+	@Override
+	public void updateResetPasswordToken(String token, String email) {
 		Users user = userRepo.findByEmail(email);
-		user.setPassword(newPassword);
+		
+		if(user != null) {
+			user.setResetPasswordToken(token);
+			userRepo.save(user);
+		}
+	}
+	
+	public Users getResetPassword(String token) {
+		return userRepo.findByResetPasswordToken(token);
+	}
+	
+	public void updatePassword(Users user, String newPassword) {
+		String encodedNewPassword = passwordEncoder.encode(newPassword);
+		user.setPassword(encodedNewPassword);
+		user.setResetPasswordToken(null);
 		userRepo.save(user);
 		
 	}
+
 }
+

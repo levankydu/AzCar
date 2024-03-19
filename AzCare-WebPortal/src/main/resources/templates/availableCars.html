@@ -143,7 +143,7 @@
 				<div class="row clearfix">
 					<div class="col-xl-4 col-lg-5 col-md-5 col-sm-5">
 						<h4 class="heading"
-							th:text="${carRegisterList.size}+' Result(s) Found'"></h4>
+							th:text="${carRegisterList.size}+' Cars(s) For You'"></h4>
 					</div>
 					<div class="col-xl-8 col-lg-7 col-md-7 col-sm-7">
 						<div class="sorting-options clearfix">
@@ -167,13 +167,13 @@
 					<div class="car-box">
 
 						<div class="car-thumbnail">
-							<a href="car-details.html" class="car-img">
+							<a th:href="'details'+'/'+${car.id}" class="car-img">
 
-								<div class="listing-badges" th:if="car.discount =='0'">
+								<div class="listing-badges" th:if="${car.discount} == '0'">
 									<span class="featured">Featured</span>
 								</div>
-								<div class="listing-time opening" th:if="car.discount !='0'">
-									<span class="featured" th:text="${car.discount}+'% For sale' "></span>
+								<div class="listing-time opening" th:if="${car.discount} >0">
+									<span class="featured" th:text="${car.discount}+'% For discount' "></span>
 								</div>
 								<div id="carouselExampleIndicators1" class="carousel slide"
 									data-ride="carousel">

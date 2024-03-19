@@ -30,10 +30,13 @@ public class SecurityConfig {
 
 		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests((requests) -> requests
 				.requestMatchers("/").permitAll()
+				.requestMatchers("/forgot_password/**").permitAll()
+				.requestMatchers("/reset_password?token={token}/**").permitAll()
 				.requestMatchers("/register/**").permitAll()
 				.requestMatchers("/login/**").permitAll()
 				.requestMatchers("/registeradmin").permitAll()
 				.requestMatchers("/home/carregister/**").hasAnyRole("USER", "ADMIN")
+				.requestMatchers("/home/availablecars/**").hasAnyRole("USER", "ADMIN")
 				.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
 				.requestMatchers("/dashboard/**").hasAnyRole("ADMIN")
 				.anyRequest().authenticated())
