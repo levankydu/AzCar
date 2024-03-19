@@ -18,6 +18,7 @@ public interface UserRepository extends JpaRepository<Users,Long>{
 	@Query("SELECT u FROM Users u")
     List<Users> findAllUsers();
 	
+	public Users findByResetPasswordToken(String email);
 	
 	
 	

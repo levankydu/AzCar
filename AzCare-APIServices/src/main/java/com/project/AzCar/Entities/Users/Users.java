@@ -61,6 +61,9 @@ public class Users implements Serializable{
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dob;
 	private boolean isEnabled;
+	private boolean changePassword;
+	private String resetPasswordToken;
+
 	private String gender;
 	private BigDecimal balance;
 	private int score;

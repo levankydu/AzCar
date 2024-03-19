@@ -188,14 +188,8 @@ Users loginedUser = new Users();
 		model.addAttribute("userlists", userlists);
 		return "admin/ListAccount";
 	}
-	
-	@GetMapping("/dashboard/ListAccount/profile/{email}")
-	public String profile(@PathVariable("email") String email, Model model) {
-		Users user = userRepo.findUserByEmail(email);
 
-		user.getEmail();
-		model.addAttribute("user", user);
-		return "admin/profile/{email}";
-	}
+	
+	
 
 }
