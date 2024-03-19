@@ -15,4 +15,9 @@ public class ExtraFeeServiceImpl implements ExtraFeeServices {
 	public void save(ExtraFee model) {
 		extraFeeRepository.save(model);
 	}
+
+	@Override
+	public ExtraFee findByCarId(int id) {
+		return extraFeeRepository.findByCarId(id);
+	}
 }

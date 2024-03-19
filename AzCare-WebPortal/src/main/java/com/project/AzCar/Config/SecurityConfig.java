@@ -34,6 +34,7 @@ public class SecurityConfig {
 				.requestMatchers("/login/**").permitAll()
 				.requestMatchers("/registeradmin").permitAll()
 				.requestMatchers("/home/carregister/**").hasAnyRole("USER", "ADMIN")
+				.requestMatchers("/home/availablecars/**").hasAnyRole("USER", "ADMIN")
 				.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
 				.requestMatchers("/dashboard/**").hasAnyRole("ADMIN")
 				.anyRequest().authenticated())

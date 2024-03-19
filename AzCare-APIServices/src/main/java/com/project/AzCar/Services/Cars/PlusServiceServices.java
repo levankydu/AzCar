@@ -6,4 +6,5 @@ import com.project.AzCar.Entities.Cars.PlusServices;
 @Service
 public interface PlusServiceServices {
 	void save(PlusServices model);
+	PlusServices findByCarId(int id);
 }

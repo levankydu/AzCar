@@ -16,6 +16,9 @@ public class FastBookingServicesImpl implements FastBookingServices{
 		bookingRepository.save(model);
 		
 	}
+	@Override
+	public FastBooking findByCarId(int id) {
+		return bookingRepository.findByCarId(id);	}
 
 	
 }

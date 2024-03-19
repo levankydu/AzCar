@@ -18,5 +18,9 @@ public class DistrictServiceImpl implements DistrictServices{
 	public List<District> getDistricByProvinceCode(String code) {
 		return districtRepository.getDistrictByProviceCode(code);
 	}
+	@Override
+	public List<String> getListDistrictString() {
+		return districtRepository.getListString();
+	}
 
 }

@@ -7,4 +7,5 @@ import com.project.AzCar.Entities.Cars.ExtraFee;
 @Service
 public interface ExtraFeeServices {
 	void save(ExtraFee model);
+	ExtraFee findByCarId(int id);
 }

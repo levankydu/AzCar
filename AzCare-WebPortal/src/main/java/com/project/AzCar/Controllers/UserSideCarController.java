@@ -195,6 +195,58 @@ public class UserSideCarController {
 		return "successPage";
 	}
 
+	@GetMapping("/home/availablecars/details/{carId}")
+	public String getDetailsPage(@PathVariable("carId") String carId, Model carDetails,Model address,Model fastBooking,Model carPlus,Model extraFee) {
+		var model = carServices.findById(Integer.parseInt(carId));
+		var modelDto = carServices.mapToDto(model.getId());
+		List<String> listProvince = provinceServices.getListCityString();
+		var carFastBooking = bookingServices.findByCarId(model.getId());
+		if(carFastBooking !=null) {
+			fastBooking.addAttribute("fastBooking", carFastBooking);
+		}
+		var carExtraFee = extraFeeServices.findByCarId(model.getId());
+		if(carExtraFee !=null) {
+			
+			extraFee.addAttribute("extraFee", carExtraFee);
+		}
+		var carPLusService = plusServiceServices.findByCarId(model.getId());
+		if(carPLusService !=null) {
+			
+			carPlus.addAttribute("plusService", carPLusService);
+		}
+		modelDto.setCarmodel(brandServices.getModel(model.getModelId()));
+		modelDto.setImages(carImageServices.getImgByCarId(model.getId()));
+		for (var c : listProvince) {
+			if (model.getAddress().contains(c)) {
+				address.addAttribute("address",c);
+			}
+		}
+
+		carDetails.addAttribute("carDetails", modelDto);
+		return "carDetails";
+	}
+
+	@GetMapping("/home/availablecars/details/{carId}/{filename}")
+	public ResponseEntity<Resource> getDetailsImage(@PathVariable("carId") String carId,
+			@PathVariable("filename") String filename) {
+		List<CarInfor> list = carServices.findAll();
+		String dir = "";
+		int i = 0;
+		while (i < list.size()) {
+			dir = "./UploadFiles/carImages/" + list.get(i).getModelId() + "-" + list.get(i).getId();
+			Resource fileResource = fileStorageServices.load(filename, dir);
+			if (fileResource == null) {
+				i++;
+
+			} else {
+				return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment; filename=\"" + fileResource.getFilename() + "\"").body(fileResource);
+			}
+
+		}
+		return null;
+	}
+
 	@GetMapping("/home/availablecars/")
 	public String getAvailableCarsPage(Model carRegisterList) {
 		List<CarInfor> list = carServices.findAll();
@@ -220,21 +272,20 @@ public class UserSideCarController {
 	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename) throws IOException {
 		List<CarInfor> list = carServices.findAll();
 		String dir = "";
-			int i =0;
-			while(i<list.size()) {
-				dir = "./UploadFiles/carImages/" + list.get(i).getModelId() + "-" + list.get(i).getId();
-				Resource fileResource = fileStorageServices.load(filename, dir);
-				if (fileResource == null) {
-					i++;
+		int i = 0;
+		while (i < list.size()) {
+			dir = "./UploadFiles/carImages/" + list.get(i).getModelId() + "-" + list.get(i).getId();
+			Resource fileResource = fileStorageServices.load(filename, dir);
+			if (fileResource == null) {
+				i++;
 
-				} else {
-					return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-							"attachment; filename=\"" + fileResource.getFilename() + "\"").body(fileResource);
-				}
-
+			} else {
+				return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment; filename=\"" + fileResource.getFilename() + "\"").body(fileResource);
 			}
-			return null;
 
+		}
+		return null;
 
 	}
 
