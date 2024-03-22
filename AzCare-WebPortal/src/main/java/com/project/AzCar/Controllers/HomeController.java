@@ -2,13 +2,10 @@ package com.project.AzCar.Controllers;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
 import java.util.ArrayList;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,15 +14,13 @@ import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-
-import org.springframework.data.repository.query.Param;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,12 +38,10 @@ import com.project.AzCar.Dto.Users.UserDto;
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Mailer.EmailService;
-
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
 import com.project.AzCar.Services.Cars.CarServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
-
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
@@ -76,6 +69,7 @@ public class HomeController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@Autowired
 	private CarServices carServices;
 	@Autowired
 	private ProvinceServices provinceServices;

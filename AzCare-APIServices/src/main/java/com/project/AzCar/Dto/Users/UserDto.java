@@ -5,7 +5,6 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Transient;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
