@@ -20,17 +20,17 @@ public class UserDto {
 	@NotEmpty(message = "Please enter your name.")
 	private String name;
 
-	@NotEmpty(message = "Please enter your email")
-	@Email(message = "Email format must be correct")
+	@NotEmpty(message = "Email not empty")
+
 	private String email;
 
 	@NotEmpty(message = "Please enter password.")
 	private String password;
-	
+	@NotEmpty(message = "Please enter confirmpassword.")
 	private String confirmPassword;
 
 	private String image;
-	
+
 	private String phone;
 
 	private String firstName;
@@ -39,9 +39,9 @@ public class UserDto {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dob;
 	private boolean isEnabled;
-	
+
 	private boolean changePassword;
-	
+
 	@Transient
 	public boolean isPasswordMatching() {
 		if (password != null && password.equals(confirmPassword)) {
@@ -50,8 +50,5 @@ public class UserDto {
 			return false;
 		}
 	}
-	
-	
-	
-	
+
 }

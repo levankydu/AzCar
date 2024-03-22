@@ -41,7 +41,8 @@
 <link type="text/css" rel="stylesheet" href="assets/css/style.css">
 <link rel="stylesheet" type="text/css" id="style_sheet"
 	href="assets/css/skins/default.css">
-
+<link rel="stylesheet"
+	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
 </head>
 <body id="top">
 	<!-- <!-- Google Tag Manager (noscript) -->
@@ -54,6 +55,7 @@ End Google Tag Manager (noscript)
 	<div class="contact-section overview-bgi">
 		<div class="container">
 			<div class="row">
+				
 				<div class="col-lg-12">
 					<!-- Form content box start -->
 					<div class="form-content-box">
@@ -70,11 +72,11 @@ End Google Tag Manager (noscript)
 								<p class="text-danger" th:text="${session.signin_error}"></p>
 								<!-- Sau khi hiển thị, xóa thông báo để tránh hiển thị lỗi cũ khi trang được làm mới -->
 								<script th:inline="javascript">
-									
 									setTimeout(
 											function() {
-												document.querySelector('.text-danger').innerText = '';
-											}, 5000); 
+												document
+														.querySelector('.text-danger').innerText = '';
+											}, 5000);
 									// 5 seconds
 								</script>
 							</div>
@@ -163,6 +165,26 @@ End Google Tag Manager (noscript)
 		th:src="@{assets/js/ie-emulation-modes-warning.js}"></script>
 	<!-- Custom JS Script -->
 	<script type="text/javascript" th:src="@{/assets/js/app.js}"></script>
+	<script
+		th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
 
+	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
+	<script type="text/javascript">
+		function checkSubmitLogin() {
+
+			var loginCheck = document.getElementById('validation-login').textContent
+					.trim().length;
+
+			const sum = loginCheck;
+			if (sum > 0) {
+				console.log(sum);
+				document.getElementById('toast-failed-login').click();
+				return false;
+			} else {
+				document.getElementById('toast-success-login').click();
+				return index.submit();
+			}
+		}
+	</script>
 </body>
 </html>
