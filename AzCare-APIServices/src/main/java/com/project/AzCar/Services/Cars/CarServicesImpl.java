@@ -42,4 +42,9 @@ public class CarServicesImpl implements CarServices {
 		return carRepository.getById(id);
 	}
 
+	@Override
+	public List<CarInfor> getbyOwnerId(int id) {
+		return carRepository.getbyOwnerId(id);
+	}
+
 }

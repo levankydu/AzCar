@@ -73,9 +73,8 @@
 			<div class="row">
 				<div class="col-12">
 					<nav class="navbar navbar-expand-lg navbar-light rounded">
-						<a class="navbar-brand logo navbar-brand d-flex mr-auto"
-							href="/"> <img
-							src="/assets/img/logos/black-logo.png" alt="logo">
+						<a class="navbar-brand logo navbar-brand d-flex mr-auto" href="/">
+							<img src="/assets/img/logos/black-logo.png" alt="logo">
 						</a>
 						<button class="navbar-toggler" type="button"
 							data-toggle="collapse" data-target="#navbar"
@@ -88,7 +87,7 @@
 								<li class="nav-item"><a class="nav-link"
 									th:href="@{/home/availablecars/}">Available Cars</a></li>
 								<li class="nav-item" th:if="${session.user}"><a
-									class="nav-link" href="#">My Plan</a></li>
+									class="nav-link" href="home/myplan/">My Plan</a></li>
 								<li class="nav-item "><a class="nav-link" href="#">
 										About Us </a></li>
 
@@ -99,14 +98,14 @@
 
 								<li class="nav-item dropdown" th:if="${session.user}"><a
 									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-									href="/profile" th:text="Hello+', ' +${session.user}"></a> <a
+									th:href="@{/user/profile/} + ${session.user}" th:text="Hello+', ' +${session.user}"></a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
 									href="/logout">LogOut</a></li>
 
 
 								<li class="nav-item dropdown" th:if="${session.admin}"><a
 									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-									href="/profile" th:text="Hello+', ' +${session.admin}"></a> <a
+									th:href="@{/user/profile/}+ ${session.admin}" th:text="Hello+', ' +${session.admin}"></a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
 									href="/dashboard/">Dash board</a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
@@ -138,7 +137,7 @@
 					<div class="col-md-5">
 						<div class="breadcrumb-area">
 							<ul>
-								<li><a href="index.html">Index</a></li>
+								<li><a href="/">Index</a></li>
 								<li><span>/</span>Car Register</li>
 
 							</ul>
@@ -147,9 +146,9 @@
 					<div class="col-md-7">
 						<div class="contact-info">
 							<ul>
-								<li><i class="fa fa-phone"></i> +1-8X0-666-8X88</li>
-								<li><a href="tel:+84-3939-7979" class="btn btn-md btn-theme">Contact
-										us</a></li>
+								<li><i class="fa fa-phone"></i> +84-3939-7979</li>
+								<li><a href="tel:+84-3939-7979"
+									class="btn btn-md btn-theme">Contact us</a></li>
 							</ul>
 						</div>
 					</div>
@@ -223,7 +222,7 @@
 													<input type="hidden" value="" id="modelIdSelect"
 														name="modelId">
 													<div class="form-group col-6">
-														<label for="car-brand">Brand</label> <select
+														<label for="brandSelect">Brand</label> <select
 															id="brandSelect" class="form-control" name="brand"
 															onchange="return brandSubmit();">
 															<option value="">Select Brand</option>
@@ -233,7 +232,7 @@
 														</select>
 													</div>
 													<div class="form-group col-6">
-														<label for="car-category">Category</label> <select
+														<label for="categorySelect">Category</label> <select
 															disabled="disabled" id="categorySelect"
 															class="form-control" onchange="return categorySubmit()"
 															name="categorySelect">
@@ -244,7 +243,7 @@
 													</div>
 
 													<div class="form-group col-6">
-														<label for="car-model">Model</label> <select
+														<label for="modelSelect">Model</label> <select
 															disabled="disabled" id="modelSelect" class="form-control"
 															name="modelSelect" onchange="return modelSubmit();">
 
@@ -253,7 +252,7 @@
 													</div>
 
 													<div class="form-group col-6">
-														<label for="car-year">Year of production</label> <select
+														<label for="yearSelect">Year of production</label> <select
 															onchange="return yearSubmit();" disabled="disabled"
 															id="yearSelect" class="form-control" name="yearSelect"></select>
 													</div>
@@ -268,7 +267,7 @@
 
 
 													<div class="form-group col-6">
-														<label for="car-fuel-type">Fuel Type</label> <select
+														<label for="fuelCheck">Fuel Type</label> <select
 															id="fuelCheck" class="form-control" name="fuelType">
 															<option value="">---Select Fuel Type---</option>
 															<option value="Gasoline">Gasoline</option>
@@ -278,7 +277,7 @@
 													</div>
 													<div class="form-group col-6" style="display: none"
 														id="fuelResponse">
-														<label for="car-transmission">Transmission</label> <select
+														<label for="transmissionCheck">Transmission</label> <select
 															onchange="return validateCarbasic();"
 															id="transmissionCheck" class="form-control"
 															name="engineInformationTranmission">
@@ -318,7 +317,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/map-icon.png" alt="Map">
 														<span style="display: block;">Map</span> <input
-															class="d-none" id="car-features-temp1"
+															class="d-none" 
 															name="features[map]" type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services"
@@ -328,7 +327,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/bluetooth-icon.png"
 															alt="Bluetooth"> <span style="display: block;">Bluetooth</span>
-														<input class="d-none" id="car-features-temp1"
+														<input class="d-none" 
 															name="features[bluetooth]" type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services"
@@ -338,7 +337,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/360_camera-icon.png"
 															alt="Camera 360"> <span style="display: block;">Camera
-															360</span> <input class="d-none" id="car-features-temp1"
+															360</span> <input class="d-none" 
 															name="features[camera360]" type="checkbox">
 													</div>
 												</div>
@@ -350,7 +349,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/parking_camera-icon.png"
 															alt="Parking camera"> <span style="display: block;">Parking
-															camera</span> <input class="d-none" id="car-features-temp1"
+															camera</span> <input class="d-none" 
 															name="features[map]" type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services"
@@ -360,7 +359,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/dash_camera-icon.png"
 															alt="Dash camera"> <span style="display: block;">Dash
-															camera</span> <input class="d-none" id="car-features-temp1"
+															camera</span> <input class="d-none" 
 															name="features[bluetooth]" type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services"
@@ -370,7 +369,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/reverse_camera-icon.png"
 															alt="Reverse camera"> <span style="display: block;">Reverse
-															Camera</span> <input class="d-none" id="car-features-temp1"
+															Camera</span> <input class="d-none" 
 															name="features[camera360]" type="checkbox">
 													</div>
 												</div>
@@ -382,7 +381,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/tpms-v2-icon.png"
 															alt="Tire Sensor"> <span style="display: block;">Tire
-															Sensor</span> <input class="d-none" id="car-features-temp1"
+															Sensor</span> <input class="d-none" 
 															name="features[map]" type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services"
@@ -392,7 +391,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/impact_sensor-icon.png"
 															alt="Impact Sensor"> <span style="display: block;">Impact
-															Sensor</span> <input class="d-none" id="car-features-temp1"
+															Sensor</span> <input class="d-none" 
 															name="features[bluetooth]" type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services"
@@ -402,7 +401,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/head_up-icon.png"
 															alt="Head Up"> <span style="display: block;">Head
-															Up</span> <input class="d-none" id="car-features-temp1"
+															Up</span> <input class="d-none" 
 															name="features[camera360]" type="checkbox">
 													</div>
 												</div>
@@ -414,7 +413,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/sunroof-icon.png"
 															alt="Sunroof"> <span style="display: block;">Sun
-															roof</span> <input class="d-none" id="car-features-temp1"
+															roof</span> <input class="d-none" 
 															name="features[map]" type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services" id="gps-service"
@@ -423,7 +422,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/gps-icon.png" alt="Gps">
 														<span style="display: block;">Gps</span> <input
-															class="d-none" id="car-features-temp1"
+															class="d-none" 
 															name="features[bluetooth]" type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services"
@@ -433,7 +432,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/babyseat-icon.png"
 															alt="Baby seat"> <span style="display: block;">Baby
-															seat</span> <input class="d-none" id="car-features-temp1"
+															seat</span> <input class="d-none" 
 															name="features[camera360]" type="checkbox">
 													</div>
 												</div>
@@ -444,7 +443,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/usb-icon.png" alt="Usb">
 														<span style="display: block;">USB</span> <input
-															class="d-none" id="car-features-temp1"
+															class="d-none" 
 															name="features[map]" type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services"
@@ -454,7 +453,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/spare_tire-icon.png"
 															alt="Spare Tire"> <span style="display: block;">Spare
-															Tire-</span> <input class="d-none" id="car-features-temp1"
+															Tire-</span> <input class="d-none" 
 															name="features[bluetooth]" type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services" id="dvd-service"
@@ -463,7 +462,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/dvd-icon.png" alt="dvd">
 														<span style="display: block;">DVD </span> <input
-															class="d-none" id="car-features-temp1"
+															class="d-none" 
 															name="features[camera360]" type="checkbox">
 													</div>
 												</div>
@@ -475,7 +474,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/bonnet-icon.png"
 															alt="Bonnet"> <span style="display: block;">Bonnet</span>
-														<input class="d-none" id="car-features-temp1"
+														<input class="d-none" 
 															name="features[map]" type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services" id="etc-service"
@@ -484,7 +483,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/etc-icon.png" alt="etc">
 														<span style="display: block;">ETC </span> <input
-															class="d-none" id="car-features-temp1"
+															class="d-none" 
 															name="features[camera360]" type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2  car-services"
@@ -494,7 +493,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/airbags-icon.png"
 															alt="Airbags"> <span style="display: block;">Airbags</span>
-														<input class="d-none" id="car-features-temp1"
+														<input class="d-none" 
 															name="features[bluetooth]" type="checkbox">
 													</div>
 
@@ -582,7 +581,7 @@
 																	<div class="form-group">
 																		<label>Estimate time arrival(hours)</label> <input
 																			type="number" class="form-control" id="estimateTime"
-																			name="estimateTime"
+																			name="estimateTime" disabled
 																			onkeyup="return checkEstimateTime();">
 																	</div>
 																</div>
@@ -601,13 +600,15 @@
 														<div class="input-group-prepend">
 															<input type="text" readonly class="form-control"
 																name="address" placeholder="Click to enter address"
-																onclick="return openModal.click();" id="carAddress"
-																value=""> <a href="#" data-toggle="modal"
-																data-target="#addressModal" id="openModal" hidden="true">Click
-																me</a>
+																 onclick="return openModal.click();"
+																id="carAddress" value=""> <a href="#"
+																data-toggle="modal" data-target="#addressModal"
+																id="openModal" hidden="true">Click me</a>
 
 														</div>
-
+														<div class="col-12 text-danger text-center">
+															<span id="validation-NULL-address"></span>
+														</div>
 													</div>
 
 													<div class="form-group mb-3 col-12">
@@ -746,7 +747,7 @@
 													</div>
 
 													<div class="form-group">
-														<label for="BehindImg">Behind Image: </label> <input
+														<label for="behindImg">Behind Image: </label> <input
 															type="file" class="form-control-file imgCars"
 															id="behindImg" name="behindImg"
 															onchange="previewImage('behindImg','behindImgPre')">
@@ -756,7 +757,7 @@
 
 													</div>
 													<div class="form-group">
-														<label for="lefImg">Left Image: </label> <input
+														<label for="leftImg">Left Image: </label> <input
 															type="file" class="form-control-file imgCars"
 															id="leftImg" name="leftImg"
 															onchange="previewImage('leftImg','leftImgPre')">
@@ -850,7 +851,7 @@
 							<div class="modal-right-content bg-white">
 								<section class="form-group row">
 
-									<label class="col-3 col-form-label" for="province">Province:</label>
+									<label class="col-3 col-form-label" for="provinceSelect">Province:</label>
 									<div class="col-7">
 										<select id="provinceSelect" class="form-control"
 											name="province" onchange="return provinceSubmit();">
@@ -866,7 +867,7 @@
 								</section>
 								<section class="form-group row">
 
-									<label class="col-3 col-form-label" for="district">District:</label>
+									<label class="col-3 col-form-label" for="districtSelect">District:</label>
 
 									<div class="col-7">
 										<select disabled="disabled" id="districtSelect"
@@ -879,7 +880,7 @@
 
 								</section>
 								<section class="form-group row">
-									<label class="col-3 col-form-label" for="ward">Ward:</label>
+									<label class="col-3 col-form-label" for="wardSelect">Ward:</label>
 									<div class="col-7">
 										<select disabled="disabled" id="wardSelect"
 											class="form-control" name="wardSelect">
@@ -924,12 +925,11 @@
 						<h4>Contact Us</h4>
 						<div class="f-border"></div>
 						<ul class="contact-info">
-							<li>Address: 20/F Green Road, Dhanmondi, Dhaka</li>
-							<li>Email: <a href="mailto:info@themevessel.com">info@themevessel.com</a>
+							<li>Address: 590 CMT8, P.11, Q.3, Tp.Hồ Chí Minh</li>
+							<li>Email: <a href="mailto:AzCars@AzCars.com">AzCars@AzCars.com</a>
 							</li>
-							<li>Phone: <a href="tel:+0477-85x6-552">+XXXX XXXX XXX</a>
-							</li>
-							<li>Fax: +XXXX XXXX XXX</li>
+							<li>Phone: <a href="tel:+84-3939-7979">+84-3939-7979</a></li>
+							<li>Fax: <a href="fax:+84-3939-7979">+84-3939-7979</a></li>
 						</ul>
 
 						<ul class="social-list clearfix">
@@ -939,7 +939,8 @@
 									class="fa fa-twitter"></i></a></li>
 							<li><a href="#" class="google-bgh"><i
 									class="fa fa-google-plus"></i></a></li>
-							<li><a href="#" class="rss-bgh"><i class="fa fa-rss"></i></a></li>
+							<li><a href="#" class="rss-bgh"><i class="fa fa-rss"></i></a>
+							</li>
 							<li><a href="#" class="linkedin-bgh"><i
 									class="fa fa-linkedin"></i></a></li>
 						</ul>
@@ -952,14 +953,14 @@
 						<ul class="links">
 							<li><a href="#"><i class="flaticon-arrows"></i>About us</a>
 							</li>
-							<li><a href="#"><i class="flaticon-arrows"></i>Service</a></li>
-							<li><a href="#"><i class="flaticon-arrows"></i>Car
-									Listing</a></li>
-							<li><a href="#"><i class="flaticon-arrows"></i>Car Grid</a>
-							</li>
+
+							<li><a href="#"><i class="flaticon-arrows"></i>Available
+									Cars Listing</a></li>
+
+
 							<li><a href="#"><i class="flaticon-arrows"></i>Contact
 									Us</a></li>
-							<li><a href="#"><i class="flaticon-arrows"></i>Blog</a></li>
+
 							<li><a href="#"><i class="flaticon-arrows"></i>Car
 									Details</a></li>
 						</ul>
@@ -970,8 +971,8 @@
 						<h4>Recent Posts</h4>
 						<div class="f-border"></div>
 						<div class="media mb-4">
-							<a class="pr-3" href="car-details.html"> <img
-								src="/assets/img/sub-car/sub-car.jpg" alt="car">
+							<a class="pr-3" href="/"> <img
+								src="assets/img/sub-car/sub-car.jpg" alt="car" />
 							</a>
 							<div class="media-body align-self-center">
 								<h5>
@@ -984,8 +985,8 @@
 							</div>
 						</div>
 						<div class="media mb-4">
-							<a class="pr-3" href="car-details.html"> <img
-								src="/assets/img/sub-car/sub-car-2.jpg" alt="car">
+							<a class="pr-3" href="/"> <img
+								src="assets/img/sub-car/sub-car-2.jpg" alt="car" />
 							</a>
 							<div class="media-body align-self-center">
 								<h5>
@@ -998,8 +999,8 @@
 							</div>
 						</div>
 						<div class="media">
-							<a class="pr-3" href="car-details.html"> <img
-								src="/assets/img/sub-car/sub-car-3.jpg" alt="car">
+							<a class="pr-3" href="/"> <img
+								src="assets/img/sub-car/sub-car-3.jpg" alt="car" />
 							</a>
 							<div class="media-body align-self-center">
 								<h5>
@@ -1023,7 +1024,7 @@
 							<form action="#" method="GET">
 								<p>
 									<input type="text" class="form-contact" name="email"
-										placeholder="Enter Address">
+										placeholder="Enter Address" />
 								</p>
 								<p>
 									<button type="submit" name="submitNewsletter"
@@ -1038,9 +1039,8 @@
 			<div class="row">
 				<div class="col-xl-12">
 					<p class="copy">
-						&copy; 2022 <a href="http://themevessel.com/" target="_blank">Theme
-							Vessel</a>. Trademarks and brands are the car of their respective
-						owners.
+						&copy; 2024 <a href="/" target="_blank">Az Cars</a>. Group 3 Final
+						Project .
 					</p>
 				</div>
 			</div>
@@ -1191,6 +1191,7 @@
 		const street =document.getElementById('street').value;
 		if(houseNo =="" || street ==""){
 			document.getElementById('validation-address').textContent = "Address is not valid";
+			validateAddress();
 			return false;
 		}else{
 			
@@ -1203,6 +1204,7 @@
 				carAddress.setAttribute("value",address);
 				
 				offModal.click();
+				validateAddress();
 	}	
 	}
 	function brandSubmit() {
@@ -1339,16 +1341,20 @@
 		const fastBookingCheck = document.getElementById('fastBookingCheck');
 		const fastBookingResponse = document
 				.getElementById('fastBookingResponse');
+		const estimateTime = document.getElementById('estimateTime');
 
 		fastBookingCheck.addEventListener('change', function() {
 			if (this.checked) {
 				fastBookingResponse.style.display = 'block';
+				estimateTime.removeAttribute("disabled");
 				checkEstimateTime();
 				fastBookingResponse.style.animation = "5s slide-right";
 			} else {
 				fastBookingResponse.style.animation = "5s slide-left";
 				fastBookingResponse.style.display = 'none';
+				estimateTime.setAttribute("disabled",true);
 				document.getElementById('validation-estimateTime').textContent = "";
+				
 				
 			}
 		});
@@ -1538,6 +1544,7 @@
 	ruleCheck();
 	validatePlate();
 	validateImg();
+	validateAddress();
 	function validateImg(){
 		var frontImg =document.getElementById('frontImg').value;
 		var behindImg =document.getElementById('behindImg').value;
@@ -1585,9 +1592,21 @@
 		        }
 			}
         }
-
+	function validateAddress(){
+		
+		var addressResult= document.getElementById('carAddress').value;
+		
+		if(addressResult==""){    
+	
+			document.getElementById('validation-NULL-address').textContent = "Car address must be declared";
+		}else{
+			document.getElementById('validation-NULL-address').textContent = "";
+		}
+		
+	}
 	function checkSubmitRegister(){
 		validateImg();
+		validateAddress();
 		var plateCheck= document.getElementById('validation-plate').textContent.trim().length;
 		var carBasicCheck = document.getElementById('validation-result-final').textContent.trim().length;
 		var descriptionCheck =document.getElementById('validation-carDescription').textContent.trim().length;
@@ -1598,8 +1617,9 @@
 		var ImgCheck =document.getElementById('validation-image').textContent.trim().length;
 		var ImgCheckNull =document.getElementById('validation-NUll-img').textContent.trim().length;
 		var ImgChecDuplicate =document.getElementById('validation-Duplicate-image').textContent.trim().length;
+		var AddressCheckNull = document.getElementById('validation-NULL-address').textContent.trim().length;
 		
-		const sum = plateCheck+carBasicCheck+descriptionCheck+priceCheck+addressCheck+fastBookingCheck+ruleCheck+ImgCheck+ImgCheckNull+ImgChecDuplicate;
+		const sum = plateCheck+carBasicCheck+descriptionCheck+priceCheck+addressCheck+fastBookingCheck+ruleCheck+ImgCheck+ImgCheckNull+ImgChecDuplicate+AddressCheckNull;
 		if(sum>0){
 			console.log(sum);
 			document.getElementById('toast-failed-register-car').click();

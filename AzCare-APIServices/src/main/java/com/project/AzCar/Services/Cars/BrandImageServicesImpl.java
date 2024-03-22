@@ -1,5 +1,7 @@
 package com.project.AzCar.Services.Cars;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,11 @@ public class BrandImageServicesImpl implements BrandImageServices{
 		else {
 			return "null";
 		}
+	}
+
+	@Override
+	public List<BrandImages> getAll() {
+		return brandImgRepository.findAll();
 	}
 
 }

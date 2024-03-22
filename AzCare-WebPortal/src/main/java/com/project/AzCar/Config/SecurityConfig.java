@@ -35,7 +35,9 @@ public class SecurityConfig {
 				.requestMatchers("/register/**").permitAll()
 				.requestMatchers("/login/**").permitAll()
 				.requestMatchers("/registeradmin").permitAll()
+				.requestMatchers("/get/**").permitAll()
 				.requestMatchers("/home/carregister/**").hasAnyRole("USER", "ADMIN")
+				.requestMatchers("/home/myplan/**").hasAnyRole("USER", "ADMIN")
 				.requestMatchers("/home/availablecars/**").hasAnyRole("USER", "ADMIN")
 				.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
 				.requestMatchers("/dashboard/**").hasAnyRole("ADMIN")
@@ -61,7 +63,7 @@ public class SecurityConfig {
 
 	
 	  @Bean WebSecurityCustomizer webSecurityCustomizer() { return (web) ->
-	  web.ignoring().requestMatchers("/assets/**"); }
+	  web.ignoring().requestMatchers("/assets/**").requestMatchers("/adminAssets/**"); }
 	 
 
 	@Bean

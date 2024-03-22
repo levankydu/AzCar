@@ -219,6 +219,32 @@ if(document.getElementById('toast-success-registered-car')){
   })
 })
 }
+
+if(document.getElementById('toast-failed-login')){
+	document.getElementById('toast-failed-login').addEventListener('click', () => {
+  Toast.fire({
+    icon: 'warning',
+    title: 'You must login to continue.'
+  })
+})
+}
+
+if(document.getElementById('toast-failed-uploadDriveLicense')){
+	document.getElementById('toast-failed-uploadDriveLicense').addEventListener('click', () => {
+  Toast.fire({
+    icon: 'error',
+    title: 'Input error. Please try again'
+  })
+})
+}
+if(document.getElementById('toast-success-uploadDriveLicense')){
+	document.getElementById('toast-success-uploadDriveLicense').addEventListener('click', () => {
+  Toast.fire({
+    icon: 'success',
+    title: 'Upload successfully'
+  })
+})
+}
 /*document.getElementById('toast-warning').addEventListener('click', () => {
   Toast.fire({
     icon: 'warning',

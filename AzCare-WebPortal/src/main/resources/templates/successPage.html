@@ -170,10 +170,10 @@ h2 {
 						</button>
 						<div class="navbar-collapse collapse w-100" id="navbar">
 							<ul class="navbar-nav ml-auto">
-									<li class="nav-item"><a class="nav-link"
+										<li class="nav-item"><a class="nav-link"
 									th:href="@{/home/availablecars/}">Available Cars</a></li>
 								<li class="nav-item" th:if="${session.user}"><a
-									class="nav-link" href="#">My Plan</a></li>
+									class="nav-link" href="home/myplan/">My Plan</a></li>
 								<li class="nav-item "><a class="nav-link" href="#">
 										About Us </a></li>
 
@@ -184,14 +184,14 @@ h2 {
 
 								<li class="nav-item dropdown" th:if="${session.user}"><a
 									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-									href="/profile" th:text="Hello+', ' +${session.user}"></a> <a
+									th:href="@{/user/profile/} + ${session.user}" th:text="Hello+', ' +${session.user}"></a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
 									href="/logout">LogOut</a></li>
 
 
 								<li class="nav-item dropdown" th:if="${session.admin}"><a
 									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-									href="/profile" th:text="Hello+', ' +${session.admin}"></a> <a
+									th:href="@{/user/profile/}+ ${session.admin}" th:text="Hello+', ' +${session.admin}"></a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
 									href="/dashboard/">Dash board</a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"

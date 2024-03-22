@@ -14,8 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CarInforDto implements Serializable{
-
+public class CarInforDto implements Serializable {
 
 	/**
 	 * 
@@ -38,7 +37,8 @@ public class CarInforDto implements Serializable{
 
 	private String licensePlates;
 	private int carOwnerId;
-	private CarModelList carmodel;
+	private String status;
+
 	private BigDecimal price;
 	private String description;
 	private boolean isCarPlus;
@@ -48,4 +48,5 @@ public class CarInforDto implements Serializable{
 	private String rules;
 	private String address;
 	private List<CarImages> images;
+	private CarModelList carmodel;
 }
