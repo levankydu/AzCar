@@ -239,22 +239,22 @@ document.getElementById("logout").addEventListener("click", async () => {
 		Swal2.fire("Logout cancelled", "", "info");
 	}
 });
-if (document.getElementById("toast-success-register-user")) {
-	document.getElementById("toast-success-register-user").addEventListener("click", () => {
+/*if (document.getElementById("toast-success-edit-user")) {
+	document.getElementById("toast-success-edit-user").addEventListener("click", () => {
 		Swal2.fire({
 			icon: "success",
 			title: "Success",
 		})
 	})
 }
-if (document.getElementById("toast-error-register-user")) {
-	document.getElementById("toast-error-register-user").addEventListener("click", () => {
+if (document.getElementById("toast-error-edit-user")) {
+	document.getElementById("toast-error-edit-user").addEventListener("click", () => {
 		Swal2.fire({
 			icon: "error",
 			title: "Error",
 		})
 	})
-}
+}*/
 // End Điệp
 /*document.getElementById('toast-warning').addEventListener('click', () => {
   Toast.fire({

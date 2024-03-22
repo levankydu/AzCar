@@ -90,9 +90,9 @@
 									th:href="@{/user/profile/} + ${session.admin}"
 									th:text="Hello+', ' +${session.admin}"></a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
-									href="/dashboard/">Dashboard</a> <a
-									class="btn btn-sm btn-theme btn-round signup-link"
-									href="/logout">Logout</a></li>
+									href="/dashboard/">Dashboard</a>
+									<button id="logout"
+										class="btn btn-sm btn-theme btn-round signup-link">Logout</button></li>
 
 
 
@@ -1242,25 +1242,39 @@
 		th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
 
 	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
-	<script>
-	function checkSubmitLogout() {
-        // Perform logout action here
-        // For example, make an AJAX request to the logout endpoint
+	<script type="text/javascript">
+    function checkSubmitLogout() {
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/logout', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onload = function() {
-            // Redirect the user to the login page after successful logout
             window.location.href = "/login";
         };
         xhr.onerror = function() {
-            // Handle error - display error message or perform other actions
             console.error('Logout request failed');
-            // Optionally, display an error message to the user
         };
         xhr.send();
     }
-	</script>
+
+    document.getElementById("logout").addEventListener("click", async () => {
+        const { isConfirmed } = await Swal2.fire({
+            title: "Confirm Logout",
+            text: "Are you sure you want to logout?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, logout",
+            cancelButtonText: "Cancel",
+        });
+
+        if (isConfirmed) {
+            checkSubmitLogout();
+        } else {
+            Swal2.fire("Logout cancelled", "", "info");
+        }
+    });
+</script>
 
 </body>
 </html>

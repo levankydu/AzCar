@@ -161,73 +161,75 @@
 		<hr class="mt-0 mb-4">
 
 		<div class="row">
+			<p id="toast-success-edit-user" hidden="true"
+				class="btn btn-outline-primary btn-lg btn-block">Success Example</p>
+			<p id="toast-failed-edit-user" hidden="true"
+				class="btn btn-outline-primary btn-lg btn-block">Failed Example</p>
 			<div class="col-xl-4">
-
 				<!-- Profile picture card-->
 				<div class="card mb-4 mb-xl-0">
 					<div class="card-header">Profile Picture</div>
 					<div class="card-body text-center">
 						<!-- Profile picture image-->
-						<img class="img-account-profile rounded-circle mb-2" style="width:300px" id="prev"
-							th:src="'avatar/'+${user.image}" alt="">
+						<img class="img-account-profile rounded-circle mb-2"
+							style="width: 300px" id="prev" th:src="'avatar/'+${user.image}"
+							alt="">
 						<!-- Profile picture help block-->
-						<form th:action="@{/user/profile/edit/uploadFile}" method="post" enctype="multipart/form-data" >
-							<input class="form-control" name="image" id="image" type="file" onchange="return onFilesChange()"><br>
-							<button class="btn btn-primary" type="submit" onclick="return form.submit()">Save</button>
+						<form th:action="@{/user/profile/edit/uploadFile}" method="post"
+							enctype="multipart/form-data">
+							<input class="form-control" name="image" id="image" type="file"
+								onchange="return onFilesChange()"><br>
+							<button class="btn btn-primary" type="submit"
+								onclick="return form.submit()">Save</button>
 						</form>
 
 					</div>
 				</div>
 			</div>
 			<div class="col-xl-8">
-				<form th:action="@{/user/profile/edit/{email} (email=${email})}  "
-					th:method="post" enctype="multipart/form-data" th:object="${user}">
+				<form th:action="@{/user/profile/edit/{email} (email=${email})}"
+					th:method="post" enctype="multipart/form-data" th:object="${user}"
+					id="profileForm">
 					<div class="col-xl-12">
-						<!-- Account details card-->
+						<!-- Account details card -->
 						<div class="card mb-4">
 							<div class="card-header">Account Details</div>
 							<div class="card-body">
-
-
+								<!-- Email -->
 								<div class="mb-3">
 									<label class="small mb-1" for="inputUsername">Email</label> <input
 										class="form-control" id="inputUsername" type="text"
 										th:value="*{email}" readonly>
 								</div>
-								<!-- Form Row-->
+								<!-- Form Row for first name and last name -->
 								<div class="row gx-3 mb-3">
-									<!-- Form Group (first name)-->
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputFirstName">First
 											name</label> <input class="form-control" id="firstName"
 											name="firstName" type="text" th:value="*{firstName}">
+											<span id="validation-first " class="text-danger"></span>
 									</div>
-									<!-- Form Group (last name)-->
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputLastName">Last
 											name</label> <input class="form-control" id="lastName"
 											name="lastName" type="text" th:value="*{lastName}">
 									</div>
 								</div>
-								<!-- Form Row        -->
-
-								<!-- Form Row-->
+								<!-- Form Row for phone number and birthday -->
 								<div class="row gx-3 mb-3">
-									<!-- Form Group (phone number)-->
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputPhone">Phone
 											number</label> <input class="form-control" id="phone" name="phone"
 											type="text" th:value="*{phone}">
 									</div>
-									<!-- Form Group (birthday)-->
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputBirthday">Birthday</label>
 										<input class="form-control" id="dob" th:type="date" name="dob"
 											th:value="*{dob}">
 									</div>
 								</div>
+								<!-- Gender selection -->
 								<div class="row gx-3 mb-3">
-									<!-- Form Group (phone number)-->
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputGender">Gender</label> <select
 											class="form-control" id="gender" name="gender"
@@ -237,12 +239,10 @@
 											<!-- Add more options as needed -->
 										</select>
 									</div>
-									<!-- Form Group (birthday)-->
 								</div>
-								<!-- Save changes button-->
-								<button class="btn btn-primary" th:type="submit"
-									onclick="return form.submit() ">Save changes</button>
-
+								<!-- Save changes button -->
+								<button onclick="return form.submit()" class="btn btn-primary" type="submit">Save
+									changes</button>
 							</div>
 						</div>
 					</div>
@@ -547,35 +547,8 @@
 	<script src="/assets/js/ie-emulation-modes-warning.js"></script>
 	<!-- Custom JS Script -->
 	<script src="/assets/js/app.js"></script>
-	
-	<script>
-	function onFilesChange(){
-		var value =image.value;
-		if (!value.match(/\.(jpg|jpeg|png|gif)$/i)){
-			
-			document.getElementById('image').setAttribute('value', '');
-			document.getElementById('prev').setAttribute('src', '');
-			
-			document.getElementById('brandImg').reset();
-			
-		}
-			
-		
-	}
-		var reader = new FileReader();
-		reader.onload = function(r_event) {
-			document.getElementById('prev').setAttribute('src',
-					r_event.target.result);
-		}
 
-		document.getElementsByName('image')[0].addEventListener('change',
-				function(event) {
-					reader.readAsDataURL(this.files[0]);
-				});
-		
-
-		
-	</script>
 	
+
 </body>
 </html>

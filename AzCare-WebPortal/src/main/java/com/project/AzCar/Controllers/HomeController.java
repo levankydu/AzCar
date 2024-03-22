@@ -107,7 +107,6 @@ public class HomeController {
 			templateModel.put("recipientName", userDto.getEmail());
 			templateModel.put("hello", "Welcome to AzCar");
 			templateModel.put("text", "Thank you for registering with us!");
-//	        templateModel.put("text", "azCar@shop.com");
 			emailService.sendMessageUsingThymeleafTemplate("dn169240@gmail.com", "AzCar", templateModel);
 		} catch (IOException e) {
 			e.printStackTrace();
