@@ -29,8 +29,8 @@ public class EmailSeriveIml implements EmailService {
 	@Autowired
 	private SpringTemplateEngine thymeleafTemplateEngine;
 
-	@Value("classpath:/mail-logo.png")
-	private Resource resourceFile;
+//	@Value("classpath:/mail-logo.png")
+//	private Resource resourceFile;
 
 
 	@Override
@@ -58,7 +58,6 @@ public class EmailSeriveIml implements EmailService {
 		helper.setTo(to);
 		helper.setSubject(subject);
 		helper.setText(htmlBody, true);
-		helper.addInline("attachment.png", resourceFile);
 		emailSender.send(message);
 	}
 	

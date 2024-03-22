@@ -39,7 +39,8 @@
 <link type="text/css" rel="stylesheet" href="/assets/css/style.css">
 <link rel="stylesheet" type="text/css" id="style_sheet"
 	href="/assets/css/skins/default.css">
-
+<link rel="stylesheet"
+	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
 </head>
 <body id="top">
 
@@ -49,6 +50,8 @@
 	<header class="main-header sticky-header" id="main-header-2">
 		<div class="container">
 			<div class="row">
+				<p id="toast-success-logout" hidden="true"
+					class="btn btn-outline-primary btn-lg btn-block">Success Logout</p>
 				<div class="col-12">
 					<nav class="navbar navbar-expand-lg navbar-light rounded">
 						<a class="navbar-brand logo navbar-brand d-flex mr-auto" href="/">
@@ -74,22 +77,23 @@
 
 
 
-								<div th:if="${session.user}">
-									<li class="nav-item dropdown"><a
-										class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-										th:href="@{/user/profile/} + ${session.user}" th:text="Hello+', ' +${session.user}"></a> <a
-										class="btn btn-sm btn-theme btn-round signup-link"
-										href="/logout">LogOut</a></li>
-								</div>
-								<div th:if="${session.admin}">
-									<li class="nav-item dropdown"><a
-										class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-										href="#" th:text="Hello+', ' +${session.admin}"></a> <a
-										class="btn btn-sm btn-theme btn-round signup-link"
-										href="/dashboard/">Dashboard</a> <a
-										class="btn btn-sm btn-theme btn-round signup-link"
-										href="/logout">Logout</a></li>
-								</div>
+
+								<li class="nav-item dropdown" th:if="${session.user}"><a
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									th:href="@{/user/profile/} + ${session.user}"
+									th:text="Hello+', ' +${session.user}"></a>
+									<button id="logout"
+										class="btn btn-sm btn-theme btn-round signup-link">Logout</button></li>
+
+								<li class="nav-item dropdown" th:if="${session.admin}"><a
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									th:href="@{/user/profile/} + ${session.admin}"
+									th:text="Hello+', ' +${session.admin}"></a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/dashboard/">Dashboard</a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/logout">Logout</a></li>
+
 
 
 								<li class="nav-item dropdown" th:unless="${session.isAuthen}"><a
@@ -1234,5 +1238,29 @@
 
 	<!-- Custom JS Script -->
 	<script src="/assets/js/app.js"></script>
+	<script
+		th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
+
+	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
+	<script>
+	function checkSubmitLogout() {
+        // Perform logout action here
+        // For example, make an AJAX request to the logout endpoint
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/logout', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function() {
+            // Redirect the user to the login page after successful logout
+            window.location.href = "/login";
+        };
+        xhr.onerror = function() {
+            // Handle error - display error message or perform other actions
+            console.error('Logout request failed');
+            // Optionally, display an error message to the user
+        };
+        xhr.send();
+    }
+	</script>
+
 </body>
 </html>
