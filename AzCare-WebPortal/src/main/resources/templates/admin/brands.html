@@ -37,7 +37,7 @@
 				<div class="sidebar-header position-relative">
 					<div class="d-flex justify-content-between align-items-center">
 						<div class="logo">
-							<a th:href="@{/}"><img
+							<a th:href="@{/}"><img style="width:100%;height:100%"
 								th:src="@{/adminAssets/assets/compiled/svg/logo.svg}" alt="Logo"
 								srcset=""></a>
 						</div>
@@ -238,7 +238,7 @@
 														class="badge bg-warning"><a
 															th:href="@{/dashboard/brands/updateBrandLogo/}+${brand.brandName}">Need
 																To Update</a></span> <span
-														th:unless="${brand.brandLogo.contains('null')}"><img
+														th:unless="${brand.brandLogo.contains('null')}"><img 
 															th:src="@{${brand.brandLogo}}" height="60px"></img></span></td>
 													<td th:text="${brand.numberOfCars}"></td>
 													<td><span class="badge bg-success">Active</span></td>
@@ -296,7 +296,7 @@
 														<option value="typeCatName">Type A New Category</option>
 														<option th:each="cate : ${categoryList}"
 															th:value="${cate.cateName}" th:text="${cate.cateName}"></option>
-													</select> <input type="text" name="" class="col-md-8 form-control"
+													</select> <input type="text" name="" class="col-md-8 mt-2 form-control"
 														id="categoryText" hidden="true" disabled="disabled"
 														placeholder="New Category">
 
@@ -316,7 +316,7 @@
 														<option th:each="car : ${brandsList}"
 															th:value="${car.brandName}" th:text="${car.brandName}"></option>
 													</select> <input type="text" name="brand"
-														class="col-md-8 form-control" id="brandText" hidden="true"
+														class="col-md-8 mt-2 form-control" id="brandText" hidden="true"
 														disabled="disabled" placeholder="New Brand">
 												</div>
 

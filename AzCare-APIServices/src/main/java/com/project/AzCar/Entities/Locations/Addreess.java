@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.project.AzCar.Entities.Cars.CarInfor;
-import com.project.AzCar.Entities.Users.Users;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

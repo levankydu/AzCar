@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
+import com.project.AzCar.Entities.Cars.BrandImages;
 import com.project.AzCar.Entities.Cars.CarImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Cars.ExtraFee;
@@ -33,6 +34,7 @@ import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
 import com.project.AzCar.Entities.Locations.Ward;
 import com.project.AzCar.Entities.Users.Users;
+import com.project.AzCar.Services.Cars.BrandImageServices;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
 import com.project.AzCar.Services.Cars.CarServices;
@@ -44,6 +46,7 @@ import com.project.AzCar.Services.Locations.ProvinceServices;
 import com.project.AzCar.Services.Locations.WardServices;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
+import com.project.AzCar.Utilities.Constants;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -51,6 +54,8 @@ import jakarta.servlet.http.HttpServletRequest;
 public class UserSideCarController {
 	@Autowired
 	private BrandServices brandServices;
+	@Autowired
+	private BrandImageServices brandImageServices;
 	@Autowired
 	private ProvinceServices provinceServices;
 	@Autowired
@@ -101,10 +106,11 @@ public class UserSideCarController {
 		int number = rand.nextInt(max - min + 1) + min;
 		carInfor.setId(number);
 		carInfor.setAddress(address);
+		carInfor.setStatus("waiting_for_verify");
 
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users ownerId = userServices.findUserByEmail(email);
-		carInfor.setCarOwnerId(ownerId.getId().intValue());
+		carInfor.setCarOwnerId((int) ownerId.getId());
 		CarImages frontImgModel = new CarImages();
 		CarImages behindImgModel = new CarImages();
 		CarImages leftImgModel = new CarImages();
@@ -196,29 +202,30 @@ public class UserSideCarController {
 	}
 
 	@GetMapping("/home/availablecars/details/{carId}")
-	public String getDetailsPage(@PathVariable("carId") String carId, Model carDetails,Model address,Model fastBooking,Model carPlus,Model extraFee) {
+	public String getDetailsPage(@PathVariable("carId") String carId, Model carDetails, Model address,
+			Model fastBooking, Model carPlus, Model extraFee) {
 		var model = carServices.findById(Integer.parseInt(carId));
 		var modelDto = carServices.mapToDto(model.getId());
 		List<String> listProvince = provinceServices.getListCityString();
 		var carFastBooking = bookingServices.findByCarId(model.getId());
-		if(carFastBooking !=null) {
+		if (carFastBooking != null) {
 			fastBooking.addAttribute("fastBooking", carFastBooking);
 		}
 		var carExtraFee = extraFeeServices.findByCarId(model.getId());
-		if(carExtraFee !=null) {
-			
+		if (carExtraFee != null) {
+
 			extraFee.addAttribute("extraFee", carExtraFee);
 		}
 		var carPLusService = plusServiceServices.findByCarId(model.getId());
-		if(carPLusService !=null) {
-			
+		if (carPLusService != null) {
+
 			carPlus.addAttribute("plusService", carPLusService);
 		}
 		modelDto.setCarmodel(brandServices.getModel(model.getModelId()));
 		modelDto.setImages(carImageServices.getImgByCarId(model.getId()));
 		for (var c : listProvince) {
 			if (model.getAddress().contains(c)) {
-				address.addAttribute("address",c);
+				address.addAttribute("address", c);
 			}
 		}
 
@@ -248,10 +255,14 @@ public class UserSideCarController {
 	}
 
 	@GetMapping("/home/availablecars/")
-	public String getAvailableCarsPage(Model carRegisterList) {
+	public String getAvailableCarsPage(Model carRegisterList, Model listProvinces, Model listBrand,
+			Model listCategory) {
 		List<CarInfor> list = carServices.findAll();
 		List<CarInforDto> listDto = new ArrayList<>();
+		List<String> brands = brandServices.getBrandList();
+		List<String> categories = brandServices.getCategoryList();
 		List<String> listProvince = provinceServices.getListCityString();
+		List<City> provinces = provinceServices.getListCity();
 		for (var item : list) {
 			var itemDto = carServices.mapToDto(item.getId());
 			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
@@ -264,12 +275,177 @@ public class UserSideCarController {
 
 			listDto.add(itemDto);
 		}
+		listBrand.addAttribute("listBrand", brands);
+		listCategory.addAttribute("listCategory", categories);
+		listProvinces.addAttribute("provinceList", provinces);
 		carRegisterList.addAttribute("carRegisterList", listDto);
 		return "availableCars";
 	}
 
+	@PostMapping("/home/availablecars/")
+	public String getResultPage(Model carRegisterList, Model listProvinces, Model listBrand, Model listCategory,
+			@RequestParam(name = "isCarPlus", required = false, defaultValue = "false") boolean isCarPlus,
+			@RequestParam(name = "isFastBooking", required = false, defaultValue = "false") boolean isFastBooking,
+			@RequestParam(name = "isDiscount", required = false, defaultValue = "false") boolean isDiscount,
+			@RequestParam(name = "carAddress") String carAddress, @RequestParam(name = "carBrand") String carBrand,
+			@RequestParam(name = "carCate") String carCate) {
+		List<CarInfor> list = carServices.findAll();
+		List<CarInforDto> listDto = new ArrayList<>();
+		List<String> brands = brandServices.getBrandList();
+		List<String> categories = brandServices.getCategoryList();
+		List<String> listProvince = provinceServices.getListCityString();
+		List<City> provinces = provinceServices.getListCity();
+
+		for (var item : list) {
+			var itemDto = carServices.mapToDto(item.getId());
+			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
+			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
+			listDto.add(itemDto);
+		}
+		List<CarInforDto> filteredListDto = new ArrayList<>();
+		for (var item : listDto) {
+			if (carAddress.isEmpty() || item.getAddress().contains(carAddress)) {
+				filteredListDto.add(item);
+			}
+		}
+
+		if (!carBrand.isEmpty()) {
+			filteredListDto.removeIf(item -> !item.getCarmodel().getBrand().contains(carBrand));
+		}
+
+		if (!carCate.isEmpty()) {
+			filteredListDto.removeIf(item -> !item.getCarmodel().getCategory().contains(carCate));
+		}
+		if (isCarPlus) {
+			filteredListDto.removeIf(item -> !item.isCarPlus());
+		}
+
+		if (isDiscount) {
+			filteredListDto.removeIf(item -> item.getDiscount() == 0);
+		}
+		if (isFastBooking) {
+			filteredListDto.removeIf(item -> !item.isFastBooking());
+		}
+
+		for (var item : filteredListDto) {
+			for (var c : listProvince) {
+				if (item.getAddress().contains(c)) {
+					item.setAddress(c);
+				}
+			}
+		}
+		listBrand.addAttribute("listBrand", brands);
+		listCategory.addAttribute("listCategory", categories);
+		listProvinces.addAttribute("provinceList", provinces);
+		carRegisterList.addAttribute("carRegisterList", filteredListDto);
+		return "availableCars";
+	}
+
+	@GetMapping("/home/myplan/")
+	public String getMyPlanPage(HttpServletRequest request, Model listCar,Model ImgLicense) {
+
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users user = userServices.findUserByEmail(email);
+		List<CarInfor> list = carServices.getbyOwnerId((int) user.getId());
+		List<CarInforDto> listDto = new ArrayList<>();
+		List<BrandImages> listImg = brandImageServices.getAll();
+		List<String> urlLicense = new ArrayList<>();
+		for(var item : listImg) {
+			if(item.getBrandName().contains(user.getId() + "-" + user.getEmail().replace(".", "-").replace("@","-"))) {
+				urlLicense.add(item.getImageUrl());
+			}
+			
+			
+		}
+		for (var item : list) {
+			var itemDto = carServices.mapToDto(item.getId());
+			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
+			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
+
+			listDto.add(itemDto);
+		}
+		
+		ImgLicense.addAttribute("ImgLicense", urlLicense);
+		listCar.addAttribute("listCar", listDto);
+		return "myPlans";
+	}
+
 	@GetMapping("/home/availablecars/{filename}")
 	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename) throws IOException {
+		List<CarInfor> list = carServices.findAll();
+		String dir = "";
+		int i = 0;
+		while (i < list.size()) {
+			dir = "./UploadFiles/carImages/" + list.get(i).getModelId() + "-" + list.get(i).getId();
+			Resource fileResource = fileStorageServices.load(filename, dir);
+			if (fileResource == null) {
+				i++;
+
+			} else {
+				return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment; filename=\"" + fileResource.getFilename() + "\"").body(fileResource);
+			}
+
+		}
+		return null;
+
+	}
+
+	@PostMapping("/home/myplan")
+	public String uploadDriveLicense(@RequestParam("frontImg") MultipartFile frontImg,
+			@RequestParam("behindImg") MultipartFile behindImg, HttpServletRequest request) {
+		
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users ownerId = userServices.findUserByEmail(email);
+		
+		
+		String dir = "./UploadFiles/userImages" + "/" + ownerId.getId() + "-" + ownerId.getEmail().replace(".", "-").replace("@","-");
+		Path path = Paths.get(dir);
+		BrandImages frontImgModel = new BrandImages();
+		BrandImages behindImgModel = new BrandImages();
+		try {
+			Files.createDirectories(path);
+		} catch (IOException e) {
+			throw new RuntimeException("Could not initialize folder for upload!");
+		}
+
+		try {
+
+			fileStorageServices.save(frontImg, dir);
+			frontImgModel.setBrandName("front-"+ownerId.getId() + "-" + ownerId.getEmail().replace(".", "-").replace("@","-"));
+			frontImgModel.setImageUrl(frontImg.getOriginalFilename());
+			brandImageServices.saveImage(frontImgModel);
+
+			fileStorageServices.save(behindImg, dir);
+			behindImgModel.setBrandName("behind-"+ownerId.getId() + "-" + ownerId.getEmail().replace(".", "-").replace("@","-"));
+			behindImgModel.setImageUrl(behindImg.getOriginalFilename());
+		
+			brandImageServices.saveImage(behindImgModel);
+
+			
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		return "myPlans";
+	}
+	@GetMapping("/home/myplan/license/{filename}")
+	public ResponseEntity<Resource> getImageLicense(@PathVariable("filename") String filename,HttpServletRequest request) {
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users ownerId = userServices.findUserByEmail(email);
+		
+		
+		String dir = "./UploadFiles/userImages" + "/" + ownerId.getId() + "-" + ownerId.getEmail().replace(".", "-").replace("@","-");
+		
+		Resource file = fileStorageServices.load(filename, dir);
+
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+				.body(file);
+	}
+	@GetMapping("/home/myplan/{filename}")
+	public ResponseEntity<Resource> getImagePlan(@PathVariable("filename") String filename) throws IOException {
 		List<CarInfor> list = carServices.findAll();
 		String dir = "";
 		int i = 0;

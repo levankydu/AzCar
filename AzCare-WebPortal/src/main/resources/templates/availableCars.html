@@ -39,11 +39,83 @@
 <link type="text/css" rel="stylesheet" href="/assets/css/style.css">
 <link rel="stylesheet" type="text/css" id="style_sheet"
 	href="/assets/css/skins/default.css">
+<style type="text/css">
+.checkbox-wrapper-29 {
+	--size: 1rem;
+	--background: #fff;
+	font-size: var(--size);
+}
 
+.checkbox-wrapper-29 *, .checkbox-wrapper-29 *::after,
+	.checkbox-wrapper-29 *::before {
+	box-sizing: border-box;
+}
+
+.checkbox-wrapper-29 input[type="checkbox"] {
+	visibility: hidden;
+	display: none;
+}
+
+.checkbox-wrapper-29 .checkbox__label {
+	width: var(--size);
+}
+
+.checkbox-wrapper-29 .checkbox__label:before {
+	content: ' ';
+	display: block;
+	height: var(--size);
+	width: var(--size);
+	position: absolute;
+	top: calc(var(--size)* 0.125);
+	left: 0;
+	background: var(--background);
+}
+
+.checkbox-wrapper-29 .checkbox__label:after {
+	content: ' ';
+	display: block;
+	height: var(--size);
+	width: var(--size);
+	border: calc(var(--size)* .14) solid #000;
+	transition: 200ms;
+	position: absolute;
+	top: calc(var(--size)* 0.125);
+	left: 0;
+	background: var(--background);
+}
+
+.checkbox-wrapper-29 .checkbox__label:after {
+	transition: 100ms ease-in-out;
+}
+
+.checkbox-wrapper-29 .checkbox__input:checked ~ .checkbox__label:after {
+	border-top-style: none;
+	border-right-style: none;
+	-ms-transform: rotate(-45deg); /* IE9 */
+	transform: rotate(-45deg);
+	height: calc(var(--size)* .5);
+	border-color: green;
+}
+
+.checkbox-wrapper-29 .checkbox {
+	position: relative;
+	display: flex;
+	cursor: pointer;
+	/* Mobile Safari: */
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.checkbox-wrapper-29 .checkbox__label:after:hover, .checkbox-wrapper-29 .checkbox__label:after:active
+	{
+	border-color: green;
+}
+
+.checkbox-wrapper-29 .checkbox__label {
+	margin-right: calc(var(--size)* 0.45);
+}
+</style>
 </head>
 <body id="top">
-
-
 	<!-- main header start -->
 	<header class="main-header sticky-header header-with-top"
 		id="main-header-2">
@@ -65,7 +137,7 @@
 								<li class="nav-item"><a class="nav-link"
 									th:href="@{/home/availablecars/}">Available Cars</a></li>
 								<li class="nav-item" th:if="${session.user}"><a
-									class="nav-link" href="#">My Plan</a></li>
+									class="nav-link" href="home/myplan/">My Plan</a></li>
 								<li class="nav-item "><a class="nav-link" href="#">
 										About Us </a></li>
 
@@ -76,14 +148,16 @@
 
 								<li class="nav-item dropdown" th:if="${session.user}"><a
 									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-									href="/profile" th:text="Hello+', ' +${session.user}"></a> <a
+									th:href="@{/user/profile/} + ${session.user}"
+									th:text="Hello+', ' +${session.user}"></a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
 									href="/logout">LogOut</a></li>
 
 
 								<li class="nav-item dropdown" th:if="${session.admin}"><a
 									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-									href="/profile" th:text="Hello+', ' +${session.admin}"></a> <a
+									th:href="@{/user/profile/}+ ${session.admin}"
+									th:text="Hello+', ' +${session.admin}"></a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
 									href="/dashboard/">Dash board</a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
@@ -115,7 +189,7 @@
 					<div class="col-md-5">
 						<div class="breadcrumb-area">
 							<ul>
-								<li><a href="index.html">Index</a></li>
+								<li><a href="/">Index</a></li>
 								<li><span>/</span>All Cars</li>
 							</ul>
 						</div>
@@ -135,6 +209,108 @@
 	</div>
 	<!-- Sub banner end -->
 
+	<!-- Search area start -->
+	<div class="search-area" id="search-area-1">
+		<div class="container">
+			<div class="search-area-inner">
+				<div class="search-contents ">
+					<form action="/home/availablecars/" method="post">
+						<div class="row">
+							<div class="col-6 col-lg-3 col-md-3">
+								<div class="form-group">
+									<input id="carAddress" type="hidden" name="carAddress">
+									<select id="provinceSelect" class="form-control"
+										name="province" onchange="return provinceSubmit();">
+										<option value="">Select Province</option>
+
+										<option th:each="item : ${provinceList}"
+											th:value="${item.code}" th:text="${item.full_name}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="col-6 col-lg-3 col-md-3">
+								<div class="form-group">
+									<select disabled="disabled" id="districtSelect"
+										class="form-control" onchange="return districtSubmit()"
+										name="districtSelect">
+									</select>
+								</div>
+							</div>
+							<div class="col-6 col-lg-3 col-md-3">
+								<div class="form-group">
+									<select disabled="disabled" id="wardSelect"
+										class="form-control" name="wardSelect"
+										onchange="return addressSubmit()">
+									</select>
+								</div>
+							</div>
+							<div class="col-6 col-lg-3 col-md-3">
+								<div class="form-group">
+									<button class="search-button btn-md btn-color" type="submit"
+										onclick="return form.submit()">Search</button>
+								</div>
+							</div>
+
+						</div>
+						<div class="row">
+							<div class="col-6 col-lg-3 col-md-3">
+								<div class="form-group">
+
+									<select id="carBrand" class="form-control" name="carBrand">
+										<option value="">Select Brand</option>
+
+										<option th:each="item : ${listBrand}" th:value="${item}"
+											th:text="${item}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="col-6 col-lg-3 col-md-3">
+								<div class="form-group">
+									<select id="carCate" class="form-control" name="carCate">
+										<option value="">Select Category</option>
+
+										<option th:each="item : ${listCategory}" th:value="${item}"
+											th:text="${item}"></option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6 col-lg-3 col-md-3">
+								<div class="form-group">
+									<div class="checkbox-wrapper-29">
+										<label class="checkbox"> <input type="checkbox"
+											name="isDiscount" class="checkbox__input" /> <span
+											class="checkbox__label"></span> Booking has discount
+										</label>
+									</div>
+								</div>
+								<div class="form-group">
+
+									<div class="checkbox-wrapper-29 mt-3">
+										<label class="checkbox"> <input type="checkbox"
+											name="isFasBooking" class="checkbox__input" /> <span
+											class="checkbox__label"></span> Fast Booking
+										</label>
+									</div>
+								</div>
+								<div class="form-group">
+
+									<div class="checkbox-wrapper-29 mt-3">
+										<label class="checkbox"> <input type="checkbox"
+											name="isCarPlus" class="checkbox__input" /> <span
+											class="checkbox__label"></span> Delivery To Customer Locale
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Search area end -->
 	<!-- Car list fullwidth start -->
 	<div class="car-list-fullwidth content-area-2">
 		<div class="container">
@@ -145,20 +321,7 @@
 						<h4 class="heading"
 							th:text="${carRegisterList.size}+' Cars(s) For You'"></h4>
 					</div>
-					<div class="col-xl-8 col-lg-7 col-md-7 col-sm-7">
-						<div class="sorting-options clearfix">
-							<a href="car-list-fullwidth.html" class="change-view-btn"><i
-								class="fa fa-th-list"></i></a> <a href="car-grid-fullwidth.html"
-								class="change-view-btn active-view-btn"><i
-								class="fa fa-th-large"></i></a>
-						</div>
-						<div class="search-area">
-							<select class="selectpicker search-fields" name="location">
-								<option>High to Low</option>
-								<option>Low to High</option>
-							</select>
-						</div>
-					</div>
+
 				</div>
 			</div>
 			<div class="row">
@@ -173,7 +336,8 @@
 									<span class="featured">Featured</span>
 								</div>
 								<div class="listing-time opening" th:if="${car.discount} >0">
-									<span class="featured" th:text="${car.discount}+'% For discount' "></span>
+									<span class="featured"
+										th:text="${car.discount}+'% For discount' "></span>
 								</div>
 								<div id="carouselExampleIndicators1" class="carousel slide"
 									data-ride="carousel">
@@ -194,17 +358,15 @@
 
 										</div>
 										<div class="carousel-item">
-											<div th:each="img: ${car.images}" class="d-block w-100 h-100" >
-												<img 
-													
-													th:if="${img.name =='behindImg'}" th:src="${img.urlImage}"
-													alt="car">
+											<div th:each="img: ${car.images}" class="d-block w-100 h-100">
+												<img th:if="${img.name =='behindImg'}"
+													th:src="${img.urlImage}" alt="car">
 											</div>
 
 										</div>
 										<div class="carousel-item">
 											<div th:each="img: ${car.images}" class="d-block w-100 h-100">
-												<img style="height: 100; width: 100;object-fit: contain;"
+												<img style="height: 100; width: 100; object-fit: contain;"
 													th:if="${img.name =='leftImg'}" th:src="${img.urlImage}"
 													alt="car">
 											</div>
@@ -212,7 +374,7 @@
 										</div>
 										<div class="carousel-item">
 											<div th:each="img: ${car.images}" class="d-block w-100 h-100">
-												<img style="height: 100; width: 100;object-fit: contain;"
+												<img style="height: 100; width: 100; object-fit: contain;"
 													th:if="${img.name =='rightImg'}" th:src="${img.urlImage}"
 													alt="car">
 											</div>
@@ -220,7 +382,7 @@
 										</div>
 										<div class="carousel-item">
 											<div th:each="img: ${car.images}" class="d-block w-100 h-100">
-												<img style="height: 100; width: 100;object-fit: contain;"
+												<img style="height: 100; width: 100; object-fit: contain;"
 													th:if="${img.name =='insideImg'}" th:src="${img.urlImage}"
 													alt="car">
 											</div>
@@ -252,24 +414,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-lg-12">
-					<div class="pagination-box">
-						<nav aria-label="Page navigation example">
-							<ul class="pagination">
-								<li class="page-item"><a class="page-link"
-									href="car-grid-leftside.html"><span aria-hidden="true">«</span></a></li>
-								<li class="page-item"><a class="page-link"
-									href="car-grid-rightside.html">1</a></li>
-								<li class="page-item"><a class="page-link"
-									href="car-grid-leftside.html">2</a></li>
-								<li class="page-item"><a class="page-link active"
-									href="car-grid-fullwidth.html">3</a></li>
-								<li class="page-item"><a class="page-link"
-									href="car-grid-fullwidth.html"><span aria-hidden="true">»</span></a></li>
-							</ul>
-						</nav>
-					</div>
-				</div>
+
 			</div>
 		</div>
 	</div>
@@ -284,12 +429,11 @@
 						<h4>Contact Us</h4>
 						<div class="f-border"></div>
 						<ul class="contact-info">
-							<li>Address: 20/F Green Road, Dhanmondi, Dhaka</li>
-							<li>Email: <a href="mailto:info@themevessel.com">info@themevessel.com</a>
+							<li>Address: 590 CMT8, P.11, Q.3, Tp.Hồ Chí Minh</li>
+							<li>Email: <a href="mailto:AzCars@AzCars.com">AzCars@AzCars.com</a>
 							</li>
-							<li>Phone: <a href="tel:+0477-85x6-552">+XXXX XXXX XXX</a>
-							</li>
-							<li>Fax: +XXXX XXXX XXX</li>
+							<li>Phone: <a href="tel:+84-3939-7979">+84-3939-7979</a></li>
+							<li>Fax: <a href="fax:+84-3939-7979">+84-3939-7979</a></li>
 						</ul>
 
 						<ul class="social-list clearfix">
@@ -299,7 +443,8 @@
 									class="fa fa-twitter"></i></a></li>
 							<li><a href="#" class="google-bgh"><i
 									class="fa fa-google-plus"></i></a></li>
-							<li><a href="#" class="rss-bgh"><i class="fa fa-rss"></i></a></li>
+							<li><a href="#" class="rss-bgh"><i class="fa fa-rss"></i></a>
+							</li>
 							<li><a href="#" class="linkedin-bgh"><i
 									class="fa fa-linkedin"></i></a></li>
 						</ul>
@@ -312,14 +457,14 @@
 						<ul class="links">
 							<li><a href="#"><i class="flaticon-arrows"></i>About us</a>
 							</li>
-							<li><a href="#"><i class="flaticon-arrows"></i>Service</a></li>
-							<li><a href="#"><i class="flaticon-arrows"></i>Car
-									Listing</a></li>
-							<li><a href="#"><i class="flaticon-arrows"></i>Car Grid</a>
-							</li>
+
+							<li><a href="#"><i class="flaticon-arrows"></i>Available
+									Cars Listing</a></li>
+
+
 							<li><a href="#"><i class="flaticon-arrows"></i>Contact
 									Us</a></li>
-							<li><a href="#"><i class="flaticon-arrows"></i>Blog</a></li>
+
 							<li><a href="#"><i class="flaticon-arrows"></i>Car
 									Details</a></li>
 						</ul>
@@ -330,8 +475,8 @@
 						<h4>Recent Posts</h4>
 						<div class="f-border"></div>
 						<div class="media mb-4">
-							<a class="pr-3" href="car-details.html"> <img
-								src="/assets/img/sub-car/sub-car.jpg" alt="car">
+							<a class="pr-3" href="/"> <img
+								src="/assets/img/sub-car/sub-car.jpg" alt="car" />
 							</a>
 							<div class="media-body align-self-center">
 								<h5>
@@ -344,8 +489,8 @@
 							</div>
 						</div>
 						<div class="media mb-4">
-							<a class="pr-3" href="car-details.html"> <img
-								src="/assets/img/sub-car/sub-car-2.jpg" alt="car">
+							<a class="pr-3" href="/"> <img
+								src="/assets/img/sub-car/sub-car-2.jpg" alt="car" />
 							</a>
 							<div class="media-body align-self-center">
 								<h5>
@@ -358,8 +503,8 @@
 							</div>
 						</div>
 						<div class="media">
-							<a class="pr-3" href="car-details.html"> <img
-								src="/assets/img/sub-car/sub-car-3.jpg" alt="car">
+							<a class="pr-3" href="/"> <img
+								src="/assets/img/sub-car/sub-car-3.jpg" alt="car" />
 							</a>
 							<div class="media-body align-self-center">
 								<h5>
@@ -383,7 +528,7 @@
 							<form action="#" method="GET">
 								<p>
 									<input type="text" class="form-contact" name="email"
-										placeholder="Enter Address">
+										placeholder="Enter Address" />
 								</p>
 								<p>
 									<button type="submit" name="submitNewsletter"
@@ -398,9 +543,8 @@
 			<div class="row">
 				<div class="col-xl-12">
 					<p class="copy">
-						&copy; 2022 <a href="http://themevessel.com/" target="_blank">Theme
-							Vessel</a>. Trademarks and brands are the car of their respective
-						owners.
+						&copy; 2024 <a href="/" target="_blank">Az Cars</a>. Group 3 Final
+						Project .
 					</p>
 				</div>
 			</div>
@@ -409,94 +553,7 @@
 	<!-- Footer end -->
 
 
-	<!-- Car Video Modal -->
-	<div class="modal car-modal fade" id="carModal" tabindex="-1"
-		role="dialog" aria-labelledby="carModal" aria-hidden="true">
-		<div class="modal-dialog modal-lg" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<div class="row">
-						<div class="col-lg-6 modal-left">
-							<div class="modal-left-content">
-								<div id="modalCarousel" class="carousel slide"
-									data-ride="carousel">
-									<div class="carousel-inner" role="listbox">
-										<div class="carousel-item active">
-											<iframe class="modalIframe"
-												src="https://www.youtube.com/embed/5e0LxrLSzok"
-												allowfullscreen></iframe>
-										</div>
-										<div class="carousel-item">
-											<img src="/assets/img/car-1.jpg" alt="Test ALT">
-										</div>
-										<div class="carousel-item">
-											<img src="/assets/img/car-1.jpg" alt="Test ALT">
-										</div>
-									</div>
-									<a class="control control-prev" href="#modalCarousel"
-										role="button" data-slide="prev"> <i
-										class="fa fa-angle-left"></i>
-									</a> <a class="control control-next" href="#modalCarousel"
-										role="button" data-slide="next"> <i
-										class="fa fa-angle-right"></i>
-									</a>
-								</div>
-								<div class="description">
-									<h3>Description</h3>
-									<p>Curabitur odio nibh, luctus non pulvinar a, ultricies ac
-										diam. Donec neque massa, viverra interdum eros ut, imperdiet
-										pellentesque mauris. Proin sit amet</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-6 modal-right">
-							<div class="modal-right-content bg-white">
-								<strong class="price"> <i class="fa fa-star"></i> <i
-									class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-									class="fa fa-star"></i> <i class="fa fa-star-half-o"></i>
-								</strong>
-								<section>
-									<h3>Audi A5</h3>
-									<ul class="bullets">
-										<li><i class="fa fa-arrow-right"></i> Audio Interface</li>
-										<li><i class="fa fa-arrow-right"></i> CDR Audio</li>
-										<li><i class="fa fa-arrow-right"></i> Seat Heating</li>
-										<li><i class="fa fa-arrow-right"></i> ParkAssist</li>
-										<li><i class="fa fa-arrow-right"></i> Cruise Control</li>
-										<li><i class="fa fa-arrow-right"></i> Airbags</li>
-										<li><i class="fa fa-arrow-right"></i> Air Conditioning</li>
-										<li><i class="fa fa-arrow-right"></i> Alarm System</li>
-									</ul>
-								</section>
-								<section>
-									<h3>Overview</h3>
-									<dl>
-										<dt>Model</dt>
-										<dd>BMW</dd>
-										<dt>Condition</dt>
-										<dd>Brand New</dd>
-										<dt>Year</dt>
-										<dd>2018</dd>
-										<dt>Mileage</dt>
-										<dd>37,000 mi</dd>
-										<dt>Price</dt>
-										<dd>$178,000</dd>
-									</dl>
-								</section>
-								<a href="car-details.html" class="btn btn-theme">Show Detail</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+
 
 	<!-- Off-canvas sidebar -->
 	<div class="off-canvas-sidebar">
@@ -556,10 +613,73 @@
 	<script src="/assets/js/slick.min.js"></script>
 	<script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
 	<script src="/assets/js/ie-emulation-modes-warning.js"></script>
-	<script src="https://kit.fontawesome.com/56c961acc9.js"
-		crossorigin="anonymous"></script>
+	<script src="https://kit.fontawesome.com/56c961acc9.js"></script>
 
 	<!-- Custom JS Script -->
 	<script src="/assets/js/app.js"></script>
+
+	<script>
+		function provinceSubmit() {
+			const districtSelect = $("#districtSelect").get(0);
+			const wardSelect = $("#wardSelect").get(0);
+
+			$.ajax({
+				url : "/home/carregister/getDistrict",
+				type : "get",
+				data : {
+					provinceCode : $("#provinceSelect").val()
+				},
+				success : function(res) {
+					$(districtSelect).removeAttr('disabled');
+					$(districtSelect).html(
+							'<option value ="">--Select District--</option>');
+					$.each(res.districtList, function(key, value) {
+						$(districtSelect).append(
+								'<option value="' + value.code + '">'
+										+ value.full_name + '</option>');
+					});
+					$(wardSelect).html(
+							'<option value="" >--Select Ward--</option>');
+
+				}
+			});
+		};
+		function districtSubmit() {
+
+			const districtSelect = $("#districtSelect").get(0);
+			const wardSelect = $("#wardSelect").get(0);
+
+			$.ajax({
+				url : "/home/carregister/getWard",
+				type : "get",
+				data : {
+					districtCode : $("#districtSelect").val()
+				},
+				success : function(res) {
+					$(wardSelect).removeAttr('disabled');
+					$(wardSelect).html(
+							'<option value ="">--Select Ward--</option>');
+					$.each(res.wardList, function(key, value) {
+						$(wardSelect).append(
+								'<option value="' + value.code + '">'
+										+ value.full_name + '</option>');
+					});
+
+				}
+			});
+		};
+		function addressSubmit() {
+
+			var address = $("#wardSelect option:selected").text() + ", "
+					+ $("#districtSelect option:selected").text() + ", "
+					+ $("#provinceSelect option:selected").text();
+			$("#carAddress").val(address);
+			console.log(address);
+			console.log($("#carAddress").val());
+
+			carAddress.setAttribute("value", address);
+
+		}
+	</script>
 </body>
 </html>
