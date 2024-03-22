@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+
+
+<title>Az CAR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<!-- External CSS libraries -->
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/bootstrap.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/magnific-popup.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.selectBox.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/rangeslider.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/animate.min.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/slick.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.mCustomScrollbar.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/flaticon/font/flaticon.css">
+
+<!-- Favicon icon -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico"
+	type="image/x-icon">
+
+<!-- Google fonts -->
+<link rel="stylesheet" type="text/css"
+	href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
+
+<!-- Custom Stylesheet -->
+<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" type="text/css" id="style_sheet"
+	href="/assets/css/skins/default.css">
+<link rel="stylesheet"
+	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
+</head>
+
+
+<!-- main header start -->
+<header class="main-header sticky-header header-with-top"
+	id="main-header-2">
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<nav class="navbar navbar-expand-lg navbar-light rounded">
+					<a class="navbar-brand logo navbar-brand d-flex mr-auto"
+						href="index.html"> <img src="assets/img/logos/black-logo.png"
+						alt="logo">
+					</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse"
+						data-target="#navbar" aria-controls="navbar" aria-expanded="false"
+						aria-label="Toggle navigation">
+						<span class="fa fa-bars"></span>
+					</button>
+					<div class="navbar-collapse collapse w-100" id="navbar">
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item"><a class="nav-link"
+								th:href="@{/home/availablecars/}">Available Cars</a></li>
+							<li class="nav-item" th:if="${session.user}"><a
+								class="nav-link" href="home/myplan/">My Plan</a></li>
+							<li class="nav-item "><a class="nav-link" href="#">
+									About Us </a></li>
+
+							<li class="nav-item"><a class="nav-link" href="#">
+									Contact Us </a></li>
+
+
+
+							<li class="nav-item dropdown" th:if="${session.user}"><a
+								class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+								th:href="@{/user/profile/} + ${session.user}"
+								th:text="Hello+', ' +${session.user}"></a> <a
+								class="btn btn-sm btn-theme btn-round signup-link"
+								href="/logout">LogOut</a></li>
+
+
+							<li class="nav-item dropdown" th:if="${session.admin}"><a
+								class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+								th:href="@{/user/profile/}+ ${session.admin}"
+								th:text="Hello+', ' +${session.admin}"></a> <a
+								class="btn btn-sm btn-theme btn-round signup-link"
+								href="/dashboard/">Dash board</a> <a
+								class="btn btn-sm btn-theme btn-round signup-link"
+								href="/logout">Logout</a></li>
+							<li class="nav-item dropdown" th:unless="${session.isAuthen}"><a
+								class="btn btn-sm btn-theme btn-round signup-link" href="/login">Login</a>
+								<a class="btn btn-sm btn-theme btn-round signup-link"
+								href="/register">Register</a></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</div>
+	</div>
+</header>
+<!-- main header end -->
+
+<!-- Sub banner start -->
+<div class="sub-banner overview-bgi">
+	<div class="container">
+		<div class="page-name">
+			<h1>My Plan</h1>
+		</div>
+	</div>
+	<div class="page-info">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-5">
+					<div class="breadcrumb-area">
+						<ul>
+							<li><a href="/">Index</a></li>
+							<li><span>/</span>My Plan</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-7">
+					<div class="contact-info">
+						<ul>
+							<li><i class="fa fa-phone"></i> +84-3939-7979</li>
+							<li><a href="tel:+84-3939-7979" class="btn btn-md btn-theme">Contact
+									us</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Sub banner end -->
+
+<!-- Agent page start -->
+<div class="agent-page content-area-2">
+	<!-- Agent detail start -->
+	<div class="agent-detail">
+		<div class="container">
+			<div class="row">
+				<p id="toast-success-uploadDriveLicense" hidden="true"
+					class="btn btn-outline-primary btn-lg btn-block">Success
+					Example</p>
+				<p id="toast-failed-uploadDriveLicense" hidden="true"
+					class="btn btn-outline-primary btn-lg btn-block">Failed Example</p>
+				<h4 class="col-10 offset-md-1"
+					style="text-align: center; font-weight: bold;">
+					Welcome, <span th:text="${session.emailLogin}"></span>
+				</h4>
+				<div class="col-10 offset-md-1">
+
+
+					<div class="agent-description">
+						<div class="tabbing tabbing-box mb-30">
+							<ul class="nav nav-tabs" id="carTab" role="tablist">
+								<li class="nav-item"><a class="nav-link active show"
+									id="one-tab" data-toggle="tab" href="#one" role="tab"
+									aria-controls="one" aria-selected="false">My Cars</a></li>
+								<li class="nav-item"><a class="nav-link" id="two-tab"
+									data-toggle="tab" href="#two" role="tab" aria-controls="two"
+									aria-selected="false">My Booking</a></li>
+								<li class="nav-item"><a class="nav-link" id="three-tab"
+									data-toggle="tab" href="#three" role="tab"
+									aria-controls="three" aria-selected="true">My Car Driving
+										License</a></li>
+								<li class="nav-item"><a class="nav-link" id="four-tab"
+									data-toggle="tab" href="#four" role="tab" aria-controls="four"
+									aria-selected="true">History Booking</a></li>
+							</ul>
+							<div class="tab-content" id="carTabContent">
+								<div class="tab-pane fade active show" id="one" role="tabpanel"
+									aria-labelledby="one-tab">
+
+									<div class="car-box-5" th:each="car : ${listCar}">
+										<div class="row mt-2">
+											<div class="col-lg-3 col-md-5">
+												<a th:href="@{'/home/availablecars/details/' + ${car.id}}"
+													class="car-img">
+													<div class="listing-badges" th:if="${car.discount} == '0'">
+														<span class="featured">Featured</span>
+													</div>
+													<div class="listing-time opening"
+														th:if="${car.discount} >0">
+														<span class="featured"
+															th:text="${car.discount}+'% For discount' "></span>
+													</div>
+													<div id="carouselExampleIndicators1" class="carousel slide"
+														data-ride="carousel">
+														<ol class="carousel-indicators">
+															<li data-target="#carouselExampleIndicators1"
+																data-slide-to="0" class="active"></li>
+															<li data-target="#carouselExampleIndicators1"
+																data-slide-to="1"></li>
+															<li data-target="#carouselExampleIndicators1"
+																data-slide-to="2"></li>
+														</ol>
+														<div class="carousel-inner">
+															<div class="carousel-item active">
+																<div th:each="img: ${car.images}">
+																	<img
+																		style="height: 100; width: 100; object-fit: contain;"
+																		th:if="${img.name =='frontImg'}"
+																		th:src="${img.urlImage}" alt="car">
+																</div>
+
+															</div>
+															<div class="carousel-item">
+																<div th:each="img: ${car.images}"
+																	class="d-block w-100 h-100">
+																	<img
+																		style="height: 100; width: 100; object-fit: contain;"
+																		th:if="${img.name =='behindImg'}"
+																		th:src="${img.urlImage}" alt="car">
+																</div>
+
+															</div>
+															<div class="carousel-item">
+																<div th:each="img: ${car.images}"
+																	class="d-block w-100 h-100">
+																	<img
+																		style="height: 100; width: 100; object-fit: contain;"
+																		th:if="${img.name =='leftImg'}"
+																		th:src="${img.urlImage}" alt="car">
+																</div>
+
+															</div>
+															<div class="carousel-item">
+																<div th:each="img: ${car.images}"
+																	class="d-block w-100 h-100">
+																	<img
+																		style="height: 100; width: 100; object-fit: contain;"
+																		th:if="${img.name =='rightImg'}"
+																		th:src="${img.urlImage}" alt="car">
+																</div>
+
+															</div>
+															<div class="carousel-item">
+																<div th:each="img: ${car.images}"
+																	class="d-block w-100 h-100">
+																	<img
+																		style="height: 100; width: 100; object-fit: contain;"
+																		th:if="${img.name =='insideImg'}"
+																		th:src="${img.urlImage}" alt="car">
+																</div>
+
+															</div>
+														</div>
+													</div>
+												</a>
+											</div>
+											<div class="col-lg-9 col-md-7">
+												<div class="detail ">
+													<h3 class="title">
+														<a href="car-details.html" th:text="${car.carmodel.model}"></a>
+													</h3>
+
+													<div class="listing-price">
+														<span class="new" th:text="${car.price}+' $/day'"></span>
+													</div>
+
+												</div>
+												<p class="btn btn-theme" th:text="${car.status}"></p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane fade" id="two" role="tabpanel"
+									aria-labelledby="two-tab">
+									<div class="additional-details-list">
+										<p>Sed at leo sit amet mi bibendum aliquam. Interdum et
+											malesuada fames ac ante ipsum primis in faucibus. Praesent
+											cursus varius odio, non faucibus dui. Nunc vehicula lectus
+											sed velit suscipit aliquam vitae eu ipsum. adipiscing elit.</p>
+										p>Aliquam ultricies nunc porta metus interdum mollis. Donec
+										porttitor libero augue, vehicula tincidunt lectus placerat a.
+										Sed tincidunt dolor non sem dictum dignissim. Nulla vulputate
+										orci felis, ac ornare purus ultricies a. Fusce euismod magna
+										orci, sit amet aliquam turpis dignissim ac. In at tortor at
+										ligula pharetra sollicitudin. Sed tincidunt, purus eget
+										laoreet elementum, felis est pharetra ante, tincidunt feugiat
+										libero enim sed risus.
+										</p>
+										<p>Sed at leo sit amet mi bibendum aliquam. Interdum et
+											malesuada fames ac ante ipsum primis in faucibus. Praesent
+											cursus varius odio, non faucibus dui. Nunc vehicula lectus
+											sed velit suscipit aliquam vitae eu ipsum. adipiscing elit.</p>
+									</div>
+								</div>
+								<div class="tab-pane fade " id="three" role="tabpanel"
+									aria-labelledby="three-tab">
+									<div class="form-group mb-3 col-12">
+										<div class="row col-10 offset-md-1"
+											th:if="${ImgLicense.size()}>0">
+											<h5 class="col-12" style="font-weight: bold;">Your Car
+												Driving License</h5>
+
+
+											<div class="form-group col-md-8">
+												<label for="frontImg">Front License: </label> <img
+													class="form-control-file imgCars" id="frontImg"
+													th:src="'license/'+${ImgLicense.get(0)}" name="frontImg">
+
+
+											</div>
+
+											<div class="form-group col-md-8">
+												<label for="behindImg">Behind License: </label> <img
+													class="form-control-file imgCars" id="behindImg"
+													th:src="'license/'+${ImgLicense.get(1)}" name="behindImg">
+												
+											</div>
+
+										</div>
+										<div class="row col-10 offset-md-1"
+											th:unless="${ImgLicense.size()}>0">
+											<h5 class="col-12" style="font-weight: bold;">Upload
+												Your Car Driving License</h5>
+											<form th:action="@{/home/myplan}" method="post"
+												enctype="multipart/form-data" id="uploadDriveLicense">
+												<div class="form-group col-md-8">
+													<label for="frontImg">Front License: </label> <input
+														type="file" class="form-control-file imgCars"
+														id="frontImg" name="frontImg"
+														onchange="previewImage('frontImg','frontImgPre')">
+
+													<div class="col-md-8">
+														<br> <img src="" id="frontImgPre" height="100px" />
+													</div>
+												</div>
+
+												<div class="form-group col-md-8">
+													<label for="behindImg">Behind License: </label> <input
+														type="file" class="form-control-file imgCars"
+														id="behindImg" name="behindImg"
+														onchange="previewImage('behindImg','behindImgPre')">
+													<div class="col-md-8">
+														<br> <img src="" id="behindImgPre" height="100px" />
+													</div>
+
+												</div>
+												<div class="col-4">
+
+													<button onclick="return checkImg()" class="btn btn-primary"
+														style="background-color: #3c5bfc;">Submit</button>
+
+												</div>
+											</form>
+
+											<div class="col-12 text-danger text-center">
+												<span id="validation-image"></span>
+											</div>
+											<div class="col-12 text-danger text-center">
+												<span id="validation-NUll-img"></span>
+											</div>
+											<div class="col-12 text-danger text-center">
+												<span id="validation-Duplicate-image"></span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane fade " id="four" role="tabpanel"
+									aria-labelledby="four-tab">
+									<p>History</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- Agent detail end -->
+</div>
+<!-- Agent page end -->
+
+<!-- Footer start -->
+<footer class="footer">
+	<div class="container footer-inner">
+		<div class="row">
+			<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+				<div class="footer-item">
+					<h4>Contact Us</h4>
+					<div class="f-border"></div>
+					<ul class="contact-info">
+						<li>Address: 590 CMT8, P.11, Q.3, Tp.Hồ Chí Minh</li>
+						<li>Email: <a href="mailto:AzCars@AzCars.com">AzCars@AzCars.com</a>
+						</li>
+						<li>Phone: <a href="tel:+84-3939-7979">+84-3939-7979</a></li>
+						<li>Fax: <a href="fax:+84-3939-7979">+84-3939-7979</a></li>
+					</ul>
+
+					<ul class="social-list clearfix">
+						<li><a href="#" class="facebook-bgh"><i
+								class="fa fa-facebook"></i></a></li>
+						<li><a href="#" class="twitter-bgh"><i
+								class="fa fa-twitter"></i></a></li>
+						<li><a href="#" class="google-bgh"><i
+								class="fa fa-google-plus"></i></a></li>
+						<li><a href="#" class="rss-bgh"><i class="fa fa-rss"></i></a>
+						</li>
+						<li><a href="#" class="linkedin-bgh"><i
+								class="fa fa-linkedin"></i></a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+				<div class="footer-item">
+					<h4>Useful Links</h4>
+					<div class="f-border"></div>
+					<ul class="links">
+						<li><a href="#"><i class="flaticon-arrows"></i>About us</a></li>
+
+						<li><a href="#"><i class="flaticon-arrows"></i>Available
+								Cars Listing</a></li>
+
+
+						<li><a href="#"><i class="flaticon-arrows"></i>Contact Us</a></li>
+
+						<li><a href="#"><i class="flaticon-arrows"></i>Car
+								Details</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+				<div class="recent-posts footer-item">
+					<h4>Recent Posts</h4>
+					<div class="f-border"></div>
+					<div class="media mb-4">
+						<a class="pr-3" href="/"> <img
+							src="/assets/img/sub-car/sub-car.jpg" alt="car" />
+						</a>
+						<div class="media-body align-self-center">
+							<h5>
+								<a href="car-details.html">2016 Audi S5 Coupe</a>
+							</h5>
+							<p>February 27, 2022</p>
+							<p>
+								<strong>$245,000</strong>
+							</p>
+						</div>
+					</div>
+					<div class="media mb-4">
+						<a class="pr-3" href="/"> <img
+							src="/assets/img/sub-car/sub-car-2.jpg" alt="car" />
+						</a>
+						<div class="media-body align-self-center">
+							<h5>
+								<a href="car-details.html">2016 Audi R8</a>
+							</h5>
+							<p>February 27, 2022</p>
+							<p>
+								<strong>$245,000</strong>
+							</p>
+						</div>
+					</div>
+					<div class="media">
+						<a class="pr-3" href="/"> <img
+							src="/assets/img/sub-car/sub-car-3.jpg" alt="car" />
+						</a>
+						<div class="media-body align-self-center">
+							<h5>
+								<a href="car-details.html">Read Audi A7 TDI</a>
+							</h5>
+							<p>February 27, 2022</p>
+							<p>
+								<strong>$245,000</strong>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+				<div class="footer-item clearfix">
+					<h4>Subscribe</h4>
+					<div class="f-border"></div>
+					<div class="Subscribe-box">
+						<p>Excepteur sint occaecat cupidatat non proident, sunt in
+							culpa qui officia deserunt mollit.</p>
+						<form action="#" method="GET">
+							<p>
+								<input type="text" class="form-contact" name="email"
+									placeholder="Enter Address" />
+							</p>
+							<p>
+								<button type="submit" name="submitNewsletter"
+									class="btn btn-block btn-color">Subscribe</button>
+							</p>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xl-12">
+				<p class="copy">
+					&copy; 2024 <a href="/" target="_blank">Az Cars</a>. Group 3 Final
+					Project .
+				</p>
+			</div>
+		</div>
+	</div>
+</footer>
+<!-- Footer end -->
+
+<!-- Off-canvas sidebar -->
+<div class="off-canvas-sidebar">
+	<div class="off-canvas-sidebar-wrapper">
+		<div class="off-canvas-header">
+			<a class="close-offcanvas" href="#"><span class="fa fa-times"></span></a>
+		</div>
+		<div class="off-canvas-content">
+			<aside class="canvas-widget">
+				<div class="logo text-center">
+					<img src="assets/img/logos/logo.png" alt="logo">
+				</div>
+			</aside>
+			<aside class="canvas-widget">
+				<ul class="menu">
+					<li class="menu-item menu-item-has-children"><a
+						href="index.html">Home</a></li>
+					<li class="menu-item"><a href="car-grid-leftside.html">Car
+							List</a></li>
+					<li class="menu-item"><a href="car-details.html">Car
+							Detail</a></li>
+					<li class="menu-item"><a href="blog-single-sidebar-right.html">Blog</a></li>
+					<li class="menu-item"><a href="about-1.html">About US</a></li>
+					<li class="menu-item"><a href="contact-1.html">Contact US</a></li>
+				</ul>
+			</aside>
+			<aside class="canvas-widget">
+				<ul class="social-icons">
+					<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+					<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+					<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+					<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+					<li><a href="#"><i class="fa fa-vk"></i></a></li>
+				</ul>
+			</aside>
+		</div>
+	</div>
+</div>
+
+<!-- External JS libraries -->
+<script src="/assets/js/jquery-2.2.0.min.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/jquery.selectBox.js"></script>
+<script src="/assets/js/rangeslider.js"></script>
+<script src="/assets/js/jquery.magnific-popup.min.js"></script>
+<script src="/assets/js/jquery.filterizr.js"></script>
+<script src="/assets/js/wow.min.js"></script>
+<script src="/assets/js/backstretch.js"></script>
+<script src="/assets/js/jquery.countdown.js"></script>
+<script src="/assets/js/jquery.scrollUp.js"></script>
+<script src="/assets/js/particles.min.js"></script>
+<script src="/assets/js/typed.min.js"></script>
+<script src="/assets/js/dropzone.js"></script>
+<script src="/assets/js/jquery.mb.YTPlayer.js"></script>
+<script src="/assets/js/slick.min.js"></script>
+<script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="/assets/js/ie-emulation-modes-warning.js"></script>
+<script src="https://kit.fontawesome.com/56c961acc9.js"
+	crossorigin="anonymous"></script>
+<script
+	th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
+
+<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
+
+<!-- Custom JS Script -->
+<script src="/assets/js/app.js"></script>
+
+<script>
+	function validateImg() {
+		var frontImg = document.getElementById('frontImg').value;
+		var behindImg = document.getElementById('behindImg').value;
+
+		if (frontImg == "" || behindImg == "") {
+			document.getElementById('validation-NUll-img').textContent = "All neccessary images must be uploaded";
+		} else {
+			document.getElementById('validation-NUll-img').textContent = "";
+		}
+		if (frontImg == behindImg) {
+
+			document.getElementById('validation-Duplicate-image').textContent = "Images are duplicated name, Please try again";
+		} else {
+			document.getElementById('validation-Duplicate-image').textContent = "";
+		}
+	}
+	function previewImage(inputId, previewId) {
+
+		validateImg();
+		var input = document.getElementById(inputId);
+		var preview = document.getElementById(previewId);
+		var value = input.value;
+
+		if (!value.match(/\.(jpg|jpeg|png|gif)$/i)) {
+
+			input.setAttribute('value', '');
+			preview.setAttribute('src', '');
+			document.getElementById('validation-image').textContent = "Some Images are not valid";
+		} else {
+
+			document.getElementById('validation-image').textContent = "";
+			if (input && input.files && input.files[0]) {
+				var reader = new FileReader();
+
+				reader.onload = function(e) {
+					preview.src = e.target.result;
+				}
+
+				reader.readAsDataURL(input.files[0]);
+			}
+		}
+	}
+	validateImg();
+	function checkImg() {
+		validateImg();
+
+		var ImgCheck = document.getElementById('validation-image').textContent
+				.trim().length;
+		var ImgCheckNull = document.getElementById('validation-NUll-img').textContent
+				.trim().length;
+		var ImgChecDuplicate = document
+				.getElementById('validation-Duplicate-image').textContent
+				.trim().length;
+
+		const sum = ImgCheck + ImgCheckNull + ImgChecDuplicate;
+		if (sum > 0) {
+			console.log(sum);
+			document.getElementById('toast-failed-uploadDriveLicense').click();
+			return false;
+		} else {
+			document.getElementById('toast-success-uploadDriveLicense').click();
+			return uploadDriveLicense.submit();
+		}
+	}
+</script>
+</body>
+</html>

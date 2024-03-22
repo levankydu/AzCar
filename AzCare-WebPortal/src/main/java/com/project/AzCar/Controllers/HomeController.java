@@ -2,23 +2,30 @@ package com.project.AzCar.Controllers;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import java.util.ArrayList;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+
+import org.springframework.data.repository.query.Param;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,9 +38,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.project.AzCar.Dto.CarInfos.CarInforDto;
 import com.project.AzCar.Dto.Users.UserDto;
+import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Mailer.EmailService;
+
+import com.project.AzCar.Services.Cars.BrandServices;
+import com.project.AzCar.Services.Cars.CarImageServices;
+import com.project.AzCar.Services.Cars.CarServices;
+import com.project.AzCar.Services.Locations.ProvinceServices;
+
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
@@ -56,15 +71,91 @@ public class HomeController {
 	@Autowired
 	private JavaMailSender mailSender;
 
-	@Autowired
-	private FilesStorageServices fileStorageServices;
+	
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	private CarServices carServices;
+	@Autowired
+	private ProvinceServices provinceServices;
+	@Autowired
+	private BrandServices brandServices;
+	@Autowired
+	private CarImageServices carImageServices;
+	
+	@Autowired
+	private FilesStorageServices fileStorageServices;
+
+
 	@GetMapping("/")
-	public String getHome() {
+	public String getHome(Model carRegisterList,Model carsInHcm,Model carsInHn,Model carsInDn,Model carsInBd) {
+		List<CarInfor> list = carServices.findAll();
+		List<CarInforDto> listDto = new ArrayList<>();
+		List<CarInforDto> listcarsInHcm = new ArrayList<>();
+		List<CarInforDto> listcarsInHn = new ArrayList<>();
+		List<CarInforDto> listcarsInDn = new ArrayList<>();
+		List<CarInforDto> listcarsInBd = new ArrayList<>();
+		List<String> listProvince = provinceServices.getListCityString();
+		for (var item : list) {
+			var itemDto = carServices.mapToDto(item.getId());
+			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
+			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
+			for (var c : listProvince) {
+				if (item.getAddress().contains(c)) {
+					itemDto.setAddress(c);
+				}
+			}
+
+			listDto.add(itemDto);
+		}
+		for(var item: listDto) {
+			if(item.getAddress().contains("Hồ Chí Minh")) {
+				listcarsInHcm.add(item);
+			}
+		}
+		for(var item: listDto) {
+			if(item.getAddress().contains("Hà Nội")) {
+				listcarsInHn.add(item);
+			}
+		}
+		for(var item: listDto) {
+			if(item.getAddress().contains("Đà Nẵng")) {
+				listcarsInDn.add(item);
+			}
+		}
+		for(var item: listDto) {
+			if(item.getAddress().contains("Bình Dương")) {
+				listcarsInBd.add(item);
+			}
+		}
+		carsInHcm.addAttribute("carsInHcm", listcarsInHcm);
+		carsInHn.addAttribute("carsInHn", listcarsInHn);
+		carsInDn.addAttribute("carsInDn", listcarsInDn);
+		carsInBd.addAttribute("carsInBd", listcarsInBd);
+		listDto.removeIf(car->car.getDiscount()==0);
+		carRegisterList.addAttribute("carRegisterList", listDto);
 		return "index";
+	}
+	@GetMapping("/get/{filename}")
+	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename) throws IOException {
+		List<CarInfor> list = carServices.findAll();
+		String dir = "";
+		int i = 0;
+		while (i < list.size()) {
+			dir = "./UploadFiles/carImages/" + list.get(i).getModelId() + "-" + list.get(i).getId();
+			Resource fileResource = fileStorageServices.load(filename, dir);
+			if (fileResource == null) {
+				i++;
+
+			} else {
+				return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment; filename=\"" + fileResource.getFilename() + "\"").body(fileResource);
+			}
+
+		}
+		return null;
+
 	}
 
 	@GetMapping("/login")
