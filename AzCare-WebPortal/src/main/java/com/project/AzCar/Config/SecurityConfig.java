@@ -41,6 +41,7 @@ public class SecurityConfig {
 				.requestMatchers("/home/availablecars/**").hasAnyRole("USER", "ADMIN")
 				.requestMatchers("/user/profile/**").hasAnyRole("USER", "ADMIN")
 				.requestMatchers("/dashboard/**").hasAnyRole("ADMIN")
+				.requestMatchers("/dashboard/carverify/**").hasAnyRole("ADMIN")
 				.anyRequest().authenticated())
 				.formLogin((form) -> form
 						.loginPage("/login")

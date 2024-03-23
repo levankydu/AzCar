@@ -137,7 +137,7 @@
 								<li class="nav-item"><a class="nav-link"
 									th:href="@{/home/availablecars/}">Available Cars</a></li>
 								<li class="nav-item" th:if="${session.user}"><a
-									class="nav-link" href="home/myplan/">My Plan</a></li>
+									class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
 								<li class="nav-item "><a class="nav-link" href="#">
 										About Us </a></li>
 
@@ -401,7 +401,7 @@
 
 								</div>
 							</div>
-							<p th:text="${car.description}"></p>
+							<!-- <p th:text="${car.description}"></p> -->
 							<ul class="facilities-list clearfix">
 								<li class="bordered-right"><i class="fa fa-map-marker"
 									aria-hidden="true"></i> <span th:text="${car.address}"></span></li>

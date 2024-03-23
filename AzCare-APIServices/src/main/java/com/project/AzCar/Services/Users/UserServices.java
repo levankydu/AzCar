@@ -24,5 +24,5 @@ public interface UserServices {
 	Users findUserByToken(String token);
 	
 	void saveUserReset(Users user);
-
+	Users findById(long id);
 }

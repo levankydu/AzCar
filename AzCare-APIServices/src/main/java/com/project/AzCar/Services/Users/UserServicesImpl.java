@@ -122,4 +122,9 @@ public class UserServicesImpl implements UserServices {
 	public void saveUserReset(Users user) {
 		userRepo.save(user);
 	}
+
+	@Override
+	public Users findById(long id) {
+		return userRepo.findById(id);
+	}
 }
