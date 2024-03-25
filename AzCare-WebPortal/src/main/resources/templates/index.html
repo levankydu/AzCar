@@ -70,8 +70,8 @@
 								<li class="nav-item"><a class="nav-link"
 									onclick="return checkLogin();"
 									th:href="@{/home/availablecars/}">Available Cars</a></li>
-								<li class="nav-item" th:if="${session.user}"><a
-									class="nav-link" href="home/myplan/">My Plan</a></li>
+								<li class="nav-item" th:if="${session.emailLogin}"><a
+									class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
 								<li class="nav-item"><a class="nav-link" href="#">
 										About Us </a></li>
 
@@ -160,7 +160,7 @@
 				<p>Check out our on sale booking cars</p>
 			</div>
 
-			<div class="slick-slider-area" th:if="${carRegisterList.size()} >0">
+			<div class="slick-slider-area" th:if="${carRegisterList.size()} >2">
 				<div class="row slick-carousel"
 					data-slick='{"slidesToShow": 3, "responsive":[{"breakpoint": 1024,"settings":{"slidesToShow": 2}}, {"breakpoint": 768,"settings":{"slidesToShow": 1}}]}'>
 					<div class="slick-slide-item">

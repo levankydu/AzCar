@@ -41,6 +41,43 @@
 	href="/assets/css/skins/default.css">
 <link rel="stylesheet"
 	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
+<style>
+/* CSS */
+.button-92 {
+	--c: #fff;
+	/* text color */
+	background: linear-gradient(90deg, #0000 33%, #fff5, #0000 67%)
+		var(--_p, 100%)/300% no-repeat, #3c5bfc;
+	/* background color */
+	color: #0000;
+	border: none;
+	transform: perspective(500px) rotateY(calc(20deg * var(--_i, -1)));
+	text-shadow: calc(var(--_i, -1)* 0.08em) -.01em 0 var(--c),
+		calc(var(--_i, -1)*-0.08em) .01em 2px #0004;
+	outline-offset: .1em;
+	transition: 0.3s;
+}
+
+.button-92:hover, .button-92:focus-visible {
+	--_p: 0%;
+	--_i: 1;
+}
+
+.button-92:active {
+	text-shadow: none;
+	color: var(--c);
+	box-shadow: inset 0 0 9e9q #0005;
+	transition: 0s;
+}
+
+.button-92 {
+	font-weight: bold;
+	font-size: 2rem;
+	margin: 0;
+	cursor: pointer;
+	padding: .1em .3em;
+}
+</style>
 </head>
 
 
@@ -51,9 +88,8 @@
 		<div class="row">
 			<div class="col-12">
 				<nav class="navbar navbar-expand-lg navbar-light rounded">
-					<a class="navbar-brand logo navbar-brand d-flex mr-auto"
-						href="index.html"> <img src="assets/img/logos/black-logo.png"
-						alt="logo">
+					<a class="navbar-brand logo navbar-brand d-flex mr-auto" href="/">
+						<img src="assets/img/logos/black-logo.png" alt="logo">
 					</a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse"
 						data-target="#navbar" aria-controls="navbar" aria-expanded="false"
@@ -65,7 +101,7 @@
 							<li class="nav-item"><a class="nav-link"
 								th:href="@{/home/availablecars/}">Available Cars</a></li>
 							<li class="nav-item" th:if="${session.user}"><a
-								class="nav-link" href="home/myplan/">My Plan</a></li>
+								class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
 							<li class="nav-item "><a class="nav-link" href="#">
 									About Us </a></li>
 
@@ -174,10 +210,20 @@
 							<div class="tab-content" id="carTabContent">
 								<div class="tab-pane fade active show" id="one" role="tabpanel"
 									aria-labelledby="one-tab">
+									<div class="row mb-5">
+										<a th:href="@{/home/carregister/}">
+											<button class="button-92" role="button">Register my
+												Car?</button>
 
+
+										</a>
+
+									</div>
 									<div class="car-box-5" th:each="car : ${listCar}">
+									
 										<div class="row mt-2">
 											<div class="col-lg-3 col-md-5">
+											
 												<a th:href="@{'/home/availablecars/details/' + ${car.id}}"
 													class="car-img">
 													<div class="listing-badges" th:if="${car.discount} == '0'">
@@ -261,7 +307,9 @@
 													<div class="listing-price">
 														<span class="new" th:text="${car.price}+' $/day'"></span>
 													</div>
-
+													<div class="listing-price">
+														<p>License Plates: <span class="new" th:text="${car.licensePlates}"></span> </p>
+													</div>
 												</div>
 												<p class="btn btn-theme" th:text="${car.status}"></p>
 											</div>
@@ -275,15 +323,14 @@
 											malesuada fames ac ante ipsum primis in faucibus. Praesent
 											cursus varius odio, non faucibus dui. Nunc vehicula lectus
 											sed velit suscipit aliquam vitae eu ipsum. adipiscing elit.</p>
-										p>Aliquam ultricies nunc porta metus interdum mollis. Donec
-										porttitor libero augue, vehicula tincidunt lectus placerat a.
-										Sed tincidunt dolor non sem dictum dignissim. Nulla vulputate
-										orci felis, ac ornare purus ultricies a. Fusce euismod magna
-										orci, sit amet aliquam turpis dignissim ac. In at tortor at
-										ligula pharetra sollicitudin. Sed tincidunt, purus eget
-										laoreet elementum, felis est pharetra ante, tincidunt feugiat
-										libero enim sed risus.
-										</p>
+										<p>Aliquam ultricies nunc porta metus interdum mollis.
+											Donec porttitor libero augue, vehicula tincidunt lectus
+											placerat a. Sed tincidunt dolor non sem dictum dignissim.
+											Nulla vulputate orci felis, ac ornare purus ultricies a.
+											Fusce euismod magna orci, sit amet aliquam turpis dignissim
+											ac. In at tortor at ligula pharetra sollicitudin. Sed
+											tincidunt, purus eget laoreet elementum, felis est pharetra
+											ante, tincidunt feugiat libero enim sed risus.</p>
 										<p>Sed at leo sit amet mi bibendum aliquam. Interdum et
 											malesuada fames ac ante ipsum primis in faucibus. Praesent
 											cursus varius odio, non faucibus dui. Nunc vehicula lectus
@@ -311,7 +358,7 @@
 												<label for="behindImg">Behind License: </label> <img
 													class="form-control-file imgCars" id="behindImg"
 													th:src="'license/'+${ImgLicense.get(1)}" name="behindImg">
-												
+
 											</div>
 
 										</div>

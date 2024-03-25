@@ -6,6 +6,10 @@ import java.util.List;
 
 import com.project.AzCar.Entities.Cars.CarImages;
 import com.project.AzCar.Entities.Cars.CarModelList;
+import com.project.AzCar.Entities.Cars.ExtraFee;
+import com.project.AzCar.Entities.Cars.FastBooking;
+import com.project.AzCar.Entities.Cars.PlusServices;
+import com.project.AzCar.Entities.Users.Users;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -49,4 +53,8 @@ public class CarInforDto implements Serializable {
 	private String address;
 	private List<CarImages> images;
 	private CarModelList carmodel;
+	private Users owner;
+	private PlusServices carPlusModel;
+	private FastBooking fastbookingModel;
+	private ExtraFee extraFeeModel;
 }
