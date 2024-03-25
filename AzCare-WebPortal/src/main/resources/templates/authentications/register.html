@@ -41,7 +41,8 @@
 <link type="text/css" rel="stylesheet" href="assets/css/style.css">
 <link rel="stylesheet" type="text/css" id="style_sheet"
 	href="assets/css/skins/default.css">
-
+<link rel="stylesheet"
+	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
 </head>
 <body id="top">
 	<!-- Google Tag Manager (noscript) -->
@@ -54,6 +55,11 @@ End Google Tag Manager (noscript)
 	<div class="contact-section overview-bgi">
 		<div class="container">
 			<div class="row">
+				<p id="toast-success-registered-user" hidden="true"
+					class="btn btn-outline-primary btn-lg btn-block">Success
+					Example</p>
+				<p id="toast-failed-register-user" hidden="true"
+					class="btn btn-outline-primary btn-lg btn-block">Failed Example</p>
 				<div class="col-lg-12">
 					<!-- Form content box start -->
 					<div class="form-content-box">
@@ -69,37 +75,40 @@ End Google Tag Manager (noscript)
 								<div class="alert alert-info">Registration successful !!!
 								</div>
 							</div>
+							
 							<!-- Form start-->
 							<form method="post" role="form" th:action="@{/register}"
-								th:object="${user}">
+								th:object="${user}" id="registerUser">
 								<div class="form-group">
 									<input type="text" id="name" name="name" class="input-text"
-										placeholder="Full Name">
-									<p class="text-danger" th:errors="*{name}"></p>
+										placeholder="Full Name" onkeyup="validateName();"> <span
+										id="validation-name" class="text-danger"></span>
 								</div>
 								<div class="form-group">
 									<input type="text" id="email" name="email" class="input-text"
-										placeholder="Email Address">
-									<p class="text-danger" th:errors="*{email}"></p>
+										placeholder="Email Address" onkeyup="validateEmail();">
+									<span id="validation-email" class="text-danger"></span> 
+									<p class="text-danger"  th:errors="*{email}"></p>
+									
+									
 								</div>
 								<div class="form-group">
 									<input type="password" id="password" name="password"
-										class="input-text" placeholder="Password">
-									<p class="text-danger" th:errors="*{password}"></p>
-
+										class="input-text" placeholder="Password"
+										onkeyup="validatePassword();"> <span
+										id="validation-password" class="text-danger"></span>
 								</div>
 								<div class="form-group">
 									<input type="password" id="confirmPassword"
 										name="confirmPassword" class="input-text"
-										placeholder="Confirm Password">
-									<p class="text-danger" th:errors="*{confirmPassword}"></p>
-
+										placeholder="Confirm Password"
+										onkeyup="validateConfirmPassword();"> <span
+										id="validation-confirmPassword" class="text-danger"></span>
 								</div>
 								<div class="form-group mb-0">
-									<button type="submit" class="btn-md btn-theme"
-										onclick="return form.submit()">Signup</button>
+									<button class="btn-md btn-theme"
+										onclick="return checkSubmitRegisterUser();">Signup</button>
 								</div>
-
 							</form>
 							<!-- Form end-->
 						</div>
@@ -157,5 +166,90 @@ End Google Tag Manager (noscript)
 		th:src="@{assets/js/ie-emulation-modes-warning.js}"></script>
 	<!-- Custom JS Script -->
 	<script type="text/javascript" th:src="@{/assets/js/app.js}"></script>
+
+
+	<script
+		th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
+
+	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
+
+
+	<script>
+		function validateName() {
+			const nameValue = document.getElementById("name").value;
+
+			if (nameValue === "") {
+				document.getElementById('validation-name').textContent = "Name is required";
+				return false;
+			} else {
+				document.getElementById('validation-name').textContent = "";
+				return true;
+			}
+		}
+
+		function validateEmail() {
+			const emailValue = document.getElementById("email").value;
+			var pattern = /^[\w.]+@gmail\.com$/;
+
+			if (emailValue === "") {
+				document.getElementById('validation-email').textContent = "Email is required";
+				return false;
+			} else if (!pattern.test(emailValue)) {
+				document.getElementById('validation-email').textContent = "Email must be in correct format";
+				return false;
+			} else {
+				document.getElementById('validation-email').textContent = "";
+
+				return true;
+			}
+		}
+
+		function validatePassword() {
+			const passwordValue = document.getElementById("password").value;
+
+			if (passwordValue === "") {
+				document.getElementById('validation-password').textContent = "Password is required";
+				return false;
+			} else {
+				document.getElementById('validation-password').textContent = "";
+				return true;
+			}
+		}
+
+		function validateConfirmPassword() {
+			const passwordValue = document.getElementById("password").value;
+			const confirmPasswordValue = document
+					.getElementById("confirmPassword").value;
+
+			if (confirmPasswordValue === "") {
+				document.getElementById('validation-confirmPassword').textContent = "Confirm Password is required";
+				return false;
+			} else if (passwordValue !== confirmPasswordValue) {
+				document.getElementById('validation-confirmPassword').textContent = "Passwords do not match";
+				return false;
+			} else {
+				document.getElementById('validation-confirmPassword').textContent = "";
+				return true;
+			}
+		}
+
+		function checkSubmitRegisterUser() {
+			var isValidName = validateName();
+			var isValidEmail = validateEmail();
+			var isValidPassword = validatePassword();
+			var isValidConfirmPassword = validateConfirmPassword();
+
+			if (isValidName && isValidEmail && isValidPassword
+					&& isValidConfirmPassword) {
+				document.getElementById('toast-success-registered-user')
+						.click();
+				return registerUser.submit();
+			} else {
+				document.getElementById('toast-failed-register-user').click();
+				return false;
+			}
+		}
+	</script>
+
 </body>
 </html>

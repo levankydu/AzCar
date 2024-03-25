@@ -2,6 +2,7 @@ package com.project.AzCar.Controllers;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
@@ -64,8 +66,6 @@ public class HomeController {
 	@Autowired
 	private JavaMailSender mailSender;
 
-	
-
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -77,13 +77,12 @@ public class HomeController {
 	private BrandServices brandServices;
 	@Autowired
 	private CarImageServices carImageServices;
-	
+
 	@Autowired
 	private FilesStorageServices fileStorageServices;
 
-
 	@GetMapping("/")
-	public String getHome(Model carRegisterList,Model carsInHcm,Model carsInHn,Model carsInDn,Model carsInBd) {
+	public String getHome(Model carRegisterList, Model carsInHcm, Model carsInHn, Model carsInDn, Model carsInBd) {
 		List<CarInfor> list = carServices.findAll();
 		List<CarInforDto> listDto = new ArrayList<>();
 		List<CarInforDto> listcarsInHcm = new ArrayList<>();
@@ -103,23 +102,23 @@ public class HomeController {
 
 			listDto.add(itemDto);
 		}
-		for(var item: listDto) {
-			if(item.getAddress().contains("Hồ Chí Minh")) {
+		for (var item : listDto) {
+			if (item.getAddress().contains("Hồ Chí Minh")) {
 				listcarsInHcm.add(item);
 			}
 		}
-		for(var item: listDto) {
-			if(item.getAddress().contains("Hà Nội")) {
+		for (var item : listDto) {
+			if (item.getAddress().contains("Hà Nội")) {
 				listcarsInHn.add(item);
 			}
 		}
-		for(var item: listDto) {
-			if(item.getAddress().contains("Đà Nẵng")) {
+		for (var item : listDto) {
+			if (item.getAddress().contains("Đà Nẵng")) {
 				listcarsInDn.add(item);
 			}
 		}
-		for(var item: listDto) {
-			if(item.getAddress().contains("Bình Dương")) {
+		for (var item : listDto) {
+			if (item.getAddress().contains("Bình Dương")) {
 				listcarsInBd.add(item);
 			}
 		}
@@ -127,10 +126,11 @@ public class HomeController {
 		carsInHn.addAttribute("carsInHn", listcarsInHn);
 		carsInDn.addAttribute("carsInDn", listcarsInDn);
 		carsInBd.addAttribute("carsInBd", listcarsInBd);
-		listDto.removeIf(car->car.getDiscount()==0);
+		listDto.removeIf(car -> car.getDiscount() == 0);
 		carRegisterList.addAttribute("carRegisterList", listDto);
 		return "index";
 	}
+
 	@GetMapping("/get/{filename}")
 	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename) throws IOException {
 		List<CarInfor> list = carServices.findAll();
@@ -172,8 +172,7 @@ public class HomeController {
 		Users existingUser = uServices.findUserByEmail(userDto.getEmail());
 
 		if (existingUser != null) {
-			result.rejectValue("email", null, "User already registered !!!");
-
+		    result.rejectValue("email", null, "Email already registered !!!");
 		}
 
 		if (!userDto.isPasswordMatching()) {
@@ -186,24 +185,29 @@ public class HomeController {
 			return "/authentications/register";
 		}
 
-		uServices.saveUser(userDto);
+		
 		try {
-			Map<String, Object> templateModel = new HashMap<>();
-			templateModel.put("recipientName", userDto.getEmail());
-			templateModel.put("hello", "Welcome to AzCar");
-			templateModel.put("text", "Thank you for registering with us!");
-//	        templateModel.put("text", "azCar@shop.com");
-			emailService.sendMessageUsingThymeleafTemplate("dn169240@gmail.com", "AzCar", templateModel);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			e.printStackTrace();
+			uServices.saveUser(userDto);
+			try {
+				Map<String, Object> templateModel = new HashMap<>();
+				templateModel.put("recipientName", userDto.getEmail());
+				templateModel.put("hello", "Welcome to AzCar");
+				templateModel.put("text", "Cảm ơn Bạn đã sử dụng dịch vụ thuê xe của chúng tôi");
+				emailService.sendMessageUsingThymeleafTemplate(userDto.getEmail(), "AzCar", templateModel);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				e.printStackTrace();
+			}
+			return "authentications/login";
+		}catch (Exception e) {
+			System.out.println(e);
 		}
-//		return "/authentications/login";
+		
 		return "authentications/register";
-
 	}
 
+	 
 	@GetMapping(path = "/registeradmin", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<JSONObject> registrationAdmin(@ModelAttribute UserDto userDto) {
@@ -413,7 +417,8 @@ public class HomeController {
 	private void sendEmail(String email, String resetPasswordLink)
 			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
 		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message);
+		MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+				StandardCharsets.UTF_8.name());
 
 		helper.setFrom("AzCar@gmail.com", "AzCar");
 		helper.setTo(email);
@@ -422,10 +427,12 @@ public class HomeController {
 		String content = "<p>Hello,</p>" + "<p>You have requested to reset your password.</p>"
 				+ "<p>Click the link below to change your password.</p>" + "<p><b><a href=\"" + resetPasswordLink
 				+ "\" >Change my Password</a></b></p>"
-				+ "<p>Ignore this email if you do remember your password, or you have not made the request</p>";
+				+ "<p>Ignore this email if you do remember your password, or you have not made the request</p>"
+				+ "<p>Chào mừng bạn đến với dịch vụ AzCar</p>";
 		helper.setSubject(subject);
 		helper.setText(content, true);
 		mailSender.send(message);
 	}
+
 
 }
