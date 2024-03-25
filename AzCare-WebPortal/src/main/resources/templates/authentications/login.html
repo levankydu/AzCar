@@ -55,7 +55,9 @@ End Google Tag Manager (noscript)
 	<div class="contact-section overview-bgi">
 		<div class="container">
 			<div class="row">
-				
+
+
+
 				<div class="col-lg-12">
 					<!-- Form content box start -->
 					<div class="form-content-box">
@@ -67,31 +69,28 @@ End Google Tag Manager (noscript)
 						<div class="details">
 							<!-- Name -->
 							<h3>Sign into your account</h3>
+							<p id="toast-failed-login" hidden="true"
+								class="btn btn-outline-primary btn-lg btn-block">Failed
+								Example</p>
+
+
 
 							<div th:if="${session.signin_error}">
-								<p class="text-danger" th:text="${session.signin_error}"></p>
-								<!-- Sau khi hiển thị, xóa thông báo để tránh hiển thị lỗi cũ khi trang được làm mới -->
-								<script th:inline="javascript">
-									setTimeout(
-											function() {
-												document
-														.querySelector('.text-danger').innerText = '';
-											}, 5000);
-									// 5 seconds
-								</script>
+								<p class="text-danger" th:text="${session.signin_error}"
+									></p>
 							</div>
 							<!-- Form start -->
 							<form method="post" role="form" th:action="@{/dologin}"
-								th:object="${user}">
+								id="loginForm">
 								<div class="form-group">
 									<input type="email" id="email" name="email" class="input-text"
-										placeholder="Email Address">
-									<p class="text-danger" th:errors="*{email}"></p>
+										placeholder="Email Address" required> <span
+										id="validation-email" class="text-danger"></span>
 								</div>
 								<div class="form-group">
 									<input type="password" id="password" name="password"
-										class="input-text" placeholder="Password">
-									<p class="text-danger" th:errors="*{password}"></p>
+										class="input-text" placeholder="Password" required> <span
+										id="validation-password" class="text-danger"></span>
 								</div>
 								<div class="checkbox">
 									<div class="ez-checkbox pull-left">
@@ -104,8 +103,8 @@ End Google Tag Manager (noscript)
 									<div class="clearfix"></div>
 								</div>
 								<div class="form-group mb-0">
-									<button type="submit" class="btn-md btn-theme"
-										onclick="return form.submit()">Login</button>
+									<button type="button" onclick="validateForm()"
+										class="btn-md btn-theme">Login</button>
 								</div>
 							</form>
 							<!-- Form end -->
@@ -170,21 +169,61 @@ End Google Tag Manager (noscript)
 
 	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 	<script type="text/javascript">
-		function checkSubmitLogin() {
+		document.addEventListener("DOMContentLoaded", function() {
+			// Check if logout success flag is set in localStorage
+			const logoutSuccess = localStorage.getItem('logoutSuccess');
 
-			var loginCheck = document.getElementById('validation-login').textContent
-					.trim().length;
-
-			const sum = loginCheck;
-			if (sum > 0) {
-				console.log(sum);
-				document.getElementById('toast-failed-login').click();
-				return false;
-			} else {
-				document.getElementById('toast-success-login').click();
-				return index.submit();
+			if (logoutSuccess === 'true') {
+				Swal2.fire({
+					icon : "success",
+					title : "Logout successful",
+				});
+				// Clear the logout success flag from localStorage
+				localStorage.removeItem('logoutSuccess');
 			}
-		}
+		});
+
+		function validateForm() {
+	        var email = document.getElementById('email').value;
+	        var password = document.getElementById('password').value;
+
+	        var emailValid = email.length > 0; // Check if email is not empty
+	        var passwordValid = password.length > 0; // Check if password is not empty
+
+	        if (!emailValid) {
+	            document.getElementById('validation-email').innerText = 'Email address is required.';
+	        } else {
+	            document.getElementById('validation-email').innerText = '';
+	        }
+
+	        if (!passwordValid) {
+	            document.getElementById('validation-password').innerText = 'Password is required.';
+	        } else {
+	            document.getElementById('validation-password').innerText = '';
+	        }
+
+	        document.getElementById('email').addEventListener('input', function() {
+	            var email = this.value;
+	            if (email.length === 0) {
+	                document.getElementById('validation-email').innerText = 'Email address is required.';
+	            } else {
+	                document.getElementById('validation-email').innerText = '';
+	            }
+	        });
+
+	        document.getElementById('password').addEventListener('input', function() {
+	            var password = this.value;
+	            if (password.length === 0) {
+	                document.getElementById('validation-password').innerText = 'Password is required.';
+	            } else {
+	                document.getElementById('validation-password').innerText = '';
+	            }
+	        });
+	        if (emailValid && passwordValid) {
+	            // If both email and password are valid, submit the form
+	            document.getElementById('loginForm').submit();
+	        }
+	    }
 	</script>
 </body>
 </html>

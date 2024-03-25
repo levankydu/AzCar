@@ -273,7 +273,6 @@ if (document.getElementById('toast-success-registered-car')) {
 	})
 }
 // Điệp
-
 if (document.getElementById("logout")) {
 	document.getElementById("logout").addEventListener("click", async () => {
 		const { isConfirmed } = await Swal2.fire({
@@ -295,35 +294,49 @@ if (document.getElementById("logout")) {
 		}
 	});
 }
+if (document.getElementById("toast-success-logout")) {
+	document.getElementById("toast-success-logout").addEventListener("click", () => {
 
-if (document.getElementById("toast-success-register-user")) {
-	document.getElementById("toast-success-register-user").addEventListener("click", () => {
 		Swal2.fire({
 			icon: "success",
 			title: "Success",
 		})
 	})
 }
-if (document.getElementById("toast-error-register-user")) {
-	document.getElementById("toast-error-register-user").addEventListener("click", () => {
-		Swal2.fire({
-			icon: "error",
-			title: "Error",
-		})
-	})
-}
 
-// End Điệp
-
-
-if (document.getElementById('toast-failed-login')) {
-	document.getElementById('toast-failed-login').addEventListener('click', () => {
+if (document.getElementById('toast-success-registered-user')) {
+	document.getElementById('toast-success-registered-user').addEventListener('click', () => {
 		Toast.fire({
-			icon: 'warning',
-			title: 'You must login to continue.'
+			icon: 'success',
+			title: 'Registered successfully'
 		})
 	})
 }
+if (document.getElementById('toast-failed-register-user')) {
+	document.getElementById('toast-failed-register-user').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'error',
+			title: 'Edit failed'
+		})
+	})
+}
+if (document.getElementById('toast-success-edit-user')) {
+	document.getElementById('toast-success-edit-user').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'success',
+			title: 'Edit successfully'
+		})
+	})
+}
+if (document.getElementById('toast-failed-register-user')) {
+	document.getElementById('toast-failed-register-user').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'error',
+			title: 'Registered failed'
+		})
+	})
+}
+// End Điệp
 
 if (document.getElementById('toast-failed-uploadDriveLicense')) {
 	document.getElementById('toast-failed-uploadDriveLicense').addEventListener('click', () => {
