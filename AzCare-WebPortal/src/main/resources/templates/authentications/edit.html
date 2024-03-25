@@ -189,7 +189,7 @@
 			<div class="col-xl-8">
 				<form th:action="@{/user/profile/edit/{email} (email=${email})}"
 					th:method="post" enctype="multipart/form-data" th:object="${user}"
-					id="profileForm">
+					id="editForm">
 					<div class="col-xl-12">
 						<!-- Account details card -->
 						<div class="card mb-4">
@@ -206,13 +206,14 @@
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputFirstName">First
 											name</label> <input class="form-control" id="firstName"
-											name="firstName" type="text" th:value="*{firstName}">
-											<span id="validation-first " class="text-danger"></span>
+											name="firstName" type="text" th:value="*{firstName}" onkeyup="validateFirstName();">
+											<span id="validation-firstName" class="text-danger"></span>
 									</div>
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputLastName">Last
 											name</label> <input class="form-control" id="lastName"
-											name="lastName" type="text" th:value="*{lastName}">
+											name="lastName" type="text" th:value="*{lastName}" onkeyup="validateLastName();">
+											<span id="validation-lastName" class="text-danger"></span>
 									</div>
 								</div>
 								<!-- Form Row for phone number and birthday -->
@@ -220,12 +221,14 @@
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputPhone">Phone
 											number</label> <input class="form-control" id="phone" name="phone"
-											type="text" th:value="*{phone}">
+											type="text" th:value="*{phone}" onkeyup="validatePhone();">
+											<span id="validation-phone" class="text-danger"></span>
 									</div>
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputBirthday">Birthday</label>
 										<input class="form-control" id="dob" th:type="date" name="dob"
-											th:value="*{dob}">
+											th:value="*{dob}" onkeyup="validateDob();">
+											<span id="validation-dob" class="text-danger"></span>
 									</div>
 								</div>
 								<!-- Gender selection -->
@@ -241,7 +244,7 @@
 									</div>
 								</div>
 								<!-- Save changes button -->
-								<button onclick="return form.submit()" class="btn btn-primary" type="submit">Save
+								<button onclick="return checkSubmitEditUser()" class="btn btn-primary" type="submit">Save
 									changes</button>
 							</div>
 						</div>
@@ -548,7 +551,68 @@
 	<!-- Custom JS Script -->
 	<script src="/assets/js/app.js"></script>
 
-	
+	<script type="text/javascript">
+	function validateFirstName() {
+		const firstNameValue = document.getElementById("firstName").value;
+
+		if (firstNameValue === "") {
+			document.getElementById('validation-firstName').textContent = "FirstName is required";
+			return false;
+		} else {
+			document.getElementById('validation-firstName').textContent = "";
+			return true;
+		}
+	}
+	function validateLastName() {
+		const lastNameValue = document.getElementById("lastName").value;
+
+		if (lastNameValue === "") {
+			document.getElementById('validation-lastName').textContent = "LastName is required";
+			return false;
+		} else {
+			document.getElementById('validation-lastName').textContent = "";
+			return true;
+		}
+	}
+	function validatePhone() {
+		const phoneValue = document.getElementById("phone").value;
+
+		if (phoneValue === "") {
+			document.getElementById('validation-phone').textContent = "Phone is required";
+			return false;
+		} else {
+			document.getElementById('validation-phone').textContent = "";
+			return true;
+		}
+	}
+	function validateDob() {
+		const DobValue = document.getElementById("dob").value;
+
+		if (DobValue === "") {
+			document.getElementById('validation-dob').textContent = "dob is required";
+			return false;
+		} else {
+			document.getElementById('validation-phone').textContent = "";
+			return true;
+		}
+	}
+	function checkSubmitEditUser() {
+		var isValidFirstName = validateFirstName();
+		var isValidLastName = validateLastName();
+		var isValidPhone = validatePhone();
+		var isValidDob = validateDob();
+
+		if (isValidFirstName && isValidLastName && isValidPhone
+				&& isValidDob) {
+			document.getElementById('toast-success-edit-user')
+					.click();
+			return registerUser.submit();
+		} else {
+			document.getElementById('toast-failed-edit-user').click();
+			return false;
+		}
+	}
+	</script>
 
 </body>
 </html>
