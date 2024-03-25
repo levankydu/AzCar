@@ -7,7 +7,7 @@ $(function () {
         populateColorPlates();
         setTimeout(function () {
             $(".page_loader").fadeOut("fast");
-            $('link[id="style_sheet"]').attr('href', 'assets/css/skins/default.css');
+            $('link[id="style_sheet"]').attr('href', '/assets/css/skins/default.css');
         }, 1000);
         if ($('body .filter-portfolio').length > 0) {
             $(function () {
@@ -42,17 +42,17 @@ $(function () {
                     $('.sticky-header').addClass('header-shrink');
                 }
                 if($('.do-sticky').length < 1) {
-                    $('.logo img').attr('src', 'assets/img/logos/black-logo.png');
+                    $('.logo img').attr('src', '/assets/img/logos/black-logo.png');
                 }
             }
             else {
                 $('.sticky-header').removeClass('header-shrink');
                 if($('.do-sticky').length < 1) {
-                    $('.logo img').attr('src', 'assets/img/logos/logo.png');
+                    $('.logo img').attr('src', '/assets/img/logos/logo.png');
                 }
             }
         } else {
-            $('.logo img').attr('src', 'assets/img/logos/black-logo.png');
+            $('.logo img').attr('src', '/assets/img/logos/black-logo.png');
         }
     }
 
@@ -285,13 +285,13 @@ $(function () {
         $(this).children(".current-min").val(currentMin);
         $(this).children(".current-max").val(currentMax);
     });
-
+/*
     // Select picket activation
     $('select').selectBox(
         {
             mobile: true,
         }
-    );
+    );*/
 
 
     // Dropdown activation

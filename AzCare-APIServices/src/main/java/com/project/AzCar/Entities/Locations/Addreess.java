@@ -3,7 +3,7 @@ package com.project.AzCar.Entities.Locations;
 import java.io.Serializable;
 import java.util.List;
 
-import com.project.AzCar.Entities.Users.Users;
+import com.project.AzCar.Entities.Cars.CarInfor;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -31,17 +31,18 @@ public class Addreess implements Serializable{/**
 
 	@Id
 	private int id;
-	private String Street;
+	private String street;
 	private String houseNo;
 	private String idCtiy;
 	private String idDistrict;
 	private String idWard;
 	
+	
 	@Transient
 	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-	@JoinTable(name = "address_user")
-	private List<Users> users;
+	@JoinTable(name = "address_car")
+	private List<CarInfor> cars;
 	
-	
+	private int idCarRegister;
 	
 }

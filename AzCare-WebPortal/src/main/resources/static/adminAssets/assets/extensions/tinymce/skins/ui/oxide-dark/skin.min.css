@@ -3397,13 +3397,26 @@ keyframes tam-bouncing-dots { 0%,100%,80%{
 }
 
 40
+
+
 %
 {
 transform
+
+
 :
-scale(
+
+
+scale
+(
+
+
 1
+
+
 )
+
+
 }
 }
 .tox:not([dir=rtl]) .tox-spinner>div:not(:first-child) {

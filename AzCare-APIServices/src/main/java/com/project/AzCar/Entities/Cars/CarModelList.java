@@ -8,7 +8,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
@@ -29,17 +29,16 @@ public class CarModelList implements Serializable {
 	@Id
 	private String objectId;
 
-	@Transient
-	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, targetEntity = BrandImages.class)
-	private List<BrandImages> brandImages = new ArrayList<>();
 
 	private String brand;
 	private String category;
 	@Transient
-	@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, targetEntity = CarInfor.class)
-	private List<CarInfor> carModelList = new ArrayList<>();
+	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER, targetEntity = CarInfor.class)
+	private List<CarInfor> cars = new ArrayList<>();
 
 	private String model;
 
 	private Long year;
+	
+	
 }

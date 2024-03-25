@@ -2468,7 +2468,7 @@ textarea.form-control-lg {
 }
 
 .form-check-input[disabled] ~.form-check-label, .form-check-input:disabled
-	~.form-check-label {
+	 ~.form-check-label {
 	cursor: default;
 	opacity: .5
 }
@@ -2702,14 +2702,14 @@ textarea.form-control-lg {
 }
 
 .form-floating>.form-control:focus ~label, .form-floating>.form-control:not(:placeholder-shown)
-	~label, .form-floating>.form-control-plaintext ~label, .form-floating>.form-select
-	~label {
+	 ~label, .form-floating>.form-control-plaintext ~label, .form-floating>.form-select
+	 ~label {
 	color: rgba(var(--bs-body-color-rgb), .65);
 	transform: scale(.85) translateY(-.5rem) translate(-0.15rem)
 }
 
 .form-floating>.form-control:focus ~label:after, .form-floating>.form-control:not(:placeholder-shown)
-	~label:after, .form-floating>.form-control-plaintext ~label:after,
+	 ~label:after, .form-floating>.form-control-plaintext ~label:after,
 	.form-floating>.form-select ~label:after {
 	position: absolute;
 	top: 1rem;
@@ -2732,13 +2732,13 @@ textarea.form-control-lg {
 	border-width: 1px 0
 }
 
-.form-floating>:disabled ~label, .form-floating>.form-control:disabled ~label
-	{
+.form-floating>:disabled ~label, .form-floating>.form-control:disabled 
+	~label {
 	color: #6c757d
 }
 
 .form-floating>:disabled ~label:after, .form-floating>.form-control:disabled
-	~label:after {
+	 ~label:after {
 	background-color: #e9ecef
 }
 
@@ -6589,14 +6589,29 @@ keyframes spinner-grow { 0%{
 }
 
 50
+
+
 %
 {
 opacity
+
+
 :
-1;
+
+
+1
+;
+
+
 transform
+
+
 :
+
+
 none
+
+
 }
 }
 .spinner-grow {
@@ -21250,7 +21265,7 @@ body .bi:before, [class^=bi-]:before, [class*=" bi-"]:before {
 }
 
 .form-group.with-title .form-control:focus ~label, .form-group.with-title dataTable-input:focus
-	~label {
+	 ~label {
 	border-right: 1px solid #435ebe;
 	border-top: 1px solid #435ebe;
 	border-left: 1px solid #435ebe
