@@ -191,6 +191,12 @@ public class UserSideCarController {
 		return "registerCar";
 
 	}
+	
+	@PostMapping("/home/availablecars/details/{carId}")
+	public String postRental(@PathVariable("carId") String carId, @ModelAttribute("differenceDate")String differenceDate) {
+		
+		return "";
+	}
 
 	@GetMapping("/home/carregister/success/")
 	public String getMethodName() {
@@ -199,7 +205,7 @@ public class UserSideCarController {
 
 	@GetMapping("/home/availablecars/details/{carId}")
 	public String getDetailsPage(@PathVariable("carId") String carId, Model carDetails, Model address,
-			Model fastBooking, Model carPlus, Model extraFee) {
+			Model fastBooking, Model carPlus, Model extraFee, Model fullAddress, Model provinceList) {
 		var model = carServices.findById(Integer.parseInt(carId));
 		var modelDto = carServices.mapToDto(model.getId());
 		List<String> listProvince = provinceServices.getListCityString();
@@ -221,7 +227,10 @@ public class UserSideCarController {
 				address.addAttribute("address", c);
 			}
 		}
-
+		List<City> provinces = provinceServices.getListCity();
+		provinceList.addAttribute("provinceList", provinces);
+		
+		fullAddress.addAttribute("fullAddress", model.getAddress());
 		carDetails.addAttribute("carDetails", modelDto);
 		return "carDetails";
 	}
