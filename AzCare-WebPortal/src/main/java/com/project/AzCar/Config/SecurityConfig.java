@@ -31,14 +31,17 @@ public class SecurityConfig {
 		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests((requests) -> requests
 				.requestMatchers("/").permitAll()
 				.requestMatchers("/forgot_password/**").permitAll()
-				.requestMatchers("/reset_password?token={token}/**").permitAll()
+				.requestMatchers("/reset_password/**").permitAll()
 				.requestMatchers("/register/**").permitAll()
 				.requestMatchers("/login/**").permitAll()
 				.requestMatchers("/registeradmin").permitAll()
+				.requestMatchers("/get/**").permitAll()
 				.requestMatchers("/home/carregister/**").hasAnyRole("USER", "ADMIN")
+				.requestMatchers("/home/myplan/**").hasAnyRole("USER", "ADMIN")
 				.requestMatchers("/home/availablecars/**").hasAnyRole("USER", "ADMIN")
-				.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+				.requestMatchers("/user/profile/**").hasAnyRole("USER", "ADMIN")
 				.requestMatchers("/dashboard/**").hasAnyRole("ADMIN")
+				.requestMatchers("/dashboard/carverify/**").hasAnyRole("ADMIN")
 				.anyRequest().authenticated())
 				.formLogin((form) -> form
 						.loginPage("/login")
@@ -61,7 +64,7 @@ public class SecurityConfig {
 
 	
 	  @Bean WebSecurityCustomizer webSecurityCustomizer() { return (web) ->
-	  web.ignoring().requestMatchers("/assets/**"); }
+	  web.ignoring().requestMatchers("/assets/**").requestMatchers("/adminAssets/**"); }
 	 
 
 	@Bean

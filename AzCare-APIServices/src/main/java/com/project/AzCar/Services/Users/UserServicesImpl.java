@@ -93,52 +93,38 @@ public class UserServicesImpl implements UserServices {
 	}
 
 	@Override
-	public void changePassword(String email, String newPassword, String oldPassword) throws IllegalArgumentException {
-	    Users user = userRepo.findByEmail(email);
-
-	    if (user == null) {
-	        throw new IllegalArgumentException("User with email " + email + " not found.");
-	    }
-
-	    if (oldPassword == null || oldPassword.isEmpty()) {
-	        throw new IllegalArgumentException("Please provide your current password.");
-	    }
-
-	    if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-	        throw new IllegalArgumentException("Current password is incorrect.");
-	    }
-
-	    if (newPassword == null || newPassword.isEmpty()) {
-	        throw new IllegalArgumentException("Please provide a new password.");
-	    }
-
-	    String encodedNewPassword = passwordEncoder.encode(newPassword);
-	    user.setPassword(encodedNewPassword);
-	    user.setChangePassword(false);
-	    userRepo.save(user);
-	}
-
-	@Override
 	public void updateResetPasswordToken(String token, String email) {
 		Users user = userRepo.findByEmail(email);
-		
-		if(user != null) {
+
+		if (user != null) {
 			user.setResetPasswordToken(token);
 			userRepo.save(user);
 		}
 	}
-	
+
 	public Users getResetPassword(String token) {
 		return userRepo.findByResetPasswordToken(token);
 	}
-	
+
 	public void updatePassword(Users user, String newPassword) {
 		String encodedNewPassword = passwordEncoder.encode(newPassword);
 		user.setPassword(encodedNewPassword);
 		user.setResetPasswordToken(null);
 		userRepo.save(user);
-		
 	}
 
-}
+	@Override
+	public Users findUserByToken(String token) {
+		return userRepo.findUserByToken(token);
+	}
 
+	@Override
+	public void saveUserReset(Users user) {
+		userRepo.save(user);
+	}
+
+	@Override
+	public Users findById(long id) {
+		return userRepo.findById(id);
+	}
+}

@@ -39,7 +39,11 @@
 <link type="text/css" rel="stylesheet" href="/assets/css/style.css">
 <link rel="stylesheet" type="text/css" id="style_sheet"
 	href="/assets/css/skins/default.css">
-
+<style type="text/css">
+.selected {
+	border: 1px solid blue;
+}
+</style>
 </head>
 <body id="top">
 
@@ -66,7 +70,7 @@
 								<li class="nav-item"><a class="nav-link"
 									th:href="@{/home/availablecars/}">Available Cars</a></li>
 								<li class="nav-item" th:if="${session.user}"><a
-									class="nav-link" href="#">My Plan</a></li>
+									class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
 								<li class="nav-item "><a class="nav-link" href="#">
 										About Us </a></li>
 
@@ -77,14 +81,16 @@
 
 								<li class="nav-item dropdown" th:if="${session.user}"><a
 									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-									href="/profile" th:text="Hello+', ' +${session.user}"></a> <a
+									th:href="@{/user/profile/} + ${session.user}"
+									th:text="Hello+', ' +${session.user}"></a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
 									href="/logout">LogOut</a></li>
 
 
 								<li class="nav-item dropdown" th:if="${session.admin}"><a
 									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-									href="/profile" th:text="Hello+', ' +${session.admin}"></a> <a
+									th:href="@{/user/profile/}+ ${session.admin}"
+									th:text="Hello+', ' +${session.admin}"></a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
 									href="/dashboard/">Dash board</a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
@@ -233,7 +239,7 @@
 								</div>
 								<div class="pull-right">
 									<h3>
-										<span class="text-right" th:text="${carDetails.price}+'$'"></span>
+										<span class="text-right" th:text="${carDetails.price}+'$/day'"></span>
 									</h3>
 									<p>
 										<i class="fa fa-star-half-o"></i> <i class="fa fa-star"></i> <i
@@ -248,17 +254,48 @@
 					<div class="specifications widget-2 d-lg-none d-xl-none mb-60">
 						<h5 class="sidebar-title">Specifications</h5>
 						<ul>
-							<li><span>Model</span>Maxima</li>
-							<li><span>Body Style</span>Convertible</li>
-							<li><span>Condition</span>Brand New</li>
-							<li><span>Year</span>2018</li>
-							<li><span>Mileage</span>37,000 mi</li>
-							<li><span>Transmission</span>6-speed Manual</li>
-							<li><span>Interior Color</span>Dark Grey</li>
-							<li><span>Engine</span>3.4L Mid-Engine V6</li>
-							<li><span>Fuel Type</span>Gasoline Fuel</li>
-							<li><span>No. of Gears:</span>5</li>
-							<li><span>Location</span>Toronto</li>
+							<li><span>Brand: </span>
+								<p class="mb-0" th:text="${carDetails.carmodel.brand}"></p></li>
+
+							<li><span>Model:</span>
+								<p class="mb-0" th:text="${carDetails.carmodel.model}"></p></li>
+							<li><span>Body Style:</span>
+								<p class="mb-0" th:text="${carDetails.carmodel.category}"></p></li>
+
+							<li><span>Year:</span>
+								<p class="mb-0" th:text="${carDetails.carmodel.year}"></p></li>
+
+							<li><span>Transmission:</span>
+								<p class="mb-0"
+									th:text="${carDetails.engineInformationTranmission}? 'Automatic' :'Manual'"></p></li>
+
+
+							<li><span>Fuel Type: </span>
+								<p class="mb-0" th:text="${carDetails.fuelType}"></p></li>
+
+							<li><span>Location</span>
+								<p class="mb-0" th:text="${address}"></p></li>
+
+							<li th:if="${fastBooking}!= null"><span>Auto Accept
+									Booking in: </span>
+								<p class="mb-0" th:text="${fastBooking.estimateTime}+' hour(s)'"></p></li>
+							<li th:if="${plusService}!= null"><span>Max Delivery
+									Distance: </span>
+								<p class="mb-0"
+									th:text="${plusService.maxDeliveryDistance}+' km(s)'"></p></li>
+							<li th:if="${plusService}!= null"><span>Fee Delivery
+									per km: </span>
+								<p class="mb-0" th:text="${plusService.feePerKm}+' $'"></p></li>
+							<li th:if="${plusService}!= null"><span>Fee Delivery
+									in: </span>
+								<p class="mb-0"
+									th:text="${plusService.freeDeliveryWithin}+' km(s)'"></p></li>
+							<li th:if="${extraFee}!= null"><span>Maximum Km per
+									day: </span>
+								<p class="mb-0" th:text="${extraFee.maximunKmPerDay}+' km(s)'"></p></li>
+							<li th:if="${extraFee}!= null"><span>Over litmit Fee:
+							</span>
+								<p class="mb-0" th:text="${extraFee.overLimitFee}+' $/1km'"></p></li>
 						</ul>
 					</div>
 					<!-- Car vedio start -->
@@ -268,40 +305,170 @@
 					</div>
 					<!-- Features opions start -->
 					<div class="features-opions mb-60">
-						<h3 class="heading">Features</h3>
+						<h3 class="heading">Features in Car</h3>
+
+						<input type="hidden" id="resultFeatures"
+							th:value="${carDetails.services}" name="services">
 						<div class="row">
-							<div class="col-md-4 col-sm-6">
-								<ul>
-									<li><i class="flaticon-vehicle"></i> Top Speed: 260</li>
-									<li><i class="flaticon-petrol"></i> Fuel Type: Diesel</li>
-									<li><i class="flaticon-road"></i> Mileage: 40,200 KM</li>
-									<li><i class="flaticon-car"></i> Engine: 2901</li>
-									<li><i class="flaticon-car-1"></i> Gear: 5</li>
-								</ul>
+							<div class="col-3 mx-4 my-2 car-services" id="map-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/map-icon.png" alt="Map"> <span
+									style="display: block;">Map</span> <input class="d-none"
+									id="car-features-temp1" name="features[map]" type="checkbox">
 							</div>
-							<div class="col-md-4 col-sm-6">
-								<ul>
-									<li><i class="flaticon-transport-4"></i> Body Style: Sedan
-									</li>
-									<li><i class="flaticon-time"></i> Year:2018</li>
-									<li><i class="flaticon-paint"></i> Interior Color: White</li>
-									<li><i class="flaticon-transport-2"></i> Horse Power: 310
-									</li>
-									<li><i class="flaticon-repair"></i> Doors: 4</li>
-								</ul>
+							<div class="col-3 mx-4 my-2 car-services" id="bluetooth-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/bluetooth-icon.png"
+									alt="Bluetooth"> <span style="display: block;">Bluetooth</span>
+								<input class="d-none" id="car-features-temp1"
+									name="features[bluetooth]" type="checkbox">
 							</div>
-							<div class="col-md-4 col-sm-6">
-								<ul>
-									<li><i class="flaticon-location"></i> Location: Florisa,
-										USA</li>
-									<li><i class="flaticon-car-2"></i> Free Services</li>
-									<li><i class="flaticon-paint"></i> Interior Color: Black</li>
-									<li><i class="flaticon-transport-3"></i> Electric Range</li>
-									<li><i class="flaticon-transport-3"></i> Oll Changes</li>
-								</ul>
+							<div class="col-3 mx-4 my-2 car-services" id="camera360-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/360_camera-icon.png"
+									alt="Camera 360"> <span style="display: block;">Camera
+									360</span> <input class="d-none" id="car-features-temp1"
+									name="features[camera360]" type="checkbox">
 							</div>
 						</div>
+						<div class="row">
+							<div class="col-3 mx-4 my-2 car-services"
+								id="parkingCamera-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/parking_camera-icon.png"
+									alt="Parking camera"> <span style="display: block;">Parking
+									camera</span> <input class="d-none" id="car-features-temp1"
+									name="features[map]" type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="dashCamera-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/dash_camera-icon.png"
+									alt="Dash camera"> <span style="display: block;">Dash
+									camera</span> <input class="d-none" id="car-features-temp1"
+									name="features[bluetooth]" type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services"
+								id="reverseCamera-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/reverse_camera-icon.png"
+									alt="Reverse camera"> <span style="display: block;">Reverse
+									Camera</span> <input class="d-none" id="car-features-temp1"
+									name="features[camera360]" type="checkbox">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-3 mx-4 my-2 car-services" id="tireSensor-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/tpms-v2-icon.png"
+									alt="Tire Sensor"> <span style="display: block;">Tire
+									Sensor</span> <input class="d-none" id="car-features-temp1"
+									name="features[map]" type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services"
+								id="impactSensor-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/impact_sensor-icon.png"
+									alt="Impact Sensor"> <span style="display: block;">Impact
+									Sensor</span> <input class="d-none" id="car-features-temp1"
+									name="features[bluetooth]" type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="headUp-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/head_up-icon.png" alt="Head Up">
+								<span style="display: block;">Head Up</span> <input
+									class="d-none" id="car-features-temp1"
+									name="features[camera360]" type="checkbox">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-3 mx-4 my-2 car-services" id="sunRoof-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/sunroof-icon.png" alt="Sunroof">
+								<span style="display: block;">Sun roof</span> <input
+									class="d-none" id="car-features-temp1" name="features[map]"
+									type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="gps-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/gps-icon.png" alt="Gps"> <span
+									style="display: block;">Gps</span> <input class="d-none"
+									id="car-features-temp1" name="features[bluetooth]"
+									type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="babySeat-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/babyseat-icon.png"
+									alt="Baby seat"> <span style="display: block;">Baby
+									seat</span> <input class="d-none" id="car-features-temp1"
+									name="features[camera360]" type="checkbox">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-3 mx-4 my-2 car-services" id="usb-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/usb-icon.png" alt="Usb"> <span
+									style="display: block;">USB</span> <input class="d-none"
+									id="car-features-temp1" name="features[map]" type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="spareTire-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/spare_tire-icon.png"
+									alt="Spare Tire"> <span style="display: block;">Spare
+									Tire-</span> <input class="d-none" id="car-features-temp1"
+									name="features[bluetooth]" type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="dvd-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/dvd-icon.png" alt="dvd"> <span
+									style="display: block;">DVD </span> <input class="d-none"
+									id="car-features-temp1" name="features[camera360]"
+									type="checkbox">
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-3 mx-4 my-2 car-services" id="bonnet-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/bonnet-icon.png" alt="Bonnet">
+								<span style="display: block;">Bonnet</span> <input
+									class="d-none" id="car-features-temp1" name="features[map]"
+									type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="etc-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/etc-icon.png" alt="etc"> <span
+									style="display: block;">ETC </span> <input class="d-none"
+									id="car-features-temp1" name="features[camera360]"
+									type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="airBags-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/airbags-icon.png" alt="Airbags">
+								<span style="display: block;">Airbags</span> <input
+									class="d-none" id="car-features-temp1"
+									name="features[bluetooth]" type="checkbox">
+							</div>
+
+						</div>
 					</div>
+
 					<!-- Car vedio start -->
 					<div class="car-video mb-60">
 						<h3 class="heading">Car Rules</h3>
@@ -511,12 +678,13 @@
 									<p class="mb-0" th:text="${plusService.feePerKm}+' $'"></p></li>
 								<li th:if="${plusService}!= null"><span>Fee Delivery
 										in: </span>
-									<p class="mb-0" th:text="${plusService.freeDeliveryWithin}+' km(s)'"></p></li>
-								<li th:if="${extraFee}!= null"><span>Maximum Km per day:
-										</span>
+									<p class="mb-0"
+										th:text="${plusService.freeDeliveryWithin}+' km(s)'"></p></li>
+								<li th:if="${extraFee}!= null"><span>Maximum Km per
+										day: </span>
 									<p class="mb-0" th:text="${extraFee.maximunKmPerDay}+' km(s)'"></p></li>
-									<li th:if="${extraFee}!= null"><span>Over litmit Fee:
-										</span>
+								<li th:if="${extraFee}!= null"><span>Over litmit
+										Fee: </span>
 									<p class="mb-0" th:text="${extraFee.overLimitFee}+' $/1km'"></p></li>
 							</ul>
 						</div>
@@ -589,12 +757,11 @@
 						<h4>Contact Us</h4>
 						<div class="f-border"></div>
 						<ul class="contact-info">
-							<li>Address: 20/F Green Road, Dhanmondi, Dhaka</li>
-							<li>Email: <a href="mailto:info@themevessel.com">info@themevessel.com</a>
+							<li>Address: 590 CMT8, P.11, Q.3, Tp.Hồ Chí Minh</li>
+							<li>Email: <a href="mailto:AzCars@AzCars.com">AzCars@AzCars.com</a>
 							</li>
-							<li>Phone: <a href="tel:+0477-85x6-552">+XXXX XXXX XXX</a>
-							</li>
-							<li>Fax: +XXXX XXXX XXX</li>
+							<li>Phone: <a href="tel:+84-3939-7979">+84-3939-7979</a></li>
+							<li>Fax: <a href="fax:+84-3939-7979">+84-3939-7979</a></li>
 						</ul>
 
 						<ul class="social-list clearfix">
@@ -604,7 +771,8 @@
 									class="fa fa-twitter"></i></a></li>
 							<li><a href="#" class="google-bgh"><i
 									class="fa fa-google-plus"></i></a></li>
-							<li><a href="#" class="rss-bgh"><i class="fa fa-rss"></i></a></li>
+							<li><a href="#" class="rss-bgh"><i class="fa fa-rss"></i></a>
+							</li>
 							<li><a href="#" class="linkedin-bgh"><i
 									class="fa fa-linkedin"></i></a></li>
 						</ul>
@@ -617,14 +785,14 @@
 						<ul class="links">
 							<li><a href="#"><i class="flaticon-arrows"></i>About us</a>
 							</li>
-							<li><a href="#"><i class="flaticon-arrows"></i>Service</a></li>
-							<li><a href="#"><i class="flaticon-arrows"></i>Car
-									Listing</a></li>
-							<li><a href="#"><i class="flaticon-arrows"></i>Car Grid</a>
-							</li>
+
+							<li><a href="#"><i class="flaticon-arrows"></i>Available
+									Cars Listing</a></li>
+
+
 							<li><a href="#"><i class="flaticon-arrows"></i>Contact
 									Us</a></li>
-							<li><a href="#"><i class="flaticon-arrows"></i>Blog</a></li>
+
 							<li><a href="#"><i class="flaticon-arrows"></i>Car
 									Details</a></li>
 						</ul>
@@ -635,8 +803,8 @@
 						<h4>Recent Posts</h4>
 						<div class="f-border"></div>
 						<div class="media mb-4">
-							<a class="pr-3" href="car-details.html"> <img
-								src="/assets/img/sub-car/sub-car.jpg" alt="car">
+							<a class="pr-3" href="/"> <img
+								src="/assets/img/sub-car/sub-car.jpg" alt="car" />
 							</a>
 							<div class="media-body align-self-center">
 								<h5>
@@ -649,8 +817,8 @@
 							</div>
 						</div>
 						<div class="media mb-4">
-							<a class="pr-3" href="car-details.html"> <img
-								src="/assets/img/sub-car/sub-car-2.jpg" alt="car">
+							<a class="pr-3" href="/"> <img
+								src="/assets/img/sub-car/sub-car-2.jpg" alt="car" />
 							</a>
 							<div class="media-body align-self-center">
 								<h5>
@@ -663,8 +831,8 @@
 							</div>
 						</div>
 						<div class="media">
-							<a class="pr-3" href="car-details.html"> <img
-								src="/assets/img/sub-car/sub-car-3.jpg" alt="car">
+							<a class="pr-3" href="/"> <img
+								src="/assets/img/sub-car/sub-car-3.jpg" alt="car" />
 							</a>
 							<div class="media-body align-self-center">
 								<h5>
@@ -688,7 +856,7 @@
 							<form action="#" method="GET">
 								<p>
 									<input type="text" class="form-contact" name="email"
-										placeholder="Enter Address">
+										placeholder="Enter Address" />
 								</p>
 								<p>
 									<button type="submit" name="submitNewsletter"
@@ -703,9 +871,8 @@
 			<div class="row">
 				<div class="col-xl-12">
 					<p class="copy">
-						&copy; 2022 <a href="http://themevessel.com/" target="_blank">Theme
-							Vessel</a>. Trademarks and brands are the car of their respective
-						owners.
+						&copy; 2024 <a href="/" target="_blank">Az Cars</a>. Group 3 Final
+						Project .
 					</p>
 				</div>
 			</div>
@@ -775,10 +942,27 @@
 	<script src="/assets/js/slick.min.js"></script>
 	<script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
 	<script src="/assets/js/ie-emulation-modes-warning.js"></script>
-	<script src="https://kit.fontawesome.com/56c961acc9.js"
-		crossorigin="anonymous"></script>
+	<script src="https://kit.fontawesome.com/56c961acc9.js"></script>
 
 	<!-- Custom JS Script -->
 	<script src="/assets/js/app.js"></script>
+
+	<script>
+		var carFeatures = document.getElementById('resultFeatures').value;
+		var listResult = document
+				.getElementsByClassName("col-3 mx-4 my-2 car-services");
+		for (var i = 0; i < listResult.length; i++) {
+			// Checking if the string contains the ID of the current element
+			if (carFeatures.includes(listResult[i].id)) {
+				document.getElementById(listResult[i].id).classList
+						.add("selected");
+
+			} else {
+				document.getElementById(listResult[i].id).setAttribute("style",
+						"display:none")
+
+			}
+		}
+	</script>
 </body>
 </html>

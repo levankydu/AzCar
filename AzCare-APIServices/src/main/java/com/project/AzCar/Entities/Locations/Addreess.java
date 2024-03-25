@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.project.AzCar.Entities.Cars.CarInfor;
-import com.project.AzCar.Entities.Users.Users;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -38,10 +37,6 @@ public class Addreess implements Serializable{/**
 	private String idDistrict;
 	private String idWard;
 	
-	@Transient
-	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
-	@JoinTable(name = "address_user")
-	private List<Users> users;
 	
 	@Transient
 	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)

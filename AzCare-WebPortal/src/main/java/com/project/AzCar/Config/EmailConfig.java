@@ -42,8 +42,6 @@ public class EmailConfig {
 		mailSender.setUsername(mailServerUsername);
 		mailSender.setPassword(mailServerPassword);
 
-		System.out.println("------------ : " + mailServerUsername);
-		System.out.println("------------ : " + mailServerPassword);
 
 		Properties props = mailSender.getJavaMailProperties();
 		props.put("mail.transport.protocol", "smtp");

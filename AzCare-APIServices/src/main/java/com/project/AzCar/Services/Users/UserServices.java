@@ -15,16 +15,14 @@ public interface UserServices {
 
 	UserDto editProfile(String email, UserDto updatedUserDto);
 
-	void changePassword(String email, String newPassword, String oldPassword);
-
 	void updateResetPasswordToken(String token, String email);
-
-	Users getResetPassword(String token);
-
-	void updatePassword(Users user, String newPassword);
 
 	Users findUserByEmail(String email);
 
 	List<Users> findAllUsers();
-
+	
+	Users findUserByToken(String token);
+	
+	void saveUserReset(Users user);
+	Users findById(long id);
 }

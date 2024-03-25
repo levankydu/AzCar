@@ -9,10 +9,8 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.project.AzCar.Entities.Cars.CarModelList;
-import com.project.AzCar.Entities.Locations.Addreess;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -42,7 +40,7 @@ public class Users implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private long id;
 
 	@Transient
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST,targetEntity = CarModelList.class)
@@ -67,11 +65,10 @@ public class Users implements Serializable{
 	private String gender;
 	private BigDecimal balance;
 	private int score;
-	@Column(length = 1024)
+
 	private String image;
-	@Transient
-	@ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
-	private List<Addreess> address;
+	
+	private String address;
 
 	public Users(String firstName, String email, String password, List<Roles> roles) {
 		this.firstName = firstName;

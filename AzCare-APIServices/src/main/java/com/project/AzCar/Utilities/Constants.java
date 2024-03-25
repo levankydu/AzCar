@@ -11,4 +11,12 @@ public class Constants {
 		String CAR_DIR="./UploadFiles/carImages";
 		String USER_DIR ="./UploadFiles/userImages";
 	}
+	
+	public static interface carStatus{
+		String VERIFY="waiting_for_verify";
+		String READY="ready_for_booking";
+		String BUSY="on_other_booking";
+		String BLOCK="blocked";
+		String DECLINED ="declined";
+	}
 }
