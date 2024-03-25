@@ -31,7 +31,6 @@ import com.project.AzCar.Entities.Cars.BrandImages;
 import com.project.AzCar.Entities.Cars.CarImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Cars.ExtraFee;
-import com.project.AzCar.Entities.Cars.FastBooking;
 import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
@@ -42,7 +41,6 @@ import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
 import com.project.AzCar.Services.Cars.CarServices;
 import com.project.AzCar.Services.Cars.ExtraFeeServices;
-import com.project.AzCar.Services.Cars.FastBookingServices;
 import com.project.AzCar.Services.Cars.PlusServiceServices;
 import com.project.AzCar.Services.Locations.DistrictServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
@@ -72,8 +70,6 @@ public class UserSideCarController {
 	@Autowired
 	private ExtraFeeServices extraFeeServices;
 	@Autowired
-	private FastBookingServices bookingServices;
-	@Autowired
 	private PlusServiceServices plusServiceServices;
 	@Autowired
 	private CarServices carServices;
@@ -96,13 +92,12 @@ public class UserSideCarController {
 	public String postCarRegister(
 			@RequestParam(name = "isCarPlus", required = false, defaultValue = "false") boolean isCarPlus,
 			@RequestParam(name = "isExtraFee", required = false, defaultValue = "false") boolean isExtraFee,
-			@RequestParam(name = "isFastBooking", required = false, defaultValue = "false") boolean isFastBooking,
 			@RequestParam("frontImg") MultipartFile frontImg, @RequestParam("behindImg") MultipartFile behindImg,
 			@RequestParam("leftImg") MultipartFile leftImg, @RequestParam("rightImg") MultipartFile rightImg,
 			@RequestParam("insideImg") MultipartFile insideImg, @ModelAttribute("carInfor") CarInfor carInfor,
-			@ModelAttribute("extraFee") ExtraFee extraFee, @ModelAttribute("fastBooking") FastBooking fastBooking,
-			@ModelAttribute("plusServices") PlusServices plusServices, @ModelAttribute("address") String address,
-			BindingResult bindingResult, HttpServletRequest request) throws IOException {
+			@ModelAttribute("extraFee") ExtraFee extraFee, @ModelAttribute("plusServices") PlusServices plusServices,
+			@ModelAttribute("address") String address, BindingResult bindingResult, HttpServletRequest request)
+			throws IOException {
 
 		int min = 0; // Minimum value
 		int max = 999999999; // Maximum value
@@ -180,20 +175,13 @@ public class UserSideCarController {
 			System.out.println(plusServices);
 			plusServiceServices.save(plusServices);
 		}
-		if (isFastBooking) {
-			carInfor.setFastBooking(true);
-			fastBooking.setCarRegisterdId(number);
-			fastBooking.setFee(100);
-			bookingServices.save(fastBooking);
-			System.out.println(fastBooking);
-		}
 
 		try {
 			System.out.println(carInfor);
 			carServices.saveCarRegister(carInfor);
 			var carDto = carServices.mapToDto(carInfor.getId());
 			carDto.setCarmodel(brandServices.getModel(carInfor.getModelId()));
-			sendEmail(email,carDto);
+			sendEmail(email, carDto);
 			return "successPage";
 
 		} catch (Exception e) {
@@ -215,10 +203,7 @@ public class UserSideCarController {
 		var model = carServices.findById(Integer.parseInt(carId));
 		var modelDto = carServices.mapToDto(model.getId());
 		List<String> listProvince = provinceServices.getListCityString();
-		var carFastBooking = bookingServices.findByCarId(model.getId());
-		if (carFastBooking != null) {
-			fastBooking.addAttribute("fastBooking", carFastBooking);
-		}
+
 		var carExtraFee = extraFeeServices.findByCarId(model.getId());
 		if (carExtraFee != null) {
 
@@ -272,7 +257,7 @@ public class UserSideCarController {
 		List<String> listProvince = provinceServices.getListCityString();
 		List<City> provinces = provinceServices.getListCity();
 		for (var item : list) {
-			if(item.getStatus().equals(Constants.carStatus.READY)) {
+			if (item.getStatus().equals(Constants.carStatus.READY)) {
 				var itemDto = carServices.mapToDto(item.getId());
 				itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 				itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
@@ -284,7 +269,7 @@ public class UserSideCarController {
 
 				listDto.add(itemDto);
 			}
-			
+
 		}
 		listBrand.addAttribute("listBrand", brands);
 		listCategory.addAttribute("listCategory", categories);
@@ -333,9 +318,6 @@ public class UserSideCarController {
 
 		if (isDiscount) {
 			filteredListDto.removeIf(item -> item.getDiscount() == 0);
-		}
-		if (isFastBooking) {
-			filteredListDto.removeIf(item -> !item.isFastBooking());
 		}
 
 		for (var item : filteredListDto) {
@@ -531,19 +513,16 @@ public class UserSideCarController {
 		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 
-		
 		helper.setFrom("AzCar@gmail.com", "AzCar");
 		helper.setTo(email);
 
 		String subject = "Successfull register your car";
-		String content = "<p>Hello,"+email+"</p>" + "<p>Thank you for registering your car rental with AzCar.</p>"
-				+ "<p>Below are some main details of your car:</p>" + 
-				"<p><b>Car Details:</b></p>" + 
-				"<p>" + "Brand: "+ carDetails.getCarmodel().getBrand() + "</p>" + 
-				"<p>" + "Model: " + carDetails.getCarmodel().getModel()+ "</p>" + 
-				"<p>" + "Price: " + carDetails.getPrice() + " $/day" + "</p>" + 
-				"<p>" + "License Plates: "+ carDetails.getLicensePlates() + "</p>" + 
-				"<p>" + "Pick-up Location: " + carDetails.getAddress()+ "</p>" +
+		String content = "<p>Hello," + email + "</p>" + "<p>Thank you for registering your car rental with AzCar.</p>"
+				+ "<p>Below are some main details of your car:</p>" + "<p><b>Car Details:</b></p>" + "<p>" + "Brand: "
+				+ carDetails.getCarmodel().getBrand() + "</p>" + "<p>" + "Model: " + carDetails.getCarmodel().getModel()
+				+ "</p>" + "<p>" + "Price: " + carDetails.getPrice() + " $/day" + "</p>" + "<p>" + "License Plates: "
+				+ carDetails.getLicensePlates() + "</p>" + "<p>" + "Pick-up Location: " + carDetails.getAddress()
+				+ "</p>" +
 
 				"<p>This is to confirm that we already got info of your car, We will send you an email after verify your information</p>"
 				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";

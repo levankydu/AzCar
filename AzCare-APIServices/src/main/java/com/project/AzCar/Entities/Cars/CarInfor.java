@@ -42,7 +42,7 @@ public class CarInfor implements Serializable {
 	private String description;
 	private boolean isCarPlus;
 	private boolean isExtraFee;
-	private boolean isFastBooking;
+
 	private int discount;
 	private String rules;
 	private String address;

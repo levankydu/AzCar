@@ -38,7 +38,6 @@ import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
 import com.project.AzCar.Services.Cars.CarServices;
 import com.project.AzCar.Services.Cars.ExtraFeeServices;
-import com.project.AzCar.Services.Cars.FastBookingServices;
 import com.project.AzCar.Services.Cars.PlusServiceServices;
 import com.project.AzCar.Services.Locations.DistrictServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
@@ -78,8 +77,7 @@ public class AdminController {
 	private CarImageServices carImageServices;
 	@Autowired
 	private ExtraFeeServices extraFeeServices;
-	@Autowired
-	private FastBookingServices bookingServices;
+
 	@Autowired
 	private PlusServiceServices plusServiceServices;
 	@Autowired
@@ -143,11 +141,6 @@ public class AdminController {
 		if (model.isExtraFee()) {
 
 			modelDto.setExtraFeeModel(extraFeeServices.findByCarId(model.getId()));
-		}
-
-		if (model.isFastBooking()) {
-
-			modelDto.setFastbookingModel(bookingServices.findByCarId(model.getId()));
 		}
 
 		carDetails.addAttribute("carDetails", modelDto);
@@ -285,14 +278,14 @@ public class AdminController {
 
 	@PostMapping("/dashboard/confirmCarverify")
 	public String verifyCar(@ModelAttribute("status") String status, @ModelAttribute("carId") String carId) {
-	
+
 		var model = carServices.findById(Integer.parseInt(carId));
 		var modelDto = carServices.mapToDto(model.getId());
 		modelDto.setOwner(userServices.findById(model.getCarOwnerId()));
 		if (status.equals("accepted")) {
 			model.setStatus(Constants.carStatus.READY);
 			carServices.saveCarRegister(model);
-			
+
 			try {
 				sendEmailAccept(modelDto.getOwner().getEmail(), modelDto);
 			} catch (UnsupportedEncodingException e) {
@@ -329,25 +322,22 @@ public class AdminController {
 		model.addAttribute("userlists", userlists);
 		return "admin/ListAccount";
 	}
-	
+
 	private void sendEmailAccept(String email, CarInforDto carDetails)
 			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
 		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 
-		
 		helper.setFrom("AzCar@gmail.com", "AzCar");
 		helper.setTo(email);
 
 		String subject = "Successfull register your car";
-		String content = "<p>Hello,"+email+"</p>" + "<p>Thank you for registering your car rental with AzCar.</p>"
-				+ "<p>Below are some main details of your car:</p>" + 
-				"<p><b>Car Details:</b></p>" + 
-				"<p>" + "Brand: "+ carDetails.getCarmodel().getBrand() + "</p>" + 
-				"<p>" + "Model: " + carDetails.getCarmodel().getModel()+ "</p>" + 
-				"<p>" + "Price: " + carDetails.getPrice() + " $/day" + "</p>" + 
-				"<p>" + "License Plates: "+ carDetails.getLicensePlates() + "</p>" + 
-				"<p>" + "Pick-up Location: " + carDetails.getAddress()+ "</p>" +
+		String content = "<p>Hello," + email + "</p>" + "<p>Thank you for registering your car rental with AzCar.</p>"
+				+ "<p>Below are some main details of your car:</p>" + "<p><b>Car Details:</b></p>" + "<p>" + "Brand: "
+				+ carDetails.getCarmodel().getBrand() + "</p>" + "<p>" + "Model: " + carDetails.getCarmodel().getModel()
+				+ "</p>" + "<p>" + "Price: " + carDetails.getPrice() + " $/day" + "</p>" + "<p>" + "License Plates: "
+				+ carDetails.getLicensePlates() + "</p>" + "<p>" + "Pick-up Location: " + carDetails.getAddress()
+				+ "</p>" +
 
 				"<p>This is to confirm that we already verify your information</p>"
 				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
@@ -361,19 +351,16 @@ public class AdminController {
 		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 
-		
 		helper.setFrom("AzCar@gmail.com", "AzCar");
 		helper.setTo(email);
 
 		String subject = "Failed verify register your car";
-		String content = "<p>Hello,"+email+"</p>" + "<p>Thank you for registering your car rental with AzCar.</p>"
-				+ "<p>Below are some main details of your car:</p>" + 
-				"<p><b>Car Details:</b></p>" + 
-				"<p>" + "Brand: "+ carDetails.getCarmodel().getBrand() + "</p>" + 
-				"<p>" + "Model: " + carDetails.getCarmodel().getModel()+ "</p>" + 
-				"<p>" + "Price: " + carDetails.getPrice() + " $/day" + "</p>" + 
-				"<p>" + "License Plates: "+ carDetails.getLicensePlates() + "</p>" + 
-				"<p>" + "Pick-up Location: " + carDetails.getAddress()+ "</p>" +
+		String content = "<p>Hello," + email + "</p>" + "<p>Thank you for registering your car rental with AzCar.</p>"
+				+ "<p>Below are some main details of your car:</p>" + "<p><b>Car Details:</b></p>" + "<p>" + "Brand: "
+				+ carDetails.getCarmodel().getBrand() + "</p>" + "<p>" + "Model: " + carDetails.getCarmodel().getModel()
+				+ "</p>" + "<p>" + "Price: " + carDetails.getPrice() + " $/day" + "</p>" + "<p>" + "License Plates: "
+				+ carDetails.getLicensePlates() + "</p>" + "<p>" + "Pick-up Location: " + carDetails.getAddress()
+				+ "</p>" +
 
 				"<p>This is to confirm that your car is not meet our rules</p>"
 				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";

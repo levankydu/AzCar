@@ -276,26 +276,18 @@
 							<li><span>Location</span>
 								<p class="mb-0" th:text="${address}"></p></li>
 
-							<li th:if="${fastBooking}!= null"><span>Auto Accept
-									Booking in: </span>
-								<p class="mb-0" th:text="${fastBooking.estimateTime}+' hour(s)'"></p></li>
-							<li th:if="${plusService}!= null"><span>Max Delivery
-									Distance: </span>
+							
+							<li th:if="${plusService}!= null"><span>Delivery Car Fee: </span>
 								<p class="mb-0"
-									th:text="${plusService.maxDeliveryDistance}+' km(s)'"></p></li>
-							<li th:if="${plusService}!= null"><span>Fee Delivery
-									per km: </span>
-								<p class="mb-0" th:text="${plusService.feePerKm}+' $'"></p></li>
-							<li th:if="${plusService}!= null"><span>Fee Delivery
-									in: </span>
-								<p class="mb-0"
-									th:text="${plusService.freeDeliveryWithin}+' km(s)'"></p></li>
-							<li th:if="${extraFee}!= null"><span>Maximum Km per
-									day: </span>
-								<p class="mb-0" th:text="${extraFee.maximunKmPerDay}+' km(s)'"></p></li>
-							<li th:if="${extraFee}!= null"><span>Over litmit Fee:
+									th:text="${plusService.fee}+' $'"></p></li>
+							
+						
+							<li th:if="${extraFee}!= null"><span>Cleanning Fee
+									: </span>
+								<p class="mb-0" th:text="${extraFee.cleanningFee}+' $'"></p></li>
+							<li th:if="${extraFee}!= null"><span>Decoration Fee:
 							</span>
-								<p class="mb-0" th:text="${extraFee.overLimitFee}+' $/1km'"></p></li>
+								<p class="mb-0" th:text="${extraFee.decorationFee}+' $'"></p></li>
 						</ul>
 					</div>
 					<!-- Car vedio start -->
@@ -665,27 +657,19 @@
 								<li><span>Location</span>
 									<p class="mb-0" th:text="${address}"></p></li>
 
-								<li th:if="${fastBooking}!= null"><span>Auto Accept
-										Booking in: </span>
+								
+								<li th:if="${plusService}!= null"><span>Delivery Fee
+										: </span>
 									<p class="mb-0"
-										th:text="${fastBooking.estimateTime}+' hour(s)'"></p></li>
-								<li th:if="${plusService}!= null"><span>Max Delivery
-										Distance: </span>
-									<p class="mb-0"
-										th:text="${plusService.maxDeliveryDistance}+' km(s)'"></p></li>
-								<li th:if="${plusService}!= null"><span>Fee Delivery
-										per km: </span>
-									<p class="mb-0" th:text="${plusService.feePerKm}+' $'"></p></li>
-								<li th:if="${plusService}!= null"><span>Fee Delivery
-										in: </span>
-									<p class="mb-0"
-										th:text="${plusService.freeDeliveryWithin}+' km(s)'"></p></li>
-								<li th:if="${extraFee}!= null"><span>Maximum Km per
-										day: </span>
-									<p class="mb-0" th:text="${extraFee.maximunKmPerDay}+' km(s)'"></p></li>
-								<li th:if="${extraFee}!= null"><span>Over litmit
-										Fee: </span>
-									<p class="mb-0" th:text="${extraFee.overLimitFee}+' $/1km'"></p></li>
+										th:text="${plusService.fee}+' $'"></p></li>
+							
+							
+								<li th:if="${extraFee}!= null"><span>Cleanning Fee
+										: </span>
+									<p class="mb-0" th:text="${extraFee.cleanningFee}+' $'"></p></li>
+								<li th:if="${extraFee}!= null"><span>Decoration Fee
+										: </span>
+									<p class="mb-0" th:text="${extraFee.decorationFee}+' $'"></p></li>
 							</ul>
 						</div>
 						<!-- Sell your car -->

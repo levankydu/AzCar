@@ -99,14 +99,16 @@
 
 								<li class="nav-item dropdown" th:if="${session.user}"><a
 									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-									th:href="@{/user/profile/} + ${session.user}" th:text="Hello+', ' +${session.user}"></a> <a
+									th:href="@{/user/profile/} + ${session.user}"
+									th:text="Hello+', ' +${session.user}"></a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
 									href="/logout">LogOut</a></li>
 
 
 								<li class="nav-item dropdown" th:if="${session.admin}"><a
 									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-									th:href="@{/user/profile/}+ ${session.admin}" th:text="Hello+', ' +${session.admin}"></a> <a
+									th:href="@{/user/profile/}+ ${session.admin}"
+									th:text="Hello+', ' +${session.admin}"></a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
 									href="/dashboard/">Dash board</a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
@@ -269,7 +271,8 @@
 
 													<div class="form-group col-6">
 														<label for="fuelCheck">Fuel Type</label> <select
-															id="fuelCheck" class="form-control" onchange="return validateCarbasic();" name="fuelType">
+															id="fuelCheck" class="form-control"
+															onchange="return validateCarbasic();" name="fuelType">
 															<option value="">---Select Fuel Type---</option>
 															<option value="Gasoline">Gasoline</option>
 															<option value="Diesel">Diesel Oil</option>
@@ -318,8 +321,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/map-icon.png" alt="Map">
 														<span style="display: block;">Map</span> <input
-															class="d-none" 
-															name="features[map]" type="checkbox">
+															class="d-none" name="features[map]" type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services"
 														id="bluetooth-service"
@@ -328,8 +330,8 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/bluetooth-icon.png"
 															alt="Bluetooth"> <span style="display: block;">Bluetooth</span>
-														<input class="d-none" 
-															name="features[bluetooth]" type="checkbox">
+														<input class="d-none" name="features[bluetooth]"
+															type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services"
 														id="camera360-service"
@@ -338,8 +340,8 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/360_camera-icon.png"
 															alt="Camera 360"> <span style="display: block;">Camera
-															360</span> <input class="d-none" 
-															name="features[camera360]" type="checkbox">
+															360</span> <input class="d-none" name="features[camera360]"
+															type="checkbox">
 													</div>
 												</div>
 												<div class="row">
@@ -350,8 +352,8 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/parking_camera-icon.png"
 															alt="Parking camera"> <span style="display: block;">Parking
-															camera</span> <input class="d-none" 
-															name="features[map]" type="checkbox">
+															camera</span> <input class="d-none" name="features[map]"
+															type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services"
 														id="dashCamera-service"
@@ -360,8 +362,8 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/dash_camera-icon.png"
 															alt="Dash camera"> <span style="display: block;">Dash
-															camera</span> <input class="d-none" 
-															name="features[bluetooth]" type="checkbox">
+															camera</span> <input class="d-none" name="features[bluetooth]"
+															type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services"
 														id="reverseCamera-service"
@@ -370,8 +372,8 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/reverse_camera-icon.png"
 															alt="Reverse camera"> <span style="display: block;">Reverse
-															Camera</span> <input class="d-none" 
-															name="features[camera360]" type="checkbox">
+															Camera</span> <input class="d-none" name="features[camera360]"
+															type="checkbox">
 													</div>
 												</div>
 												<div class="row">
@@ -382,8 +384,8 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/tpms-v2-icon.png"
 															alt="Tire Sensor"> <span style="display: block;">Tire
-															Sensor</span> <input class="d-none" 
-															name="features[map]" type="checkbox">
+															Sensor</span> <input class="d-none" name="features[map]"
+															type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services"
 														id="impactSensor-service"
@@ -392,8 +394,8 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/impact_sensor-icon.png"
 															alt="Impact Sensor"> <span style="display: block;">Impact
-															Sensor</span> <input class="d-none" 
-															name="features[bluetooth]" type="checkbox">
+															Sensor</span> <input class="d-none" name="features[bluetooth]"
+															type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services"
 														id="headUp-service"
@@ -402,8 +404,8 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/head_up-icon.png"
 															alt="Head Up"> <span style="display: block;">Head
-															Up</span> <input class="d-none" 
-															name="features[camera360]" type="checkbox">
+															Up</span> <input class="d-none" name="features[camera360]"
+															type="checkbox">
 													</div>
 												</div>
 												<div class="row">
@@ -414,8 +416,8 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/sunroof-icon.png"
 															alt="Sunroof"> <span style="display: block;">Sun
-															roof</span> <input class="d-none" 
-															name="features[map]" type="checkbox">
+															roof</span> <input class="d-none" name="features[map]"
+															type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services" id="gps-service"
 														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
@@ -423,8 +425,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/gps-icon.png" alt="Gps">
 														<span style="display: block;">Gps</span> <input
-															class="d-none" 
-															name="features[bluetooth]" type="checkbox">
+															class="d-none" name="features[bluetooth]" type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services"
 														id="babySeat-service"
@@ -433,8 +434,8 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/babyseat-icon.png"
 															alt="Baby seat"> <span style="display: block;">Baby
-															seat</span> <input class="d-none" 
-															name="features[camera360]" type="checkbox">
+															seat</span> <input class="d-none" name="features[camera360]"
+															type="checkbox">
 													</div>
 												</div>
 												<div class="row">
@@ -444,8 +445,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/usb-icon.png" alt="Usb">
 														<span style="display: block;">USB</span> <input
-															class="d-none" 
-															name="features[map]" type="checkbox">
+															class="d-none" name="features[map]" type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services"
 														id="spareTire-service"
@@ -454,8 +454,8 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/spare_tire-icon.png"
 															alt="Spare Tire"> <span style="display: block;">Spare
-															Tire-</span> <input class="d-none" 
-															name="features[bluetooth]" type="checkbox">
+															Tire-</span> <input class="d-none" name="features[bluetooth]"
+															type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services" id="dvd-service"
 														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
@@ -463,8 +463,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/dvd-icon.png" alt="dvd">
 														<span style="display: block;">DVD </span> <input
-															class="d-none" 
-															name="features[camera360]" type="checkbox">
+															class="d-none" name="features[camera360]" type="checkbox">
 													</div>
 												</div>
 												<div class="row">
@@ -475,8 +474,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/bonnet-icon.png"
 															alt="Bonnet"> <span style="display: block;">Bonnet</span>
-														<input class="d-none" 
-															name="features[map]" type="checkbox">
+														<input class="d-none" name="features[map]" type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2 car-services" id="etc-service"
 														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
@@ -484,8 +482,7 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/etc-icon.png" alt="etc">
 														<span style="display: block;">ETC </span> <input
-															class="d-none" 
-															name="features[camera360]" type="checkbox">
+															class="d-none" name="features[camera360]" type="checkbox">
 													</div>
 													<div class="col-3 mx-4 my-2  car-services"
 														id="airBags-service"
@@ -494,8 +491,8 @@
 															style="max-width: 50%; max-height: 50%"
 															src="/assets/img/icon-services/airbags-icon.png"
 															alt="Airbags"> <span style="display: block;">Airbags</span>
-														<input class="d-none" 
-															name="features[bluetooth]" type="checkbox">
+														<input class="d-none" name="features[bluetooth]"
+															type="checkbox">
 													</div>
 
 												</div>
@@ -562,49 +559,16 @@
 															</div>
 														</div>
 													</div>
-
-													<div class="form-group col-12">
-														<div class="row">
-															<h5 style="font-weight: bold;" class="col-6">Fast
-																Booking</h5>
-															<div class="col-6">
-																<label class="switch"> <input type="checkbox"
-																	id="fastBookingCheck" class="primary"
-																	name="isFastBooking"> <span
-																	class="slider round"></span>
-																</label>
-															</div>
-														</div>
-
-														<div class="row">
-															<div class="col-6">
-																<div id="fastBookingResponse" style="display: none;">
-																	<div class="form-group">
-																		<label>Estimate time arrival(hours)</label> <input
-																			type="number" class="form-control" id="estimateTime"
-																			name="estimateTime" disabled
-																			onkeyup="return checkEstimateTime();">
-																	</div>
-																</div>
-
-
-															</div>
-															<div class="col-12 text-danger text-center">
-																<span id="validation-estimateTime"></span>
-															</div>
-														</div>
-													</div>
-
 													<div class="form-group mb-3 col-12">
 														<h5 style="font-weight: bold;">Car address</h5>
 
 														<div class="input-group-prepend">
 															<input type="text" readonly class="form-control"
 																name="address" placeholder="Click to enter address"
-																 onclick="return openModal.click();"
-																id="carAddress" value=""> <a href="#"
-																data-toggle="modal" data-target="#addressModal"
-																id="openModal" hidden="true">Click me</a>
+																onclick="return openModal.click();" id="carAddress"
+																value=""> <a href="#" data-toggle="modal"
+																data-target="#addressModal" id="openModal" hidden="true">Click
+																me</a>
 
 														</div>
 														<div class="col-12 text-danger text-center">
@@ -627,38 +591,17 @@
 															<div class="row col-12" id="deliveryResponse"
 																style="display: none;">
 																<div class="col-6 mb-3">
-																	<h6>Maximum delivery distance</h6>
+																	<h6>Fee</h6>
 																	<input type="range" class="form-control-range" min="1"
-																		max="50" value="7" id="deliveryDistanceRange"
-																		name="maxDeliveryDistance" disabled> <span>Recommended
-																		distance: 7km</span>
+																		max="1000" value="100" id="deliveryDistanceRange"
+																		name="fee" disabled> <span>Recommended
+																		Fee: 100$</span>
 																</div>
 																<div class="col-6">
 																	<span id="deliveryDistanceValue"
 																		class="float-right text-success"></span>
 																</div>
-																<div class="col-6 mb-3">
-																	<h6>Car delivery fee per kilometer</h6>
-																	<input type="range" class="form-control-range" min="1"
-																		max="30" value="10" id="deliveryFeeRange"
-																		name="feePerKm" disabled> <span>Recommended
-																		fee: $10</span>
-																</div>
-																<div class="col-6">
-																	<span id="deliveryFeeValue"
-																		class="float-right text-success"></span>
-																</div>
-																<div class="col-6 mb-3">
-																	<h6>Free car delivery within</h6>
-																	<input type="range" class="form-control-range" min="1"
-																		name="freeDeliveryWithin" max="50" value="0"
-																		id="freeDeliveryRange" disabled> <span>Recommended
-																		distance: 1km</span>
-																</div>
-																<div class="col-6">
-																	<span id="freeDeliveryValue"
-																		class="float-right text-success"></span>
-																</div>
+
 															</div>
 														</div>
 
@@ -667,8 +610,8 @@
 
 													<div class="form-group mb-3 col-12">
 														<div class="row">
-															<h5 class="col-6" style="font-weight: bold;">Limit
-																the number of kilometers</h5>
+															<h5 class="col-6" style="font-weight: bold;">Extra
+																Fee</h5>
 															<div class="col-6">
 																<label class="switch "> <input type="checkbox"
 																	id="limitKmCheck" class="primary" name="isExtraFee">
@@ -678,21 +621,21 @@
 															<div class="row col-12" id="limitKmResponse"
 																style="display: none;">
 																<div class="col-6 mb-3">
-																	<h6>Maximum number of km in 1 day</h6>
-																	<input type="range" class="form-control-range"
-																		min="300" max="500" value="400" id="maxKmRange"
-																		name="maximunKmPerDay" disabled> <span>Recommended
-																		kilometers: 400km</span>
+																	<h6>Cleaning Fee</h6>
+																	<input type="range" class="form-control-range" min="1"
+																		max="500" value="100" id="maxKmRange"
+																		name="cleanningFee" disabled> <span>Recommended
+																		Fee: 100$</span>
 																</div>
 																<div class="col-6">
 																	<span id="maxKmValue" class="float-right text-success"></span>
 																</div>
 																<div class="col-6 mb-3">
-																	<h6>Over-limit fee (per km)</h6>
-																	<input type="range" class="form-control-range" min="3"
-																		name="overLimitFee" max="10" value="5"
+																	<h6>Decoration Fee</h6>
+																	<input type="range" class="form-control-range" min="1"
+																		name="decorationFee" max="500" value="100"
 																		id="overLimitFeeRange" disabled> <span>Recommended
-																		fee: $5</span>
+																		fee: 100$</span>
 																</div>
 																<div class="col-6">
 																	<span id="overLimitFeeValue"
@@ -1339,36 +1282,7 @@
 				discountRange.setAttribute("disabled",true);
 			}
 		});
-		const fastBookingCheck = document.getElementById('fastBookingCheck');
-		const fastBookingResponse = document
-				.getElementById('fastBookingResponse');
-		const estimateTime = document.getElementById('estimateTime');
-
-		fastBookingCheck.addEventListener('change', function() {
-			if (this.checked) {
-				fastBookingResponse.style.display = 'block';
-				estimateTime.removeAttribute("disabled");
-				checkEstimateTime();
-				fastBookingResponse.style.animation = "5s slide-right";
-			} else {
-				fastBookingResponse.style.animation = "5s slide-left";
-				fastBookingResponse.style.display = 'none';
-				estimateTime.setAttribute("disabled",true);
-				document.getElementById('validation-estimateTime').textContent = "";
-				
-				
-			}
-		});
-		function checkEstimateTime(){
-			const estimateTime = document.getElementById('estimateTime').value;
-			if(estimateTime <1){
-				document.getElementById('validation-estimateTime').textContent = "Estimate time is not valid";
-			}else{
-				
-			        document.getElementById('validation-estimateTime').textContent = "";
-		}
-			
-		}
+		
 		const deliveryCheck = document.getElementById('deliveryCheck');
 		const deliveryResponse = document.getElementById('deliveryResponse');
 
@@ -1376,11 +1290,11 @@
 			if (this.checked) {
 				deliveryResponse.style.display = 'flex';
 				deliveryDistanceRange.removeAttribute("disabled");
-				deliveryFeeRange.removeAttribute("disabled");
-				freeDeliveryRange.removeAttribute("disabled");
-				document.getElementById('deliveryDistanceValue').textContent = "Delivery Distance: "+deliveryDistanceRange.value + "km";
-				document.getElementById('deliveryFeeValue').textContent = "Delivery Fee/km: "+deliveryFeeRange.value + "$";
-				document.getElementById('freeDeliveryValue').textContent = "Free Fee With in: "+freeDeliveryRange.value + "km";
+				
+				
+				document.getElementById('deliveryDistanceValue').textContent = "Delivery Fee: "+deliveryDistanceRange.value + " $";
+				
+				
 				deliveryResponse.style.animation = "5s slide-right";
 				
 				
@@ -1388,11 +1302,10 @@
 				deliveryResponse.style.animation = "5s slide-left";
 				deliveryResponse.style.display = 'none';
 				deliveryDistanceRange.setAttribute("disabled",true);
-				deliveryFeeRange.setAttribute("disabled",true);
-				freeDeliveryRange.setAttribute("disabled",true);
+				
+				
 				document.getElementById('deliveryDistanceValue').textContent = "";
-				document.getElementById('deliveryFeeValue').textContent = "";
-				document.getElementById('freeDeliveryValue').textContent = "";
+				
 			}
 		});
 		const limitKmCheck = document.getElementById('limitKmCheck');
@@ -1403,8 +1316,8 @@
 				limitKmResponse.style.display = 'flex';
 				overLimitFeeRange.removeAttribute("disabled");
 				maxKmRange.removeAttribute("disabled");
-				document.getElementById('maxKmValue').textContent = "Maximum km in 1 day: "+maxKmRange.value + "km";
-				document.getElementById('overLimitFeeValue').textContent = "Fee over-limit /km: "+overLimitFeeRange.value + "$";
+				document.getElementById('maxKmValue').textContent = "Cleanning Fee: "+maxKmRange.value + " $";
+				document.getElementById('overLimitFeeValue').textContent = "Decoration Fee: "+overLimitFeeRange.value + " $";
 				limitKmResponse.style.animation = "5s slide-right";
 			} else {
 				limitKmResponse.style.animation = "5s slide-left";
@@ -1427,6 +1340,7 @@
 				item.hidden= false;
 				}
 			}else if(this.value == "Electric"){
+				document.getElementById('validation-result-final').textContent = "";
 				fuelResponse.style.display = 'block';
 				
 				document.getElementById('transmissionCheck').value= "1";
@@ -1448,9 +1362,9 @@
 		var valueSpan = document.getElementById('discountValue');
 		var deliveryDistanceRange = document.getElementById('deliveryDistanceRange');
 		var deliveryDistanceValue = document.getElementById('deliveryDistanceValue');
-		var deliveryFeeRange = document.getElementById('deliveryFeeRange');
+
+
 		var deliveryFeeValue = document.getElementById('deliveryFeeValue');
-		var freeDeliveryRange = document.getElementById('freeDeliveryRange');
 		var freeDeliveryValue = document.getElementById('freeDeliveryValue');
 		var maxKmRange = document.getElementById('maxKmRange');
 		var maxKmValue = document.getElementById('maxKmValue');
@@ -1461,19 +1375,15 @@
 		    valueSpan.textContent = "Discount: "+this.value + "%";
 		});
 		deliveryDistanceRange.addEventListener('input', function() {
-			deliveryDistanceValue.textContent = "Delivery Distance: "+this.value + "km";
+			deliveryDistanceValue.textContent = "Delivery Fee: "+this.value + " $";
 		});
-		deliveryFeeRange.addEventListener('input', function() {
-			deliveryFeeValue.textContent = "Delivery Fee/km: "+this.value + "$";
-		});
-		freeDeliveryRange.addEventListener('input', function() {
-			freeDeliveryValue.textContent = "Free Fee With in: "+this.value + "km";
-		});
+		
+		
 		maxKmRange.addEventListener('input', function() {
-			maxKmValue.textContent = "Maximum km in 1 day: "+this.value + "km";
+			maxKmValue.textContent = "Cleanning Fee: "+this.value + " $";
 		});
 		overLimitFeeRange.addEventListener('input', function() {
-			overLimitFeeValue.textContent = "Fee over-limit /km: "+this.value + "$";
+			overLimitFeeValue.textContent = "Decoration Fee: "+this.value + " $";
 		});
 		
 		
@@ -1482,6 +1392,7 @@
 		const modelIdSelect = document.getElementById("modelIdSelect").value;
 		const carSeatQty = document.getElementById("car-seat-qty").value;
 		const transmissionCheck = document.getElementById("transmissionCheck").value;
+		
 		if(carSeatQty >7 || carSeatQty<2){
 			document.getElementById('validation-numberOfSeat-result').textContent = "Seat quantity not valid";
 		}else{
@@ -1613,14 +1524,14 @@
 		var descriptionCheck =document.getElementById('validation-carDescription').textContent.trim().length;
 		var priceCheck =document.getElementById('validation-priceRent').textContent.trim().length;
 		var addressCheck = document.getElementById('carAddress').textContent.trim().length;
-		var fastBookingCheck=document.getElementById('validation-estimateTime').textContent.trim().length;
+		
 		var ruleCheck =document.getElementById('validation-rules').textContent.trim().length;
 		var ImgCheck =document.getElementById('validation-image').textContent.trim().length;
 		var ImgCheckNull =document.getElementById('validation-NUll-img').textContent.trim().length;
 		var ImgChecDuplicate =document.getElementById('validation-Duplicate-image').textContent.trim().length;
 		var AddressCheckNull = document.getElementById('validation-NULL-address').textContent.trim().length;
 		
-		const sum = plateCheck+carBasicCheck+descriptionCheck+priceCheck+addressCheck+fastBookingCheck+ruleCheck+ImgCheck+ImgCheckNull+ImgChecDuplicate+AddressCheckNull;
+		const sum = plateCheck+carBasicCheck+descriptionCheck+priceCheck+addressCheck+ruleCheck+ImgCheck+ImgCheckNull+ImgChecDuplicate+AddressCheckNull;
 		if(sum>0){
 			console.log(sum);
 			document.getElementById('toast-failed-register-car').click();

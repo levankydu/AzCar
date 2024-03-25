@@ -7,7 +7,6 @@ import java.util.List;
 import com.project.AzCar.Entities.Cars.CarImages;
 import com.project.AzCar.Entities.Cars.CarModelList;
 import com.project.AzCar.Entities.Cars.ExtraFee;
-import com.project.AzCar.Entities.Cars.FastBooking;
 import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Users.Users;
 
@@ -42,12 +41,10 @@ public class CarInforDto implements Serializable {
 	private String licensePlates;
 	private int carOwnerId;
 	private String status;
-
 	private BigDecimal price;
 	private String description;
 	private boolean isCarPlus;
 	private boolean isExtraFee;
-	private boolean isFastBooking;
 	private int discount;
 	private String rules;
 	private String address;
@@ -55,6 +52,6 @@ public class CarInforDto implements Serializable {
 	private CarModelList carmodel;
 	private Users owner;
 	private PlusServices carPlusModel;
-	private FastBooking fastbookingModel;
+
 	private ExtraFee extraFeeModel;
 }
