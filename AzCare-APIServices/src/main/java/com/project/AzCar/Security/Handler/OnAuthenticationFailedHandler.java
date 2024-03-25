@@ -14,7 +14,11 @@ public class OnAuthenticationFailedHandler implements AuthenticationFailureHandl
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
-		request.getSession().setAttribute("signin_error", "Wrong email or password!");
+		if (request != null) {
+			request.getSession().setAttribute("signin_error", "Wrong email or password!");
+		}
+		
+		
 		response.sendRedirect("/login");
 	}
 

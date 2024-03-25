@@ -26,9 +26,7 @@ public class PlusServices implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	private long maxDeliveryDistance;
-	private long feePerKm;
-	private long freeDeliveryWithin;
+	
 	private long fee;
 	
 	private int carRegisterId;

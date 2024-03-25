@@ -332,35 +332,23 @@
 
 										<div th:if="${carDetails.isCarPlus}">
 											<p class="card-text">
-												maxDeliveryDistance: <span
-													th:text="${carDetails.carPlusModel.maxDeliveryDistance+' km(s)'}"></span>
+												Delivery Fee: <span
+													th:text="${carDetails.carPlusModel.fee+' $'}"></span>
 											</p>
-											<p class="card-text">
-												feePerKm: <span
-													th:text="${carDetails.carPlusModel.feePerKm+' $'}"></span>
-											</p>
-											<p class="card-text">
-												freeDeliveryWithin: <span
-													th:text="${carDetails.carPlusModel.freeDeliveryWithin+' km(s)'}"></span>
-											</p>
+											
 										</div>
 										<div th:if="${carDetails.isExtraFee}">
 											<p class="card-text">
-												maximunKmPerDay: <span
-													th:text="${carDetails.extraFeeModel.maximunKmPerDay+ ' km(s)'}"></span>
+												Cleanning Fee: <span
+													th:text="${carDetails.extraFeeModel.cleanningFee+ ' $'}"></span>
 											</p>
 											<p class="card-text">
-												overLimitFee: <span
-													th:text="${carDetails.extraFeeModel.overLimitFee +' $'}"></span>
+												Decoration Fee: <span
+													th:text="${carDetails.extraFeeModel.decorationFee +' $'}"></span>
 											</p>
 										</div>
 
-										<div th:if="${carDetails.isFastBooking}">
-											<p class="card-text">
-												estimateTime: <span
-													th:text="${carDetails.fastbookingModel.estimateTime +' hour(s)'}"></span>
-											</p>
-										</div>
+										
 
 
 
