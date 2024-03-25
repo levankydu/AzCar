@@ -272,16 +272,19 @@ public class UserSideCarController {
 		List<String> listProvince = provinceServices.getListCityString();
 		List<City> provinces = provinceServices.getListCity();
 		for (var item : list) {
-			var itemDto = carServices.mapToDto(item.getId());
-			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
-			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
-			for (var c : listProvince) {
-				if (item.getAddress().contains(c)) {
-					itemDto.setAddress(c);
+			if(item.getStatus().equals(Constants.carStatus.READY)) {
+				var itemDto = carServices.mapToDto(item.getId());
+				itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
+				itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
+				for (var c : listProvince) {
+					if (item.getAddress().contains(c)) {
+						itemDto.setAddress(c);
+					}
 				}
-			}
 
-			listDto.add(itemDto);
+				listDto.add(itemDto);
+			}
+			
 		}
 		listBrand.addAttribute("listBrand", brands);
 		listCategory.addAttribute("listCategory", categories);

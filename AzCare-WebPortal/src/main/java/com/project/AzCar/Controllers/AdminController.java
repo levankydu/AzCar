@@ -1,6 +1,7 @@
 package com.project.AzCar.Controllers;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,6 +47,7 @@ import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -282,17 +285,38 @@ public class AdminController {
 
 	@PostMapping("/dashboard/confirmCarverify")
 	public String verifyCar(@ModelAttribute("status") String status, @ModelAttribute("carId") String carId) {
-		System.out.println(status);
-		System.out.println(carId);
+	
 		var model = carServices.findById(Integer.parseInt(carId));
+		var modelDto = carServices.mapToDto(model.getId());
+		modelDto.setOwner(userServices.findById(model.getCarOwnerId()));
 		if (status.equals("accepted")) {
 			model.setStatus(Constants.carStatus.READY);
 			carServices.saveCarRegister(model);
+			
+			try {
+				sendEmailAccept(modelDto.getOwner().getEmail(), modelDto);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
 		if (status.equals("declined")) {
 			model.setStatus(Constants.carStatus.DECLINED);
 			carServices.saveCarRegister(model);
+			try {
+				sendEmailDecline(modelDto.getOwner().getEmail(), modelDto);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 
 		return "redirect:/dashboard/carverify/";
@@ -305,5 +329,56 @@ public class AdminController {
 		model.addAttribute("userlists", userlists);
 		return "admin/ListAccount";
 	}
+	
+	private void sendEmailAccept(String email, CarInforDto carDetails)
+			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
 
+		
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		String subject = "Successfull register your car";
+		String content = "<p>Hello,"+email+"</p>" + "<p>Thank you for registering your car rental with AzCar.</p>"
+				+ "<p>Below are some main details of your car:</p>" + 
+				"<p><b>Car Details:</b></p>" + 
+				"<p>" + "Brand: "+ carDetails.getCarmodel().getBrand() + "</p>" + 
+				"<p>" + "Model: " + carDetails.getCarmodel().getModel()+ "</p>" + 
+				"<p>" + "Price: " + carDetails.getPrice() + " $/day" + "</p>" + 
+				"<p>" + "License Plates: "+ carDetails.getLicensePlates() + "</p>" + 
+				"<p>" + "Pick-up Location: " + carDetails.getAddress()+ "</p>" +
+
+				"<p>This is to confirm that we already verify your information</p>"
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
+	}
+
+	private void sendEmailDecline(String email, CarInforDto carDetails)
+			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+
+		
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		String subject = "Failed verify register your car";
+		String content = "<p>Hello,"+email+"</p>" + "<p>Thank you for registering your car rental with AzCar.</p>"
+				+ "<p>Below are some main details of your car:</p>" + 
+				"<p><b>Car Details:</b></p>" + 
+				"<p>" + "Brand: "+ carDetails.getCarmodel().getBrand() + "</p>" + 
+				"<p>" + "Model: " + carDetails.getCarmodel().getModel()+ "</p>" + 
+				"<p>" + "Price: " + carDetails.getPrice() + " $/day" + "</p>" + 
+				"<p>" + "License Plates: "+ carDetails.getLicensePlates() + "</p>" + 
+				"<p>" + "Pick-up Location: " + carDetails.getAddress()+ "</p>" +
+
+				"<p>This is to confirm that your car is not meet our rules</p>"
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
+	}
 }
