@@ -1,39 +1,30 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
 
 
-<title>Az CAR</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="UTF-8">
-<!-- External CSS libraries -->
-<link type="text/css" rel="stylesheet"
-	href="/assets/css/bootstrap.min.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/css/magnific-popup.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/css/jquery.selectBox.css">
-<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/css/rangeslider.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/css/animate.min.css">
-<link type="text/css" rel="stylesheet" href="/assets/css/slick.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/css/jquery.mCustomScrollbar.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/fonts/font-awesome/css/font-awesome.min.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/fonts/flaticon/font/flaticon.css">
+	<title>Az CAR</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<!-- External CSS libraries -->
+	<link type="text/css" rel="stylesheet" href="/assets/css/bootstrap.min.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/magnific-popup.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/jquery.selectBox.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/rangeslider.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/animate.min.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/slick.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/jquery.mCustomScrollbar.css">
+	<link type="text/css" rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<link type="text/css" rel="stylesheet" href="/assets/fonts/flaticon/font/flaticon.css">
 
-<!-- Favicon icon -->
-<link rel="shortcut icon" href="/assets/img/favicon.ico"
-	type="image/x-icon">
+	<!-- Favicon icon -->
+	<link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon">
 
-<!-- Google fonts -->
-<link rel="stylesheet" type="text/css"
-	href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
+	<!-- Google fonts -->
+	<link rel="stylesheet" type="text/css"
+		href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
 
 <!-- Custom Stylesheet -->
 <link type="text/css" rel="stylesheet" href="/assets/css/style.css">
@@ -54,14 +45,168 @@
 	border: 1px solid blue;
 }
 </style>
+	<!-- Custom Stylesheet -->
+	<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
+	<link rel="stylesheet" type="text/css" id="style_sheet" href="/assets/css/skins/default.css">
+	<style type="text/css">
+		.selected {
+			border: 1px solid blue;
+		}
+
+		* {
+			box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			-webkit-box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Roboto', sans-serif;
+			color: #546E7A;
+		}
+
+		.wrapper {
+			max-width: 18rem;
+			padding: 0 0.5rem;
+			margin-left: auto;
+			margin-right: auto;
+			padding-top: 4rem;
+		}
+
+		label {
+			font-size: 0.75rem;
+			font-weight: 400;
+			display: block;
+			margin-bottom: 0.5rem;
+			color: #B0BEC5;
+			border: 1px solid #ECEFF1;
+			padding: 0.5rem 0.75rem;
+			border-radius: 0.5rem;
+		}
+
+		input {
+			font-family: 'Roboto', sans-serif;
+			display: block;
+			border: none;
+			border-radius: 0.25rem;
+			border: 1px solid transparent;
+			line-height: 1.5rem;
+			padding: 0;
+			font-size: 1rem;
+			color: #607D8B;
+			width: 100%;
+			margin-top: 0.5rem;
+		}
+
+		input:focus {
+			outline: none;
+		}
+
+		#ui-datepicker-div {
+			display: none;
+			background-color: #fff;
+			box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
+			margin-top: 0.25rem;
+			border-radius: 0.5rem;
+			padding: 0.5rem;
+		}
+
+		table {
+			border-collapse: collapse;
+			border-spacing: 0;
+		}
+
+		.ui-datepicker-calendar thead th {
+			padding: 0.25rem 0;
+			text-align: center;
+			font-size: 0.75rem;
+			font-weight: 400;
+			color: #78909C;
+		}
+
+		.ui-datepicker-calendar tbody td {
+			width: 2.5rem;
+			text-align: center;
+			padding: 0;
+		}
+
+		.ui-datepicker-calendar tbody td a {
+			display: block;
+			border-radius: 0.25rem;
+			line-height: 2rem;
+			transition: 0.3s all;
+			color: #546E7A;
+			font-size: 0.875rem;
+			text-decoration: none;
+		}
+
+		.ui-datepicker-calendar tbody td a:hover {
+			background-color: #E0F2F1;
+		}
+
+		.ui-datepicker-calendar tbody td a.ui-state-active {
+			background-color: #009688;
+			color: white;
+		}
+
+		.ui-datepicker-header a.ui-corner-all {
+			cursor: pointer;
+			position: absolute;
+			top: 0;
+			width: 2rem;
+			height: 2rem;
+			margin: 0.5rem;
+			border-radius: 0.25rem;
+			transition: 0.3s all;
+		}
+
+		.ui-datepicker-header a.ui-corner-all:hover {
+			background-color: #ECEFF1;
+		}
+
+		.ui-datepicker-header a.ui-datepicker-prev {
+			left: 0;
+			background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMyIgaGVpZ2h0PSIxMyIgdmlld0JveD0iMCAwIDEzIDEzIj48cGF0aCBmaWxsPSIjNDI0NzcwIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik03LjI4OCA2LjI5NkwzLjIwMiAyLjIxYS43MS43MSAwIDAgMSAuMDA3LS45OTljLjI4LS4yOC43MjUtLjI4Ljk5OS0uMDA3TDguODAzIDUuOGEuNjk1LjY5NSAwIDAgMSAuMjAyLjQ5Ni42OTUuNjk1IDAgMCAxLS4yMDIuNDk3bC00LjU5NSA0LjU5NWEuNzA0LjcwNCAwIDAgMS0xLS4wMDcuNzEuNzEgMCAwIDEtLjAwNi0uOTk5bDQuMDg2LTQuMDg2eiIvPjwvc3ZnPg==");
+			background-repeat: no-repeat;
+			background-size: 0.5rem;
+			background-position: 50%;
+			transform: rotate(180deg);
+		}
+
+		.ui-datepicker-header a.ui-datepicker-next {
+			right: 0;
+			background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMyIgaGVpZ2h0PSIxMyIgdmlld0JveD0iMCAwIDEzIDEzIj48cGF0aCBmaWxsPSIjNDI0NzcwIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik03LjI4OCA2LjI5NkwzLjIwMiAyLjIxYS43MS43MSAwIDAgMSAuMDA3LS45OTljLjI4LS4yOC43MjUtLjI4Ljk5OS0uMDA3TDguODAzIDUuOGEuNjk1LjY5NSAwIDAgMSAuMjAyLjQ5Ni42OTUuNjk1IDAgMCAxLS4yMDIuNDk3bC00LjU5NSA0LjU5NWEuNzA0LjcwNCAwIDAgMS0xLS4wMDcuNzEuNzEgMCAwIDEtLjAwNi0uOTk5bDQuMDg2LTQuMDg2eiIvPjwvc3ZnPg==');
+			background-repeat: no-repeat;
+			background-size: 10px;
+			background-position: 50%;
+		}
+
+		.ui-datepicker-header a>span {
+			display: none;
+		}
+
+		.ui-datepicker-title {
+			text-align: center;
+			line-height: 2rem;
+			margin-bottom: 0.25rem;
+			font-size: 0.875rem;
+			font-weight: 500;
+			padding-bottom: 0.25rem;
+		}
+
+		.ui-datepicker-week-col {
+			color: #78909C;
+			font-weight: 400;
+			font-size: 0.75rem;
+		}
+	</style>
 </head>
+
 <body id="top">
 
 	<div class="page_loader"></div>
 
 	<!-- main header start -->
-	<header class="main-header sticky-header header-with-top"
-		id="main-header-2">
+	<header class="main-header sticky-header header-with-top" id="main-header-2">
 		<div class="container">
 			<div class="row">
 				<div class="col-12">
@@ -69,18 +214,16 @@
 						<a class="navbar-brand logo navbar-brand d-flex mr-auto" href="/">
 							<img src="assets/img/logos/black-logo.png" alt="logo">
 						</a>
-						<button class="navbar-toggler" type="button"
-							data-toggle="collapse" data-target="#navbar"
-							aria-controls="navbar" aria-expanded="false"
-							aria-label="Toggle navigation">
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
+							aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
 							<span class="fa fa-bars"></span>
 						</button>
 						<div class="navbar-collapse collapse w-100" id="navbar">
 							<ul class="navbar-nav ml-auto">
-								<li class="nav-item"><a class="nav-link"
-									th:href="@{/home/availablecars/}">Available Cars</a></li>
-								<li class="nav-item" th:if="${session.user}"><a
-									class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
+								<li class="nav-item"><a class="nav-link" th:href="@{/home/availablecars/}">Available
+										Cars</a></li>
+								<li class="nav-item" th:if="${session.user}"><a class="nav-link"
+										th:href="@{/home/myplan/}">My Plan</a></li>
 								<li class="nav-item "><a class="nav-link" href="#">
 										About Us </a></li>
 
@@ -126,26 +269,24 @@
 
 
 								<li class="nav-item dropdown" th:if="${session.user}"><a
-									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-									th:href="@{/user/profile/} + ${session.user}"
-									th:text="Hello+', ' +${session.user}"></a> <a
-									class="btn btn-sm btn-theme btn-round signup-link"
-									href="/logout">LogOut</a></li>
+										class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+										th:href="@{/user/profile/} + ${session.user}"
+										th:text="Hello+', ' +${session.user}"></a> <a
+										class="btn btn-sm btn-theme btn-round signup-link" href="/logout">LogOut</a>
+								</li>
 
 
 								<li class="nav-item dropdown" th:if="${session.admin}"><a
-									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-									th:href="@{/user/profile/}+ ${session.admin}"
-									th:text="Hello+', ' +${session.admin}"></a> <a
-									class="btn btn-sm btn-theme btn-round signup-link"
-									href="/dashboard/">Dash board</a> <a
-									class="btn btn-sm btn-theme btn-round signup-link"
-									href="/logout">Logout</a></li>
+										class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+										th:href="@{/user/profile/}+ ${session.admin}"
+										th:text="Hello+', ' +${session.admin}"></a> <a
+										class="btn btn-sm btn-theme btn-round signup-link" href="/dashboard/">Dash
+										board</a> <a class="btn btn-sm btn-theme btn-round signup-link"
+										href="/logout">Logout</a></li>
 								<li class="nav-item dropdown" th:unless="${session.isAuthen}"><a
-									class="btn btn-sm btn-theme btn-round signup-link"
-									href="/login">Login</a> <a
-									class="btn btn-sm btn-theme btn-round signup-link"
-									href="/register">Register</a></li>
+										class="btn btn-sm btn-theme btn-round signup-link" href="/login">Login</a> <a
+										class="btn btn-sm btn-theme btn-round signup-link" href="/register">Register</a>
+								</li>
 							</ul>
 						</div>
 					</nav>
@@ -177,8 +318,7 @@
 						<div class="contact-info">
 							<ul>
 								<li><i class="fa fa-phone"></i> +84-3939-7979</li>
-								<li><a href="tel:+84-3939-7979"
-									class="btn btn-md btn-theme">Contact us</a></li>
+								<li><a href="tel:+84-3939-7979" class="btn btn-md btn-theme">Contact us</a></li>
 							</ul>
 						</div>
 					</div>
@@ -193,8 +333,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-8 col-md-12">
-					<div id="carDetailsSlider"
-						class="carousel car-details-sliders slide mb-60">
+					<div id="carDetailsSlider" class="carousel car-details-sliders slide mb-60">
 						<div class="heading-car">
 							<div class="row">
 								<div class="col-md-12">
@@ -218,60 +357,53 @@
 						<!-- main slider carousel items -->
 						<div class="carousel-inner">
 							<div class="active item carousel-item" data-slide-number="0">
-								<img
-									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(0).urlImage}"
+								<img th:src="'${carDetails.id}'+'/'+${carDetails.images.get(0).urlImage}"
 									class="img-fluid" alt="car-Slider">
 							</div>
 							<div class="item carousel-item" data-slide-number="1">
-								<img
-									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(1).urlImage}"
+								<img th:src="'${carDetails.id}'+'/'+${carDetails.images.get(1).urlImage}"
 									class="img-fluid" alt="car-Slider">
 							</div>
 							<div class="item carousel-item" data-slide-number="2">
-								<img
-									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(2).urlImage}"
+								<img th:src="'${carDetails.id}'+'/'+${carDetails.images.get(2).urlImage}"
 									class="img-fluid" alt="car-Slider">
 							</div>
 							<div class="item carousel-item" data-slide-number="4">
-								<img
-									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(3).urlImage}"
+								<img th:src="'${carDetails.id}'+'/'+${carDetails.images.get(3).urlImage}"
 									class="img-fluid" alt="car-Slider">
 							</div>
 							<div class="item carousel-item" data-slide-number="5">
-								<img
-									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(4).urlImage}"
+								<img th:src="'${carDetails.id}'+'/'+${carDetails.images.get(4).urlImage}"
 									class="img-fluid" alt="car-Slider">
 							</div>
 						</div>
 						<!-- main slider carousel nav controls -->
-						<ul
-							class="carousel-indicators smail-car list-inline nav nav-justified">
-							<li class="list-inline-item active"><a
-								id="carousel-selector-0" class="selected" data-slide-to="0"
-								data-target="#carDetailsSlider"> <img
-									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(0).urlImage}"
-									class="img-fluid" alt="sub-car">
-							</a></li>
-							<li class="list-inline-item"><a id="carousel-selector-1"
-								data-slide-to="1" data-target="#carDetailsSlider"> <img
-									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(1).urlImage}"
-									class="img-fluid" alt="sub-car">
-							</a></li>
-							<li class="list-inline-item"><a id="carousel-selector-2"
-								data-slide-to="2" data-target="#carDetailsSlider"> <img
-									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(2).urlImage}"
-									class="img-fluid" alt="sub-car">
-							</a></li>
-							<li class="list-inline-item"><a id="carousel-selector-3"
-								data-slide-to="3" data-target="#carDetailsSlider"> <img
-									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(3).urlImage}"
-									class="img-fluid" alt="sub-car">
-							</a></li>
-							<li class="list-inline-item"><a id="carousel-selector-4"
-								data-slide-to="4" data-target="#carDetailsSlider"> <img
-									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(4).urlImage}"
-									class="img-fluid" alt="sub-car">
-							</a></li>
+						<ul class="carousel-indicators smail-car list-inline nav nav-justified">
+							<li class="list-inline-item active"><a id="carousel-selector-0" class="selected"
+									data-slide-to="0" data-target="#carDetailsSlider"> <img
+										th:src="'${carDetails.id}'+'/'+${carDetails.images.get(0).urlImage}"
+										class="img-fluid" alt="sub-car">
+								</a></li>
+							<li class="list-inline-item"><a id="carousel-selector-1" data-slide-to="1"
+									data-target="#carDetailsSlider"> <img
+										th:src="'${carDetails.id}'+'/'+${carDetails.images.get(1).urlImage}"
+										class="img-fluid" alt="sub-car">
+								</a></li>
+							<li class="list-inline-item"><a id="carousel-selector-2" data-slide-to="2"
+									data-target="#carDetailsSlider"> <img
+										th:src="'${carDetails.id}'+'/'+${carDetails.images.get(2).urlImage}"
+										class="img-fluid" alt="sub-car">
+								</a></li>
+							<li class="list-inline-item"><a id="carousel-selector-3" data-slide-to="3"
+									data-target="#carDetailsSlider"> <img
+										th:src="'${carDetails.id}'+'/'+${carDetails.images.get(3).urlImage}"
+										class="img-fluid" alt="sub-car">
+								</a></li>
+							<li class="list-inline-item"><a id="carousel-selector-4" data-slide-to="4"
+									data-target="#carDetailsSlider"> <img
+										th:src="'${carDetails.id}'+'/'+${carDetails.images.get(4).urlImage}"
+										class="img-fluid" alt="sub-car">
+								</a></li>
 						</ul>
 					</div>
 					<div class="heading-car-2 mb-60">
@@ -285,7 +417,7 @@
 								</div>
 								<div class="pull-right">
 									<h3>
-										<span class="text-right" th:text="${carDetails.price}+'$/day'"></span>
+										<span class="text-right" th:text="'$'+${carDetails.price}+'/day'"></span>
 									</h3>
 									<p>
 										<i class="fa fa-star-half-o"></i> <i class="fa fa-star"></i> <i
@@ -301,23 +433,29 @@
 						<h5 class="sidebar-title">Specifications</h5>
 						<ul>
 							<li><span>Brand: </span>
-								<p class="mb-0" th:text="${carDetails.carmodel.brand}"></p></li>
+								<p class="mb-0" th:text="${carDetails.carmodel.brand}"></p>
+							</li>
 
 							<li><span>Model:</span>
-								<p class="mb-0" th:text="${carDetails.carmodel.model}"></p></li>
+								<p class="mb-0" th:text="${carDetails.carmodel.model}"></p>
+							</li>
 							<li><span>Body Style:</span>
-								<p class="mb-0" th:text="${carDetails.carmodel.category}"></p></li>
+								<p class="mb-0" th:text="${carDetails.carmodel.category}"></p>
+							</li>
 
 							<li><span>Year:</span>
-								<p class="mb-0" th:text="${carDetails.carmodel.year}"></p></li>
+								<p class="mb-0" th:text="${carDetails.carmodel.year}"></p>
+							</li>
 
 							<li><span>Transmission:</span>
 								<p class="mb-0"
-									th:text="${carDetails.engineInformationTranmission}? 'Automatic' :'Manual'"></p></li>
+									th:text="${carDetails.engineInformationTranmission}? 'Automatic' :'Manual'"></p>
+							</li>
 
 
 							<li><span>Fuel Type: </span>
-								<p class="mb-0" th:text="${carDetails.fuelType}"></p></li>
+								<p class="mb-0" th:text="${carDetails.fuelType}"></p>
+							</li>
 
 							<li><span>Location</span>
 								<p class="mb-0" th:text="${address}"></p></li>
@@ -345,57 +483,54 @@
 					<div class="features-opions mb-60">
 						<h3 class="heading">Features in Car</h3>
 
-						<input type="hidden" id="resultFeatures"
-							th:value="${carDetails.services}" name="services">
+						<input type="hidden" id="resultFeatures" th:value="${carDetails.services}" name="services">
 						<div class="row">
 							<div class="col-3 mx-4 my-2 car-services" id="map-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
 									src="/assets/img/icon-services/map-icon.png" alt="Map"> <span
-									style="display: block;">Map</span> <input class="d-none"
-									id="car-features-temp1" name="features[map]" type="checkbox">
+									style="display: block;">Map</span> <input class="d-none" id="car-features-temp1"
+									name="features[map]" type="checkbox">
 							</div>
 							<div class="col-3 mx-4 my-2 car-services" id="bluetooth-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
-									src="/assets/img/icon-services/bluetooth-icon.png"
-									alt="Bluetooth"> <span style="display: block;">Bluetooth</span>
-								<input class="d-none" id="car-features-temp1"
-									name="features[bluetooth]" type="checkbox">
+									src="/assets/img/icon-services/bluetooth-icon.png" alt="Bluetooth"> <span
+									style="display: block;">Bluetooth</span>
+								<input class="d-none" id="car-features-temp1" name="features[bluetooth]"
+									type="checkbox">
 							</div>
 							<div class="col-3 mx-4 my-2 car-services" id="camera360-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
-									src="/assets/img/icon-services/360_camera-icon.png"
-									alt="Camera 360"> <span style="display: block;">Camera
-									360</span> <input class="d-none" id="car-features-temp1"
-									name="features[camera360]" type="checkbox">
+									src="/assets/img/icon-services/360_camera-icon.png" alt="Camera 360"> <span
+									style="display: block;">Camera
+									360</span> <input class="d-none" id="car-features-temp1" name="features[camera360]"
+									type="checkbox">
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-3 mx-4 my-2 car-services"
-								id="parkingCamera-service"
+							<div class="col-3 mx-4 my-2 car-services" id="parkingCamera-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
-									src="/assets/img/icon-services/parking_camera-icon.png"
-									alt="Parking camera"> <span style="display: block;">Parking
-									camera</span> <input class="d-none" id="car-features-temp1"
-									name="features[map]" type="checkbox">
+									src="/assets/img/icon-services/parking_camera-icon.png" alt="Parking camera"> <span
+									style="display: block;">Parking
+									camera</span> <input class="d-none" id="car-features-temp1" name="features[map]"
+									type="checkbox">
 							</div>
 							<div class="col-3 mx-4 my-2 car-services" id="dashCamera-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
-									src="/assets/img/icon-services/dash_camera-icon.png"
-									alt="Dash camera"> <span style="display: block;">Dash
+									src="/assets/img/icon-services/dash_camera-icon.png" alt="Dash camera"> <span
+									style="display: block;">Dash
 									camera</span> <input class="d-none" id="car-features-temp1"
 									name="features[bluetooth]" type="checkbox">
 							</div>
-							<div class="col-3 mx-4 my-2 car-services"
-								id="reverseCamera-service"
+							<div class="col-3 mx-4 my-2 car-services" id="reverseCamera-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
-									src="/assets/img/icon-services/reverse_camera-icon.png"
-									alt="Reverse camera"> <span style="display: block;">Reverse
+									src="/assets/img/icon-services/reverse_camera-icon.png" alt="Reverse camera"> <span
+									style="display: block;">Reverse
 									Camera</span> <input class="d-none" id="car-features-temp1"
 									name="features[camera360]" type="checkbox">
 							</div>
@@ -404,17 +539,16 @@
 							<div class="col-3 mx-4 my-2 car-services" id="tireSensor-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
-									src="/assets/img/icon-services/tpms-v2-icon.png"
-									alt="Tire Sensor"> <span style="display: block;">Tire
-									Sensor</span> <input class="d-none" id="car-features-temp1"
-									name="features[map]" type="checkbox">
+									src="/assets/img/icon-services/tpms-v2-icon.png" alt="Tire Sensor"> <span
+									style="display: block;">Tire
+									Sensor</span> <input class="d-none" id="car-features-temp1" name="features[map]"
+									type="checkbox">
 							</div>
-							<div class="col-3 mx-4 my-2 car-services"
-								id="impactSensor-service"
+							<div class="col-3 mx-4 my-2 car-services" id="impactSensor-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
-									src="/assets/img/icon-services/impact_sensor-icon.png"
-									alt="Impact Sensor"> <span style="display: block;">Impact
+									src="/assets/img/icon-services/impact_sensor-icon.png" alt="Impact Sensor"> <span
+									style="display: block;">Impact
 									Sensor</span> <input class="d-none" id="car-features-temp1"
 									name="features[bluetooth]" type="checkbox">
 							</div>
@@ -422,9 +556,8 @@
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
 									src="/assets/img/icon-services/head_up-icon.png" alt="Head Up">
-								<span style="display: block;">Head Up</span> <input
-									class="d-none" id="car-features-temp1"
-									name="features[camera360]" type="checkbox">
+								<span style="display: block;">Head Up</span> <input class="d-none"
+									id="car-features-temp1" name="features[camera360]" type="checkbox">
 							</div>
 						</div>
 						<div class="row">
@@ -432,25 +565,23 @@
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
 									src="/assets/img/icon-services/sunroof-icon.png" alt="Sunroof">
-								<span style="display: block;">Sun roof</span> <input
-									class="d-none" id="car-features-temp1" name="features[map]"
-									type="checkbox">
+								<span style="display: block;">Sun roof</span> <input class="d-none"
+									id="car-features-temp1" name="features[map]" type="checkbox">
 							</div>
 							<div class="col-3 mx-4 my-2 car-services" id="gps-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
 									src="/assets/img/icon-services/gps-icon.png" alt="Gps"> <span
-									style="display: block;">Gps</span> <input class="d-none"
-									id="car-features-temp1" name="features[bluetooth]"
-									type="checkbox">
+									style="display: block;">Gps</span> <input class="d-none" id="car-features-temp1"
+									name="features[bluetooth]" type="checkbox">
 							</div>
 							<div class="col-3 mx-4 my-2 car-services" id="babySeat-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
-									src="/assets/img/icon-services/babyseat-icon.png"
-									alt="Baby seat"> <span style="display: block;">Baby
-									seat</span> <input class="d-none" id="car-features-temp1"
-									name="features[camera360]" type="checkbox">
+									src="/assets/img/icon-services/babyseat-icon.png" alt="Baby seat"> <span
+									style="display: block;">Baby
+									seat</span> <input class="d-none" id="car-features-temp1" name="features[camera360]"
+									type="checkbox">
 							</div>
 						</div>
 						<div class="row">
@@ -458,14 +589,14 @@
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
 									src="/assets/img/icon-services/usb-icon.png" alt="Usb"> <span
-									style="display: block;">USB</span> <input class="d-none"
-									id="car-features-temp1" name="features[map]" type="checkbox">
+									style="display: block;">USB</span> <input class="d-none" id="car-features-temp1"
+									name="features[map]" type="checkbox">
 							</div>
 							<div class="col-3 mx-4 my-2 car-services" id="spareTire-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
-									src="/assets/img/icon-services/spare_tire-icon.png"
-									alt="Spare Tire"> <span style="display: block;">Spare
+									src="/assets/img/icon-services/spare_tire-icon.png" alt="Spare Tire"> <span
+									style="display: block;">Spare
 									Tire-</span> <input class="d-none" id="car-features-temp1"
 									name="features[bluetooth]" type="checkbox">
 							</div>
@@ -473,9 +604,8 @@
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
 									src="/assets/img/icon-services/dvd-icon.png" alt="dvd"> <span
-									style="display: block;">DVD </span> <input class="d-none"
-									id="car-features-temp1" name="features[camera360]"
-									type="checkbox">
+									style="display: block;">DVD </span> <input class="d-none" id="car-features-temp1"
+									name="features[camera360]" type="checkbox">
 							</div>
 						</div>
 						<div class="row">
@@ -483,25 +613,22 @@
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
 									src="/assets/img/icon-services/bonnet-icon.png" alt="Bonnet">
-								<span style="display: block;">Bonnet</span> <input
-									class="d-none" id="car-features-temp1" name="features[map]"
-									type="checkbox">
+								<span style="display: block;">Bonnet</span> <input class="d-none"
+									id="car-features-temp1" name="features[map]" type="checkbox">
 							</div>
 							<div class="col-3 mx-4 my-2 car-services" id="etc-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
 									src="/assets/img/icon-services/etc-icon.png" alt="etc"> <span
-									style="display: block;">ETC </span> <input class="d-none"
-									id="car-features-temp1" name="features[camera360]"
-									type="checkbox">
+									style="display: block;">ETC </span> <input class="d-none" id="car-features-temp1"
+									name="features[camera360]" type="checkbox">
 							</div>
 							<div class="col-3 mx-4 my-2 car-services" id="airBags-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
 									src="/assets/img/icon-services/airbags-icon.png" alt="Airbags">
-								<span style="display: block;">Airbags</span> <input
-									class="d-none" id="car-features-temp1"
-									name="features[bluetooth]" type="checkbox">
+								<span style="display: block;">Airbags</span> <input class="d-none"
+									id="car-features-temp1" name="features[bluetooth]" type="checkbox">
 							</div>
 
 						</div>
@@ -521,8 +648,8 @@
 							<li>
 								<div class="comment">
 									<div class="comment-author">
-										<a href="#"> <img src="/assets/img/avatar/avatar-13.jpg"
-											class="rounded-circle" alt="avatar-13">
+										<a href="#"> <img src="/assets/img/avatar/avatar-13.jpg" class="rounded-circle"
+												alt="avatar-13">
 										</a>
 									</div>
 									<div class="comment-content">
@@ -555,7 +682,7 @@
 										<div class="comment">
 											<div class="comment-author">
 												<a href="#"> <img src="/assets/img/avatar/avatar-13.jpg"
-													class="rounded-circle" alt="avatar-13">
+														class="rounded-circle" alt="avatar-13">
 												</a>
 											</div>
 
@@ -592,8 +719,8 @@
 							<li>
 								<div class="comment">
 									<div class="comment-author">
-										<a href="#"> <img src="/assets/img/avatar/avatar-13.jpg"
-											class="rounded-circle" alt="avatar-13">
+										<a href="#"> <img src="/assets/img/avatar/avatar-13.jpg" class="rounded-circle"
+												alt="avatar-13">
 										</a>
 									</div>
 									<div class="comment-content">
@@ -634,8 +761,7 @@
 									<div class="row">
 										<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 											<div class="form-group name">
-												<input type="text" name="name" class="form-control"
-													placeholder="Name">
+												<input type="text" name="name" class="form-control" placeholder="Name">
 											</div>
 										</div>
 										<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
@@ -664,8 +790,7 @@
 										</div>
 										<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
 											<div class="send-btn">
-												<button type="submit"
-													class="btn btn-color btn-md btn-message">Send
+												<button type="submit" class="btn btn-color btn-md btn-message">Send
 													Message</button>
 											</div>
 										</div>
@@ -682,23 +807,29 @@
 							<h5 class="sidebar-title">Specifications</h5>
 							<ul>
 								<li><span>Brand: </span>
-									<p class="mb-0" th:text="${carDetails.carmodel.brand}"></p></li>
+									<p class="mb-0" th:text="${carDetails.carmodel.brand}"></p>
+								</li>
 
 								<li><span>Model:</span>
-									<p class="mb-0" th:text="${carDetails.carmodel.model}"></p></li>
+									<p class="mb-0" th:text="${carDetails.carmodel.model}"></p>
+								</li>
 								<li><span>Body Style:</span>
-									<p class="mb-0" th:text="${carDetails.carmodel.category}"></p></li>
+									<p class="mb-0" th:text="${carDetails.carmodel.category}"></p>
+								</li>
 
 								<li><span>Year:</span>
-									<p class="mb-0" th:text="${carDetails.carmodel.year}"></p></li>
+									<p class="mb-0" th:text="${carDetails.carmodel.year}"></p>
+								</li>
 
 								<li><span>Transmission:</span>
 									<p class="mb-0"
-										th:text="${carDetails.engineInformationTranmission}? 'Automatic' :'Manual'"></p></li>
+										th:text="${carDetails.engineInformationTranmission}? 'Automatic' :'Manual'"></p>
+								</li>
 
 
 								<li><span>Fuel Type: </span>
-									<p class="mb-0" th:text="${carDetails.fuelType}"></p></li>
+									<p class="mb-0" th:text="${carDetails.fuelType}"></p>
+								</li>
 
 								<li><span>Location</span>
 									<p class="mb-0" th:text="${address}"></p></li>
@@ -717,57 +848,91 @@
 									<p class="mb-0" th:text="${extraFee.decorationFee}+' $'"></p></li>
 							</ul>
 						</div>
-						<!-- Sell your car -->
-						<div class="sell-your-car">
-							<h3>Book This Car</h3>
-							<p></p>
-							<a href="" class="btn btn-md btn-color">Book Now Now</a>
-						</div>
 						<!-- Recent posts start -->
 						<div class="widget recent-posts">
-							<h5 class="sidebar-title">Another cars in same address</h5>
-							<div class="media mb-4">
-								<a class="pr-3" href="car-details.html"> <img
-									src="/assets/img/sub-car/sub-car.jpg" alt="car">
-								</a>
-								<div class="media-body align-self-center">
-									<h5>
-										<a href="car-details.html">2016 Audi S5 Coupe</a>
-									</h5>
-									<p>February 27, 2022</p>
-									<p>
-										<strong>$245,000</strong>
-									</p>
+							<form th:action="${'/home/availablecars/details/' + carDetails.id}" method="post">
+								<h2 class="" th:text="'$'+${carDetails.price}+'/day'"></h2>
+								<div class="row">
+									<div class="col-12">
+										<div class="row">
+											<div class="col-md-6">
+												<div class="wrapper">
+													<label for="form-fromDate">From
+														<input name="fromDate" type="text" id="form-fromDate"
+															autocomplete="off">
+													</label>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="wrapper">
+													<label for="form-toDate">To
+														<input name="toDate" type="text" id="form-toDate"
+															autocomplete="off" onChange="return updateTotalRent();">
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-12">
+										<hr>
+										<h3 class="sidebar-title">Location</h3>
+										<p th:attr="data-full-address=${fullAddress}" th:text="${fullAddress}"></p>
+									</div>
+									<div class="col-12" th:if="carDetails.isCarPlus">
+										<h6 class="">Choose your current location:</h6>
+										<div class="input-group-prepend">
+											<input type="text" readonly class="form-control" name="address"
+												placeholder="Click to enter address" onclick="return openModal.click();"
+												id="carAddress" value=""> <a href="#" data-toggle="modal"
+												data-target="#addressModal" id="openModal" hidden="true">Click me</a>
+										</div>
+										<div class="col-12 text-danger text-center">
+											<span id="validation-NULL-address"></span>
+										</div>
+									</div>
+									<div class="col-12">
+										<hr>
+										<div class="row">
+											<div class="col-6">
+												<p class="float-left">Rental Unit Price:</p>
+											</div>
+											<div class="col-6">
+												<p class="float-right" th:text="'$'+${carDetails.price}+'/day'"></p>
+											</div>
+											<div class="col-6">
+												<p class="float-left">Details:</p>
+											</div>
+											<div class="col-6">
+												<p class="float-right" th:attr="data-price=${carDetails.price}"
+													id="form-details-amount"></p>
+											</div>
+											<div class="col-6">
+												<p class="float-left">Delivery Fee:</p>
+											</div>
+											<div class="col-6">
+												<p class="float-right"
+													id="form-delivery-fee">$0</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-12">
+										<hr>
+										<div class="row">
+											<div class="col-6">
+												<p style="font-weight: 500;" class="float-left">Total:</p>
+											</div>
+											<div class="col-6">
+												<p style="font-weight: 500;" class="float-right" id="form-total"></p>
+											</div>
+										</div>
+									</div>
 								</div>
-							</div>
-							<div class="media mb-4">
-								<a class="pr-3" href="car-details.html"> <img
-									src="/assets/img/sub-car/sub-car-2.jpg" alt="car">
-								</a>
-								<div class="media-body align-self-center">
-									<h5>
-										<a href="car-details.html">2016 Audi R8</a>
-									</h5>
-									<p>February 27, 2022</p>
-									<p>
-										<strong>$245,000</strong>
-									</p>
+								<div class="text-center mt-5">
+									<input type="hidden" name="differenceDate" id="form-differenceDate">
+									<button href="" class="btn btn-md btn-color" onclick="return form.submit();">Rent
+										Now</button>
 								</div>
-							</div>
-							<div class="media">
-								<a class="pr-3" href="car-details.html"> <img
-									src="/assets/img/sub-car/sub-car-3.jpg" alt="car">
-								</a>
-								<div class="media-body align-self-center">
-									<h5>
-										<a href="car-details.html">Read Audi A7 TDI</a>
-									</h5>
-									<p>February 27, 2022</p>
-									<p>
-										<strong>$245,000</strong>
-									</p>
-								</div>
-							</div>
+							</form>
 						</div>
 
 					</div>
@@ -794,16 +959,12 @@
 						</ul>
 
 						<ul class="social-list clearfix">
-							<li><a href="#" class="facebook-bgh"><i
-									class="fa fa-facebook"></i></a></li>
-							<li><a href="#" class="twitter-bgh"><i
-									class="fa fa-twitter"></i></a></li>
-							<li><a href="#" class="google-bgh"><i
-									class="fa fa-google-plus"></i></a></li>
+							<li><a href="#" class="facebook-bgh"><i class="fa fa-facebook"></i></a></li>
+							<li><a href="#" class="twitter-bgh"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="#" class="google-bgh"><i class="fa fa-google-plus"></i></a></li>
 							<li><a href="#" class="rss-bgh"><i class="fa fa-rss"></i></a>
 							</li>
-							<li><a href="#" class="linkedin-bgh"><i
-									class="fa fa-linkedin"></i></a></li>
+							<li><a href="#" class="linkedin-bgh"><i class="fa fa-linkedin"></i></a></li>
 						</ul>
 					</div>
 				</div>
@@ -832,8 +993,7 @@
 						<h4>Recent Posts</h4>
 						<div class="f-border"></div>
 						<div class="media mb-4">
-							<a class="pr-3" href="/"> <img
-								src="/assets/img/sub-car/sub-car.jpg" alt="car" />
+							<a class="pr-3" href="/"> <img src="/assets/img/sub-car/sub-car.jpg" alt="car" />
 							</a>
 							<div class="media-body align-self-center">
 								<h5>
@@ -846,8 +1006,7 @@
 							</div>
 						</div>
 						<div class="media mb-4">
-							<a class="pr-3" href="/"> <img
-								src="/assets/img/sub-car/sub-car-2.jpg" alt="car" />
+							<a class="pr-3" href="/"> <img src="/assets/img/sub-car/sub-car-2.jpg" alt="car" />
 							</a>
 							<div class="media-body align-self-center">
 								<h5>
@@ -860,8 +1019,7 @@
 							</div>
 						</div>
 						<div class="media">
-							<a class="pr-3" href="/"> <img
-								src="/assets/img/sub-car/sub-car-3.jpg" alt="car" />
+							<a class="pr-3" href="/"> <img src="/assets/img/sub-car/sub-car-3.jpg" alt="car" />
 							</a>
 							<div class="media-body align-self-center">
 								<h5>
@@ -884,8 +1042,7 @@
 								culpa qui officia deserunt mollit.</p>
 							<form action="#" method="GET">
 								<p>
-									<input type="text" class="form-contact" name="email"
-										placeholder="Enter Address" />
+									<input type="text" class="form-contact" name="email" placeholder="Enter Address" />
 								</p>
 								<p>
 									<button type="submit" name="submitNewsletter"
@@ -909,10 +1066,6 @@
 	</footer>
 	<!-- Footer end -->
 
-
-
-
-
 	<!-- Off-canvas sidebar -->
 	<div class="off-canvas-sidebar">
 		<div class="off-canvas-sidebar-wrapper">
@@ -927,14 +1080,12 @@
 				</aside>
 				<aside class="canvas-widget">
 					<ul class="menu">
-						<li class="menu-item menu-item-has-children"><a
-							href="index.html">Home</a></li>
+						<li class="menu-item menu-item-has-children"><a href="index.html">Home</a></li>
 						<li class="menu-item"><a href="car-grid-leftside.html">Car
 								List</a></li>
 						<li class="menu-item"><a href="car-details.html">Car
 								Detail</a></li>
-						<li class="menu-item"><a
-							href="blog-single-sidebar-right.html">Blog</a></li>
+						<li class="menu-item"><a href="blog-single-sidebar-right.html">Blog</a></li>
 						<li class="menu-item"><a href="about-1.html">About US</a></li>
 						<li class="menu-item"><a href="contact-1.html">Contact US</a></li>
 					</ul>
@@ -952,8 +1103,73 @@
 		</div>
 	</div>
 
+	<div class="modal car-modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModal"
+		style="display: none;" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true" id="offModal">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-6 modal-left">
+							<div class="modal-left-content">
+								<div id="modalCarousel" class="carousel slide" data-ride="carousel">
+									<div class="carousel-inner" role="listbox">
+										<div class="carousel-item active">
+											<img src="/assets/img/icon-services/address.jpg" alt="">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6 modal-right">
+							<div class="modal-right-content bg-white">
+								<section class="form-group row">
+									<label class="col-3 col-form-label" for="provinceSelect">Province:</label>
+									<div class="col-7">
+										<select id="provinceSelect" class="form-control" name="province"
+											onchange="return provinceSubmit();">
+											<option value="">Select Province</option>
+
+											<option th:each="item : ${provinceList}" th:value="${item.code}"
+												th:text="${item.full_name}"></option>
+										</select>
+									</div>
+								</section>
+								<section class="form-group row">
+									<label class="col-3 col-form-label" for="districtSelect">District:</label>
+									<div class="col-7">
+										<select disabled="disabled" id="districtSelect" class="form-control"
+											onchange="return districtSubmit()" name="districtSelect">
+										</select>
+									</div>
+								</section>
+								<section class="form-group row">
+									<label class="col-3 col-form-label" for="wardSelect">Ward:</label>
+									<div class="col-7">
+										<select disabled="disabled" id="wardSelect" class="form-control"
+											name="wardSelect">
+										</select>
+									</div>
+								</section>
+								<section class="form-group row">
+									<span id="validation-address" class="text-danger text-center"></span>
+								</section>
+								<a href="#" class="btn btn-theme" onclick="return addressSubmit();">Save</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<!-- External JS libraries -->
 	<script src="/assets/js/jquery-2.2.0.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 	<script src="/assets/js/popper.min.js"></script>
 	<script src="/assets/js/bootstrap.min.js"></script>
 	<script src="/assets/js/jquery.selectBox.js"></script>
@@ -979,19 +1195,179 @@
 	<script>
 		var carFeatures = document.getElementById('resultFeatures').value;
 		var listResult = document
-				.getElementsByClassName("col-3 mx-4 my-2 car-services");
+			.getElementsByClassName("col-3 mx-4 my-2 car-services");
 		for (var i = 0; i < listResult.length; i++) {
 			// Checking if the string contains the ID of the current element
 			if (carFeatures.includes(listResult[i].id)) {
 				document.getElementById(listResult[i].id).classList
-						.add("selected");
+					.add("selected");
 
 			} else {
 				document.getElementById(listResult[i].id).setAttribute("style",
-						"display:none")
+					"display:none")
 
 			}
 		}
+
+		$(function () {
+			var today = new Date();
+			var todayFormatted = $.datepicker.formatDate("dd-mm-yy", today);
+			var tomorrow = new Date(today);
+			tomorrow.setDate(tomorrow.getDate());
+			var tomorrowFormatted = $.datepicker.formatDate("dd-mm-yy", tomorrow);
+
+			var fromDateInput = $("#form-fromDate");
+			var toDateInput = $("#form-toDate");
+
+			$("#form-fromDate").datepicker({
+				dateFormat: "dd-mm-yy",
+				duration: "fast",
+				minDate: 0, // Tối thiểu là hôm nay
+				beforeShowDay: function (date) {
+					// Disable các ngày trước hôm nay
+					return [date = today];
+				},
+				onSelect: function (selectedDate) {
+					// Cập nhật giá trị minDate của toDateInput
+					toDateInput.datepicker("option", "minDate", selectedDate);
+					updateTotalRent();
+				}
+			}).datepicker("setDate", todayFormatted);
+
+			$("#form-toDate").datepicker({
+				dateFormat: "dd-mm-yy",
+				duration: "fast",
+				minDate: 0, // Tối thiểu là ngày mai
+				beforeShowDay: function (date) {
+					// Disable các ngày trước hôm nay
+					return [date = today];
+				}
+			}).datepicker("setDate", tomorrowFormatted); // Đặt giá trị mặc định là hôm nay
+		});
+
+
+		function updateTotalRent() {
+			console.log('running total rent function');
+			// Lấy giá xe mỗi ngày từ thuộc tính data-price
+			var dailyPrice = parseFloat(document.getElementById("form-details-amount").getAttribute("data-price"));
+			console.log("dailyPrice:", dailyPrice);
+
+			// Kiểm tra và xử lý fromDateValue
+			var fromDateValue = document.getElementById("form-fromDate").value;
+			var fromDate = null;
+			if (fromDateValue && fromDateValue.match(/^\d{2}-\d{2}-\d{4}$/)) {
+				var fromDateParts = fromDateValue.split("-");
+				fromDate = new Date(parseInt(fromDateParts[2]), parseInt(fromDateParts[1]) - 1, parseInt(fromDateParts[0]));
+			}
+			console.log("fromDate:", fromDate);
+
+			// Kiểm tra và xử lý toDateValue
+			var toDateValue = document.getElementById("form-toDate").value;
+			var toDate = null;
+			if (toDateValue && toDateValue.match(/^\d{2}-\d{2}-\d{4}$/)) {
+				var toDateParts = toDateValue.split("-");
+				toDate = new Date(parseInt(toDateParts[2]), parseInt(toDateParts[1]) - 1, parseInt(toDateParts[0]));
+			}
+			console.log("toDate:", toDate);
+
+			if (fromDate && toDate) {
+				// Tính số mili giây chênh lệch giữa hai ngày
+				var timeDifference = toDate.getTime() - fromDate.getTime();
+				console.log("timeDifference:", timeDifference);
+
+				// Chuyển đổi từ mili giây sang ngày
+				var daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24)) + 1;
+				document.getElementById("form-differenceDate").value = daysDifference;
+
+				console.log("daysDifference:", daysDifference);
+
+				// Tính tổng giá thuê xe
+				var totalRent = dailyPrice * daysDifference;
+
+				// Cập nhật nội dung của phần tử total-rent
+				document.getElementById("form-details-amount").textContent = '$' + dailyPrice.toLocaleString() + ' x ' + daysDifference + (daysDifference > 1 ? ' days' : ' day');
+				document.getElementById("form-total").textContent = '$' + totalRent.toLocaleString();;
+			}
+		}
+
+		function provinceSubmit() {
+			const districtSelect = $("#districtSelect").get(0);
+			const wardSelect = $("#wardSelect").get(0);
+
+			$.ajax({
+				url: "/home/carregister/getDistrict",
+				type: "get",
+				data: {provinceCode: $("#provinceSelect").val()},
+				success: function (res) {
+					$(districtSelect).removeAttr('disabled');
+					$(districtSelect).html('<option value ="">--Select District--</option>');
+					$.each(res.districtList, function (key, value) {
+						$(districtSelect).append('<option value="' + value.code + '">' + value.full_name + '</option>');
+					});
+					$(wardSelect).html('<option value="" >--Select Ward--</option>');
+				}
+			});
+		};
+		function districtSubmit() {
+			const districtSelect = $("#districtSelect").get(0);
+			const wardSelect = $("#wardSelect").get(0);
+
+			$.ajax({
+				url: "/home/carregister/getWard",
+				type: "get",
+				data: {districtCode: $("#districtSelect").val()},
+				success: function (res) {
+					$(wardSelect).removeAttr('disabled');
+					$(wardSelect).html('<option value ="">--Select Ward--</option>');
+					$.each(res.wardList, function (key, value) {
+						$(wardSelect).append('<option value="' + value.code + '">' + value.full_name + '</option>');
+					});
+				}
+			});
+		};
+		function addressSubmit() {
+			document.getElementById('validation-address').textContent = "";
+			const address = $("#wardSelect option:selected").text() + ", " + $("#districtSelect option:selected").text() + ", " + $("#provinceSelect option:selected").text();
+			$("#carAddress").val(address);
+			carAddress.setAttribute("value", address);
+
+			offModal.click();
+			validateAddress();
+			getDeliveryFee();
+		}
+
+		function validateAddress() {
+
+			var addressResult = document.getElementById('carAddress').value;
+
+			if (addressResult == "") {
+
+				document.getElementById('validation-NULL-address').textContent = "Car address must be declared";
+			} else {
+				document.getElementById('validation-NULL-address').textContent = "";
+			}
+
+		}
+		
+		function getDeliveryFee(){
+			const fullAddress = document.querySelector("p[data-full-address]");
+			const carRawAddress = fullAddress.getAttribute('data-full-address');
+			if (!carRawAddress.includes($("#provinceSelect option:selected").text())) {
+				console.log('ko trùng tinh - khong giao xe');
+			} else {
+				if (carRawAddress.includes($("#districtSelect option:selected").text())) {
+					console.log('trung quan(thanhpho) - giao free');
+				} else {
+					console.log('trung tinh - khong trung thanh pho - charge fee');
+				}
+			}
+		}
+
+		// Gọi hàm cập nhật tổng giá thuê xe khi trang được tải và mỗi khi input thay đổi
+		window.onload = function () {
+			updateTotalRent();
+		};
 	</script>
 </body>
+
 </html>
