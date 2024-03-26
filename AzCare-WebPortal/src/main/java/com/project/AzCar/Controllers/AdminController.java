@@ -13,6 +13,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +37,7 @@ import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Cars.CarModelList;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Users.Users;
+import com.project.AzCar.Notification.Message;
 import com.project.AzCar.Services.Cars.BrandImageServices;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
@@ -55,18 +60,15 @@ import jakarta.servlet.http.HttpServletResponse;
 public class AdminController {
 
 	@Autowired
-
 	private BrandServices brandServices;
 	@Autowired
 	BrandImageServices brandImageServices;
-
 	@Autowired
 	private FilesStorageServices fileStorageServices;
 	@Autowired
 	private UserServices userRepo;
 	@Autowired
 	private JavaMailSender mailSender;
-
 	@Autowired
 	private ProvinceServices provinceServices;
 	@Autowired
@@ -77,14 +79,14 @@ public class AdminController {
 	private CarImageServices carImageServices;
 	@Autowired
 	private ExtraFeeServices extraFeeServices;
-
 	@Autowired
 	private PlusServiceServices plusServiceServices;
 	@Autowired
 	private CarServices carServices;
-
 	@Autowired
 	private UserServices userServices;
+	@Autowired
+    SimpMessagingTemplate simpMessagingTemplate;
 
 	@GetMapping("/dashboard/")
 	public String getDashboard(Model model, Authentication authentication) {
@@ -128,8 +130,18 @@ public class AdminController {
 	}
 
 	@GetMapping("/dashboard/carverify/{carId}")
-	public String getVerifyDetailsPage(@PathVariable("carId") String carId, Model carDetails) {
+	public String getVerifyDetailsPage(@PathVariable("carId") String carId, Model carDetails,Model checkPlate) {
+		var listAcceptedCar = carServices.findAll();
+		
+		
+		
 		var model = carServices.findById(Integer.parseInt(carId));
+		for(var item: listAcceptedCar) {
+			if(model.getLicensePlates().equals(item.getLicensePlates())) {
+				checkPlate.addAttribute("checkPlate", "Duplicate License Plate");
+			}
+		}
+		
 		var modelDto = carServices.mapToDto(model.getId());
 		modelDto.setCarmodel(brandServices.getModel(model.getModelId()));
 		modelDto.setImages(carImageServices.getImgByCarId(model.getId()));
@@ -142,7 +154,7 @@ public class AdminController {
 
 			modelDto.setExtraFeeModel(extraFeeServices.findByCarId(model.getId()));
 		}
-
+		checkPlate.addAttribute("checkPlate", "");
 		carDetails.addAttribute("carDetails", modelDto);
 
 		return "admin/verifyDetails";
@@ -282,6 +294,8 @@ public class AdminController {
 		var model = carServices.findById(Integer.parseInt(carId));
 		var modelDto = carServices.mapToDto(model.getId());
 		modelDto.setOwner(userServices.findById(model.getCarOwnerId()));
+		modelDto.setCarmodel(brandServices.getModel(model.getModelId()));
+		
 		if (status.equals("accepted")) {
 			model.setStatus(Constants.carStatus.READY);
 			carServices.saveCarRegister(model);
@@ -312,7 +326,7 @@ public class AdminController {
 
 		}
 
-		return "redirect:/dashboard/carverify/";
+		return "redirect:/dashboard/carverify/"+carId;
 	}
 
 	@GetMapping("/dashboard/ListAccount")
@@ -368,4 +382,19 @@ public class AdminController {
 		helper.setText(content, true);
 		mailSender.send(message);
 	}
+	
+	
+
+    // Mapped as /app/application
+    @MessageMapping("/application")
+    @SendTo("/all/messages")
+    public Message send(final Message message) throws Exception {
+        return message;
+    }
+
+    // Mapped as /app/private
+    @MessageMapping("/private")
+    public void sendToSpecificUser(@Payload Message message) throws Exception{
+        simpMessagingTemplate.convertAndSendToUser(message.getTo(), "/specific", message);
+    }
 }

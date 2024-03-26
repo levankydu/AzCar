@@ -15,8 +15,8 @@
                 });
             });
 
-            socket = new SockJS('/ws');
-            privateStompClient = Stomp.over(socket);
+            var privateSocket = new SockJS('/ws/private');
+            privateStompClient = Stomp.over(privateSocket);
             privateStompClient.connect({}, function(frame) {
                     console.log(frame);
                     privateStompClient.subscribe('/user/specific', function(result) {
@@ -32,13 +32,16 @@
                   JSON.stringify({'text':text}));
             }
 
-             function sendPrivateMessage() {
-                var text = document.getElementById('privateText').value;
-                var to = document.getElementById('to').value;
-                stompClient.send("/app/private", {},
-                  JSON.stringify({'text':text, 'to':to}));
-            }
-
+            function sendPrivateMessage() {
+        		var text = document.getElementById('privateText').value;
+        		var to = document.getElementById('to').value;
+        		stompClient.send("/app/private", {}, JSON.stringify({
+        			'text' : text,
+        			'to' : to
+        		}));
+        		
+        		
+        	}
             function show(message) {
                 var response = document.getElementById('messages');
                 var p = document.createElement('p');

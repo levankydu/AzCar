@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - Mazer Admin Dashboard</title>
+<title>Dashboard - CarVerifyDetails</title>
 
 
 
@@ -30,6 +30,16 @@
 
 <link rel="stylesheet"
 	href="/adminAssets/assets/compiled/css/table-datatable-jquery.css">
+
+<link rel="stylesheet" href="/assets/css/notiCss.css">
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+
+
+<script type="text/javascript" src="/assets/js/notiJs.js"></script>
 <style type="text/css">
 /* CSS */
 .button-54 {
@@ -255,13 +265,13 @@
 			</header>
 
 			<div class="page-heading">
-				<h3>Profile Statistics</h3>
-				<div class="mt-2">
+				<h3>Car Information</h3>
+				<!-- <div class="mt-2">
 					Username: <span sec:authentication="principal.Username"></span>
 				</div>
 				<div class="mt-2">
 					Roles: <span sec:authentication="principal.authorities"></span>
-				</div>
+				</div> -->
 			</div>
 
 
@@ -294,7 +304,9 @@
 										</p>
 										<p class="card-text">
 											Car Plates: <span th:text="${carDetails.licensePlates}"></span>
-											<span class="badge bg-warning" th:text="${carDetails.status}"></span>
+											<span class="badge"
+												th:classappend="${checkPlate == '' ? 'bg-success' : 'bg-danger'}"
+												th:text="${checkPlate==''?'This License Is Not Register Yet':checkPlate}"></span>
 										</p>
 										<p class="card-text">
 											Category: <span th:text="${carDetails.carmodel.category}"></span>
@@ -335,7 +347,7 @@
 												Delivery Fee: <span
 													th:text="${carDetails.carPlusModel.fee+' $'}"></span>
 											</p>
-											
+
 										</div>
 										<div th:if="${carDetails.isExtraFee}">
 											<p class="card-text">
@@ -348,7 +360,7 @@
 											</p>
 										</div>
 
-										
+
 
 
 
@@ -356,38 +368,15 @@
 
 								</div>
 
-								<div class="row"
-									th:if="${carDetails.status=='waiting_for_verify'}">
-									<form action="/dashboard/confirmCarverify" method="post"
-										class="col-4 offset-md-1" id="verify">
 
 
-										<input id="status" type="hidden" name="status"
-											value="accepted"> <input type="hidden" name="carId"
-											th:value="${carDetails.id}">
-										<button class="button-54" role="button" value="accepted"
-											name="status" id="accept">Accept this Car</button>
-
-
-
-
-									</form>
-									<form action="/dashboard/confirmCarverify" method="post"
-										class="col-4 offset-md-1" id="declined">
-
-
-										<input id="status" type="hidden" name="status"
-											value="declined"> <input type="hidden" name="carId"
-											th:value="${carDetails.id}">
-
-										<button class="button-54" role="button" id="decline"
-											value="declined" name="decline">Decline this Car</button>
-
-
-									</form>
+								<div style="display: none">
+									<button id="sendPrivateMessage" onclick="sendPrivateMessage();">Send
+										Private</button>
+									<input type="text" id="privateText"
+										placeholder="Private Message" /> <input type="text" id="to"
+										th:value="${carDetails.owner.email}" placeholder="To" />
 								</div>
-
-
 
 							</div>
 
@@ -447,6 +436,38 @@
 											class="carousel-control-next-icon" aria-hidden="true"></span>
 											<span class="visually-hidden">Next</span>
 										</a>
+									</div>
+									
+									<br/>
+									<div class="row"
+										th:if="${carDetails.status=='waiting_for_verify'}">
+										<form action="/dashboard/confirmCarverify" method="post"
+											class="col-4 offset-md-1" id="verify">
+
+
+											<input id="status" type="hidden" name="status"
+												value="accepted"> <input type="hidden" name="carId"
+												th:value="${carDetails.id}">
+											<button class="button-54" role="button" value="accepted"
+												name="status" id="accept">Accept this Car</button>
+
+
+
+
+										</form>
+										<form action="/dashboard/confirmCarverify" method="post"
+											class="col-4 offset-md-1" id="declined">
+
+
+											<input id="status" type="hidden" name="status"
+												value="declined"> <input type="hidden" name="carId"
+												th:value="${carDetails.id}">
+
+											<button class="button-54" role="button" id="decline"
+												value="declined" name="decline">Decline this Car</button>
+
+
+										</form>
 									</div>
 								</div>
 							</div>

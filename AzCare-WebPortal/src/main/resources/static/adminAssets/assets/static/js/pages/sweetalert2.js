@@ -175,7 +175,8 @@ if(document.getElementById("accept")){
 	}).then((result) => {
 
 		if (result.value && result.value.toLowerCase() === 'verify') {
-			
+			privateText.value ="''Your car is available for rent now, check your email for full information''";
+			sendPrivateMessage();
 			verify.submit();
 			console.log("User entered 'verify'");
 		} else {
@@ -203,9 +204,9 @@ if(document.getElementById("decline")){
 		showCancelButton: true,
 
 	}).then((result) => {
-
 		if (result.value && result.value.toLowerCase() === 'decline') {
-
+			privateText.value ="''Your car is declined for rent now, check your email for full information''";
+			sendPrivateMessage();
 			declined.submit();
 			console.log("User entered 'verify'");
 		} else {
