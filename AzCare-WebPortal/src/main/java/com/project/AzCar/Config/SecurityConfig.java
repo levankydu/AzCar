@@ -33,12 +33,15 @@ public class SecurityConfig {
 				.requestMatchers("/forgot_password/**").permitAll()
 				.requestMatchers("/reset_password/**").permitAll()
 				.requestMatchers("/register/**").permitAll()
+
 				.requestMatchers("/login/**").permitAll()
 				.requestMatchers("/registeradmin").permitAll()
 				.requestMatchers("/get/**").permitAll()
 				.requestMatchers("/home/carregister/**").hasAnyRole("USER", "ADMIN")
 				.requestMatchers("/home/myplan/**").hasAnyRole("USER", "ADMIN")
 				.requestMatchers("/home/availablecars/**").hasAnyRole("USER", "ADMIN")
+				.requestMatchers("/reviews/**").hasAnyRole("USER", "ADMIN")
+
 				.requestMatchers("/user/profile/**").hasAnyRole("USER", "ADMIN")
 				.requestMatchers("/dashboard/**").hasAnyRole("ADMIN")
 				.anyRequest().authenticated())

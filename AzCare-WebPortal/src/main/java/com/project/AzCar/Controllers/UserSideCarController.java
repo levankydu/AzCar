@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
 import com.project.AzCar.Entities.Locations.Ward;
+import com.project.AzCar.Entities.Reviews.Reviews;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Services.Cars.BrandImageServices;
 import com.project.AzCar.Services.Cars.BrandServices;
@@ -44,6 +46,7 @@ import com.project.AzCar.Services.Cars.PlusServiceServices;
 import com.project.AzCar.Services.Locations.DistrictServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
 import com.project.AzCar.Services.Locations.WardServices;
+import com.project.AzCar.Services.Reviews.ReviewService;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
@@ -77,6 +80,8 @@ public class UserSideCarController {
 	@Autowired
 	private UserServices userServices;
 
+	@Autowired
+	private ReviewService reviewServices;
 	@GetMapping("/home/carregister/")
 	public String getCarRegisterPage(Model brandList, Model provinceList) {
 
@@ -203,7 +208,9 @@ public class UserSideCarController {
 
 	@GetMapping("/home/availablecars/details/{carId}")
 	public String getDetailsPage(@PathVariable("carId") String carId, Model carDetails, Model address,
-			Model fastBooking, Model carPlus, Model extraFee) {
+			Model fastBooking, Model carPlus, Model extraFee , Model review) {
+	    int parsedCarId = Integer.parseInt(carId);
+
 		var model = carServices.findById(Integer.parseInt(carId));
 		var modelDto = carServices.mapToDto(model.getId());
 		List<String> listProvince = provinceServices.getListCityString();
@@ -229,9 +236,17 @@ public class UserSideCarController {
 			}
 		}
 
+	    // Lấy danh sách các review cho chiếc xe và thêm vào model
+	    List<Reviews> reviews = reviewServices.findAllReviewsByCarId((long) parsedCarId);
+	    
+	    
+	    review.addAttribute("reviews", reviews);
+	    
+	    
 		carDetails.addAttribute("carDetails", modelDto);
 		return "carDetails";
 	}
+	
 
 	@GetMapping("/home/availablecars/details/{carId}/{filename}")
 	public ResponseEntity<Resource> getDetailsImage(@PathVariable("carId") String carId,

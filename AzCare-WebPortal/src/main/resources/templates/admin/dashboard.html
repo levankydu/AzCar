@@ -326,14 +326,17 @@
 														<th>Comment</th>
 													</tr>
 												</thead>
-												<tbody>
-													<tr>
+												<tbody >
+													
+													<tr th:each="review : ${reviews}">
 														<td class="col-3">
 															<div class="d-flex align-items-center">
 																<div class="avatar avatar-md">
 																	<img src="./assets/compiled/jpg/5.jpg">
 																</div>
-																<p class="font-bold ms-3 mb-0">Si Cantik</p>
+																<p th:text="${review.userId}" 
+																class="font-bold ms-3 mb-0">
+																	</p>
 															</div>
 														</td>
 														<td class="col-auto">

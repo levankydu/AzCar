@@ -24,11 +24,16 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 
 import com.project.AzCar.Dto.Brands.BrandsDto;
 import com.project.AzCar.Dto.Categories.CategoriesDto;
+import com.project.AzCar.Dto.Reviews.ReviewsDTO;
 import com.project.AzCar.Entities.Cars.BrandImages;
 import com.project.AzCar.Entities.Cars.CarModelList;
+import com.project.AzCar.Entities.Reviews.Reviews;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Services.Cars.BrandImageServices;
 import com.project.AzCar.Services.Cars.BrandServices;
+import com.project.AzCar.Services.Reviews.IReviewsService;
+import com.project.AzCar.Services.Reviews.ReviewService;
+import com.project.AzCar.Services.Reviews.ReviewsServiceImpl;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
@@ -51,12 +56,15 @@ public class AdminController {
 	private FilesStorageServices fileStorageServices;
 	@Autowired
 	private UserServices userRepo;
+	
+	@Autowired
+	private IReviewsService reviewsSv;
 
 
 	@GetMapping("/dashboard/")
 	public String getDashboard(Model model, Authentication authentication) {
 Users loginedUser = new Users();
-
+		getComments(model);
 		loginedUser.setFirstName(authentication.getName());
 		model.addAttribute("user", loginedUser);
 		return "admin/dashboard";
@@ -188,7 +196,23 @@ Users loginedUser = new Users();
 		return "admin/ListAccount";
 	}
 
-	
+	public void getComments(Model model )
+	{
+		List<Reviews> list = reviewsSv.findRecentReviews();
+		List<ReviewsDTO> listReviewsDTO = new ArrayList();
+		for(Reviews re : list)
+		{
+			ReviewsDTO reDTO = new ReviewsDTO();
+			reDTO.setId(re.getId());
+			reDTO.setCarId(re.getCarInfor().getId());
+			reDTO.setComment(re.getComment());
+			reDTO.setRating(re.getRating());
+			reDTO.setStatus(re.getStatus());
+		}
+		System.out.print(list);
+		model.addAttribute("reviews",list);
+		
+	}
 	
 
 }
