@@ -26,8 +26,8 @@ public class ExtraFee implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	private long maximunKmPerDay;
-	private long overLimitFee;
+	private long cleanningFee;
+	private long decorationFee;
 	private int carRegisterId;
 	
 }

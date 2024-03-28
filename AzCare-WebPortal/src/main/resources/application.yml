@@ -13,7 +13,8 @@ spring:
    
     url: jdbc:mysql://localhost:3306/azcarsdb
     username: root
-    password: tincute1
+    password: 1410
+    
   jpa:
     hibernate:
       ddl-auto: update
@@ -28,3 +29,4 @@ spring:
           starttls:
             enable: true
     username: dn169240@gmail.com
+    

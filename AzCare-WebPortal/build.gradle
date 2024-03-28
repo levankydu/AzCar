@@ -44,6 +44,8 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.2.3'
 	// https://mvnrepository.com/artifact/javax.mail/javax.mail-api
 	implementation 'javax.mail:javax.mail-api:1.6.2'
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-websocket
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-websocket', version: '3.2.4'
 	
 	
 }

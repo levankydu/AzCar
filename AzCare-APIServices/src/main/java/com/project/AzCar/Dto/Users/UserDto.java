@@ -5,7 +5,6 @@ import java.util.Date;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Transient;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,9 +14,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserDto {
 
-	private String id;
-
-	private String name;
+	private long id;
+	private String firstName;
+	private String lastName;
+	private String fullName;
 
 	private String email;
 
@@ -29,8 +29,7 @@ public class UserDto {
 
 	private String phone;
 
-	private String firstName;
-	private String lastName;
+	
 	private String gender;
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date dob;

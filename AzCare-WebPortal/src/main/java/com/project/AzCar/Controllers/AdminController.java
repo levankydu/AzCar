@@ -1,6 +1,7 @@
 package com.project.AzCar.Controllers;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,12 +37,12 @@ import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Cars.CarModelList;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Users.Users;
+import com.project.AzCar.Notification.Message;
 import com.project.AzCar.Services.Cars.BrandImageServices;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
 import com.project.AzCar.Services.Cars.CarServices;
 import com.project.AzCar.Services.Cars.ExtraFeeServices;
-import com.project.AzCar.Services.Cars.FastBookingServices;
 import com.project.AzCar.Services.Cars.PlusServiceServices;
 import com.project.AzCar.Services.Locations.DistrictServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
@@ -45,6 +51,7 @@ import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -53,18 +60,15 @@ import jakarta.servlet.http.HttpServletResponse;
 public class AdminController {
 
 	@Autowired
-
 	private BrandServices brandServices;
 	@Autowired
 	BrandImageServices brandImageServices;
-
 	@Autowired
 	private FilesStorageServices fileStorageServices;
 	@Autowired
 	private UserServices userRepo;
 	@Autowired
 	private JavaMailSender mailSender;
-
 	@Autowired
 	private ProvinceServices provinceServices;
 	@Autowired
@@ -76,14 +80,13 @@ public class AdminController {
 	@Autowired
 	private ExtraFeeServices extraFeeServices;
 	@Autowired
-	private FastBookingServices bookingServices;
-	@Autowired
 	private PlusServiceServices plusServiceServices;
 	@Autowired
 	private CarServices carServices;
-
 	@Autowired
 	private UserServices userServices;
+	@Autowired
+    SimpMessagingTemplate simpMessagingTemplate;
 
 	@GetMapping("/dashboard/")
 	public String getDashboard(Model model, Authentication authentication) {
@@ -127,8 +130,18 @@ public class AdminController {
 	}
 
 	@GetMapping("/dashboard/carverify/{carId}")
-	public String getVerifyDetailsPage(@PathVariable("carId") String carId, Model carDetails) {
+	public String getVerifyDetailsPage(@PathVariable("carId") String carId, Model carDetails,Model checkPlate) {
+		var listAcceptedCar = carServices.findAll();
+		
+		
+		
 		var model = carServices.findById(Integer.parseInt(carId));
+		for(var item: listAcceptedCar) {
+			if(model.getLicensePlates().equals(item.getLicensePlates())) {
+				checkPlate.addAttribute("checkPlate", "Duplicate License Plate");
+			}
+		}
+		
 		var modelDto = carServices.mapToDto(model.getId());
 		modelDto.setCarmodel(brandServices.getModel(model.getModelId()));
 		modelDto.setImages(carImageServices.getImgByCarId(model.getId()));
@@ -141,12 +154,7 @@ public class AdminController {
 
 			modelDto.setExtraFeeModel(extraFeeServices.findByCarId(model.getId()));
 		}
-
-		if (model.isFastBooking()) {
-
-			modelDto.setFastbookingModel(bookingServices.findByCarId(model.getId()));
-		}
-
+		checkPlate.addAttribute("checkPlate", "");
 		carDetails.addAttribute("carDetails", modelDto);
 
 		return "admin/verifyDetails";
@@ -282,20 +290,43 @@ public class AdminController {
 
 	@PostMapping("/dashboard/confirmCarverify")
 	public String verifyCar(@ModelAttribute("status") String status, @ModelAttribute("carId") String carId) {
-		System.out.println(status);
-		System.out.println(carId);
+
 		var model = carServices.findById(Integer.parseInt(carId));
+		var modelDto = carServices.mapToDto(model.getId());
+		modelDto.setOwner(userServices.findById(model.getCarOwnerId()));
+		modelDto.setCarmodel(brandServices.getModel(model.getModelId()));
+		
 		if (status.equals("accepted")) {
 			model.setStatus(Constants.carStatus.READY);
 			carServices.saveCarRegister(model);
+
+			try {
+				sendEmailAccept(modelDto.getOwner().getEmail(), modelDto);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
 		if (status.equals("declined")) {
 			model.setStatus(Constants.carStatus.DECLINED);
 			carServices.saveCarRegister(model);
+			try {
+				sendEmailDecline(modelDto.getOwner().getEmail(), modelDto);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 
-		return "redirect:/dashboard/carverify/";
+		return "redirect:/dashboard/carverify/"+carId;
 	}
 
 	@GetMapping("/dashboard/ListAccount")
@@ -306,4 +337,64 @@ public class AdminController {
 		return "admin/ListAccount";
 	}
 
+	private void sendEmailAccept(String email, CarInforDto carDetails)
+			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		String subject = "Successfull register your car";
+		String content = "<p>Hello," + email + "</p>" + "<p>Thank you for registering your car rental with AzCar.</p>"
+				+ "<p>Below are some main details of your car:</p>" + "<p><b>Car Details:</b></p>" + "<p>" + "Brand: "
+				+ carDetails.getCarmodel().getBrand() + "</p>" + "<p>" + "Model: " + carDetails.getCarmodel().getModel()
+				+ "</p>" + "<p>" + "Price: " + carDetails.getPrice() + " $/day" + "</p>" + "<p>" + "License Plates: "
+				+ carDetails.getLicensePlates() + "</p>" + "<p>" + "Pick-up Location: " + carDetails.getAddress()
+				+ "</p>" +
+
+				"<p>This is to confirm that we already verify your information</p>"
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
+	}
+
+	private void sendEmailDecline(String email, CarInforDto carDetails)
+			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		String subject = "Failed verify register your car";
+		String content = "<p>Hello," + email + "</p>" + "<p>Thank you for registering your car rental with AzCar.</p>"
+				+ "<p>Below are some main details of your car:</p>" + "<p><b>Car Details:</b></p>" + "<p>" + "Brand: "
+				+ carDetails.getCarmodel().getBrand() + "</p>" + "<p>" + "Model: " + carDetails.getCarmodel().getModel()
+				+ "</p>" + "<p>" + "Price: " + carDetails.getPrice() + " $/day" + "</p>" + "<p>" + "License Plates: "
+				+ carDetails.getLicensePlates() + "</p>" + "<p>" + "Pick-up Location: " + carDetails.getAddress()
+				+ "</p>" +
+
+				"<p>This is to confirm that your car is not meet our rules</p>"
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
+	}
+	
+	
+
+    // Mapped as /app/application
+    @MessageMapping("/application")
+    @SendTo("/all/messages")
+    public Message send(final Message message) throws Exception {
+        return message;
+    }
+
+    // Mapped as /app/private
+    @MessageMapping("/private")
+    public void sendToSpecificUser(@Payload Message message) throws Exception{
+        simpMessagingTemplate.convertAndSendToUser(message.getTo(), "/specific", message);
+    }
 }
