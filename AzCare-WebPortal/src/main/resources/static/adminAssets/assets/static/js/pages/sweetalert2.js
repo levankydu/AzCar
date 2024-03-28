@@ -320,6 +320,14 @@ if (document.getElementById('toast-failed-register-user')) {
 		})
 	})
 }
+if (document.getElementById('toast-failed-register-exit')) {
+	document.getElementById('toast-failed-register-exit').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'error',
+			title: 'Email eixt'
+		})
+	})
+}
 if (document.getElementById('toast-success-edit-user')) {
 	document.getElementById('toast-success-edit-user').addEventListener('click', () => {
 		Toast.fire({
@@ -328,11 +336,43 @@ if (document.getElementById('toast-success-edit-user')) {
 		})
 	})
 }
-if (document.getElementById('toast-failed-register-user')) {
-	document.getElementById('toast-failed-register-user').addEventListener('click', () => {
+if (document.getElementById('toast-failed-edit-user')) {
+	document.getElementById('toast-failed-edit-user').addEventListener('click', () => {
 		Toast.fire({
 			icon: 'error',
-			title: 'Registered failed'
+			title: 'Edit failed'
+		})
+	})
+}
+if (document.getElementById('toast-success-change-password')) {
+	document.getElementById('toast-success-change-password').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'success',
+			title: 'Change Password successfully'
+		})
+	})
+}
+if (document.getElementById('toast-failed-change-password')) {
+	document.getElementById('toast-failed-change-password').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'error',
+			title: 'Change Password failed'
+		})
+	})
+}
+if (document.getElementById('toast-success-upload-avatar')) {
+	document.getElementById('toast-success-upload-avatar').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'success',
+			title: 'Upload successfully'
+		})
+	})
+}
+if (document.getElementById('toast-failed-upload-avatar')) {
+	document.getElementById('toast-failed-upload-avatar').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'error',
+			title: 'Upload failed'
 		})
 	})
 }

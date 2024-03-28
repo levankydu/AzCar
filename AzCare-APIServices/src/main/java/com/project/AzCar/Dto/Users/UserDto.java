@@ -16,16 +16,13 @@ import lombok.NoArgsConstructor;
 public class UserDto {
 
 	private String id;
-//	@NotEmpty(message = "Please enter your name.")
-	private String name;
 
-//	@NotEmpty(message = "Email not empty")
+	private String name;
 
 	private String email;
 
-//	@NotEmpty(message = "Please enter password.")
 	private String password;
-//	@NotEmpty(message = "Please enter confirmpassword.")
+
 	private String confirmPassword;
 
 	private String image;
@@ -35,8 +32,9 @@ public class UserDto {
 	private String firstName;
 	private String lastName;
 	private String gender;
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date dob;
+
 	private boolean isEnabled;
 	private String token;
 	private boolean changePassword;

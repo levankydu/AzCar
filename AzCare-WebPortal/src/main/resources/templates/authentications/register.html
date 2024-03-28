@@ -44,6 +44,38 @@
 <link rel="stylesheet"
 	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
 </head>
+<style>
+.form-group {
+	position: relative;
+	margin-bottom: 20px;
+}
+
+.input-text {
+	width: calc(100% - 40px);
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	outline: none;
+}
+
+.toggle-password {
+	position: absolute;
+	top: 50%;
+	right: 10px;
+	transform: translateY(-50%);
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+}
+
+.toggle-password i {
+	color: #777;
+}
+
+.toggle-password.active i {
+	color: #333;
+}
+</style>
 <body id="top">
 	<!-- Google Tag Manager (noscript) -->
 	<!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TAGID"
@@ -60,6 +92,8 @@ End Google Tag Manager (noscript)
 					Example</p>
 				<p id="toast-failed-register-user" hidden="true"
 					class="btn btn-outline-primary btn-lg btn-block">Failed Example</p>
+				<p id="toast-failed-register-exit" hidden="true"
+					class="btn btn-outline-primary btn-lg btn-block">Failed Example</p>
 				<div class="col-lg-12">
 					<!-- Form content box start -->
 					<div class="form-content-box">
@@ -75,7 +109,7 @@ End Google Tag Manager (noscript)
 								<div class="alert alert-info">Registration successful !!!
 								</div>
 							</div>
-							
+
 							<!-- Form start-->
 							<form method="post" role="form" th:action="@{/register}"
 								th:object="${user}" id="registerUser">
@@ -87,23 +121,33 @@ End Google Tag Manager (noscript)
 								<div class="form-group">
 									<input type="text" id="email" name="email" class="input-text"
 										placeholder="Email Address" onkeyup="validateEmail();">
-									<span id="validation-email" class="text-danger"></span> 
-									<p class="text-danger"  th:errors="*{email}"></p>
-									
-									
+									<span id="validation-email" class="text-danger"></span>
+									<p class="text-danger" th:text="${errorMessage}"></p>
+
 								</div>
 								<div class="form-group">
 									<input type="password" id="password" name="password"
 										class="input-text" placeholder="Password"
 										onkeyup="validatePassword();"> <span
 										id="validation-password" class="text-danger"></span>
+									<button type="button" class="toggle-password"
+										id="togglePassword1"
+										onclick="togglePasswordVisibility('password')">
+										<i class="fa fa-eye"></i>
+									</button>
 								</div>
+
 								<div class="form-group">
 									<input type="password" id="confirmPassword"
 										name="confirmPassword" class="input-text"
 										placeholder="Confirm Password"
 										onkeyup="validateConfirmPassword();"> <span
 										id="validation-confirmPassword" class="text-danger"></span>
+									<button type="button" class="toggle-password"
+										id="togglePassword2"
+										onclick="togglePasswordVisibility('confirmPassword')">
+										<i class="fa fa-eye"></i>
+									</button>
 								</div>
 								<div class="form-group mb-0">
 									<button class="btn-md btn-theme"
@@ -234,20 +278,59 @@ End Google Tag Manager (noscript)
 		}
 
 		function checkSubmitRegisterUser() {
-			var isValidName = validateName();
-			var isValidEmail = validateEmail();
-			var isValidPassword = validatePassword();
-			var isValidConfirmPassword = validateConfirmPassword();
+		    var isValidName = validateName();
+		    var isValidEmail = validateEmail();
+		    var isValidPassword = validatePassword();
+		    var isValidConfirmPassword = validateConfirmPassword();
 
-			if (isValidName && isValidEmail && isValidPassword
-					&& isValidConfirmPassword) {
-				document.getElementById('toast-success-registered-user')
-						.click();
-				return registerUser.submit();
-			} else {
-				document.getElementById('toast-failed-register-user').click();
-				return false;
-			}
+		    if (isValidName && isValidEmail && isValidPassword && isValidConfirmPassword) {
+		        var formData = new FormData(document.getElementById('registerUser'));
+		        fetch('/register', {
+		            method: 'POST',
+		            body: formData
+		        })
+		        .then(response => {
+		            if (!response.ok) {
+		                throw new Error('Network response was not ok');
+		            }
+		            return response.text(); 
+		        })
+		        .then(data => {
+		            if (data === "Email already registered !!!") {
+		               
+		                document.getElementById('toast-failed-register-user').click();
+		                document.getElementById('validation-email').textContent = "Email already registered";
+		            } else if (data === "Confirm Password do not match." || data === "Validation error occurred." || data === "Error sending email." || data === "Error occurred.") {
+		               
+		                document.getElementById('toast-failed-register-user').click();
+		                alert(data); 
+		            } else {
+		                
+		                document.getElementById('toast-success-registered-user').click();
+		                document.getElementById('registerUser').reset(); 
+		            }
+		        })
+		        .catch(error => {
+		            
+		            document.getElementById('toast-failed-register-exit').click();
+		        });
+		    } else {
+		        
+		        document.getElementById('toast-failed-register-user').click();
+		    }
+		    return false; 
+		}
+		function togglePasswordVisibility(inputId) {
+		    var passwordField = document.getElementById(inputId);
+		    var toggleButton = document.getElementById("togglePassword" + inputId.slice(-1)); // Lấy số cuối cùng từ inputId
+
+		    if (passwordField.type === "password") {
+		        passwordField.type = "text";
+		        toggleButton.innerHTML = '<i class="far fa-eye-slash"></i>'; // Sử dụng biểu tượng "eye-slash"
+		    } else {
+		        passwordField.type = "password";
+		        toggleButton.innerHTML = '<i class="far fa-eye"></i>'; // Sử dụng biểu tượng "eye"
+		    }
 		}
 	</script>
 

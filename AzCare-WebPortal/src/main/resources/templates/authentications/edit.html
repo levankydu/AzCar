@@ -30,6 +30,9 @@
 	href="/assets/fonts/flaticon/font/flaticon.css">
 
 
+<!-- Bootstrap Datepicker CSS -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 <!-- Favicon icon -->
 <link rel="shortcut icon" href="/assets/img/favicon.ico"
 	type="image/x-icon">
@@ -42,7 +45,8 @@
 <link type="text/css" rel="stylesheet" href="/assets/css/style.css">
 <link rel="stylesheet" type="text/css" id="style_sheet"
 	href="/assets/css/skins/default.css">
-
+<link rel="stylesheet"
+	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
 </head>
 <body id="top">
 	<!-- Google Tag Manager (noscript) -->
@@ -86,9 +90,9 @@
 								<li class="nav-item dropdown" th:if="${session.user}"><a
 									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
 									th:href="@{/user/profile/} + ${session.user}"
-									th:text="Hello+', ' +${session.user}"></a> <a
-									class="btn btn-sm btn-theme btn-round signup-link"
-									href="/logout">LogOut</a></li>
+									th:text="Hello+', ' +${session.user}"></a>
+									<button id="logout"
+										class="btn btn-sm btn-theme btn-round signup-link">Logout</button></li>
 
 
 								<li class="nav-item dropdown" th:if="${session.admin}"><a
@@ -96,9 +100,9 @@
 									th:href="@{/user/profile/}+ ${session.admin}"
 									th:text="Hello+', ' +${session.admin}"></a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
-									href="/dashboard/">Dash board</a> <a
-									class="btn btn-sm btn-theme btn-round signup-link"
-									href="/logout">Logout</a></li>
+									href="/dashboard/">Dash board</a>
+									<button id="logout"
+										class="btn btn-sm btn-theme btn-round signup-link">Logout</button></li>
 								<li class="nav-item dropdown" th:unless="${session.isAuthen}"><a
 									class="btn btn-sm btn-theme btn-round signup-link"
 									href="/login">Login</a> <a
@@ -117,7 +121,7 @@
 	<div class="sub-banner overview-bgi">
 		<div class="container">
 			<div class="page-name">
-				<h1>Agent Detail</h1>
+				<h1>Edit Profile</h1>
 			</div>
 		</div>
 		<div class="page-info">
@@ -126,8 +130,8 @@
 					<div class="col-md-5">
 						<div class="breadcrumb-area">
 							<ul>
-								<li><a href="index.html">Index</a></li>
-								<li><span>/</span>Agent Detail</li>
+								<li><a href="/">Index</a></li>
+								<li><a th:href="@{/user/profile/{email} (email=${email}) }"><span>/</span>Profile</a></li>
 							</ul>
 						</div>
 					</div>
@@ -153,7 +157,7 @@
 		<nav class="nav nav-borders">
 			<a class="nav-link active ms-0"
 				th:href="@{/user/profile/{email} (email=${email})}">Profile</a> <a
-				class="nav-link" href="#">Billing</a> <a class="nav-link"
+				class="nav-link"
 				th:href="@{/user/profile/changePassword/{email} (email=${email})}">Change
 				Password</a> <a class="nav-link"
 				th:href="@{/user/profile/edit/{email} (email=${email})}">Edit</a>
@@ -165,6 +169,7 @@
 				class="btn btn-outline-primary btn-lg btn-block">Success Example</p>
 			<p id="toast-failed-edit-user" hidden="true"
 				class="btn btn-outline-primary btn-lg btn-block">Failed Example</p>
+
 			<div class="col-xl-4">
 				<!-- Profile picture card-->
 				<div class="card mb-4 mb-xl-0">
@@ -183,6 +188,13 @@
 								onclick="return form.submit()">Save</button>
 						</form>
 
+						<!-- Toast messages -->
+						<p id="toast-success-upload-avatar" hidden="true"
+							class="btn btn-outline-primary btn-lg btn-block">Image
+							uploaded successfully</p>
+						<p id="toast-failed-upload-avatar" hidden="true"
+							class="btn btn-outline-primary btn-lg btn-block">Failed to
+							upload image</p>
 					</div>
 				</div>
 			</div>
@@ -198,7 +210,7 @@
 								<!-- Email -->
 								<div class="mb-3">
 									<label class="small mb-1" for="inputUsername">Email</label> <input
-										class="form-control" id="inputUsername" type="text"
+										class="form-control" id="emailInput" type="text"
 										th:value="*{email}" readonly>
 								</div>
 								<!-- Form Row for first name and last name -->
@@ -206,14 +218,16 @@
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputFirstName">First
 											name</label> <input class="form-control" id="firstName"
-											name="firstName" type="text" th:value="*{firstName}" onkeyup="validateFirstName();">
-											<span id="validation-firstName" class="text-danger"></span>
+											name="firstName" type="text" th:value="*{firstName}"
+											onkeyup="validateFirstName();"> <span
+											id="validation-firstName" class="text-danger"></span>
 									</div>
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputLastName">Last
 											name</label> <input class="form-control" id="lastName"
-											name="lastName" type="text" th:value="*{lastName}" onkeyup="validateLastName();">
-											<span id="validation-lastName" class="text-danger"></span>
+											name="lastName" type="text" th:value="*{lastName}"
+											onkeyup="validateLastName();"> <span
+											id="validation-lastName" class="text-danger"></span>
 									</div>
 								</div>
 								<!-- Form Row for phone number and birthday -->
@@ -222,13 +236,13 @@
 										<label class="small mb-1" for="inputPhone">Phone
 											number</label> <input class="form-control" id="phone" name="phone"
 											type="text" th:value="*{phone}" onkeyup="validatePhone();">
-											<span id="validation-phone" class="text-danger"></span>
+										<span id="validation-phone" class="text-danger"></span>
 									</div>
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputBirthday">Birthday</label>
-										<input class="form-control" id="dob" th:type="date" name="dob"
-											th:value="*{dob}" onkeyup="validateDob();">
-											<span id="validation-dob" class="text-danger"></span>
+										<input class="form-control" id="dob" type="text" name="dob"
+											th:value="*{dob}" onchange="validateDob();"> <span
+											id="validation-dob" class="text-danger"></span>
 									</div>
 								</div>
 								<!-- Gender selection -->
@@ -244,8 +258,8 @@
 									</div>
 								</div>
 								<!-- Save changes button -->
-								<button onclick="return checkSubmitEditUser()" class="btn btn-primary" type="submit">Save
-									changes</button>
+								<button onclick="return checkSubmitEditUser()"
+									class="btn btn-primary">Save changes</button>
 							</div>
 						</div>
 					</div>
@@ -550,68 +564,189 @@
 	<script src="/assets/js/ie-emulation-modes-warning.js"></script>
 	<!-- Custom JS Script -->
 	<script src="/assets/js/app.js"></script>
+	<!-- Bootstrap CSS -->
+
+
+	<!-- jQuery -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<!-- Bootstrap JS -->
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Bootstrap Datepicker JS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+	<script
+		th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
+
+	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 
 	<script type="text/javascript">
-	function validateFirstName() {
-		const firstNameValue = document.getElementById("firstName").value;
+		function validateFirstName() {
+			const firstNameValue = document.getElementById("firstName").value;
 
-		if (firstNameValue === "") {
-			document.getElementById('validation-firstName').textContent = "FirstName is required";
-			return false;
-		} else {
-			document.getElementById('validation-firstName').textContent = "";
-			return true;
+			if (firstNameValue === "") {
+				document.getElementById('validation-firstName').textContent = "FirstName is required";
+				return false;
+			} else {
+				document.getElementById('validation-firstName').textContent = "";
+				return true;
+			}
 		}
-	}
-	function validateLastName() {
-		const lastNameValue = document.getElementById("lastName").value;
+		function validateLastName() {
+			const lastNameValue = document.getElementById("lastName").value;
 
-		if (lastNameValue === "") {
-			document.getElementById('validation-lastName').textContent = "LastName is required";
-			return false;
-		} else {
-			document.getElementById('validation-lastName').textContent = "";
-			return true;
+			if (lastNameValue === "") {
+				document.getElementById('validation-lastName').textContent = "LastName is required";
+				return false;
+			} else {
+				document.getElementById('validation-lastName').textContent = "";
+				return true;
+			}
 		}
-	}
-	function validatePhone() {
-		const phoneValue = document.getElementById("phone").value;
+		function validatePhone() {
+			const phoneValue = document.getElementById("phone").value;
 
-		if (phoneValue === "") {
-			document.getElementById('validation-phone').textContent = "Phone is required";
-			return false;
-		} else {
-			document.getElementById('validation-phone').textContent = "";
-			return true;
+			if (phoneValue === "") {
+				document.getElementById('validation-phone').textContent = "Phone is required";
+				return false;
+			} else {
+				document.getElementById('validation-phone').textContent = "";
+				return true;
+			}
 		}
-	}
-	function validateDob() {
-		const DobValue = document.getElementById("dob").value;
+		$(document).ready(function() {
+		    $('#dob').datepicker({
+		        format: 'dd-mm-yyyy',
+		        autoclose: true,
+		        endDate: '0d'
+		    }).on('changeDate', function(e) {
+		        // Kiểm tra lại ngày sinh khi người dùng chọn
+		        validateDob();
+		    });
 
-		if (DobValue === "") {
-			document.getElementById('validation-dob').textContent = "dob is required";
-			return false;
-		} else {
-			document.getElementById('validation-phone').textContent = "";
-			return true;
-		}
-	}
-	function checkSubmitEditUser() {
-		var isValidFirstName = validateFirstName();
-		var isValidLastName = validateLastName();
-		var isValidPhone = validatePhone();
-		var isValidDob = validateDob();
+		    // Lấy giá trị ngày sinh mặc định
+		    var defaultDob = $('#dob').val();
 
-		if (isValidFirstName && isValidLastName && isValidPhone
-				&& isValidDob) {
-			document.getElementById('toast-success-edit-user')
-					.click();
-			return registerUser.submit();
-		} else {
-			document.getElementById('toast-failed-edit-user').click();
+		    // Kiểm tra nếu giá trị mặc định tồn tại và không rỗng
+		    if (defaultDob) {
+		        // Tách phần ngày tháng năm từ giá trị mặc định
+		        var parts = defaultDob.split(' ');
+		        var datePart = parts[0]; // Lấy phần ngày tháng năm
+
+		        // Đặt lại giá trị ngày sinh chỉ với phần ngày tháng năm
+		        $('#dob').val(datePart);
+		    }
+		});
+
+		function validateDob() {
+		    const dobValue = document.getElementById("dob").value;
+		    const dobDate = new Date(dobValue);
+		    const today = new Date();
+
+		    if (dobValue === "") {
+		        document.getElementById('validation-dob').textContent = "Date of birth is required";
+		        return false;
+		    } else {
+		        document.getElementById('validation-dob').textContent = "";
+
+		        // Kiểm tra nếu ngày sinh lớn hơn ngày hiện tại
+		        if (dobDate > today) {
+		            document.getElementById('validation-dob').textContent = "Date of birth can't be in the future";
+		            return false;
+		        }
+
+		        return true;
+		    }
+		}
+		function checkSubmitEditUser() {
+			var isValidFirstName = validateFirstName();
+			var isValidLastName = validateLastName();
+			var isValidPhone = validatePhone();
+			var isValidDob = validateDob();
+			var email = document.getElementById("emailInput").value;
+
+			if (isValidFirstName && isValidLastName && isValidPhone
+					&& isValidDob) {
+				$.ajax({
+					type : "POST",
+					url : "/user/profile/edit/" + email,
+					data : $("#editForm").serialize(),
+					success : function(response) {
+						document.getElementById('toast-success-edit-user')
+								.click();
+					},
+					error : function(xhr, status, error) {
+						document.getElementById('toast-failed-edit-user')
+								.click();
+					}
+				});
+			} else {
+				document.getElementById('toast-failed-edit-user').click();
+			}
 			return false;
 		}
-	}
+
+		$(document).ready(function() {
+			$('#dob').datepicker({
+				format : 'dd-mm-yyyy',
+				autoclose : true
+			});
+		});
+		function onFilesChange() {
+			var value = image.value;
+			if (!value.match(/\.(jpg|jpeg|png|gif)$/i)) {
+				document.getElementById('toast-failed-updated_data').click();
+				document.getElementById('image').setAttribute('value', '');
+				document.getElementById('prev').setAttribute('src', '');
+			}
+		}
+		var reader = new FileReader();
+		reader.onload = function(r_event) {
+			document.getElementById('prev').setAttribute('src',
+					r_event.target.result);
+		}
+
+		document.getElementsByName('image')[0].addEventListener('change',
+				function(event) {
+					reader.readAsDataURL(this.files[0]);
+				});
+
+		function checkSubmitLogout() {
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', '/logout', true);
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.onload = function() {
+				if (xhr.status === 200) {
+
+					localStorage.setItem('logoutSuccess', 'true');
+
+					window.location.href = "/";
+				} else {
+					console.error('Logout request failed');
+				}
+			};
+			xhr.onerror = function() {
+				console.error('Logout request failed');
+			};
+			xhr.send();
+		}
+		document.addEventListener("DOMContentLoaded", function() {
+
+			const logoutSuccess = localStorage.getItem('logoutSuccess');
+
+			if (logoutSuccess === 'true') {
+				Swal2.fire({
+					icon : "success",
+					title : "Logout successful",
+				});
+
+				localStorage.removeItem('logoutSuccess');
+			}
+		});
 	</script>
 
 </body>
