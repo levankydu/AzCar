@@ -14,10 +14,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserDto {
 
-	private String id;
-//	@NotEmpty(message = "Please enter your name.")
-	private String name;
+	private long id;
+	
+	
+	private String firstName;
+	private String lastName;
 
+	
+	private String fullName;
+	 
 //	@NotEmpty(message = "Email not empty")
 
 	private String email;
@@ -31,8 +36,7 @@ public class UserDto {
 
 	private String phone;
 
-	private String firstName;
-	private String lastName;
+	
 	private String gender;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dob;

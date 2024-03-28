@@ -30,7 +30,8 @@ public class SecurityConfig {
 
 		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests((requests) -> requests
 				.requestMatchers("/").permitAll()
-				.requestMatchers("/", "/ws/**").permitAll()
+				.requestMatchers("/ws/**").permitAll()
+				.requestMatchers("/api/getUsers/**").permitAll()
 				.requestMatchers("/forgot_password/**").permitAll()
 				.requestMatchers("/reset_password/**").permitAll()
 				.requestMatchers("/register/**").permitAll()

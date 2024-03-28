@@ -25,4 +25,6 @@ public interface UserServices {
 	
 	void saveUserReset(Users user);
 	Users findById(long id);
+	
+	UserDto mapToDto(int id);
 }
