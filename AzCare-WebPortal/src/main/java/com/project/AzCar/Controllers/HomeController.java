@@ -8,8 +8,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.mail.MessagingException;
 
@@ -24,12 +26,14 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -153,9 +157,7 @@ public class HomeController {
 
 	@GetMapping("/login")
 	public String getLogin(Model model) {
-
 		model.addAttribute("user", new Users());
-
 		return "/authentications/login";
 	}
 
@@ -163,50 +165,33 @@ public class HomeController {
 	public String registrationForm(Model model) {
 		UserDto user = new UserDto();
 		model.addAttribute("user", user);
-		return "/authentications/register";
-	}
-
-	@PostMapping("/register")
-	public String registration(@Valid @ModelAttribute("user") UserDto userDto, BindingResult result, Model model) {
-		Users existingUser = uServices.findUserByEmail(userDto.getEmail());
-
-		if (existingUser != null) {
-		    result.rejectValue("email", null, "Email already registered !!!");
-		}
-
-		if (!userDto.isPasswordMatching()) {
-			result.rejectValue("confirmPassword", null, "Confirm Password do not match.");
-			return "/authentications/register";
-		}
-
-		if (result.hasErrors()) {
-			model.addAttribute("user", userDto);
-			return "/authentications/register";
-		}
-
-		
-		try {
-			uServices.saveUser(userDto);
-			try {
-				Map<String, Object> templateModel = new HashMap<>();
-				templateModel.put("recipientName", userDto.getEmail());
-				templateModel.put("hello", "Welcome to AzCar");
-				templateModel.put("text", "Cảm ơn Bạn đã sử dụng dịch vụ thuê xe của chúng tôi");
-				emailService.sendMessageUsingThymeleafTemplate(userDto.getEmail(), "AzCar", templateModel);
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (MessagingException e) {
-				e.printStackTrace();
-			}
-			return "authentications/login";
-		}catch (Exception e) {
-			System.out.println(e);
-		}
-		
 		return "authentications/register";
 	}
 
-	 
+	@PostMapping("/register")
+	public ResponseEntity<?> registration(@Valid @ModelAttribute("user") UserDto userDto, BindingResult result) {
+	    Users existingUser = uServices.findUserByEmail(userDto.getEmail());
+
+	    if (existingUser != null) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already registered !!!");
+	    }
+	    try {
+	        uServices.saveUser(userDto);
+	        try {
+	            Map<String, Object> templateModel = new HashMap<>();
+	            templateModel.put("recipientName", userDto.getEmail());
+	            templateModel.put("hello", "Welcome to AzCar");
+	            templateModel.put("text", "Cảm ơn Bạn đã sử dụng dịch vụ thuê xe của chúng tôi");
+	            emailService.sendMessageUsingThymeleafTemplate(userDto.getEmail(), "AzCar", templateModel);
+	            return ResponseEntity.ok("Registration successful.");
+	        } catch (Exception e) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error sending email.");
+	        }
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred.");
+	    }
+	}
+
 	@GetMapping(path = "/registeradmin", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<JSONObject> registrationAdmin(@ModelAttribute UserDto userDto) {
@@ -237,28 +222,30 @@ public class HomeController {
 
 	@GetMapping("/user/profile/edit/{email}")
 	public String editProfile(@PathVariable("email") String email, Model model) {
-
 		Users user = uServices.findUserByEmail(email);
-
 		if (user != null) {
 			model.addAttribute("user", user);
-
 			model.addAttribute("uDto", new UserDto());
 			model.addAttribute("uDto", new Users());
 
 			return "authentications/edit";
-		}
-		return "/user/profile/{email}" + email;
+		} else {
 
+			return "redirect:/user/profile/" + email;
+		}
 	}
 
 	@PostMapping("/user/profile/edit/{email}")
-	public String editProfile(@PathVariable("email") String email, @ModelAttribute("uDto") UserDto uDto, Model model) {
-
-		uServices.editProfile(email, uDto);
-
-		return "redirect:/user/profile/{email}";
-
+	@ResponseBody
+	public ResponseEntity<String> editProfile(@PathVariable("email") String email,
+			@ModelAttribute("uDto") UserDto uDto) {
+		try {
+			uServices.editProfile(email, uDto);
+			return ResponseEntity.ok("Profile updated successfully.");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error updating profile: " + e.getMessage());
+		}
 	}
 
 	@GetMapping("/user/profile/changePassword/{email}")
@@ -266,36 +253,42 @@ public class HomeController {
 		Users user = uServices.findUserByEmail(email);
 		model.addAttribute("user", user);
 		model.addAttribute("password", "");
-		return "/authentications/changePassword";
+		return "authentications/changePassword";
 	}
 
 	@PostMapping("/user/profile/changePassword/{email}")
-	public String changePassword(@PathVariable("email") String email, @RequestParam("oldPassword") String oldPassword,
-			@RequestParam("newPassword") String newPassword, @RequestParam("confirmPassword") String confirmPassword,
-			RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	public ResponseEntity<?> changePassword(@PathVariable("email") String email,
+			@RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword,
+			@RequestParam("confirmPassword") String confirmPassword, HttpServletRequest request) {
 
 		Users user = uServices.findUserByEmail(request.getSession().getAttribute("emailLogin").toString());
 
+		String dbPassword = user.getPassword();
+
 		if (!newPassword.equals(confirmPassword)) {
-			redirectAttributes.addFlashAttribute("error", "Passwords do not match.");
-			return "redirect:/user/profile/changePassword/{email}";
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords do not match.");
 		}
 
-		if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-			redirectAttributes.addFlashAttribute("error", "OldPasswords do not match.");
-			return "redirect:/user/profile/changePassword/{email}";
+		if (!passwordEncoder.matches(oldPassword, dbPassword)) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Old password is incorrect.");
 		}
+
 		try {
+
+			if (passwordEncoder.matches(newPassword, dbPassword)) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+						.body("New password cannot be the same as old password.");
+			}
+
 			user.setPassword(passwordEncoder.encode(newPassword));
 			uServices.saveUserReset(user);
+			return ResponseEntity.ok("Password changed successfully.");
 		} catch (IllegalArgumentException e) {
-			redirectAttributes.addFlashAttribute("error", e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to change password.");
 		}
-
-		return "redirect:/user/profile/{email}";
-
 	}
 
+	private Set<String> usedTokens = new HashSet<>();
 	@GetMapping("/forgot_password")
 	public String showForgotPassword(Model model) {
 		model.addAttribute("email", "Forgot Password");
@@ -303,59 +296,69 @@ public class HomeController {
 	}
 
 	@PostMapping("/forgot_password")
-	public String processForgotPassword(HttpServletRequest request, Model model, UserDto userForgot) {
-		Users user = uServices.findUserByEmail(userForgot.getEmail());
-		String email = request.getParameter("email");
-		String token = RandomString.make(45);
-		System.out.println("Email: " + email);
-		System.out.println("token: " + token);
-		if (user != null) {
-			try {
+	public ResponseEntity<String> processForgotPassword(@ModelAttribute("userForgot") UserDto userForgot,
+	                                                    HttpServletRequest request) {
+	    String email = userForgot.getEmail();
+	    if (email == null || email.isEmpty()) {
+	        return ResponseEntity.badRequest().body("Email is required.");
+	    }
 
-				uServices.updateResetPasswordToken(token, email);
-				String resetPasswordLink = Utility.getSiteURL(request) + "/reset_password/token/" + token;
-				sendEmail(email, resetPasswordLink);
-				model.addAttribute("success", "We have sent a reset password link to your email.");
-
-			} catch (Exception e) {
-				model.addAttribute("errors", "Email not emty!!");
-			}
-		} else {
-			model.addAttribute("error", "Email Wrong, Please check your Email!!");
-		}
-
-		model.addAttribute("email", "Forgot Password");
-		return "/authentications/forgot_password";
+	    Users user = uServices.findUserByEmail(email);
+	    if (user != null) {
+	        String token = RandomString.make(10);
+	        System.out.println("Email: " + email);
+	        System.out.println("Token: " + token);
+	        try {
+	            uServices.updateResetPasswordToken(token, email);
+	            String resetPasswordLink = Utility.getSiteURL(request) + "/reset_password/token/" + token;
+	            sendEmail(email, resetPasswordLink);
+	            return ResponseEntity.ok("We have sent a reset password link to your email.");
+	        } catch (Exception e) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                    .body("Failed to send reset password link. Please try again later.");
+	        }
+	    } else {
+	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email not found. Please check your email address.");
+	    }
 	}
+
 
 	@GetMapping("/reset_password/token/{token}")
 	public String showResetPasswordForm(@PathVariable("token") String token, Model user, Model tokenModel) {
-		var codeModel = uServices.findUserByToken(token);
+	   
+	    if (usedTokens.contains(token)) {
+	        
+	        return "authentications/tokenErrorPage";
+	    }
 
-		if (codeModel != null) {
-			user.addAttribute("user", codeModel);
-			tokenModel.addAttribute("tokenModel", token);
-			return "/authentications/reset_password";
-		} else {
-			return "redirect:/authentications/login";
-		}
+	    var codeModel = uServices.findUserByToken(token);
+	    if (codeModel != null) {
+	        user.addAttribute("user", codeModel);
+	        tokenModel.addAttribute("tokenModel", token);
+	        return "/authentications/reset_password";
+	    } else {
+	        return "redirect:/authentications/login";
+	    }
 	}
 
 	@PostMapping("/reset_password/token")
-	public String processResetPassword(Model user, @ModelAttribute(name = "password") String password,
-			@ModelAttribute(name = "tokenModel") String tokenModel) {
+	public ResponseEntity<String> processResetPassword(@ModelAttribute("password") String password,
+	                                                   @ModelAttribute("tokenModel") String tokenModel) {
+	    if (usedTokens.contains(tokenModel)) {
+	        return ResponseEntity.badRequest().body("Token has already been used.");
+	    }
 
-		var codeModel = uServices.findUserByToken(tokenModel);
-
-		if (codeModel != null) {
-			codeModel.setPassword(passwordEncoder.encode(password));
-			uServices.saveUserReset(codeModel);
-			return "/authentications/login";
-		} else {
-			return "/authentications/reset_password?error";
-		}
-
+	    var codeModel = uServices.findUserByToken(tokenModel);
+	    if (codeModel != null) {
+	        codeModel.setPassword(passwordEncoder.encode(password));
+	        uServices.saveUserReset(codeModel);
+	        usedTokens.add(tokenModel); // Đánh dấu token đã được sử dụng
+	        return ResponseEntity.ok("Password changed successfully.");
+	    } else {
+	        return ResponseEntity.notFound().build();
+	    }
 	}
+	
 
 	@GetMapping("/user/profile/avatar/{filename}")
 	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename, HttpServletRequest request) {
@@ -403,15 +406,14 @@ public class HomeController {
 				fileStorageServices.save(image, dir);
 				user.setImage(image.getOriginalFilename());
 				uServices.saveUserReset(user);
-				return "redirect:/user/profile/edit/uploadFile" + "?succesUpdateImage";
+				return "redirect:/user/profile/"+user.getEmail() + "?succesUpdateImage";
 			} catch (Exception e) {
 				System.out.println(e);
 			}
 		}
-
-		return "redirect:/user/profile/edit/uploadFile" + "?failUpdateImage";
-
+		return "redirect:/user/profile/"+user.getEmail()+"?failUpdateImage";
 	}
+
 
 	private void sendEmail(String email, String resetPasswordLink)
 			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
@@ -426,12 +428,10 @@ public class HomeController {
 		String content = "<p>Hello,</p>" + "<p>You have requested to reset your password.</p>"
 				+ "<p>Click the link below to change your password.</p>" + "<p><b><a href=\"" + resetPasswordLink
 				+ "\" >Change my Password</a></b></p>"
-				+ "<p>Ignore this email if you do remember your password, or you have not made the request</p>"
-				+ "<p>Chào mừng bạn đến với dịch vụ AzCar</p>";
+				+ "<p>Ignore this email if you do remember your password, or you have not made the request</p>";
 		helper.setSubject(subject);
 		helper.setText(content, true);
 		mailSender.send(message);
 	}
-
 
 }

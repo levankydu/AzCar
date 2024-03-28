@@ -169,26 +169,14 @@ End Google Tag Manager (noscript)
 
 	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 	<script type="text/javascript">
-		document.addEventListener("DOMContentLoaded", function() {
-			// Check if logout success flag is set in localStorage
-			const logoutSuccess = localStorage.getItem('logoutSuccess');
-
-			if (logoutSuccess === 'true') {
-				Swal2.fire({
-					icon : "success",
-					title : "Logout successful",
-				});
-				// Clear the logout success flag from localStorage
-				localStorage.removeItem('logoutSuccess');
-			}
-		});
+		
 
 		function validateForm() {
 	        var email = document.getElementById('email').value;
 	        var password = document.getElementById('password').value;
 
-	        var emailValid = email.length > 0; // Check if email is not empty
-	        var passwordValid = password.length > 0; // Check if password is not empty
+	        var emailValid = email.length > 0; 
+	        var passwordValid = password.length > 0; 
 
 	        if (!emailValid) {
 	            document.getElementById('validation-email').innerText = 'Email address is required.';
@@ -220,7 +208,7 @@ End Google Tag Manager (noscript)
 	            }
 	        });
 	        if (emailValid && passwordValid) {
-	            // If both email and password are valid, submit the form
+	            
 	            document.getElementById('loginForm').submit();
 	        }
 	    }

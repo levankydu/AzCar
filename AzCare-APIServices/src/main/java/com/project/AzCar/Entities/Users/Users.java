@@ -56,7 +56,7 @@ public class Users implements Serializable{
 			@JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(name = "role_id", referencedColumnName = "id") })
 	private List<Roles> roles = new ArrayList<>();
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date dob;
 	private boolean isEnabled;
 	private boolean changePassword;

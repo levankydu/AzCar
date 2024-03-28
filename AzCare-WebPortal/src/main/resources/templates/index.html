@@ -957,7 +957,7 @@
 
 					localStorage.setItem('logoutSuccess', 'true');
 
-					window.location.href = "/login";
+					window.location.href = "/";
 				} else {
 					console.error('Logout request failed');
 				}
@@ -967,6 +967,19 @@
 			};
 			xhr.send();
 		}
+		document.addEventListener("DOMContentLoaded", function() {
+			
+			const logoutSuccess = localStorage.getItem('logoutSuccess');
+
+			if (logoutSuccess === 'true') {
+				Swal2.fire({
+					icon : "success",
+					title : "Logout successful",
+				});
+				
+				localStorage.removeItem('logoutSuccess');
+			}
+		});
 	</script>
 
 
