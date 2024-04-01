@@ -44,7 +44,8 @@
 <link type="text/css" rel="stylesheet" href="/assets/css/style.css">
 <link rel="stylesheet" type="text/css" id="style_sheet"
 	href="/assets/css/skins/default.css">
-
+<link rel="stylesheet"
+	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
 </head>
 <body id="top">
 
@@ -83,24 +84,24 @@
 								<li class="nav-item dropdown" th:if="${session.user}"><a
 									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
 									th:href="@{/user/profile/} + ${session.user}"
-									th:text="Hello+', ' +${session.user}"></a> <a
-									class="btn btn-sm btn-theme btn-round signup-link"
-									href="/logout">LogOut</a></li>
-
+									th:text="Hello+', ' +${session.user}"></a>
+									<button id="logout"
+										class="btn btn-sm btn-theme btn-round signup-link">Logout</button></li>
 
 								<li class="nav-item dropdown" th:if="${session.admin}"><a
 									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-									th:href="@{/user/profile/}+ ${session.admin}"
-									th:text="Hello+', ' +${session.admin}"></a> <a
+									href="#" th:text="Hello+', ' +${session.admin}"></a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
-									href="/dashboard/">Dash board</a> <a
-									class="btn btn-sm btn-theme btn-round signup-link"
-									href="/logout">Logout</a></li>
-								<li class="nav-item dropdown" th:unless="${session.isAuthen}"><a
-									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/dashboard/">Dashboard</a>
+									<button id="logout"
+										class="btn btn-sm btn-theme btn-round signup-link">Logout</button></li>
+
+								<li class="nav-item dropdown" th:unless="${session.isAuthen}">
+									<a class="btn btn-sm btn-theme btn-round signup-link"
 									href="/login">Login</a> <a
 									class="btn btn-sm btn-theme btn-round signup-link"
-									href="/register">Register</a></li>
+									href="/register">Register</a>
+								</li>
 							</ul>
 						</div>
 					</nav>
@@ -148,8 +149,6 @@
 		<nav class="nav nav-borders">
 			<a class="nav-link active ms-0"
 				th:href="@{/user/profile/{email} (email=${email})}">Profile</a>
-			<a class="nav-link"
-				href="https://www.bootdey.com/snippets/view/bs5-profile-billing-page">Billing</a>
 			<a class="nav-link"
 				th:href="@{/user/profile/changePassword/{email} (email=${email})}">Change
 				Password</a> <a class="nav-link"
@@ -213,7 +212,7 @@
 								<div class="col-md-6">
 									<label class="small mb-1" for="inputBirthday">Birthday</label>
 									<input class="form-control" id="dob" name="dob"
-										th:value="${user.dob}" readonly>
+										th:value="${#dates.format(user.dob, 'dd-MM-yyyy')}" readonly>
 								</div>
 							</div>
 							<div class="row gx-3 mb-3">
@@ -523,8 +522,45 @@
 	<script src="/assets/js/jquery.mb.YTPlayer.js"></script>
 	<script src="/assets/js/slick.min.js"></script>
 	<script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
-	
+	<script
+		th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
+
+	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 	<!-- Custom JS Script -->
 	<script src="/assets/js/app.js"></script>
+	<script type="text/javascript">
+	function checkSubmitLogout() {
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', '/logout', true);
+		xhr.setRequestHeader('Content-Type', 'application/json');
+		xhr.onload = function() {
+			if (xhr.status === 200) {
+
+				localStorage.setItem('logoutSuccess', 'true');
+
+				window.location.href = "/";
+			} else {
+				console.error('Logout request failed');
+			}
+		};
+		xhr.onerror = function() {
+			console.error('Logout request failed');
+		};
+		xhr.send();
+	}
+	document.addEventListener("DOMContentLoaded", function() {
+
+		const logoutSuccess = localStorage.getItem('logoutSuccess');
+
+		if (logoutSuccess === 'true') {
+			Swal2.fire({
+				icon : "success",
+				title : "Logout successful",
+			});
+
+			localStorage.removeItem('logoutSuccess');
+		}
+	});
+	</script>
 </body>
 </html>

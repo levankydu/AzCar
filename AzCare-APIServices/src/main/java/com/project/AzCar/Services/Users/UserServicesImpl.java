@@ -3,6 +3,7 @@ package com.project.AzCar.Services.Users;
 import java.util.Arrays;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +27,8 @@ public class UserServicesImpl implements UserServices {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@Override
 	public void saveUser(UserDto userDto) {
@@ -34,7 +37,7 @@ public class UserServicesImpl implements UserServices {
 		if (role == null)
 			role = roleRepo.save(new Roles(Constants.Roles.USER));
 
-		Users user = new Users(userDto.getName(), userDto.getEmail(), passwordEncoder.encode(userDto.getPassword()),
+		Users user = new Users(userDto.getFullName(), userDto.getEmail(), passwordEncoder.encode(userDto.getPassword()),
 				Arrays.asList(role));
 		userRepo.save(user);
 	}
@@ -126,5 +129,12 @@ public class UserServicesImpl implements UserServices {
 	@Override
 	public Users findById(long id) {
 		return userRepo.findById(id);
+	}
+
+	@Override
+	public UserDto mapToDto(int id) {
+		var model = userRepo.findById(id);
+		UserDto modelDto = this.modelMapper.map(model, UserDto.class);
+		return modelDto;
 	}
 }
