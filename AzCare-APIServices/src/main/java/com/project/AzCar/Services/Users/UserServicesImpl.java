@@ -137,4 +137,13 @@ public class UserServicesImpl implements UserServices {
 		UserDto modelDto = this.modelMapper.map(model, UserDto.class);
 		return modelDto;
 	}
+
+	@Override
+	public boolean existsByEmail(String email) {
+		var user = userRepo.findByEmail(email);
+		if(user!= null) {
+			return true;
+		}
+		return false;
+	}
 }

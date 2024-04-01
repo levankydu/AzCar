@@ -10,11 +10,9 @@ spring:
     check-template: true
     check-template-location: true
   datasource:
-   
     url: jdbc:mysql://localhost:3306/azcarsdb
     username: root
     password: 1410
-    
   jpa:
     hibernate:
       ddl-auto: update

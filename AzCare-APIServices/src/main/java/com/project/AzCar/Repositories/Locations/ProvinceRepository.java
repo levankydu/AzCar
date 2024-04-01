@@ -16,4 +16,6 @@ public interface ProvinceRepository extends JpaRepository<City, String>{
 	
 	@Query(value = "SELECT DISTINCT c.name FROM City c")
 	List<String> getListString();
+	@Query(value = "SELECT c FROM City c WHERE c.code=?1")
+	City findbyId(String code);
 }

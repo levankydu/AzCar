@@ -386,6 +386,27 @@ public class HomeController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
 				.body(file);
 	}
+	@GetMapping("/user/profile/flutter/avatar/{filename}")
+	public ResponseEntity<Resource> getImageToFlutter(@PathVariable("filename") String filename) throws IOException {
+		List<Users> list = uServices.findAllUsers();
+		String dir = "";
+		int i = 0;
+		while (i < list.size()) {
+			dir = "./UploadFiles/userImages/" + list.get(i).getEmail().replace(".", "-");
+			Resource fileResource = fileStorageServices.load(filename, dir);
+			if (fileResource == null) {
+				i++;
+
+			} else {
+				return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment; filename=\"" + fileResource.getFilename() + "\"").body(fileResource);
+			}
+
+		}
+		return null;
+
+	}
+
 
 	@PostMapping("/user/profile/edit/uploadFile")
 	public String uploadImage(@RequestParam(name = "image") MultipartFile image, HttpServletRequest request) {

@@ -41,7 +41,7 @@
 	href="/assets/css/skins/default.css">
 <link rel="stylesheet"
 	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
-	
+
 <link rel="stylesheet" href="/assets/css/notiCss.css">
 
 <script
@@ -50,7 +50,7 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 
 
-<script type="text/javascript" src="/assets/js/notiJs.js"></script>	
+<script type="text/javascript" src="/assets/js/notiJs.js"></script>
 <style>
 /* CSS */
 .button-92 {
@@ -99,7 +99,7 @@
 			<div class="col-12">
 				<nav class="navbar navbar-expand-lg navbar-light rounded">
 					<a class="navbar-brand logo navbar-brand d-flex mr-auto" href="/">
-						<img src="assets/img/logos/black-logo.png" alt="logo">
+						<img src="/assets/img/logos/black-logo.png" alt="logo">
 					</a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse"
 						data-target="#navbar" aria-controls="navbar" aria-expanded="false"
@@ -117,42 +117,41 @@
 
 							<li class="nav-item"><a class="nav-link" href="#">
 									Contact Us </a></li>
-									<div id="openNoti">
-									<div class="" tabindex="0" id="noti">
-										<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-											xmlns:xlink="http://www.w3.org/1999/xlink"
-											viewBox="0 0 50 30" enable-background="new 0 0 50 30"
-											xml:space="preserve">
+							<div id="openNoti">
+								<div class="" tabindex="0" id="noti">
+									<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+										xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 30"
+										enable-background="new 0 0 50 30" xml:space="preserve">
     <g class="bell-icon__group">
       <path class="" id="ball" fill-rule="evenodd" stroke-width="1.5"
-												clip-rule="evenodd" fill="none" stroke="#currentColor"
-												stroke-miterlimit="10"
-												d="M28.7,25 c0,1.9-1.7,3.5-3.7,3.5s-3.7-1.6-3.7-3.5s1.7-3.5,3.7-3.5S28.7,23,28.7,25z" />
+											clip-rule="evenodd" fill="none" stroke="#currentColor"
+											stroke-miterlimit="10"
+											d="M28.7,25 c0,1.9-1.7,3.5-3.7,3.5s-3.7-1.6-3.7-3.5s1.7-3.5,3.7-3.5S28.7,23,28.7,25z" />
       <path class="" id="shell" fill-rule="evenodd" clip-rule="evenodd"
-												fill="#FFFFFF" stroke="#currentColor" stroke-width="2"
-												stroke-miterlimit="10"
-												d="M35.9,21.8c-1.2-0.7-4.1-3-3.4-8.7c0.1-1,0.1-2.1,0-3.1h0c-0.3-4.1-3.9-7.2-8.1-6.9c-3.7,0.3-6.6,3.2-6.9,6.9h0 c-0.1,1-0.1,2.1,0,3.1c0.6,5.7-2.2,8-3.4,8.7c-0.4,0.2-0.6,0.6-0.6,1v1.8c0,0.2,0.2,0.4,0.4,0.4h22.2c0.2,0,0.4-0.2,0.4-0.4v-1.8 C36.5,22.4,36.3,22,35.9,21.8L35.9,21.8z" />
+											fill="#FFFFFF" stroke="#currentColor" stroke-width="2"
+											stroke-miterlimit="10"
+											d="M35.9,21.8c-1.2-0.7-4.1-3-3.4-8.7c0.1-1,0.1-2.1,0-3.1h0c-0.3-4.1-3.9-7.2-8.1-6.9c-3.7,0.3-6.6,3.2-6.9,6.9h0 c-0.1,1-0.1,2.1,0,3.1c0.6,5.7-2.2,8-3.4,8.7c-0.4,0.2-0.6,0.6-0.6,1v1.8c0,0.2,0.2,0.4,0.4,0.4h22.2c0.2,0,0.4-0.2,0.4-0.4v-1.8 C36.5,22.4,36.3,22,35.9,21.8L35.9,21.8z" />
     </g>
   </svg>
-										<div class="notification-amount">
-											<span id="notiCounter"></span>
-										</div>
+									<div class="notification-amount">
+										<span id="notiCounter"></span>
 									</div>
+								</div>
 
-								</div>
-								<div id="modal-container">
-									<div class="modal-background">
-										<div class="modal">
-											<h2>All Notification</h2>
-											<div id="messages"></div>
-											<svg class="modal-svg" xmlns="http://www.w3.org/2000/svg"
-												width="100%" height="100%" preserveAspectRatio="none">
+							</div>
+							<div id="modal-container">
+								<div class="modal-background">
+									<div class="modal">
+										<h2>All Notification</h2>
+										<div id="messages"></div>
+										<svg class="modal-svg" xmlns="http://www.w3.org/2000/svg"
+											width="100%" height="100%" preserveAspectRatio="none">
 								<rect x="0" y="0" fill="none" width="226" height="162" rx="3"
-													ry="3"></rect>
+												ry="3"></rect>
 							</svg>
-										</div>
 									</div>
 								</div>
+							</div>
 
 
 
@@ -266,10 +265,10 @@
 
 									</div>
 									<div class="car-box-5" th:each="car : ${listCar}">
-									
+
 										<div class="row mt-2">
 											<div class="col-lg-3 col-md-5">
-											
+
 												<a th:href="@{'/home/availablecars/details/' + ${car.id}}"
 													class="car-img">
 													<div class="listing-badges" th:if="${car.discount} == '0'">
@@ -354,7 +353,10 @@
 														<span class="new" th:text="${car.price}+' $/day'"></span>
 													</div>
 													<div class="listing-price">
-														<p>License Plates: <span class="new" th:text="${car.licensePlates}"></span> </p>
+														<p>
+															License Plates: <span class="new"
+																th:text="${car.licensePlates}"></span>
+														</p>
 													</div>
 												</div>
 												<p class="btn btn-theme" th:text="${car.status}"></p>
@@ -610,7 +612,7 @@
 		<div class="off-canvas-content">
 			<aside class="canvas-widget">
 				<div class="logo text-center">
-					<img src="assets/img/logos/logo.png" alt="logo">
+					<img src="/assets/img/logos/logo.png" alt="logo">
 				</div>
 			</aside>
 			<aside class="canvas-widget">

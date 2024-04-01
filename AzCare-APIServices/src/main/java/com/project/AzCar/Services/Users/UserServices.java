@@ -27,4 +27,6 @@ public interface UserServices {
 	Users findById(long id);
 	
 	UserDto mapToDto(int id);
+
+	boolean existsByEmail(String email);
 }

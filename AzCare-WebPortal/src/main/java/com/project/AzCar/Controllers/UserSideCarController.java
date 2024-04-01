@@ -294,7 +294,10 @@ public class UserSideCarController {
 			@RequestParam(name = "isFastBooking", required = false, defaultValue = "false") boolean isFastBooking,
 			@RequestParam(name = "isDiscount", required = false, defaultValue = "false") boolean isDiscount,
 			@RequestParam(name = "carAddress") String carAddress, @RequestParam(name = "carBrand") String carBrand,
-			@RequestParam(name = "carCate") String carCate) {
+			@RequestParam(name = "carCate") String carCate,
+			@RequestParam(name = "province") String province,
+			@RequestParam(name = "districtSelect",defaultValue = "") String districtSelect,
+			@RequestParam(name = "wardSelect",defaultValue = "") String wardSelect) {
 		List<CarInfor> list = carServices.findAll();
 		List<CarInforDto> listDto = new ArrayList<>();
 		List<String> brands = brandServices.getBrandList();
@@ -314,7 +317,15 @@ public class UserSideCarController {
 				filteredListDto.add(item);
 			}
 		}
-
+		if(!province.isEmpty()) {
+			var city = provinceServices.findById(province);
+			filteredListDto.removeIf(item -> !item.getAddress().contains(city.getFull_name()));
+		}
+		
+		if(!districtSelect.isEmpty()) {
+			var district = districtServices.findbyId(districtSelect);
+			filteredListDto.removeIf(item -> !item.getAddress().contains(district.getFull_name()));
+		}
 		if (!carBrand.isEmpty()) {
 			filteredListDto.removeIf(item -> !item.getCarmodel().getBrand().contains(carBrand));
 		}
@@ -329,6 +340,7 @@ public class UserSideCarController {
 		if (isDiscount) {
 			filteredListDto.removeIf(item -> item.getDiscount() == 0);
 		}
+		
 
 		for (var item : filteredListDto) {
 			for (var c : listProvince) {
@@ -337,6 +349,7 @@ public class UserSideCarController {
 				}
 			}
 		}
+		filteredListDto.removeIf(t -> !t.getStatus().equals(Constants.carStatus.READY));
 		listBrand.addAttribute("listBrand", brands);
 		listCategory.addAttribute("listCategory", categories);
 		listProvinces.addAttribute("provinceList", provinces);
