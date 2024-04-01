@@ -16,4 +16,7 @@ public interface DistrictRepository extends JpaRepository<District, String>{
 	
 	@Query(value = "SELECT DISTINCT c.name FROM District c")
 	List<String> getListString();
+	
+	@Query(value = "SELECT c FROM District c WHERE c.code=?1")
+	District findbyId(String id);
 }

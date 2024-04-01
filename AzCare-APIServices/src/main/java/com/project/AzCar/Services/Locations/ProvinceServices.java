@@ -10,4 +10,5 @@ import com.project.AzCar.Entities.Locations.City;
 public interface ProvinceServices {
  List<City> getListCity();
  List<String> getListCityString();
+ City findById(String id);
 }

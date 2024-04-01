@@ -273,6 +273,16 @@ if (document.getElementById('toast-success-registered-car')) {
 		})
 	})
 }
+if (document.getElementById('toast-failed-login')) {
+	document.getElementById('toast-failed-login').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'warning',
+			title: 'You need login to continue'
+		})
+	})
+}
+
+
 // Điệp
 if (document.getElementById("logout")) {
 	document.getElementById("logout").addEventListener("click", async () => {

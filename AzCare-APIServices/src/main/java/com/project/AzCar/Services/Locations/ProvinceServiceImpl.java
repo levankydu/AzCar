@@ -23,5 +23,9 @@ public class ProvinceServiceImpl implements ProvinceServices{
 	public List<String> getListCityString() {
 		return proviceRepository.getListString();
 	}
+	@Override
+	public City findById(String id) {
+		return proviceRepository.findbyId(id);
+	}
 
 }
