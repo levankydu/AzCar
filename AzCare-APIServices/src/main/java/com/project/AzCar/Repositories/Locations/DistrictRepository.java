@@ -19,4 +19,5 @@ public interface DistrictRepository extends JpaRepository<District, String>{
 	
 	@Query(value = "SELECT c FROM District c WHERE c.code=?1")
 	District findbyId(String id);
+
 }

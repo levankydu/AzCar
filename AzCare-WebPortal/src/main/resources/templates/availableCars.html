@@ -226,6 +226,7 @@
 		<div class="container">
 			<div class="page-name">
 				<h1>All Available Cars</h1>
+				<h1 th:text="${province!=null?'At ' + ''''+province+'''' :''}"></h1>
 			</div>
 		</div>
 		<div class="page-info">
@@ -266,7 +267,8 @@
 									<input id="carAddress" type="hidden" name="carAddress">
 									<select id="provinceSelect" class="form-control"
 										name="province" onchange="return provinceSubmit();">
-										<option value="">Select Province</option>
+										<option
+											th:text="${province !=null? province:'--Select Province--'}"></option>
 
 										<option th:each="item : ${provinceList}"
 											th:value="${item.code}" th:text="${item.full_name}"></option>
@@ -275,17 +277,25 @@
 							</div>
 							<div class="col-6 col-lg-3 col-md-3">
 								<div class="form-group">
-									<select disabled="disabled" id="districtSelect"
-										class="form-control" onchange="return districtSubmit()"
-										name="districtSelect">
+									<select id="districtSelect" class="form-control"
+										onchange="return districtSubmit()" name="districtSelect">
+										<option
+											th:text="${district!=null? district:'--Select District--'}"></option>
+										<option th:if="listDistrict!=null"
+											th:each="item : ${listDistrict}" th:value="${item.code}"
+											th:text="${item.full_name}"></option>
+
 									</select>
 								</div>
 							</div>
 							<div class="col-6 col-lg-3 col-md-3">
 								<div class="form-group">
-									<select disabled="disabled" id="wardSelect"
-										class="form-control" name="wardSelect"
+									<select id="wardSelect" class="form-control" name="wardSelect"
 										onchange="return addressSubmit()">
+
+										<option th:text="${ward!=null? ward:'--Select Ward--'}"></option>
+										<option th:if="listWard!=null" th:each="item : ${listWard}"
+											th:value="${item.code}" th:text="${item.full_name}"></option>
 									</select>
 								</div>
 							</div>
@@ -302,7 +312,7 @@
 								<div class="form-group">
 
 									<select id="carBrand" class="form-control" name="carBrand">
-										<option value="">Select Brand</option>
+										<option th:text="${carBrand!=null?carBrand:'Select Brand'}"></option>
 
 										<option th:each="item : ${listBrand}" th:value="${item}"
 											th:text="${item}"></option>
@@ -312,7 +322,7 @@
 							<div class="col-6 col-lg-3 col-md-3">
 								<div class="form-group">
 									<select id="carCate" class="form-control" name="carCate">
-										<option value="">Select Category</option>
+										<option th:text="${carCate!=null?carCate:'Select Category'}"></option>
 
 										<option th:each="item : ${listCategory}" th:value="${item}"
 											th:text="${item}"></option>
@@ -325,7 +335,7 @@
 								<div class="form-group">
 									<div class="checkbox-wrapper-29">
 										<label class="checkbox"> <input type="checkbox"
-											name="isDiscount" class="checkbox__input" /> <span
+											name="isDiscount" class="checkbox__input" th:checked="${discount != null}" /> <span
 											class="checkbox__label"></span> Booking has discount
 										</label>
 									</div>
@@ -334,7 +344,7 @@
 
 									<div class="checkbox-wrapper-29 mt-3">
 										<label class="checkbox"> <input type="checkbox"
-											name="isCarPlus" class="checkbox__input" /> <span
+											name="isCarPlus" class="checkbox__input" th:checked="${carPlus != null}"/> <span
 											class="checkbox__label"></span> Delivery To Customer Locale
 										</label>
 									</div>
@@ -366,7 +376,7 @@
 					<div class="car-box">
 
 						<div class="car-thumbnail">
-							<a th:href="'details'+'/'+${car.id}" class="car-img">
+							<a th:href="@{/home/availablecars/details/}+${car.id}" class="car-img">
 
 								<div class="listing-badges" th:if="${car.discount} == '0'">
 									<span class="featured">Featured</span>
@@ -389,21 +399,21 @@
 										<div class="carousel-item active">
 											<div th:each="img: ${car.images}">
 												<img class="d-block w-100" th:if="${img.name =='frontImg'}"
-													th:src="${img.urlImage}" alt="car">
+													th:src="${'img/'+img.urlImage}" alt="car">
 											</div>
 
 										</div>
 										<div class="carousel-item">
 											<div th:each="img: ${car.images}" class="d-block w-100 h-100">
 												<img th:if="${img.name =='behindImg'}"
-													th:src="${img.urlImage}" alt="car">
+													th:src="${'availablecars/img/'+img.urlImage}" alt="car">
 											</div>
 
 										</div>
 										<div class="carousel-item">
 											<div th:each="img: ${car.images}" class="d-block w-100 h-100">
 												<img style="height: 100; width: 100; object-fit: contain;"
-													th:if="${img.name =='leftImg'}" th:src="${img.urlImage}"
+													th:if="${img.name =='leftImg'}" th:src="${'availablecars/img/'+img.urlImage}"
 													alt="car">
 											</div>
 
@@ -411,7 +421,7 @@
 										<div class="carousel-item">
 											<div th:each="img: ${car.images}" class="d-block w-100 h-100">
 												<img style="height: 100; width: 100; object-fit: contain;"
-													th:if="${img.name =='rightImg'}" th:src="${img.urlImage}"
+													th:if="${img.name =='rightImg'}" th:src="${'availablecars/img/'+img.urlImage}"
 													alt="car">
 											</div>
 
@@ -419,7 +429,7 @@
 										<div class="carousel-item">
 											<div th:each="img: ${car.images}" class="d-block w-100 h-100">
 												<img style="height: 100; width: 100; object-fit: contain;"
-													th:if="${img.name =='insideImg'}" th:src="${img.urlImage}"
+													th:if="${img.name =='insideImg'}" th:src="${'availablecars/img/'+img.urlImage}"
 													alt="car">
 											</div>
 
@@ -431,7 +441,7 @@
 						<div class="detail">
 							<div class="heading clearfix">
 								<div class="title pull-left">
-									<a href="car-details.html" th:text="${car.carmodel.model}"></a>
+									<a th:href="@{/home/availablecars/details/}+${car.id}" th:text="${car.carmodel.model}"></a>
 								</div>
 								<div class="price pull-right" th:text="${car.price}+'$'">
 
@@ -666,7 +676,7 @@
 					provinceCode : $("#provinceSelect").val()
 				},
 				success : function(res) {
-					$(districtSelect).removeAttr('disabled');
+
 					$(districtSelect).html(
 							'<option value ="">--Select District--</option>');
 					$.each(res.districtList, function(key, value) {
@@ -692,7 +702,7 @@
 					districtCode : $("#districtSelect").val()
 				},
 				success : function(res) {
-					$(wardSelect).removeAttr('disabled');
+
 					$(wardSelect).html(
 							'<option value ="">--Select Ward--</option>');
 					$.each(res.wardList, function(key, value) {

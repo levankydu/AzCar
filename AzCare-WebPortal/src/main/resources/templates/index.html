@@ -82,7 +82,7 @@
 
 								<li class="nav-item"><a class="nav-link"
 									onclick="return checkLogin();"
-									th:href="@{/home/availablecars/}">Available Cars</a></li>
+									th:href="@{/home/availablecars}">Available Cars</a></li>
 								<li class="nav-item" th:if="${session.emailLogin}"><a
 									class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
 								<li class="nav-item"><a class="nav-link" href="#">
@@ -376,7 +376,7 @@
 							<div class="mask">
 								<h2>TP.Hồ Chí Minh</h2>
 								<p th:text="${carsInHcm.size()+' car(s)'}"></p>
-								<a href="car-details.html" class="btn btn-border"
+								<a th:href="@{/home/availablecars(city='ho_chi_minh')}" class="btn btn-border"
 									onclick="return checkLogin()">Read more</a>
 							</div>
 						</div>
@@ -389,7 +389,7 @@
 									<div class="mask">
 										<h2>Hà Nội</h2>
 										<p th:text="${carsInHn.size()+' car(s)'}"></p>
-										<a href="car-details.html" class="btn btn-border"
+										<a th:href="@{/home/availablecars(city='ha_noi')}" class="btn btn-border"
 											onclick="return checkLogin()">Read more</a>
 									</div>
 								</div>
@@ -400,7 +400,7 @@
 									<div class="mask">
 										<h2>Đà Nẵng</h2>
 										<p th:text="${carsInDn.size()+' car(s)'}"></p>
-										<a href="car-details.html" class="btn btn-border"
+										<a th:href="@{/home/availablecars(city='da_nang')}" class="btn btn-border"
 											onclick="return checkLogin()">Read more</a>
 									</div>
 								</div>
@@ -411,7 +411,7 @@
 									<div class="mask">
 										<h2>Bình Dương</h2>
 										<p th:text="${carsInBd.size()+' car(s)'}"></p>
-										<a href="car-details.html" class="btn btn-border"
+										<a th:href="@{/home/availablecars(city='binh_duong')}" class="btn btn-border"
 											onclick="return checkLogin()">Read more</a>
 									</div>
 								</div>

@@ -85,7 +85,7 @@ public class HomeController {
 	private FilesStorageServices fileStorageServices;
 
 	@GetMapping("/")
-	public String getHome(Model carRegisterList, Model carsInHcm, Model carsInHn, Model carsInDn, Model carsInBd) {
+	public String getHome(Model ModelView) {
 		List<CarInfor> list = carServices.findAll();
 		List<CarInforDto> listDto = new ArrayList<>();
 		List<CarInforDto> listcarsInHcm = new ArrayList<>();
@@ -105,6 +105,7 @@ public class HomeController {
 
 			listDto.add(itemDto);
 		}
+		listDto.removeIf(car -> !car.getStatus().equals(Constants.carStatus.READY));
 		for (var item : listDto) {
 			if (item.getAddress().contains("Hồ Chí Minh")) {
 				listcarsInHcm.add(item);
@@ -125,12 +126,13 @@ public class HomeController {
 				listcarsInBd.add(item);
 			}
 		}
-		carsInHcm.addAttribute("carsInHcm", listcarsInHcm);
-		carsInHn.addAttribute("carsInHn", listcarsInHn);
-		carsInDn.addAttribute("carsInDn", listcarsInDn);
-		carsInBd.addAttribute("carsInBd", listcarsInBd);
+		ModelView.addAttribute("carsInHcm", listcarsInHcm);
+		ModelView.addAttribute("carsInHn", listcarsInHn);
+		ModelView.addAttribute("carsInDn", listcarsInDn);
+		ModelView.addAttribute("carsInBd", listcarsInBd);
 		listDto.removeIf(car -> car.getDiscount() == 0);
-		carRegisterList.addAttribute("carRegisterList", listDto);
+		
+		ModelView.addAttribute("carRegisterList", listDto);
 		return "index";
 	}
 

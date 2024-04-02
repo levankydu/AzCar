@@ -18,4 +18,6 @@ public interface ProvinceRepository extends JpaRepository<City, String>{
 	List<String> getListString();
 	@Query(value = "SELECT c FROM City c WHERE c.code=?1")
 	City findbyId(String code);
+	@Query(value = "SELECT c FROM City c WHERE c.code_name=?1")
+	City findbyCode(String name);
 }

@@ -16,4 +16,7 @@ public interface WardRepository extends JpaRepository<Ward, String>{
 	
 	@Query(value = "SELECT DISTINCT c.name FROM Ward c")
 	List<String> getListString();
+	
+	@Query(value = "SELECT c FROM Ward c WHERE c.id=?1")
+	Ward findbyId(String id);
 }
