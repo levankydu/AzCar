@@ -74,7 +74,7 @@ public class FilesStorageServicesImpl implements FilesStorageServices {
 		      Resource resource = new UrlResource(file.toUri());
 
 		      if (resource.exists() || resource.isReadable()) {
-		    	  System.out.println(filename+"and"+dirName+" ok found");
+//		    	  System.out.println(filename+"and"+dirName+" ok found");
 		        return resource;
 		      } else {
 		    	  

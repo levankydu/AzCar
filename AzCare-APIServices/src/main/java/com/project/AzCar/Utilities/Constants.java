@@ -19,4 +19,12 @@ public class Constants {
 		String BLOCK="blocked";
 		String DECLINED ="declined";
 	}
+	
+	public static interface orderStatus{
+		String WAITING = "waiting_for_accept";
+		String ACCEPTED = "accepted";
+		String DECLINED = "declined";
+		String RENTOR_TRIP_DONE = "rentor_trip_done";
+		String OWNER_TRIP_DONE = "owner_trip_done";
+	}
 }

@@ -2,10 +2,14 @@ package com.project.AzCar.Controllers;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +37,8 @@ import com.project.AzCar.Entities.Cars.BrandImages;
 import com.project.AzCar.Entities.Cars.CarImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Cars.ExtraFee;
+import com.project.AzCar.Entities.Cars.OrderDetails;
+import com.project.AzCar.Entities.Cars.Payment;
 import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
@@ -47,9 +53,12 @@ import com.project.AzCar.Services.Cars.PlusServiceServices;
 import com.project.AzCar.Services.Locations.DistrictServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
 import com.project.AzCar.Services.Locations.WardServices;
+import com.project.AzCar.Services.Orders.OrderDetailsService;
+import com.project.AzCar.Services.Payments.PaymentService;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
+import com.project.AzCar.Utilities.OrderExtraFee;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -79,8 +88,14 @@ public class UserSideCarController {
 	private FilesStorageServices fileStorageServices;
 	@Autowired
 	private UserServices userServices;
+	@Autowired
+	private OrderDetailsService orderServices;
+	@Autowired
+	private PaymentService paymentServices;
+	
 
 	@GetMapping("/home/carregister/")
+
 	public String getCarRegisterPage(Model brandList, Model provinceList) {
 
 		List<String> brands = brandServices.getBrandList();
@@ -195,10 +210,38 @@ public class UserSideCarController {
 	}
 
 	@PostMapping("/home/availablecars/details/{carId}")
-	public String postRental(@PathVariable("carId") String carId,
-			@ModelAttribute("differenceDate") String differenceDate) {
-
-		return "";
+	public String postRental(
+			HttpServletRequest request,
+			@ModelAttribute("order") OrderDetails orderdetails,
+			@PathVariable("carId") String carId,
+			@ModelAttribute("fromDate-string")String fromDate_string,
+			@ModelAttribute("toDate-string")String toDate_string,
+			@ModelAttribute("isSameProvince")String isSameProvince,
+			@ModelAttribute("isSameDistrict")String isSameDistrict,
+			@ModelAttribute("deliveryFee")String deliveryFee
+	) {
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users owner = userServices.findUserByEmail(email);
+		orderdetails.setUserId((int) owner.getId());
+		LocalTime currentTime = LocalTime.now();
+		orderdetails.setFromDate(LocalDateTime.parse(fromDate_string + " " + currentTime, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS")));
+		orderdetails.setToDate(LocalDateTime.parse(toDate_string + " " + currentTime, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS")));
+		orderdetails.setSameProvince(isSameProvince.equals("1"));
+		orderdetails.setSameDistrict(isSameDistrict.equals("1"));
+		if(isSameProvince.equals("1") && isSameDistrict.equals("0")) {
+			orderdetails.setExtraFee(new OrderExtraFee(Float.parseFloat(deliveryFee), 0, 0));
+		}
+		orderdetails.setHalfPaid(BigDecimal.valueOf(0));
+		orderdetails.setStatus(Constants.orderStatus.WAITING);
+		System.out.println(orderdetails);
+		var orderDetails = orderServices.save(orderdetails);
+//		var payment = new Payment();
+//		payment.setUserId((int) owner.getId());
+//		payment.setAmount(orderdetails.getTotalRent());
+//		payment.setOrderDetailsId(orderDetails.getId());
+//		payment.setDescription("Thue xe");
+//		paymentServices.save(payment);
+		return "redirect:/home/myplan/";
 	}
 
 	@GetMapping("/home/carregister/success/")
@@ -207,8 +250,8 @@ public class UserSideCarController {
 	}
 
 	@GetMapping("/home/availablecars/details/{carId}")
-	public String getDetailsPage(@PathVariable("carId") String carId, Model carDetails, Model address,
-			Model fastBooking, Model carPlus, Model extraFee, Model fullAddress, Model provinceList) {
+	public String getDetailsPage(HttpServletRequest request, @PathVariable("carId") String carId, Model carDetails, Model address,
+			Model fastBooking, Model carPlus, Model extraFee, Model fullAddress, Model provinceList, Model user) {
 		var model = carServices.findById(Integer.parseInt(carId));
 		var modelDto = carServices.mapToDto(model.getId());
 		List<String> listProvince = provinceServices.getListCityString();
@@ -235,6 +278,9 @@ public class UserSideCarController {
 
 		fullAddress.addAttribute("fullAddress", model.getAddress());
 		carDetails.addAttribute("carDetails", modelDto);
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users owner = userServices.findUserByEmail(email);
+		user.addAttribute("user", owner);
 		return "carDetails";
 	}
 
@@ -267,8 +313,10 @@ public class UserSideCarController {
 		List<String> categories = brandServices.getCategoryList();
 		List<String> listProvince = provinceServices.getListCityString();
 		List<City> provinces = provinceServices.getListCity();
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users owner = userServices.findUserByEmail(email);
 		for (var item : list) {
-			if (item.getStatus().equals(Constants.carStatus.READY)) {
+			if (item.getStatus().equals(Constants.carStatus.READY) && item.getCarOwnerId() != (int)owner.getId()) {
 				var itemDto = carServices.mapToDto(item.getId());
 				itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 				itemDto.setImages(carImageServices.getImgByCarId(item.getId()));

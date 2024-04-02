@@ -26,28 +26,26 @@
 	<link rel="stylesheet" type="text/css"
 		href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
 
-<!-- Custom Stylesheet -->
-<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
-<link rel="stylesheet" type="text/css" id="style_sheet"
-	href="/assets/css/skins/default.css">
-
-<link rel="stylesheet" href="/assets/css/notiCss.css">
-
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
-
-
-<script type="text/javascript" src="/assets/js/notiJs.js"></script>
-<style type="text/css">
-.selected {
-	border: 1px solid blue;
-}
-</style>
 	<!-- Custom Stylesheet -->
 	<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
 	<link rel="stylesheet" type="text/css" id="style_sheet" href="/assets/css/skins/default.css">
+
+	<link rel="stylesheet" href="/assets/css/notiCss.css">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+
+
+	<script type="text/javascript" src="/assets/js/notiJs.js"></script>
+	<style type="text/css">
+		.selected {
+			border: 1px solid blue;
+		}
+	</style>
+	<!-- Custom Stylesheet -->
+	<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
+	<link rel="stylesheet" type="text/css" id="style_sheet" href="/assets/css/skins/default.css">
+	<link rel="stylesheet" href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
 	<style type="text/css">
 		.selected {
 			border: 1px solid blue;
@@ -229,23 +227,22 @@
 
 								<li class="nav-item"><a class="nav-link" href="#">
 										Contact Us </a></li>
-										<div id="openNoti">
+								<div id="openNoti">
 									<div class="" tabindex="0" id="noti">
 										<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-											xmlns:xlink="http://www.w3.org/1999/xlink"
-											viewBox="0 0 50 30" enable-background="new 0 0 50 30"
-											xml:space="preserve">
-    <g class="bell-icon__group">
-      <path class="" id="ball" fill-rule="evenodd" stroke-width="1.5"
-												clip-rule="evenodd" fill="none" stroke="#currentColor"
-												stroke-miterlimit="10"
-												d="M28.7,25 c0,1.9-1.7,3.5-3.7,3.5s-3.7-1.6-3.7-3.5s1.7-3.5,3.7-3.5S28.7,23,28.7,25z" />
-      <path class="" id="shell" fill-rule="evenodd" clip-rule="evenodd"
-												fill="#FFFFFF" stroke="#currentColor" stroke-width="2"
-												stroke-miterlimit="10"
-												d="M35.9,21.8c-1.2-0.7-4.1-3-3.4-8.7c0.1-1,0.1-2.1,0-3.1h0c-0.3-4.1-3.9-7.2-8.1-6.9c-3.7,0.3-6.6,3.2-6.9,6.9h0 c-0.1,1-0.1,2.1,0,3.1c0.6,5.7-2.2,8-3.4,8.7c-0.4,0.2-0.6,0.6-0.6,1v1.8c0,0.2,0.2,0.4,0.4,0.4h22.2c0.2,0,0.4-0.2,0.4-0.4v-1.8 C36.5,22.4,36.3,22,35.9,21.8L35.9,21.8z" />
-    </g>
-  </svg>
+											xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 30"
+											enable-background="new 0 0 50 30" xml:space="preserve">
+											<g class="bell-icon__group">
+												<path class="" id="ball" fill-rule="evenodd" stroke-width="1.5"
+													clip-rule="evenodd" fill="none" stroke="#currentColor"
+													stroke-miterlimit="10"
+													d="M28.7,25 c0,1.9-1.7,3.5-3.7,3.5s-3.7-1.6-3.7-3.5s1.7-3.5,3.7-3.5S28.7,23,28.7,25z" />
+												<path class="" id="shell" fill-rule="evenodd" clip-rule="evenodd"
+													fill="#FFFFFF" stroke="#currentColor" stroke-width="2"
+													stroke-miterlimit="10"
+													d="M35.9,21.8c-1.2-0.7-4.1-3-3.4-8.7c0.1-1,0.1-2.1,0-3.1h0c-0.3-4.1-3.9-7.2-8.1-6.9c-3.7,0.3-6.6,3.2-6.9,6.9h0 c-0.1,1-0.1,2.1,0,3.1c0.6,5.7-2.2,8-3.4,8.7c-0.4,0.2-0.6,0.6-0.6,1v1.8c0,0.2,0.2,0.4,0.4,0.4h22.2c0.2,0,0.4-0.2,0.4-0.4v-1.8 C36.5,22.4,36.3,22,35.9,21.8L35.9,21.8z" />
+											</g>
+										</svg>
 										<div class="notification-amount">
 											<span id="notiCounter"></span>
 										</div>
@@ -257,11 +254,11 @@
 										<div class="modal">
 											<h2>All Notification</h2>
 											<div id="messages"></div>
-											<svg class="modal-svg" xmlns="http://www.w3.org/2000/svg"
-												width="100%" height="100%" preserveAspectRatio="none">
-								<rect x="0" y="0" fill="none" width="226" height="162" rx="3"
-													ry="3"></rect>
-							</svg>
+											<svg class="modal-svg" xmlns="http://www.w3.org/2000/svg" width="100%"
+												height="100%" preserveAspectRatio="none">
+												<rect x="0" y="0" fill="none" width="226" height="162" rx="3" ry="3">
+												</rect>
+											</svg>
 										</div>
 									</div>
 								</div>
@@ -458,20 +455,24 @@
 							</li>
 
 							<li><span>Location</span>
-								<p class="mb-0" th:text="${address}"></p></li>
+								<p class="mb-0" th:text="${address}"></p>
+							</li>
 
 
 							<li th:if="${plusService}!= null"><span>Delivery Car
 									Fee: </span>
-								<p class="mb-0" th:text="${plusService.fee}+' $'"></p></li>
+								<p class="mb-0" th:text="${plusService.fee}+' $'"></p>
+							</li>
 
 
 							<li th:if="${extraFee}!= null"><span>Cleanning Fee :
-							</span>
-								<p class="mb-0" th:text="${extraFee.cleanningFee}+' $'"></p></li>
+								</span>
+								<p class="mb-0" th:text="${extraFee.cleanningFee}+' $'"></p>
+							</li>
 							<li th:if="${extraFee}!= null"><span>Decoration Fee:
-							</span>
-								<p class="mb-0" th:text="${extraFee.decorationFee}+' $'"></p></li>
+								</span>
+								<p class="mb-0" th:text="${extraFee.decorationFee}+' $'"></p>
+							</li>
 						</ul>
 					</div>
 					<!-- Car vedio start -->
@@ -832,25 +833,34 @@
 								</li>
 
 								<li><span>Location</span>
-									<p class="mb-0" th:text="${address}"></p></li>
+									<p class="mb-0" th:text="${address}"></p>
+								</li>
 
 
 								<li th:if="${plusService}!= null"><span>Delivery Fee
 										: </span>
-									<p class="mb-0" th:text="${plusService.fee}+' $'"></p></li>
+									<p class="mb-0" th:text="${plusService.fee}+' $'"></p>
+								</li>
 
 
 								<li th:if="${extraFee}!= null"><span>Cleanning Fee :
-								</span>
-									<p class="mb-0" th:text="${extraFee.cleanningFee}+' $'"></p></li>
+									</span>
+									<p class="mb-0" th:text="${extraFee.cleanningFee}+' $'"></p>
+								</li>
 								<li th:if="${extraFee}!= null"><span>Decoration Fee
 										: </span>
-									<p class="mb-0" th:text="${extraFee.decorationFee}+' $'"></p></li>
+									<p class="mb-0" th:text="${extraFee.decorationFee}+' $'"></p>
+								</li>
 							</ul>
 						</div>
 						<!-- Recent posts start -->
 						<div class="widget recent-posts">
-							<form th:action="${'/home/availablecars/details/' + carDetails.id}" method="post">
+							<form id="form-car-rental" th:action="${'/home/availablecars/details/' + carDetails.id}"
+								method="post">
+								<input type="hidden" name="totalRent" value="0">
+								<input type="hidden" name="isSameProvince" value="0">
+								<input type="hidden" name="isSameDistrict" value="0">
+								<input type="hidden" name="deliveryFee">
 								<h2 class="" th:text="'$'+${carDetails.price}+'/day'"></h2>
 								<div class="row">
 									<div class="col-12">
@@ -858,7 +868,7 @@
 											<div class="col-md-6">
 												<div class="wrapper">
 													<label for="form-fromDate">From
-														<input name="fromDate" type="text" id="form-fromDate"
+														<input name="fromDate-string" type="text" id="form-fromDate"
 															autocomplete="off">
 													</label>
 												</div>
@@ -866,7 +876,7 @@
 											<div class="col-md-6">
 												<div class="wrapper">
 													<label for="form-toDate">To
-														<input name="toDate" type="text" id="form-toDate"
+														<input name="toDate-string" type="text" id="form-toDate"
 															autocomplete="off" onChange="return updateTotalRent();">
 													</label>
 												</div>
@@ -881,7 +891,7 @@
 									<div class="col-12" th:if="carDetails.isCarPlus">
 										<h6 class="">Choose your current location:</h6>
 										<div class="input-group-prepend">
-											<input type="text" readonly class="form-control" name="address"
+											<input type="text" readonly class="form-control" name="deliveryAddress"
 												placeholder="Click to enter address" onclick="return openModal.click();"
 												id="carAddress" value=""> <a href="#" data-toggle="modal"
 												data-target="#addressModal" id="openModal" hidden="true">Click me</a>
@@ -907,11 +917,12 @@
 													id="form-details-amount"></p>
 											</div>
 											<div class="col-6">
-												<p class="float-left">Delivery Fee:</p>
+												<p th:attr="data-uqwfjwissa=${user.balance != null ? user.balance : 0}"
+													class="float-left">Delivery Fee:</p>
 											</div>
 											<div class="col-6">
-												<p class="float-right"
-													id="form-delivery-fee">$0</p>
+												<p th:attr="data-delivery-fee=${plusService != null ? plusService.fee : 0}"
+													class="float-right" id="form-delivery-fee">$0</p>
 											</div>
 										</div>
 									</div>
@@ -929,7 +940,9 @@
 								</div>
 								<div class="text-center mt-5">
 									<input type="hidden" name="differenceDate" id="form-differenceDate">
-									<button href="" class="btn btn-md btn-color" onclick="return form.submit();">Rent
+									<input type="hidden" th:attr="data-car-model=${carDetails.carmodel.model}">
+									<input type="hidden" th:attr="data-car-year=${carDetails.carmodel.year}">
+									<button href="" id="form-submit-btn" class="btn btn-md btn-color">Rent
 										Now</button>
 								</div>
 							</form>
@@ -1123,11 +1136,17 @@
 										</div>
 									</div>
 								</div>
+								<div class="description">
+									<h3>Description</h3>
+									<p>Select your car receiving address</p>
+									<p class="text-danger">* For the best experience, make sure you have picked the most convenient place for owner to delivery this car to you</p>
+								</div>
 							</div>
 						</div>
 						<div class="col-lg-6 modal-right">
 							<div class="modal-right-content bg-white">
 								<section class="form-group row">
+
 									<label class="col-3 col-form-label" for="provinceSelect">Province:</label>
 									<div class="col-7">
 										<select id="provinceSelect" class="form-control" name="province"
@@ -1138,14 +1157,22 @@
 												th:text="${item.full_name}"></option>
 										</select>
 									</div>
+
+
+
 								</section>
 								<section class="form-group row">
+
 									<label class="col-3 col-form-label" for="districtSelect">District:</label>
+
 									<div class="col-7">
 										<select disabled="disabled" id="districtSelect" class="form-control"
 											onchange="return districtSubmit()" name="districtSelect">
 										</select>
 									</div>
+
+
+
 								</section>
 								<section class="form-group row">
 									<label class="col-3 col-form-label" for="wardSelect">Ward:</label>
@@ -1154,7 +1181,22 @@
 											name="wardSelect">
 										</select>
 									</div>
+
 								</section>
+								<section class="form-group row">
+									<label class="col-3 col-form-label" for="street">Street:</label>
+									<div class="col-7">
+										<input class="form-control" id="street" type="text">
+									</div>
+								</section>
+								<section class="form-group row">
+									<label class="col-3 col-form-label" for="houseNo">House
+										No:</label>
+									<div class="col-7">
+										<input class="form-control" id="houseNo" type="text">
+									</div>
+								</section>
+
 								<section class="form-group row">
 									<span id="validation-address" class="text-danger text-center"></span>
 								</section>
@@ -1188,6 +1230,9 @@
 	<script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
 	<script src="/assets/js/ie-emulation-modes-warning.js"></script>
 	<script src="https://kit.fontawesome.com/56c961acc9.js"></script>
+	<script th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
+
+	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 
 	<!-- Custom JS Script -->
 	<script src="/assets/js/app.js"></script>
@@ -1284,9 +1329,21 @@
 				// Tính tổng giá thuê xe
 				var totalRent = dailyPrice * daysDifference;
 
+				var deliveryFeeElement = $('#form-delivery-fee');
+				var deliveryFeeText = deliveryFeeElement.text().trim();
+
+				var deliveryFee = 0;
+
+				if (deliveryFeeText.includes('$')) {
+					deliveryFee = parseInt(deliveryFeeText.replace('$', '').trim());
+				}
+
+				totalRent += deliveryFee;
+
 				// Cập nhật nội dung của phần tử total-rent
 				document.getElementById("form-details-amount").textContent = '$' + dailyPrice.toLocaleString() + ' x ' + daysDifference + (daysDifference > 1 ? ' days' : ' day');
-				document.getElementById("form-total").textContent = '$' + totalRent.toLocaleString();;
+				document.getElementById("form-total").textContent = '$' + totalRent.toLocaleString();
+				document.querySelector("#form-car-rental input[name='totalRent']").value = totalRent;
 			}
 		}
 
@@ -1326,14 +1383,37 @@
 			});
 		};
 		function addressSubmit() {
-			document.getElementById('validation-address').textContent = "";
-			const address = $("#wardSelect option:selected").text() + ", " + $("#districtSelect option:selected").text() + ", " + $("#provinceSelect option:selected").text();
+			const houseNo = document.getElementById('houseNo').value;
+			const street = document.getElementById('street').value;
+			if (houseNo == "" || street == "") {
+				document.getElementById('validation-address').textContent = "Address is not valid";
+				validateAddress();
+				return false;
+			} else {
+
+				document.getElementById('validation-address').textContent = "";
+				var address = $("#houseNo").val() + ", " + $("#street").val() + ", " + $("#wardSelect option:selected").text() + ", " + $("#districtSelect option:selected").text() + ", " + $("#provinceSelect option:selected").text();
+				$("#carAddress").val(address);
+				console.log(address);
+				console.log($("#carAddress").val());
+
+				carAddress.setAttribute("value", address);
+
+				offModal.click();
+				validateAddress();
+				getDeliveryFee();
+			}
+			/* document.getElementById('validation-address').textContent = "";
+			const address =
+				($("#wardSelect option:selected").text() == "--Select Ward--" ? "" : $("#wardSelect option:selected").text() + ", ")
+				+ ($("#districtSelect option:selected").text() == "--Select District--" ? "" : $("#districtSelect option:selected").text() + ", ")
+				+ $("#provinceSelect option:selected").text();
 			$("#carAddress").val(address);
 			carAddress.setAttribute("value", address);
 
-			offModal.click();
 			validateAddress();
 			getDeliveryFee();
+			offModal.click(); */
 		}
 
 		function validateAddress() {
@@ -1348,24 +1428,121 @@
 			}
 
 		}
-		
-		function getDeliveryFee(){
+
+		function getDeliveryFee() {
+			$('#form-submit-btn').attr('disabled', 'disabled');
 			const fullAddress = document.querySelector("p[data-full-address]");
 			const carRawAddress = fullAddress.getAttribute('data-full-address');
 			if (!carRawAddress.includes($("#provinceSelect option:selected").text())) {
 				console.log('ko trùng tinh - khong giao xe');
+				$('#form-delivery-fee').text('No delivery to your location');
+				$('#form-delivery-fee').addClass('text-danger');
+				$("#form-car-rental input[name='isSameProvince']").val(0);
+				$("#form-car-rental input[name='isSameDistrict']").val(0);
+				updateTotalRent();
 			} else {
 				if (carRawAddress.includes($("#districtSelect option:selected").text())) {
 					console.log('trung quan(thanhpho) - giao free');
+					$('#form-delivery-fee').text('$0');
+					$('#form-submit-btn').removeAttr('disabled');
+					$('#form-delivery-fee').removeClass('text-danger');
+					$("#form-car-rental input[name='isSameProvince']").val(1);
+					$("#form-car-rental input[name='isSameDistrict']").val(1);
+					updateTotalRent();
 				} else {
 					console.log('trung tinh - khong trung thanh pho - charge fee');
+					$('#form-delivery-fee').text('$' + $('#form-delivery-fee').data('delivery-fee'));
+					$('#form-submit-btn').removeAttr('disabled');
+					$('#form-delivery-fee').removeClass('text-danger');
+					$("#form-car-rental input[name='isSameProvince']").val(1);
+					$("#form-car-rental input[name='isSameDistrict']").val(0);
+					updateTotalRent();
 				}
 			}
 		}
 
+		$('#form-submit-btn').on('click', function (e) {
+			e.preventDefault();
+			const uissa = $('p[data-uqwfjwissa]').data('uqwfjwissa');
+			if (parseFloat(uissa) <= parseFloat($("#form-car-rental input[name='totalRent']").val())) {
+				Swal.fire({
+					title: "Balance is not enough",
+					text: "You won't be able to rent this car",
+					icon: "warning",
+					confirmButtonColor: "#3754ec",
+				});
+			} else {
+				let deliveryFeeElement11 = $('#form-delivery-fee');
+				let deliveryFeeText11 = deliveryFeeElement11.text().trim();
+
+				let deliveryFee11 = 0;
+
+				if (deliveryFeeText11.includes('$')) {
+					deliveryFee11 = parseInt(deliveryFeeText11.replace('$', '').trim());
+				}
+				$("input[name='deliveryFee']").val(deliveryFee11);
+				Swal.fire({
+					title: "Confirmation!",
+					html: `<table class="table">
+								<tr>
+									<th class="text-left">Model: </th>
+									<td class="text-right">${$('input[data-car-model]').data('car-model')}</td>
+								</tr>
+								<tr>
+									<th class="text-left">Year: </th>
+									<td class="text-right">${$('input[data-car-year]').data('car-year')}</td>
+								</tr>
+								<tr>
+									<th class="text-left">Rental per day: </th>
+									<td class="text-right">$${$('p[data-price]').data('price')}</td>
+								</tr>
+								<tr>
+									<th class="text-left">From: </th>
+									<td class="text-right">${$("input[name='fromDate-string']").val()}</td>
+								</tr>
+								<tr>
+									<th class="text-left">To: </th>
+									<td class="text-right">${$("input[name='toDate-string']").val()}</td>
+								</tr>
+								<tr>
+									<th class="text-left">Total days: </th>
+									<td class="text-right">${$("input[name='differenceDate']").val()}</td>
+								</tr>
+								<tr>
+									<th class="text-left">Delivery fee: </th>
+									<td class="text-right">$${deliveryFee11}</td>
+								</tr>
+								<tr>
+									<th class="text-left">Total: </th>
+									<td class="text-right">
+										<h3>$${$("#form-car-rental input[name='totalRent']").val()}</h3>
+									</td>
+								</tr>
+							</table>`,
+					showCancelButton: true,
+					confirmButtonColor: "#3085d6",
+					cancelButtonColor: "#ff214f",
+					confirmButtonText: "Yes, do it!"
+				}).then((result) => {
+					if (result.isConfirmed) {
+						Swal.fire({
+							title: "Rented!",
+							text: "Waiting for car owner to accept your rental (5 - 15 minutes)",
+							icon: "success"
+						});
+						setTimeout(function () {
+							const RENTAL_FORM = $('#form-car-rental').get(0);
+							RENTAL_FORM.submit();
+						}, 2000);
+					}
+				});
+			}
+		});
+
 		// Gọi hàm cập nhật tổng giá thuê xe khi trang được tải và mỗi khi input thay đổi
 		window.onload = function () {
 			updateTotalRent();
+			$('#form-submit-btn').attr('disabled', 'disabled');
 		};
 	</script>
 </body>
