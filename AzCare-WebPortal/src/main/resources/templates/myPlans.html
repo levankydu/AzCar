@@ -232,6 +232,21 @@
 					style="text-align: center; font-weight: bold;">
 					Welcome, <span th:text="${session.emailLogin}"></span>
 				</h4>
+				<h4 class="col-4 offset-md-8"
+					style="text-align: center; font-weight: bold;">
+					Your balance: $ <span
+						th:text="${user.balance!=null?user.balance :'0'}"></span>
+
+				</h4>
+				<form class="col-4 offset-md-8" style="text-align: center" id="charge"
+					th:action="@{/home/myplan/charge/}" method="post">
+					<button class="search-button btn-md btn-color" type="submit"
+						style="border-width: 0; border-radius: 0" 
+						onclick="return charge.submit()">Charge</button>
+
+
+				</form>
+
 				<div class="col-10 offset-md-1">
 
 
@@ -392,12 +407,17 @@
 											th:if="${ImgLicense.size()}>0">
 											<h5 class="col-12" style="font-weight: bold;">Your Car
 												Driving License</h5>
-
+											<h6 class="col-12">
+												Status: <span
+													th:classappend="${ImgLicense.get(0).status == 'accepted' ? 'text-success' : 'text-danger'}"
+													th:text="${ImgLicense.get(0).status}"></span>
+											</h6>
 
 											<div class="form-group col-md-8">
 												<label for="frontImg">Front License: </label> <img
 													class="form-control-file imgCars" id="frontImg"
-													th:src="'license/'+${ImgLicense.get(0)}" name="frontImg">
+													th:src="'license/'+${ImgLicense.get(0).ImageUrl}"
+													name="frontImg" style="height: 200px">
 
 
 											</div>
@@ -405,7 +425,8 @@
 											<div class="form-group col-md-8">
 												<label for="behindImg">Behind License: </label> <img
 													class="form-control-file imgCars" id="behindImg"
-													th:src="'license/'+${ImgLicense.get(1)}" name="behindImg">
+													th:src="'license/'+${ImgLicense.get(1).ImageUrl}"
+													name="behindImg" style="height: 200px">
 
 											</div>
 
@@ -414,7 +435,7 @@
 											th:unless="${ImgLicense.size()}>0">
 											<h5 class="col-12" style="font-weight: bold;">Upload
 												Your Car Driving License</h5>
-											<form th:action="@{/home/myplan}" method="post"
+											<form th:action="@{/home/myplan/}" method="post"
 												enctype="multipart/form-data" id="uploadDriveLicense">
 												<div class="form-group col-md-8">
 													<label for="frontImg">Front License: </label> <input

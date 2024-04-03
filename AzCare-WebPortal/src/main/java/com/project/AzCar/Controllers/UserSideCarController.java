@@ -32,21 +32,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
-import com.project.AzCar.Entities.Cars.BrandImages;
 import com.project.AzCar.Entities.Cars.CarImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Cars.ExtraFee;
 import com.project.AzCar.Entities.Cars.OrderDetails;
+import com.project.AzCar.Entities.Cars.PlateImages;
 import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
 import com.project.AzCar.Entities.Locations.Ward;
 import com.project.AzCar.Entities.Users.Users;
-import com.project.AzCar.Services.Cars.BrandImageServices;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
 import com.project.AzCar.Services.Cars.CarServices;
 import com.project.AzCar.Services.Cars.ExtraFeeServices;
+import com.project.AzCar.Services.Cars.PlateImageServices;
 import com.project.AzCar.Services.Cars.PlusServiceServices;
 import com.project.AzCar.Services.Locations.DistrictServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
@@ -66,8 +66,6 @@ public class UserSideCarController {
 	private JavaMailSender mailSender;
 	@Autowired
 	private BrandServices brandServices;
-	@Autowired
-	private BrandImageServices brandImageServices;
 	@Autowired
 	private ProvinceServices provinceServices;
 	@Autowired
@@ -90,7 +88,8 @@ public class UserSideCarController {
 	private OrderDetailsService orderServices;
 	@Autowired
 	private PaymentService paymentServices;
-	
+	@Autowired
+	private PlateImageServices plateImageServices;
 
 	@GetMapping("/home/carregister/")
 
@@ -208,25 +207,23 @@ public class UserSideCarController {
 	}
 
 	@PostMapping("/home/availablecars/details/{carId}")
-	public String postRental(
-			HttpServletRequest request,
-			@ModelAttribute("order") OrderDetails orderdetails,
-			@PathVariable("carId") String carId,
-			@ModelAttribute("fromDate-string")String fromDate_string,
-			@ModelAttribute("toDate-string")String toDate_string,
-			@ModelAttribute("isSameProvince")String isSameProvince,
-			@ModelAttribute("isSameDistrict")String isSameDistrict,
-			@ModelAttribute("deliveryFee")String deliveryFee
-	) {
+	public String postRental(HttpServletRequest request, @ModelAttribute("order") OrderDetails orderdetails,
+			@PathVariable("carId") String carId, @ModelAttribute("fromDate-string") String fromDate_string,
+			@ModelAttribute("toDate-string") String toDate_string,
+			@ModelAttribute("isSameProvince") String isSameProvince,
+			@ModelAttribute("isSameDistrict") String isSameDistrict,
+			@ModelAttribute("deliveryFee") String deliveryFee) {
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users owner = userServices.findUserByEmail(email);
 		orderdetails.setUserId((int) owner.getId());
 		LocalTime currentTime = LocalTime.now();
-		orderdetails.setFromDate(LocalDateTime.parse(fromDate_string + " " + currentTime, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS")));
-		orderdetails.setToDate(LocalDateTime.parse(toDate_string + " " + currentTime, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS")));
+		orderdetails.setFromDate(LocalDateTime.parse(fromDate_string + " " + currentTime,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS")));
+		orderdetails.setToDate(LocalDateTime.parse(toDate_string + " " + currentTime,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS")));
 		orderdetails.setSameProvince(isSameProvince.equals("1"));
 		orderdetails.setSameDistrict(isSameDistrict.equals("1"));
-		if(isSameProvince.equals("1") && isSameDistrict.equals("0")) {
+		if (isSameProvince.equals("1") && isSameDistrict.equals("0")) {
 			orderdetails.setExtraFee(new OrderExtraFee(Float.parseFloat(deliveryFee), 0, 0));
 		}
 		orderdetails.setHalfPaid(BigDecimal.valueOf(0));
@@ -248,8 +245,9 @@ public class UserSideCarController {
 	}
 
 	@GetMapping("/home/availablecars/details/{carId}")
-	public String getDetailsPage(HttpServletRequest request, @PathVariable("carId") String carId, Model carDetails, Model address,
-			Model fastBooking, Model carPlus, Model extraFee, Model fullAddress, Model provinceList, Model user) {
+	public String getDetailsPage(HttpServletRequest request, @PathVariable("carId") String carId, Model carDetails,
+			Model address, Model fastBooking, Model carPlus, Model extraFee, Model fullAddress, Model provinceList,
+			Model user) {
 		var model = carServices.findById(Integer.parseInt(carId));
 		var modelDto = carServices.mapToDto(model.getId());
 		List<String> listProvince = provinceServices.getListCityString();
@@ -302,9 +300,9 @@ public class UserSideCarController {
 	}
 
 	@GetMapping("/home/availablecars")
-	public String getAvailableCarsPage(Model ModelView,@RequestParam(name = "city",required = false) String city ,HttpServletRequest request) {
-		
-		
+	public String getAvailableCarsPage(Model ModelView, @RequestParam(name = "city", required = false) String city,
+			HttpServletRequest request) {
+
 		List<CarInfor> list = carServices.findAll();
 		List<CarInforDto> listDto = new ArrayList<>();
 		List<String> brands = brandServices.getBrandList();
@@ -314,7 +312,7 @@ public class UserSideCarController {
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users owner = userServices.findUserByEmail(email);
 		for (var item : list) {
-			if (item.getStatus().equals(Constants.carStatus.READY) && item.getCarOwnerId() != (int)owner.getId()) {
+			if (item.getStatus().equals(Constants.carStatus.READY) && item.getCarOwnerId() != (int) owner.getId()) {
 				var itemDto = carServices.mapToDto(item.getId());
 				itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 				itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
@@ -326,16 +324,15 @@ public class UserSideCarController {
 				listDto.add(itemDto);
 			}
 		}
-		if(city!=null) {
-			var cityModel =provinceServices.findByCode(city);
-			ModelView.addAttribute("province",cityModel.getFull_name());
+		if (city != null) {
+			var cityModel = provinceServices.findByCode(city);
+			ModelView.addAttribute("province", cityModel.getFull_name());
 			ModelView.addAttribute("listDistrict", districtServices.getDistricByProvinceCode(cityModel.getCode()));
-			listDto.removeIf(t->!t.getAddress().contains(cityModel.getName()));
+			listDto.removeIf(t -> !t.getAddress().contains(cityModel.getName()));
 			ModelView.addAttribute("carRegisterList", listDto);
-			
-			
+
 		}
-		
+
 		ModelView.addAttribute("listBrand", brands);
 		ModelView.addAttribute("listCategory", categories);
 		ModelView.addAttribute("provinceList", provinces);
@@ -344,7 +341,7 @@ public class UserSideCarController {
 	}
 
 	@PostMapping("/home/availablecars")
-	public String getResultPage(Model ModelView,HttpServletRequest request,
+	public String getResultPage(Model ModelView, HttpServletRequest request,
 			@RequestParam(name = "isCarPlus", required = false, defaultValue = "false") boolean isCarPlus,
 			@RequestParam(name = "isFastBooking", required = false, defaultValue = "false") boolean isFastBooking,
 			@RequestParam(name = "isDiscount", required = false, defaultValue = "false") boolean isDiscount,
@@ -362,13 +359,17 @@ public class UserSideCarController {
 		Users owner = userServices.findUserByEmail(email);
 
 		for (var item : list) {
-			
+
 			var itemDto = carServices.mapToDto(item.getId());
 			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
 			listDto.add(itemDto);
 		}
 		List<CarInforDto> filteredListDto = new ArrayList<>();
+		
+		if(carAddress.contains("Select")) {
+			carAddress="";
+		}
 		for (var item : listDto) {
 			if (carAddress.isEmpty() || item.getAddress().contains(carAddress)) {
 				filteredListDto.add(item);
@@ -381,12 +382,12 @@ public class UserSideCarController {
 				ModelView.addAttribute("listDistrict", districtServices.getDistricByProvinceCode(province));
 				filteredListDto.removeIf(item -> !item.getAddress().contains(city.getFull_name()));
 
-			}else{
-				var city2= provinceServices.findbyFullName(province);
+			} else {
+				var city2 = provinceServices.findbyFullName(province);
 				ModelView.addAttribute("province", city2.getFull_name());
 				ModelView.addAttribute("listDistrict", districtServices.getDistricByProvinceCode(city2.getCode()));
 				filteredListDto.removeIf(item -> !item.getAddress().contains(city2.getFull_name()));
-				
+
 			}
 
 		}
@@ -396,12 +397,12 @@ public class UserSideCarController {
 				ModelView.addAttribute("district", district.getFull_name());
 				ModelView.addAttribute("listWard", wardServices.getWardByDistrictCode(districtSelect));
 				filteredListDto.removeIf(item -> !item.getAddress().contains(district.getFull_name()));
-			}else{
-				var district2= districtServices.findbyFullName(districtSelect);
+			} else {
+				var district2 = districtServices.findbyFullName(districtSelect);
 				ModelView.addAttribute("district", district2.getFull_name());
-				ModelView.addAttribute("listWard", districtServices.getDistricByProvinceCode(district2.getCode()));
+				ModelView.addAttribute("listWard", wardServices.getWardByDistrictCode(district2.getCode()));
 				filteredListDto.removeIf(item -> !item.getAddress().contains(district2.getFull_name()));
-				
+
 			}
 
 		}
@@ -409,7 +410,7 @@ public class UserSideCarController {
 			var ward = wardServices.findbyId(wardSelect);
 			if (ward != null) {
 				ModelView.addAttribute("ward", ward.getFull_name());
-			}else {
+			} else {
 				ModelView.addAttribute("ward", wardSelect);
 			}
 
@@ -441,7 +442,7 @@ public class UserSideCarController {
 			}
 		}
 		filteredListDto.removeIf(t -> !t.getStatus().equals(Constants.carStatus.READY));
-		filteredListDto.removeIf(t->t.getOwner().getId()==owner.getId());
+		filteredListDto.removeIf(t -> t.getOwner().getId() == owner.getId());
 		ModelView.addAttribute("listBrand", brands);
 		ModelView.addAttribute("listCategory", categories);
 		ModelView.addAttribute("provinceList", provinces);
@@ -450,17 +451,18 @@ public class UserSideCarController {
 	}
 
 	@GetMapping("/home/myplan/")
-	public String getMyPlanPage(HttpServletRequest request, Model listCar, Model ImgLicense) {
+	public String getMyPlanPage(HttpServletRequest request, Model ModelView) {
 
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users user = userServices.findUserByEmail(email);
 		List<CarInfor> list = carServices.getbyOwnerId((int) user.getId());
 		List<CarInforDto> listDto = new ArrayList<>();
-		List<BrandImages> listImg = brandImageServices.getAll();
+		List<PlateImages> listImg = plateImageServices.getAll();
+		
+		
 		List<String> urlLicense = new ArrayList<>();
 		for (var item : listImg) {
-			if (item.getBrandName()
-					.contains(user.getId() + "-" + user.getEmail().replace(".", "-").replace("@", "-"))) {
+			if (item.getUserId() == user.getId()) {
 				urlLicense.add(item.getImageUrl());
 			}
 
@@ -472,12 +474,23 @@ public class UserSideCarController {
 
 			listDto.add(itemDto);
 		}
-
-		ImgLicense.addAttribute("ImgLicense", urlLicense);
-		listCar.addAttribute("listCar", listDto);
+		listImg.removeIf(t->t.getUserId()!=user.getId());
+		listImg.removeIf(t->t.getStatus().equals(Constants.plateStatus.DECLINED));
+		ModelView.addAttribute("ImgLicense", listImg);
+		ModelView.addAttribute("listCar", listDto);
+		ModelView.addAttribute("user",user);
 		return "myPlans";
 	}
-
+	@PostMapping("/home/myplan/charge/")
+	public String charge( HttpServletRequest request) {
+		
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users user = userServices.findUserByEmail(email);
+		user.setBalance(BigDecimal.valueOf(10000));
+		userServices.saveUserReset(user);
+		
+		return"redirect:/home/myplan/";
+	}
 	@GetMapping("/home/availablecars/img/{filename}")
 	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename) throws IOException {
 		List<CarInfor> list = carServices.findAll();
@@ -499,7 +512,7 @@ public class UserSideCarController {
 
 	}
 
-	@PostMapping("/home/myplan")
+	@PostMapping("/home/myplan/")
 	public String uploadDriveLicense(@RequestParam("frontImg") MultipartFile frontImg,
 			@RequestParam("behindImg") MultipartFile behindImg, HttpServletRequest request) {
 
@@ -509,8 +522,8 @@ public class UserSideCarController {
 		String dir = "./UploadFiles/userImages" + "/" + ownerId.getId() + "-"
 				+ ownerId.getEmail().replace(".", "-").replace("@", "-");
 		Path path = Paths.get(dir);
-		BrandImages frontImgModel = new BrandImages();
-		BrandImages behindImgModel = new BrandImages();
+		PlateImages frontImgModel = new PlateImages();
+		PlateImages behindImgModel = new PlateImages();
 		try {
 			Files.createDirectories(path);
 		} catch (IOException e) {
@@ -519,23 +532,23 @@ public class UserSideCarController {
 		try {
 
 			fileStorageServices.save(frontImg, dir);
-			frontImgModel.setBrandName(
-					"front-" + ownerId.getId() + "-" + ownerId.getEmail().replace(".", "-").replace("@", "-"));
+			frontImgModel.setUserId(ownerId.getId());
+			frontImgModel.setStatus(Constants.plateStatus.WAITING);
 			frontImgModel.setImageUrl(frontImg.getOriginalFilename());
-			brandImageServices.saveImage(frontImgModel);
+			plateImageServices.save(frontImgModel);
 
 			fileStorageServices.save(behindImg, dir);
-			behindImgModel.setBrandName(
-					"behind-" + ownerId.getId() + "-" + ownerId.getEmail().replace(".", "-").replace("@", "-"));
+			behindImgModel.setUserId(ownerId.getId());
+			behindImgModel.setStatus(Constants.plateStatus.WAITING);
 			behindImgModel.setImageUrl(behindImg.getOriginalFilename());
 
-			brandImageServices.saveImage(behindImgModel);
+			plateImageServices.save(behindImgModel);
 
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 
-		return "myPlans";
+		return "redirect:/home/myplan/";
 	}
 
 	@GetMapping("/home/myplan/license/{filename}")
