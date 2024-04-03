@@ -21,5 +21,9 @@ public class WardServiceImpl implements WardServices {
 	public List<String> getWardListString() {
 		return wardRepository.getListString();
 	}
+	@Override
+	public Ward findbyId(String id) {
+		return wardRepository.findbyId(id);
+	}
 
 }

@@ -39,6 +39,7 @@ public class SecurityConfig {
 						.permitAll().requestMatchers("/login/**").permitAll().requestMatchers("/registeradmin")
 						.permitAll().requestMatchers("/get/**").permitAll().requestMatchers("/home/carregister/**")
 						.hasAnyRole("USER", "ADMIN").requestMatchers("/home/myplan/**").hasAnyRole("USER", "ADMIN")
+						.requestMatchers("/home/availablecars**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers("/home/availablecars/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers("/user/profile/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers("/dashboard/**").hasAnyRole("ADMIN").requestMatchers("/dashboard/carverify/**")

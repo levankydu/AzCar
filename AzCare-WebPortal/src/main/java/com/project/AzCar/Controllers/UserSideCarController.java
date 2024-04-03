@@ -37,7 +37,6 @@ import com.project.AzCar.Entities.Cars.CarImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Cars.ExtraFee;
 import com.project.AzCar.Entities.Cars.OrderDetails;
-import com.project.AzCar.Entities.Cars.Payment;
 import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
@@ -207,7 +206,7 @@ public class UserSideCarController {
 		return "registerCar";
 
 	}
-	
+
 	@PostMapping("/home/availablecars/details/{carId}")
 	public String postRental(
 			HttpServletRequest request,
@@ -274,7 +273,7 @@ public class UserSideCarController {
 		}
 		List<City> provinces = provinceServices.getListCity();
 		provinceList.addAttribute("provinceList", provinces);
-		
+
 		fullAddress.addAttribute("fullAddress", model.getAddress());
 		carDetails.addAttribute("carDetails", modelDto);
 		String email = request.getSession().getAttribute("emailLogin").toString();
@@ -294,19 +293,18 @@ public class UserSideCarController {
 			Resource fileResource = fileStorageServices.load(filename, dir);
 			if (fileResource == null) {
 				i++;
-
 			} else {
 				return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
 						"attachment; filename=\"" + fileResource.getFilename() + "\"").body(fileResource);
 			}
-
 		}
 		return null;
 	}
 
-	@GetMapping("/home/availablecars/")
-	public String getAvailableCarsPage(HttpServletRequest request, Model carRegisterList, Model listProvinces, Model listBrand,
-			Model listCategory) {
+	@GetMapping("/home/availablecars")
+	public String getAvailableCarsPage(Model ModelView,@RequestParam(name = "city",required = false) String city ,HttpServletRequest request) {
+		
+		
 		List<CarInfor> list = carServices.findAll();
 		List<CarInforDto> listDto = new ArrayList<>();
 		List<String> brands = brandServices.getBrandList();
@@ -325,36 +323,46 @@ public class UserSideCarController {
 						itemDto.setAddress(c);
 					}
 				}
-
 				listDto.add(itemDto);
 			}
-
 		}
-		listBrand.addAttribute("listBrand", brands);
-		listCategory.addAttribute("listCategory", categories);
-		listProvinces.addAttribute("provinceList", provinces);
-		carRegisterList.addAttribute("carRegisterList", listDto);
+		if(city!=null) {
+			var cityModel =provinceServices.findByCode(city);
+			ModelView.addAttribute("province",cityModel.getFull_name());
+			ModelView.addAttribute("listDistrict", districtServices.getDistricByProvinceCode(cityModel.getCode()));
+			listDto.removeIf(t->!t.getAddress().contains(cityModel.getName()));
+			ModelView.addAttribute("carRegisterList", listDto);
+			
+			
+		}
+		
+		ModelView.addAttribute("listBrand", brands);
+		ModelView.addAttribute("listCategory", categories);
+		ModelView.addAttribute("provinceList", provinces);
+		ModelView.addAttribute("carRegisterList", listDto);
 		return "availableCars";
 	}
 
-	@PostMapping("/home/availablecars/")
-	public String getResultPage(Model carRegisterList, Model listProvinces, Model listBrand, Model listCategory,
+	@PostMapping("/home/availablecars")
+	public String getResultPage(Model ModelView,HttpServletRequest request,
 			@RequestParam(name = "isCarPlus", required = false, defaultValue = "false") boolean isCarPlus,
 			@RequestParam(name = "isFastBooking", required = false, defaultValue = "false") boolean isFastBooking,
 			@RequestParam(name = "isDiscount", required = false, defaultValue = "false") boolean isDiscount,
 			@RequestParam(name = "carAddress") String carAddress, @RequestParam(name = "carBrand") String carBrand,
-			@RequestParam(name = "carCate") String carCate,
-			@RequestParam(name = "province") String province,
-			@RequestParam(name = "districtSelect",defaultValue = "") String districtSelect,
-			@RequestParam(name = "wardSelect",defaultValue = "") String wardSelect) {
+			@RequestParam(name = "carCate") String carCate, @RequestParam(name = "province") String province,
+			@RequestParam(name = "districtSelect", defaultValue = "") String districtSelect,
+			@RequestParam(name = "wardSelect", defaultValue = "") String wardSelect) {
 		List<CarInfor> list = carServices.findAll();
 		List<CarInforDto> listDto = new ArrayList<>();
 		List<String> brands = brandServices.getBrandList();
 		List<String> categories = brandServices.getCategoryList();
 		List<String> listProvince = provinceServices.getListCityString();
 		List<City> provinces = provinceServices.getListCity();
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users owner = userServices.findUserByEmail(email);
 
 		for (var item : list) {
+			
 			var itemDto = carServices.mapToDto(item.getId());
 			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
@@ -366,30 +374,64 @@ public class UserSideCarController {
 				filteredListDto.add(item);
 			}
 		}
-		if(!province.isEmpty()) {
+		if (!province.isEmpty() && !province.equals("--Select Province--")) {
 			var city = provinceServices.findById(province);
-			filteredListDto.removeIf(item -> !item.getAddress().contains(city.getFull_name()));
+			if (city != null) {
+				ModelView.addAttribute("province", city.getFull_name());
+				ModelView.addAttribute("listDistrict", districtServices.getDistricByProvinceCode(province));
+				filteredListDto.removeIf(item -> !item.getAddress().contains(city.getFull_name()));
+
+			}else{
+				var city2= provinceServices.findbyFullName(province);
+				ModelView.addAttribute("province", city2.getFull_name());
+				ModelView.addAttribute("listDistrict", districtServices.getDistricByProvinceCode(city2.getCode()));
+				filteredListDto.removeIf(item -> !item.getAddress().contains(city2.getFull_name()));
+				
+			}
+
 		}
-		
-		if(!districtSelect.isEmpty()) {
+		if (!districtSelect.isEmpty() && !districtSelect.equals("--Select District--")) {
 			var district = districtServices.findbyId(districtSelect);
-			filteredListDto.removeIf(item -> !item.getAddress().contains(district.getFull_name()));
+			if (district != null) {
+				ModelView.addAttribute("district", district.getFull_name());
+				ModelView.addAttribute("listWard", wardServices.getWardByDistrictCode(districtSelect));
+				filteredListDto.removeIf(item -> !item.getAddress().contains(district.getFull_name()));
+			}else{
+				var district2= districtServices.findbyFullName(districtSelect);
+				ModelView.addAttribute("district", district2.getFull_name());
+				ModelView.addAttribute("listWard", districtServices.getDistricByProvinceCode(district2.getCode()));
+				filteredListDto.removeIf(item -> !item.getAddress().contains(district2.getFull_name()));
+				
+			}
+
 		}
-		if (!carBrand.isEmpty()) {
+		if (!wardSelect.isEmpty() && !wardSelect.equals("--Select Ward--")) {
+			var ward = wardServices.findbyId(wardSelect);
+			if (ward != null) {
+				ModelView.addAttribute("ward", ward.getFull_name());
+			}else {
+				ModelView.addAttribute("ward", wardSelect);
+			}
+
+		}
+		if (!carBrand.isEmpty() && !carBrand.equals("--Select Brand--")) {
+			ModelView.addAttribute("carBrand", carBrand);
 			filteredListDto.removeIf(item -> !item.getCarmodel().getBrand().contains(carBrand));
 		}
 
-		if (!carCate.isEmpty()) {
+		if (!carCate.isEmpty() && !carCate.equals("--Select Category--")) {
+			ModelView.addAttribute("carCate", carCate);
 			filteredListDto.removeIf(item -> !item.getCarmodel().getCategory().contains(carCate));
 		}
 		if (isCarPlus) {
+			ModelView.addAttribute("carPlus", "true");
 			filteredListDto.removeIf(item -> !item.isCarPlus());
 		}
 
 		if (isDiscount) {
+			ModelView.addAttribute("discount", "true");
 			filteredListDto.removeIf(item -> item.getDiscount() == 0);
 		}
-		
 
 		for (var item : filteredListDto) {
 			for (var c : listProvince) {
@@ -399,10 +441,11 @@ public class UserSideCarController {
 			}
 		}
 		filteredListDto.removeIf(t -> !t.getStatus().equals(Constants.carStatus.READY));
-		listBrand.addAttribute("listBrand", brands);
-		listCategory.addAttribute("listCategory", categories);
-		listProvinces.addAttribute("provinceList", provinces);
-		carRegisterList.addAttribute("carRegisterList", filteredListDto);
+		filteredListDto.removeIf(t->t.getOwner().getId()==owner.getId());
+		ModelView.addAttribute("listBrand", brands);
+		ModelView.addAttribute("listCategory", categories);
+		ModelView.addAttribute("provinceList", provinces);
+		ModelView.addAttribute("carRegisterList", filteredListDto);
 		return "availableCars";
 	}
 
@@ -435,7 +478,7 @@ public class UserSideCarController {
 		return "myPlans";
 	}
 
-	@GetMapping("/home/availablecars/{filename}")
+	@GetMapping("/home/availablecars/img/{filename}")
 	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename) throws IOException {
 		List<CarInfor> list = carServices.findAll();
 		String dir = "";
@@ -473,7 +516,6 @@ public class UserSideCarController {
 		} catch (IOException e) {
 			throw new RuntimeException("Could not initialize folder for upload!");
 		}
-
 		try {
 
 			fileStorageServices.save(frontImg, dir);

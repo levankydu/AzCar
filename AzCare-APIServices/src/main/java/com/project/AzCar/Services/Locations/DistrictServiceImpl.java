@@ -26,5 +26,10 @@ public class DistrictServiceImpl implements DistrictServices{
 	public District findbyId(String id) {
 		return districtRepository.findbyId(id);
 	}
+	@Override
+	public District findbyFullName(String fullName) {
+		return districtRepository.findbyFullName(fullName);
+	}
+
 
 }
