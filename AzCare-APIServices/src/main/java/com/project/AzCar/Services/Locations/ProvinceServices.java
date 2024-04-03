@@ -12,4 +12,5 @@ public interface ProvinceServices {
  List<String> getListCityString();
  City findById(String id);
  City findByCode(String name);
+ City findbyFullName(String fullName);
 }

@@ -229,7 +229,7 @@
 
 								<div class="text">
 									<h3>
-										<a href="car-details.html" onclick="return checkLogin()"
+										<a th:href="${'home/availablecars/details/'+carRegisterList.get(1).id}" onclick="return checkLogin()"
 											th:text="${carRegisterList.get(1).carmodel.model}"></a>
 									</h3>
 									<ul class="facilities-list clearfix">

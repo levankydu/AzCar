@@ -19,4 +19,5 @@ public interface WardRepository extends JpaRepository<Ward, String>{
 	
 	@Query(value = "SELECT c FROM Ward c WHERE c.id=?1")
 	Ward findbyId(String id);
+	
 }

@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,7 +37,6 @@ import com.project.AzCar.Entities.Cars.CarImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Cars.ExtraFee;
 import com.project.AzCar.Entities.Cars.OrderDetails;
-import com.project.AzCar.Entities.Cars.Payment;
 import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
@@ -304,7 +302,7 @@ public class UserSideCarController {
 	}
 
 	@GetMapping("/home/availablecars")
-	public String getAvailableCarsPage(Model ModelView,@RequestParam(name = "city",required = false) String city) {
+	public String getAvailableCarsPage(Model ModelView,@RequestParam(name = "city",required = false) String city ,HttpServletRequest request) {
 		
 		
 		List<CarInfor> list = carServices.findAll();
@@ -345,8 +343,8 @@ public class UserSideCarController {
 		return "availableCars";
 	}
 
-	@PostMapping("/home/availablecars/")
-	public String getResultPage(Model ModelView,
+	@PostMapping("/home/availablecars")
+	public String getResultPage(Model ModelView,HttpServletRequest request,
 			@RequestParam(name = "isCarPlus", required = false, defaultValue = "false") boolean isCarPlus,
 			@RequestParam(name = "isFastBooking", required = false, defaultValue = "false") boolean isFastBooking,
 			@RequestParam(name = "isDiscount", required = false, defaultValue = "false") boolean isDiscount,
@@ -360,8 +358,11 @@ public class UserSideCarController {
 		List<String> categories = brandServices.getCategoryList();
 		List<String> listProvince = provinceServices.getListCityString();
 		List<City> provinces = provinceServices.getListCity();
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users owner = userServices.findUserByEmail(email);
 
 		for (var item : list) {
+			
 			var itemDto = carServices.mapToDto(item.getId());
 			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
@@ -380,6 +381,12 @@ public class UserSideCarController {
 				ModelView.addAttribute("listDistrict", districtServices.getDistricByProvinceCode(province));
 				filteredListDto.removeIf(item -> !item.getAddress().contains(city.getFull_name()));
 
+			}else{
+				var city2= provinceServices.findbyFullName(province);
+				ModelView.addAttribute("province", city2.getFull_name());
+				ModelView.addAttribute("listDistrict", districtServices.getDistricByProvinceCode(city2.getCode()));
+				filteredListDto.removeIf(item -> !item.getAddress().contains(city2.getFull_name()));
+				
 			}
 
 		}
@@ -389,6 +396,12 @@ public class UserSideCarController {
 				ModelView.addAttribute("district", district.getFull_name());
 				ModelView.addAttribute("listWard", wardServices.getWardByDistrictCode(districtSelect));
 				filteredListDto.removeIf(item -> !item.getAddress().contains(district.getFull_name()));
+			}else{
+				var district2= districtServices.findbyFullName(districtSelect);
+				ModelView.addAttribute("district", district2.getFull_name());
+				ModelView.addAttribute("listWard", districtServices.getDistricByProvinceCode(district2.getCode()));
+				filteredListDto.removeIf(item -> !item.getAddress().contains(district2.getFull_name()));
+				
 			}
 
 		}
@@ -396,15 +409,17 @@ public class UserSideCarController {
 			var ward = wardServices.findbyId(wardSelect);
 			if (ward != null) {
 				ModelView.addAttribute("ward", ward.getFull_name());
+			}else {
+				ModelView.addAttribute("ward", wardSelect);
 			}
 
 		}
-		if (!carBrand.isEmpty() && !carBrand.equals("Select Brand")) {
+		if (!carBrand.isEmpty() && !carBrand.equals("--Select Brand--")) {
 			ModelView.addAttribute("carBrand", carBrand);
 			filteredListDto.removeIf(item -> !item.getCarmodel().getBrand().contains(carBrand));
 		}
 
-		if (!carCate.isEmpty() && !carCate.equals("Select Category")) {
+		if (!carCate.isEmpty() && !carCate.equals("--Select Category--")) {
 			ModelView.addAttribute("carCate", carCate);
 			filteredListDto.removeIf(item -> !item.getCarmodel().getCategory().contains(carCate));
 		}
@@ -426,6 +441,7 @@ public class UserSideCarController {
 			}
 		}
 		filteredListDto.removeIf(t -> !t.getStatus().equals(Constants.carStatus.READY));
+		filteredListDto.removeIf(t->t.getOwner().getId()==owner.getId());
 		ModelView.addAttribute("listBrand", brands);
 		ModelView.addAttribute("listCategory", categories);
 		ModelView.addAttribute("provinceList", provinces);
