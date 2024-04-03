@@ -6,6 +6,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -32,9 +33,11 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import com.project.AzCar.Dto.Brands.BrandsDto;
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
 import com.project.AzCar.Dto.Categories.CategoriesDto;
+import com.project.AzCar.Dto.PlateVerify.PlateVerifyDto;
 import com.project.AzCar.Entities.Cars.BrandImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Cars.CarModelList;
+import com.project.AzCar.Entities.Cars.PlateImages;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Notification.Message;
@@ -43,10 +46,9 @@ import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
 import com.project.AzCar.Services.Cars.CarServices;
 import com.project.AzCar.Services.Cars.ExtraFeeServices;
+import com.project.AzCar.Services.Cars.PlateImageServices;
 import com.project.AzCar.Services.Cars.PlusServiceServices;
-import com.project.AzCar.Services.Locations.DistrictServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
-import com.project.AzCar.Services.Locations.WardServices;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
@@ -66,15 +68,9 @@ public class AdminController {
 	@Autowired
 	private FilesStorageServices fileStorageServices;
 	@Autowired
-	private UserServices userRepo;
-	@Autowired
 	private JavaMailSender mailSender;
 	@Autowired
 	private ProvinceServices provinceServices;
-	@Autowired
-	private DistrictServices districtServices;
-	@Autowired
-	private WardServices wardServices;
 	@Autowired
 	private CarImageServices carImageServices;
 	@Autowired
@@ -86,7 +82,9 @@ public class AdminController {
 	@Autowired
 	private UserServices userServices;
 	@Autowired
-    SimpMessagingTemplate simpMessagingTemplate;
+	SimpMessagingTemplate simpMessagingTemplate;
+	@Autowired
+	private PlateImageServices plateImageServices;
 
 	@GetMapping("/dashboard/")
 	public String getDashboard(Model model, Authentication authentication) {
@@ -97,8 +95,74 @@ public class AdminController {
 		return "admin/dashboard";
 	}
 
+	@GetMapping("/dashboard/platesVerify/")
+	public String getPlatesVerifyPage(Model ModelView) {
+		List<Long> listUserId = plateImageServices.getUserIdList();
+		List<PlateImages> listImg = plateImageServices.getAll();
+		List<PlateVerifyDto> listPlateDto = new ArrayList<>();
+
+		for (var item : listUserId) {
+			var PlateVerifyDto = new PlateVerifyDto();
+			PlateVerifyDto.setUserModel(userServices.findById(item));
+			List<PlateImages> userImages = listImg.stream().filter(img -> img.getUserId() == item)
+					.collect(Collectors.toList());
+			PlateVerifyDto.setPlateImages(userImages);
+			listPlateDto.add(PlateVerifyDto);
+		}
+
+		ModelView.addAttribute("listPlates", listPlateDto);
+		return "admin/verifyPlates";
+
+	}
+
+	@PostMapping("/dashboard/platesVerfy/")
+	public String confirmPlateVerify(@ModelAttribute("status") String status, @ModelAttribute("userId") String userId) {
+
+		var user = userServices.findById(Long.parseLong(userId));
+		List<PlateImages> list = plateImageServices.getAll();
+		List<PlateImages> userImages = list.stream().filter(img -> img.getUserId() == Long.parseLong(userId))
+				.collect(Collectors.toList());
+
+		if (status.equals("accepted")) {
+			for (var item : userImages) {
+				item.setStatus(Constants.plateStatus.ACCEPTED);
+				plateImageServices.save(item);
+			}
+
+			try {
+				sendEmailAcceptPlate(user.getEmail());
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		if (status.equals("declined")) {
+			for (var item : userImages) {
+				item.setStatus(Constants.plateStatus.DECLINED);
+				plateImageServices.save(item);
+			}
+
+			try {
+				sendEmailDeclinePlate(user.getEmail());
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+		return "redirect:/dashboard/platesVerify/";
+	}
+
 	@GetMapping("/dashboard/carverify/")
-	public String getCarVerifyPage(Model carRegisterList, Model listProvinces, Model listBrand, Model listCategory) {
+	public String getCarVerifyPage(Model ModelView) {
 
 		List<CarInfor> list = carServices.findAll();
 		List<CarInforDto> listDto = new ArrayList<>();
@@ -121,27 +185,25 @@ public class AdminController {
 			listDto.add(itemDto);
 
 		}
-		listBrand.addAttribute("listBrand", brands);
-		listCategory.addAttribute("listCategory", categories);
-		listProvinces.addAttribute("provinceList", provinces);
-		carRegisterList.addAttribute("carRegisterList", listDto);
+		ModelView.addAttribute("listBrand", brands);
+		ModelView.addAttribute("listCategory", categories);
+		ModelView.addAttribute("provinceList", provinces);
+		ModelView.addAttribute("carRegisterList", listDto);
 		return "admin/carverify";
 
 	}
 
 	@GetMapping("/dashboard/carverify/{carId}")
-	public String getVerifyDetailsPage(@PathVariable("carId") String carId, Model carDetails,Model checkPlate) {
+	public String getVerifyDetailsPage(@PathVariable("carId") String carId, Model carDetails, Model checkPlate) {
 		var listAcceptedCar = carServices.findAll();
-		
-		
-		
+
 		var model = carServices.findById(Integer.parseInt(carId));
-		for(var item: listAcceptedCar) {
-			if(model.getLicensePlates().equals(item.getLicensePlates())) {
+		for (var item : listAcceptedCar) {
+			if (model.getLicensePlates().equals(item.getLicensePlates())) {
 				checkPlate.addAttribute("checkPlate", "Duplicate License Plate");
 			}
 		}
-		
+
 		var modelDto = carServices.mapToDto(model.getId());
 		modelDto.setCarmodel(brandServices.getModel(model.getModelId()));
 		modelDto.setImages(carImageServices.getImgByCarId(model.getId()));
@@ -223,6 +285,26 @@ public class AdminController {
 		}
 
 	}
+	@GetMapping("/dashboard/platesVerfy/{filename}")
+	public ResponseEntity<Resource> getPlateImage(@PathVariable("filename") String filename) {
+		List<Users> list = userServices.findAllUsers();
+		String dir = "";
+		int i = 0;
+		while (i < list.size()) {
+			dir = "./UploadFiles/userImages/" +list.get(i).getId()+"-" +list.get(i).getEmail().replace(".", "-").replace("@", "-");
+			Resource fileResource = fileStorageServices.load(filename, dir);
+			if (fileResource == null) {
+				i++;
+
+			} else {
+				return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment; filename=\"" + fileResource.getFilename() + "\"").body(fileResource);
+			}
+
+		}
+		return null;
+	}
+	
 
 	@GetMapping("/dashboard/brands/{filename}")
 	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename) {
@@ -295,7 +377,7 @@ public class AdminController {
 		var modelDto = carServices.mapToDto(model.getId());
 		modelDto.setOwner(userServices.findById(model.getCarOwnerId()));
 		modelDto.setCarmodel(brandServices.getModel(model.getModelId()));
-		
+
 		if (status.equals("accepted")) {
 			model.setStatus(Constants.carStatus.READY);
 			carServices.saveCarRegister(model);
@@ -326,13 +408,13 @@ public class AdminController {
 
 		}
 
-		return "redirect:/dashboard/carverify/"+carId;
+		return "redirect:/dashboard/carverify/" + carId;
 	}
 
 	@GetMapping("/dashboard/ListAccount")
 	public String getfindAll(Model model) {
 
-		List<Users> userlists = userRepo.findAllUsers();
+		List<Users> userlists = userServices.findAllUsers();
 		model.addAttribute("userlists", userlists);
 		return "admin/ListAccount";
 	}
@@ -382,19 +464,54 @@ public class AdminController {
 		helper.setText(content, true);
 		mailSender.send(message);
 	}
-	
-	
 
-    // Mapped as /app/application
-    @MessageMapping("/application")
-    @SendTo("/all/messages")
-    public Message send(final Message message) throws Exception {
-        return message;
-    }
+	private void sendEmailAcceptPlate(String email)
+			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
 
-    // Mapped as /app/private
-    @MessageMapping("/private")
-    public void sendToSpecificUser(@Payload Message message) throws Exception{
-        simpMessagingTemplate.convertAndSendToUser(message.getTo(), "/specific", message);
-    }
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		String subject = "Successfull verify your License Plate";
+		String content = "<p>Hello," + email + "</p>"
+				+ "<p>Thank you for registering your License Plate with AzCar.</p>" +
+
+				"<p>This is to confirm that we already verify your information</p>"
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
+	}
+
+	private void sendEmailDeclinePlate(String email)
+			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		String subject = "Verify your License Plate not succesfully";
+		String content = "<p>Hello," + email + "</p>" + "<p>Sorry,Your License Plate is not verified with AzCar.</p>" +
+
+				"<p>This is to confirm that we already verify your information</p>"
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
+	}
+
+	// Mapped as /app/application
+	@MessageMapping("/application")
+	@SendTo("/all/messages")
+	public Message send(final Message message) throws Exception {
+		return message;
+	}
+
+	// Mapped as /app/private
+	@MessageMapping("/private")
+	public void sendToSpecificUser(@Payload Message message) throws Exception {
+		simpMessagingTemplate.convertAndSendToUser(message.getTo(), "/specific", message);
+	}
 }

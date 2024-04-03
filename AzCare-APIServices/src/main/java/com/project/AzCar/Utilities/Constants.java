@@ -27,4 +27,11 @@ public class Constants {
 		String RENTOR_TRIP_DONE = "rentor_trip_done";
 		String OWNER_TRIP_DONE = "owner_trip_done";
 	}
+	
+	public static interface plateStatus{
+		String WAITING = "waiting_for_verify";
+		String ACCEPTED = "accepted";
+		String DECLINED = "declined";
+		
+	}
 }
