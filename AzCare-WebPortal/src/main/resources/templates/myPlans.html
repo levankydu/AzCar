@@ -232,6 +232,21 @@
 					style="text-align: center; font-weight: bold;">
 					Welcome, <span th:text="${session.emailLogin}"></span>
 				</h4>
+				<h4 class="col-4 offset-md-8"
+					style="text-align: center; font-weight: bold;">
+					Your balance: $ <span
+						th:text="${user.balance!=null?user.balance :'0'}"></span>
+
+				</h4>
+				<form class="col-4 offset-md-8" style="text-align: center" id="charge"
+					th:action="@{/home/myplan/charge/}" method="post">
+					<button class="search-button btn-md btn-color" type="submit"
+						style="border-width: 0; border-radius: 0" 
+						onclick="return charge.submit()">Charge</button>
+
+
+				</form>
+
 				<div class="col-10 offset-md-1">
 
 

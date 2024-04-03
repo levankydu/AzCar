@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
-import com.project.AzCar.Entities.Cars.BrandImages;
 import com.project.AzCar.Entities.Cars.CarImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Cars.ExtraFee;
@@ -43,7 +42,6 @@ import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
 import com.project.AzCar.Entities.Locations.Ward;
 import com.project.AzCar.Entities.Users.Users;
-import com.project.AzCar.Services.Cars.BrandImageServices;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
 import com.project.AzCar.Services.Cars.CarServices;
@@ -68,8 +66,6 @@ public class UserSideCarController {
 	private JavaMailSender mailSender;
 	@Autowired
 	private BrandServices brandServices;
-	@Autowired
-	private BrandImageServices brandImageServices;
 	@Autowired
 	private ProvinceServices provinceServices;
 	@Autowired
@@ -482,9 +478,19 @@ public class UserSideCarController {
 		listImg.removeIf(t->t.getStatus().equals(Constants.plateStatus.DECLINED));
 		ModelView.addAttribute("ImgLicense", listImg);
 		ModelView.addAttribute("listCar", listDto);
+		ModelView.addAttribute("user",user);
 		return "myPlans";
 	}
-
+	@PostMapping("/home/myplan/charge/")
+	public String charge( HttpServletRequest request) {
+		
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users user = userServices.findUserByEmail(email);
+		user.setBalance(BigDecimal.valueOf(10000));
+		userServices.saveUserReset(user);
+		
+		return"redirect:/home/myplan/";
+	}
 	@GetMapping("/home/availablecars/img/{filename}")
 	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename) throws IOException {
 		List<CarInfor> list = carServices.findAll();
