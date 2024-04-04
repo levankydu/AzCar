@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.project.AzCar.Entities.Cars.Payment;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Repositories.Payments.PaymentRepository;
-import com.project.AzCar.Repositories.Users.UserRepository;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
 

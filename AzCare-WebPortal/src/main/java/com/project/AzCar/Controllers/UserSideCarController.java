@@ -37,7 +37,6 @@ import com.project.AzCar.Entities.Cars.CarImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Cars.ExtraFee;
 import com.project.AzCar.Entities.Cars.OrderDetails;
-import com.project.AzCar.Entities.Cars.Payment;
 import com.project.AzCar.Entities.Cars.PlateImages;
 import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Locations.City;
@@ -226,9 +225,9 @@ public class UserSideCarController {
 		orderdetails.setUserId((int) user.getId());
 		LocalTime currentTime = LocalTime.now();
 		orderdetails.setFromDate(LocalDateTime.parse(fromDate_string + " " + currentTime,
-				DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS")));
+				DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSSSSS")));
 		orderdetails.setToDate(LocalDateTime.parse(toDate_string + " " + currentTime,
-				DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS")));
+				DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSSSSS")));
 		orderdetails.setSameProvince(isSameProvince.equals("1"));
 		orderdetails.setSameDistrict(isSameDistrict.equals("1"));
 		OrderExtraFee extra = new OrderExtraFee(0, carExtraFee != null ? carExtraFee.getCleanningFee() : 0, carExtraFee != null ? carExtraFee.getDecorationFee() : 0);
@@ -507,7 +506,7 @@ public class UserSideCarController {
 			List<OrderDetails> llll = orderServices.getFromCarId(item.getId());
 			var name = "OrderListDto"+itemDto.getCarmodel().getObjectId();
 			List<OrderDetailsDTO> mmmm = orderServices.getDTOFromCarId(item.getId());
-			llll.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.WAITING));
+			mmmm.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.WAITING));
 			ModelView.addAttribute(name, mmmm);
 			llll.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.WAITING));
 			
