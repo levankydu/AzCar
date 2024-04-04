@@ -32,16 +32,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
+import com.project.AzCar.Dto.Orders.OrderDetailsDTO;
 import com.project.AzCar.Entities.Cars.CarImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Cars.ExtraFee;
 import com.project.AzCar.Entities.Cars.OrderDetails;
+import com.project.AzCar.Entities.Cars.Payment;
 import com.project.AzCar.Entities.Cars.PlateImages;
 import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
 import com.project.AzCar.Entities.Locations.Ward;
 import com.project.AzCar.Entities.Users.Users;
+import com.project.AzCar.Entities.Users.Violation;
+import com.project.AzCar.Repositories.Orders.ViolationRepository;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
 import com.project.AzCar.Services.Cars.CarServices;
@@ -90,6 +94,9 @@ public class UserSideCarController {
 	private PaymentService paymentServices;
 	@Autowired
 	private PlateImageServices plateImageServices;
+	
+	@Autowired
+	private ViolationRepository violationRepo;
 
 	@GetMapping("/home/carregister/")
 
@@ -213,9 +220,10 @@ public class UserSideCarController {
 			@ModelAttribute("isSameProvince") String isSameProvince,
 			@ModelAttribute("isSameDistrict") String isSameDistrict,
 			@ModelAttribute("deliveryFee") String deliveryFee) {
+		var carExtraFee = extraFeeServices.findByCarId(Integer.parseInt(carId));
 		String email = request.getSession().getAttribute("emailLogin").toString();
-		Users owner = userServices.findUserByEmail(email);
-		orderdetails.setUserId((int) owner.getId());
+		Users user = userServices.findUserByEmail(email);
+		orderdetails.setUserId((int) user.getId());
 		LocalTime currentTime = LocalTime.now();
 		orderdetails.setFromDate(LocalDateTime.parse(fromDate_string + " " + currentTime,
 				DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS")));
@@ -223,19 +231,14 @@ public class UserSideCarController {
 				DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS")));
 		orderdetails.setSameProvince(isSameProvince.equals("1"));
 		orderdetails.setSameDistrict(isSameDistrict.equals("1"));
+		OrderExtraFee extra = new OrderExtraFee(0, carExtraFee != null ? carExtraFee.getCleanningFee() : 0, carExtraFee != null ? carExtraFee.getDecorationFee() : 0);
 		if (isSameProvince.equals("1") && isSameDistrict.equals("0")) {
-			orderdetails.setExtraFee(new OrderExtraFee(Float.parseFloat(deliveryFee), 0, 0));
+			extra.setDeliveryFee(Float.parseFloat(deliveryFee));
 		}
-		orderdetails.setHalfPaid(BigDecimal.valueOf(0));
+		orderdetails.setExtraFee(extra);
 		orderdetails.setStatus(Constants.orderStatus.WAITING);
-		System.out.println(orderdetails);
-		var orderDetails = orderServices.save(orderdetails);
-//		var payment = new Payment();
-//		payment.setUserId((int) owner.getId());
-//		payment.setAmount(orderdetails.getTotalRent());
-//		payment.setOrderDetailsId(orderDetails.getId());
-//		payment.setDescription("Thue xe");
-//		paymentServices.save(payment);
+		orderServices.save(orderdetails);
+		paymentServices.createNewLock(user.getId(), orderdetails.getId(), orderdetails.getTotalAndFees());
 		return "redirect:/home/myplan/";
 	}
 
@@ -245,9 +248,7 @@ public class UserSideCarController {
 	}
 
 	@GetMapping("/home/availablecars/details/{carId}")
-	public String getDetailsPage(HttpServletRequest request, @PathVariable("carId") String carId, Model carDetails,
-			Model address, Model fastBooking, Model carPlus, Model extraFee, Model fullAddress, Model provinceList,
-			Model user) {
+	public String getDetailsPage(HttpServletRequest request, @PathVariable("carId") String carId, Model ModelView) {
 		var model = carServices.findById(Integer.parseInt(carId));
 		var modelDto = carServices.mapToDto(model.getId());
 		List<String> listProvince = provinceServices.getListCityString();
@@ -255,28 +256,33 @@ public class UserSideCarController {
 		var carExtraFee = extraFeeServices.findByCarId(model.getId());
 		if (carExtraFee != null) {
 
-			extraFee.addAttribute("extraFee", carExtraFee);
+			ModelView.addAttribute("extraFee", carExtraFee);
 		}
 		var carPLusService = plusServiceServices.findByCarId(model.getId());
 		if (carPLusService != null) {
 
-			carPlus.addAttribute("plusService", carPLusService);
+			ModelView.addAttribute("plusService", carPLusService);
 		}
 		modelDto.setCarmodel(brandServices.getModel(model.getModelId()));
 		modelDto.setImages(carImageServices.getImgByCarId(model.getId()));
 		for (var c : listProvince) {
 			if (model.getAddress().contains(c)) {
-				address.addAttribute("address", c);
+				ModelView.addAttribute("address", c);
 			}
 		}
 		List<City> provinces = provinceServices.getListCity();
-		provinceList.addAttribute("provinceList", provinces);
+		ModelView.addAttribute("provinceList", provinces);
 
-		fullAddress.addAttribute("fullAddress", model.getAddress());
-		carDetails.addAttribute("carDetails", modelDto);
+		ModelView.addAttribute("fullAddress", model.getAddress());
+		ModelView.addAttribute("carDetails", modelDto);
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users owner = userServices.findUserByEmail(email);
-		user.addAttribute("user", owner);
+		ModelView.addAttribute("user", owner);
+		System.out.println(owner.getPhone());
+		List<PlateImages> plates = plateImageServices.getAll();
+		plates.removeIf(item -> item.getUserId() != owner.getId());
+		plates.removeIf(item -> !item.getStatus().equals(Constants.plateStatus.ACCEPTED));
+		ModelView.addAttribute("isKhongHaveBangLai", plates.size() == 0);
 		return "carDetails";
 	}
 
@@ -366,9 +372,9 @@ public class UserSideCarController {
 			listDto.add(itemDto);
 		}
 		List<CarInforDto> filteredListDto = new ArrayList<>();
-		
-		if(carAddress.contains("Select")) {
-			carAddress="";
+
+		if (carAddress.contains("Select")) {
+			carAddress = "";
 		}
 		for (var item : listDto) {
 			if (carAddress.isEmpty() || item.getAddress().contains(carAddress)) {
@@ -449,17 +455,44 @@ public class UserSideCarController {
 		ModelView.addAttribute("carRegisterList", filteredListDto);
 		return "availableCars";
 	}
+	@GetMapping("/home/myplan/accepted/{orderId}")
+	public String acceptRequestBooking(@PathVariable(name="orderId") String orderId) {
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		order.setStatus(Constants.orderStatus.ACCEPTED);
+		orderServices.save(order);
+		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
+		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(2)));
+		
+		
+		return "redirect:/home/myplan/";
+	}
+	@GetMapping("/home/myplan/declined/{orderId}")
+	public String declinedRequestBooking(@PathVariable(name="orderId") String orderId) {
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
+		var car =carServices.findById(Integer.parseInt(order.getCarId()));
+		order.setStatus(Constants.orderStatus.DECLINED);
+		orderServices.save(order);
+		Violation vio = new Violation();
+		vio.setUserId(ownerId);
+		vio.setCarId(car.getId());
+		vio.setReason(Constants.violations.OWNER_DECLINED);
+		violationRepo.save(vio);
+		paymentServices.createNewRefund(order.getUserId(), order.getId() ,order.getTotalAndFees());
+		return "redirect:/home/myplan/";
+	}
 
 	@GetMapping("/home/myplan/")
 	public String getMyPlanPage(HttpServletRequest request, Model ModelView) {
+		orderServices.unrespondDetected();
 
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users user = userServices.findUserByEmail(email);
+		List<OrderDetailsDTO> orderList = orderServices.getDTOFromCreatedBy((int) user.getId());
 		List<CarInfor> list = carServices.getbyOwnerId((int) user.getId());
 		List<CarInforDto> listDto = new ArrayList<>();
 		List<PlateImages> listImg = plateImageServices.getAll();
-		
-		
+
 		List<String> urlLicense = new ArrayList<>();
 		for (var item : listImg) {
 			if (item.getUserId() == user.getId()) {
@@ -471,26 +504,36 @@ public class UserSideCarController {
 			var itemDto = carServices.mapToDto(item.getId());
 			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
-
+			List<OrderDetails> llll = orderServices.getFromCarId(item.getId());
+			var name = "OrderListDto"+itemDto.getCarmodel().getObjectId();
+			List<OrderDetailsDTO> mmmm = orderServices.getDTOFromCarId(item.getId());
+			llll.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.WAITING));
+			ModelView.addAttribute(name, mmmm);
+			llll.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.WAITING));
+			
+			itemDto.setOrders(llll);
 			listDto.add(itemDto);
 		}
-		listImg.removeIf(t->t.getUserId()!=user.getId());
-		listImg.removeIf(t->t.getStatus().equals(Constants.plateStatus.DECLINED));
+		listImg.removeIf(t -> t.getUserId() != user.getId());
+		listImg.removeIf(t -> t.getStatus().equals(Constants.plateStatus.DECLINED));
+		ModelView.addAttribute("orderList", orderList);
 		ModelView.addAttribute("ImgLicense", listImg);
 		ModelView.addAttribute("listCar", listDto);
-		ModelView.addAttribute("user",user);
+		ModelView.addAttribute("user", user);
 		return "myPlans";
 	}
+
 	@PostMapping("/home/myplan/charge/")
-	public String charge( HttpServletRequest request) {
-		
+	public String charge(HttpServletRequest request) {
+
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users user = userServices.findUserByEmail(email);
 		user.setBalance(BigDecimal.valueOf(10000));
 		userServices.saveUserReset(user);
-		
-		return"redirect:/home/myplan/";
+
+		return "redirect:/home/myplan/";
 	}
+
 	@GetMapping("/home/availablecars/img/{filename}")
 	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename) throws IOException {
 		List<CarInfor> list = carServices.findAll();

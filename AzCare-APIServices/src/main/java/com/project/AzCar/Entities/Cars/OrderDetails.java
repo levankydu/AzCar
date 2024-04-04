@@ -12,6 +12,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,19 +32,40 @@ public class OrderDetails implements Serializable {
 
 	private String carId;
 	private int userId;
-	
-	private BigDecimal halfPaid;
+
 	private BigDecimal totalRent;
-	
+
 	private LocalDateTime fromDate;
 	private LocalDateTime toDate;
 	private int differenceDate;
 	private String deliveryAddress;
 	private boolean isSameProvince;
 	private boolean isSameDistrict;
-	
+
 	@Convert(converter = OrderExtraFeeConverter.class)
-    private OrderExtraFee extraFee;
-	
+	private OrderExtraFee extraFee;
+
 	private String status;
+
+	private LocalDateTime createdAt;
+	private LocalDateTime updatedAt;
+
+	@PrePersist
+	protected void onCreate() {
+		createdAt = LocalDateTime.now();
+		updatedAt = LocalDateTime.now();
+	}
+
+	@PreUpdate
+	protected void onUpdate() {
+		updatedAt = LocalDateTime.now();
+	}
+	
+	public BigDecimal getTotalAndFees() {
+		BigDecimal deliFee = BigDecimal.valueOf(this.extraFee.getDeliveryFee());
+		BigDecimal cleanFee = BigDecimal.valueOf(this.extraFee.getCleanFee());
+		BigDecimal smellFee = BigDecimal.valueOf(this.extraFee.getSmellFee());
+		BigDecimal insuranceFee = BigDecimal.valueOf(this.extraFee.getInsurance());
+		return this.getTotalRent().add(deliFee).add(cleanFee).add(smellFee).add(insuranceFee);
+	}
 }

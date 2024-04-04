@@ -4,6 +4,7 @@ public class OrderExtraFee {
     private float deliveryFee;
     private float cleanFee;
     private float smellFee;
+    private float insurance;
 
     public OrderExtraFee() {
         // Constructor mặc định
@@ -13,6 +14,7 @@ public class OrderExtraFee {
         this.deliveryFee = deliveryFee;
         this.cleanFee = cleanFee;
         this.smellFee = smellFee;
+        this.insurance = 200;
     }
 
     public float getDeliveryFee() {
@@ -38,4 +40,14 @@ public class OrderExtraFee {
     public void setSmellFee(float smellFee) {
         this.smellFee = smellFee;
     }
+
+	public float getInsurance() {
+		return insurance;
+	}
+
+	public void setInsurance(float insurance) {
+		this.insurance = insurance;
+	}
+    
+    
 }

@@ -15,4 +15,10 @@ public interface OrderRepository extends JpaRepository<OrderDetails, Integer> {
 	
 	@Query(value = "SELECT c FROM OrderDetails c WHERE c.userId=?1")
 	List<OrderDetails> getFromCreatedBy(int id);
+	
+	@Query(value = "SELECT c FROM OrderDetails c WHERE c.carId=?1")
+	List<OrderDetails> getFromCarId(int carId);
+
+	@Query(value = "SELECT c FROM OrderDetails c")
+	List<OrderDetails> getAll();
 }
