@@ -196,6 +196,10 @@
 			font-weight: 400;
 			font-size: 0.75rem;
 		}
+		table td, table th {
+			padding-top: 0.2rem !important;
+			padding-bottom: 0.2rem !important;
+		}
 	</style>
 </head>
 
@@ -938,12 +942,16 @@
 										</div>
 									</div>
 								</div>
-								<div class="text-center mt-5">
+								<div th:if="${!isKhongHaveBangLai && user.phone != null}" class="text-center mt-5">
 									<input type="hidden" name="differenceDate" id="form-differenceDate">
 									<input type="hidden" th:attr="data-car-model=${carDetails.carmodel.model}">
 									<input type="hidden" th:attr="data-car-year=${carDetails.carmodel.year}">
-									<button href="" id="form-submit-btn" class="btn btn-md btn-color">Rent
-										Now</button>
+									<button href="" id="form-submit-btn" class="btn btn-md btn-color">Rent Now</button>
+								</div>
+								<div th:if="${isKhongHaveBangLai || user.phone == null}" class="text-center mt-5">
+									<p th:if="${isKhongHaveBangLai}" class="text-danger">You must update your driving license before rent</p>
+									<p th:if="${user.phone == null}" class="text-danger">You must update your phone number before rent</p>
+									<a class="btn btn-md btn-color" th:href="@{/user/profile/} + ${session.user}">Go to profile</a>
 								</div>
 							</form>
 						</div>
@@ -1200,7 +1208,7 @@
 								<section class="form-group row">
 									<span id="validation-address" class="text-danger text-center"></span>
 								</section>
-								<a href="#" class="btn btn-theme" onclick="return addressSubmit();">Save</a>
+								<button class="btn btn-theme" onclick="return addressSubmit();">Save</button>
 							</div>
 						</div>
 					</div>
@@ -1237,7 +1245,10 @@
 	<!-- Custom JS Script -->
 	<script src="/assets/js/app.js"></script>
 
-	<script>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+	    var extraFeeeeeee = /*[[${extraFee}]]*/ '';
+	    /*]]>*/
 		var carFeatures = document.getElementById('resultFeatures').value;
 		var listResult = document
 			.getElementsByClassName("col-3 mx-4 my-2 car-services");
@@ -1463,8 +1474,9 @@
 
 		$('#form-submit-btn').on('click', function (e) {
 			e.preventDefault();
+			const totalFinalRent = parseFloat($("#form-car-rental input[name='totalRent']").val()) + parseFloat(extraFeeeeeee ? extraFeeeeeee.decorationFee ?? 0 : 0) + parseFloat(extraFeeeeeee ? extraFeeeeeee.cleanningFee ?? 0 : 0) + 200;
 			const uissa = $('p[data-uqwfjwissa]').data('uqwfjwissa');
-			if (parseFloat(uissa) <= parseFloat($("#form-car-rental input[name='totalRent']").val())) {
+			if (parseFloat(uissa) < parseFloat(totalFinalRent)) {
 				Swal.fire({
 					title: "Balance is not enough",
 					text: "You won't be able to rent this car",
@@ -1481,6 +1493,23 @@
 					deliveryFee11 = parseInt(deliveryFeeText11.replace('$', '').trim());
 				}
 				$("input[name='deliveryFee']").val(deliveryFee11);
+				const extraFeeField = extraFeeeeeee 
+								? `<tr>
+										<td colspan=2 class="text-center">Extra Fee</td>
+									</tr>
+									<tr>
+										<td class="text-left">Cleanning Fee: </td>
+										<td class="text-right">$${extraFeeeeeee.cleanningFee.toLocaleString() ?? 0}</td>
+									</tr>
+									<tr>
+										<td class="text-left">Smell Fee: </td>
+										<td class="text-right">$${extraFeeeeeee.decorationFee.toLocaleString() ?? 0}</td>
+									</tr>
+									<tr>
+										<td class="text-left">Insurance Fee: </td>
+										<td class="text-right">$200</td>
+									</tr>`
+							  	: '';
 				Swal.fire({
 					title: "Confirmation!",
 					html: `<table class="table">
@@ -1494,7 +1523,7 @@
 								</tr>
 								<tr>
 									<th class="text-left">Rental per day: </th>
-									<td class="text-right">$${$('p[data-price]').data('price')}</td>
+									<td class="text-right">$${$('p[data-price]').data('price').toLocaleString()}</td>
 								</tr>
 								<tr>
 									<th class="text-left">From: </th>
@@ -1506,16 +1535,30 @@
 								</tr>
 								<tr>
 									<th class="text-left">Total days: </th>
-									<td class="text-right">${$("input[name='differenceDate']").val()}</td>
+									<td class="text-right">${$("input[name='differenceDate']").val().toLocaleString()}</td>
 								</tr>
 								<tr>
 									<th class="text-left">Delivery fee: </th>
-									<td class="text-right">$${deliveryFee11}</td>
+									<td class="text-right">$${deliveryFee11.toLocaleString()}</td>
 								</tr>
+								<tr>
+									<th class="text-left">Sub Total: </th>
+									<td class="text-right">
+										$${$("#form-car-rental input[name='totalRent']").val().toLocaleString()}
+									</td>
+								</tr>
+								${extraFeeField}
 								<tr>
 									<th class="text-left">Total: </th>
 									<td class="text-right">
-										<h3>$${$("#form-car-rental input[name='totalRent']").val()}</h3>
+										<h4>$${totalFinalRent.toLocaleString()}</h4>
+										<p class="text-success">Current balance: $${uissa.toLocaleString()}</p>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<p class="text-danger">* If you have agreed, you will be locked $${totalFinalRent.toLocaleString()} as a mortgage (fees included as notified), the fees incurred will be returned to you if no problems occur after car rental completed.</p>
+										<p class="text-danger">* If the car owner does not respond within 15 minutes, the locked money will be fully refunded to you immediately.</p>
 									</td>
 								</tr>
 							</table>`,
@@ -1527,7 +1570,10 @@
 					if (result.isConfirmed) {
 						Swal.fire({
 							title: "Rented!",
-							text: "Waiting for car owner to accept your rental (5 - 15 minutes)",
+							text: "Waiting for car owner to accept your rental (2 minutes)",
+							html: `
+								<a href="/home/myplan/">You can check your request booking here</a>
+							`,
 							icon: "success"
 						});
 						setTimeout(function () {

@@ -1,99 +1,85 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
 
 
-<title>Az CAR</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="UTF-8">
-<!-- External CSS libraries -->
-<link type="text/css" rel="stylesheet"
-	href="/assets/css/bootstrap.min.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/css/magnific-popup.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/css/jquery.selectBox.css">
-<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/css/rangeslider.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/css/animate.min.css">
-<link type="text/css" rel="stylesheet" href="/assets/css/slick.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/css/jquery.mCustomScrollbar.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/fonts/font-awesome/css/font-awesome.min.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/fonts/flaticon/font/flaticon.css">
+	<title>Az CAR</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<!-- External CSS libraries -->
+	<link type="text/css" rel="stylesheet" href="/assets/css/bootstrap.min.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/magnific-popup.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/jquery.selectBox.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/rangeslider.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/animate.min.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/slick.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/jquery.mCustomScrollbar.css">
+	<link type="text/css" rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<link type="text/css" rel="stylesheet" href="/assets/fonts/flaticon/font/flaticon.css">
 
-<!-- Favicon icon -->
-<link rel="shortcut icon" href="/assets/img/favicon.ico"
-	type="image/x-icon">
+	<!-- Favicon icon -->
+	<link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon">
 
-<!-- Google fonts -->
-<link rel="stylesheet" type="text/css"
-	href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
+	<!-- Google fonts -->
+	<link rel="stylesheet" type="text/css"
+		href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
 
-<!-- Custom Stylesheet -->
-<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
-<link rel="stylesheet" type="text/css" id="style_sheet"
-	href="/assets/css/skins/default.css">
-<link rel="stylesheet"
-	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
+	<!-- Custom Stylesheet -->
+	<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
+	<link rel="stylesheet" type="text/css" id="style_sheet" href="/assets/css/skins/default.css">
+	<link rel="stylesheet" href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
 
-<link rel="stylesheet" href="/assets/css/notiCss.css">
+	<link rel="stylesheet" href="/assets/css/notiCss.css">
 
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 
 
-<script type="text/javascript" src="/assets/js/notiJs.js"></script>
-<style>
-/* CSS */
-.button-92 {
-	--c: #fff;
-	/* text color */
-	background: linear-gradient(90deg, #0000 33%, #fff5, #0000 67%)
-		var(--_p, 100%)/300% no-repeat, #3c5bfc;
-	/* background color */
-	color: #0000;
-	border: none;
-	transform: perspective(500px) rotateY(calc(20deg * var(--_i, -1)));
-	text-shadow: calc(var(--_i, -1)* 0.08em) -.01em 0 var(--c),
-		calc(var(--_i, -1)*-0.08em) .01em 2px #0004;
-	outline-offset: .1em;
-	transition: 0.3s;
-}
+	<script type="text/javascript" src="/assets/js/notiJs.js"></script>
+	<style>
+		/* CSS */
+		.button-92 {
+			--c: #fff;
+			/* text color */
+			background: linear-gradient(90deg, #0000 33%, #fff5, #0000 67%) var(--_p, 100%)/300% no-repeat, #3c5bfc;
+			/* background color */
+			color: #0000;
+			border: none;
+			transform: perspective(500px) rotateY(calc(20deg * var(--_i, -1)));
+			text-shadow: calc(var(--_i, -1)* 0.08em) -.01em 0 var(--c),
+				calc(var(--_i, -1)*-0.08em) .01em 2px #0004;
+			outline-offset: .1em;
+			transition: 0.3s;
+		}
 
-.button-92:hover, .button-92:focus-visible {
-	--_p: 0%;
-	--_i: 1;
-}
+		.button-92:hover,
+		.button-92:focus-visible {
+			--_p: 0%;
+			--_i: 1;
+		}
 
-.button-92:active {
-	text-shadow: none;
-	color: var(--c);
-	box-shadow: inset 0 0 9e9q #0005;
-	transition: 0s;
-}
+		.button-92:active {
+			text-shadow: none;
+			color: var(--c);
+			box-shadow: inset 0 0 9e9q #0005;
+			transition: 0s;
+		}
 
-.button-92 {
-	font-weight: bold;
-	font-size: 2rem;
-	margin: 0;
-	cursor: pointer;
-	padding: .1em .3em;
-}
-</style>
+		.button-92 {
+			font-weight: bold;
+			font-size: 2rem;
+			margin: 0;
+			cursor: pointer;
+			padding: .1em .3em;
+		}
+	</style>
 </head>
 
 
 <!-- main header start -->
-<header class="main-header sticky-header header-with-top"
-	id="main-header-2">
+<header class="main-header sticky-header header-with-top" id="main-header-2">
 	<div class="container">
 		<div class="row">
 			<div class="col-12">
@@ -101,17 +87,16 @@
 					<a class="navbar-brand logo navbar-brand d-flex mr-auto" href="/">
 						<img src="/assets/img/logos/black-logo.png" alt="logo">
 					</a>
-					<button class="navbar-toggler" type="button" data-toggle="collapse"
-						data-target="#navbar" aria-controls="navbar" aria-expanded="false"
-						aria-label="Toggle navigation">
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
+						aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="fa fa-bars"></span>
 					</button>
 					<div class="navbar-collapse collapse w-100" id="navbar">
 						<ul class="navbar-nav ml-auto">
-							<li class="nav-item"><a class="nav-link"
-								th:href="@{/home/availablecars}">Available Cars</a></li>
-							<li class="nav-item" th:if="${session.user}"><a
-								class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
+							<li class="nav-item"><a class="nav-link" th:href="@{/home/availablecars}">Available Cars</a>
+							</li>
+							<li class="nav-item" th:if="${session.user}"><a class="nav-link"
+									th:href="@{/home/myplan/}">My Plan</a></li>
 							<li class="nav-item "><a class="nav-link" href="#">
 									About Us </a></li>
 
@@ -122,17 +107,17 @@
 									<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
 										xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 30"
 										enable-background="new 0 0 50 30" xml:space="preserve">
-    <g class="bell-icon__group">
-      <path class="" id="ball" fill-rule="evenodd" stroke-width="1.5"
-											clip-rule="evenodd" fill="none" stroke="#currentColor"
-											stroke-miterlimit="10"
-											d="M28.7,25 c0,1.9-1.7,3.5-3.7,3.5s-3.7-1.6-3.7-3.5s1.7-3.5,3.7-3.5S28.7,23,28.7,25z" />
-      <path class="" id="shell" fill-rule="evenodd" clip-rule="evenodd"
-											fill="#FFFFFF" stroke="#currentColor" stroke-width="2"
-											stroke-miterlimit="10"
-											d="M35.9,21.8c-1.2-0.7-4.1-3-3.4-8.7c0.1-1,0.1-2.1,0-3.1h0c-0.3-4.1-3.9-7.2-8.1-6.9c-3.7,0.3-6.6,3.2-6.9,6.9h0 c-0.1,1-0.1,2.1,0,3.1c0.6,5.7-2.2,8-3.4,8.7c-0.4,0.2-0.6,0.6-0.6,1v1.8c0,0.2,0.2,0.4,0.4,0.4h22.2c0.2,0,0.4-0.2,0.4-0.4v-1.8 C36.5,22.4,36.3,22,35.9,21.8L35.9,21.8z" />
-    </g>
-  </svg>
+										<g class="bell-icon__group">
+											<path class="" id="ball" fill-rule="evenodd" stroke-width="1.5"
+												clip-rule="evenodd" fill="none" stroke="#currentColor"
+												stroke-miterlimit="10"
+												d="M28.7,25 c0,1.9-1.7,3.5-3.7,3.5s-3.7-1.6-3.7-3.5s1.7-3.5,3.7-3.5S28.7,23,28.7,25z" />
+											<path class="" id="shell" fill-rule="evenodd" clip-rule="evenodd"
+												fill="#FFFFFF" stroke="#currentColor" stroke-width="2"
+												stroke-miterlimit="10"
+												d="M35.9,21.8c-1.2-0.7-4.1-3-3.4-8.7c0.1-1,0.1-2.1,0-3.1h0c-0.3-4.1-3.9-7.2-8.1-6.9c-3.7,0.3-6.6,3.2-6.9,6.9h0 c-0.1,1-0.1,2.1,0,3.1c0.6,5.7-2.2,8-3.4,8.7c-0.4,0.2-0.6,0.6-0.6,1v1.8c0,0.2,0.2,0.4,0.4,0.4h22.2c0.2,0,0.4-0.2,0.4-0.4v-1.8 C36.5,22.4,36.3,22,35.9,21.8L35.9,21.8z" />
+										</g>
+									</svg>
 									<div class="notification-amount">
 										<span id="notiCounter"></span>
 									</div>
@@ -144,11 +129,10 @@
 									<div class="modal">
 										<h2>All Notification</h2>
 										<div id="messages"></div>
-										<svg class="modal-svg" xmlns="http://www.w3.org/2000/svg"
-											width="100%" height="100%" preserveAspectRatio="none">
-								<rect x="0" y="0" fill="none" width="226" height="162" rx="3"
-												ry="3"></rect>
-							</svg>
+										<svg class="modal-svg" xmlns="http://www.w3.org/2000/svg" width="100%"
+											height="100%" preserveAspectRatio="none">
+											<rect x="0" y="0" fill="none" width="226" height="162" rx="3" ry="3"></rect>
+										</svg>
 									</div>
 								</div>
 							</div>
@@ -156,25 +140,23 @@
 
 
 							<li class="nav-item dropdown" th:if="${session.user}"><a
-								class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-								th:href="@{/user/profile/} + ${session.user}"
-								th:text="Hello+', ' +${session.user}"></a> <a
-								class="btn btn-sm btn-theme btn-round signup-link"
-								href="/logout">LogOut</a></li>
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									th:href="@{/user/profile/} + ${session.user}"
+									th:text="Hello+', ' +${session.user}"></a> <a
+									class="btn btn-sm btn-theme btn-round signup-link" href="/logout">LogOut</a></li>
 
 
 							<li class="nav-item dropdown" th:if="${session.admin}"><a
-								class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-								th:href="@{/user/profile/}+ ${session.admin}"
-								th:text="Hello+', ' +${session.admin}"></a> <a
-								class="btn btn-sm btn-theme btn-round signup-link"
-								href="/dashboard/">Dash board</a> <a
-								class="btn btn-sm btn-theme btn-round signup-link"
-								href="/logout">Logout</a></li>
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									th:href="@{/user/profile/}+ ${session.admin}"
+									th:text="Hello+', ' +${session.admin}"></a> <a
+									class="btn btn-sm btn-theme btn-round signup-link" href="/dashboard/">Dash board</a>
+								<a class="btn btn-sm btn-theme btn-round signup-link" href="/logout">Logout</a>
+							</li>
 							<li class="nav-item dropdown" th:unless="${session.isAuthen}"><a
-								class="btn btn-sm btn-theme btn-round signup-link" href="/login">Login</a>
-								<a class="btn btn-sm btn-theme btn-round signup-link"
-								href="/register">Register</a></li>
+									class="btn btn-sm btn-theme btn-round signup-link" href="/login">Login</a>
+								<a class="btn btn-sm btn-theme btn-round signup-link" href="/register">Register</a>
+							</li>
 						</ul>
 					</div>
 				</nav>
@@ -223,26 +205,22 @@
 	<div class="agent-detail">
 		<div class="container">
 			<div class="row">
-				<p id="toast-success-uploadDriveLicense" hidden="true"
-					class="btn btn-outline-primary btn-lg btn-block">Success
+				<p id="toast-success-uploadDriveLicense" hidden="true" class="btn btn-outline-primary btn-lg btn-block">
+					Success
 					Example</p>
-				<p id="toast-failed-uploadDriveLicense" hidden="true"
-					class="btn btn-outline-primary btn-lg btn-block">Failed Example</p>
-				<h4 class="col-10 offset-md-1"
-					style="text-align: center; font-weight: bold;">
+				<p id="toast-failed-uploadDriveLicense" hidden="true" class="btn btn-outline-primary btn-lg btn-block">
+					Failed Example</p>
+				<h4 class="col-10 offset-md-1" style="text-align: center; font-weight: bold;">
 					Welcome, <span th:text="${session.emailLogin}"></span>
 				</h4>
-				<h4 class="col-4 offset-md-8"
-					style="text-align: center; font-weight: bold;">
-					Your balance: $ <span
-						th:text="${user.balance!=null?user.balance :'0'}"></span>
+				<h4 class="col-4 offset-md-8" style="text-align: center; font-weight: bold;">
+					Your balance: $ <span th:text="${user.balance!=null?user.balance :'0'}"></span>
 
 				</h4>
 				<form class="col-4 offset-md-8" style="text-align: center" id="charge"
 					th:action="@{/home/myplan/charge/}" method="post">
 					<button class="search-button btn-md btn-color" type="submit"
-						style="border-width: 0; border-radius: 0" 
-						onclick="return charge.submit()">Charge</button>
+						style="border-width: 0; border-radius: 0" onclick="return charge.submit()">Charge</button>
 
 
 				</form>
@@ -253,19 +231,16 @@
 					<div class="agent-description">
 						<div class="tabbing tabbing-box mb-30">
 							<ul class="nav nav-tabs" id="carTab" role="tablist">
-								<li class="nav-item"><a class="nav-link active show"
-									id="one-tab" data-toggle="tab" href="#one" role="tab"
-									aria-controls="one" aria-selected="false">My Cars</a></li>
-								<li class="nav-item"><a class="nav-link" id="two-tab"
-									data-toggle="tab" href="#two" role="tab" aria-controls="two"
-									aria-selected="false">My Booking</a></li>
-								<li class="nav-item"><a class="nav-link" id="three-tab"
-									data-toggle="tab" href="#three" role="tab"
-									aria-controls="three" aria-selected="true">My Car Driving
+								<li class="nav-item"><a class="nav-link active show" id="one-tab" data-toggle="tab"
+										href="#one" role="tab" aria-controls="one" aria-selected="false">My Cars</a>
+								</li>
+								<li class="nav-item"><a class="nav-link" id="two-tab" data-toggle="tab" href="#two"
+										role="tab" aria-controls="two" aria-selected="false">My Booking</a></li>
+								<li class="nav-item"><a class="nav-link" id="three-tab" data-toggle="tab" href="#three"
+										role="tab" aria-controls="three" aria-selected="true">My Car Driving
 										License</a></li>
-								<li class="nav-item"><a class="nav-link" id="four-tab"
-									data-toggle="tab" href="#four" role="tab" aria-controls="four"
-									aria-selected="true">History Booking</a></li>
+								<li class="nav-item"><a class="nav-link" id="four-tab" data-toggle="tab" href="#four"
+										role="tab" aria-controls="four" aria-selected="true">History Booking</a></li>
 							</ul>
 							<div class="tab-content" id="carTabContent">
 								<div class="tab-pane fade active show" id="one" role="tabpanel"
@@ -289,8 +264,7 @@
 													<div class="listing-badges" th:if="${car.discount} == '0'">
 														<span class="featured">Featured</span>
 													</div>
-													<div class="listing-time opening"
-														th:if="${car.discount} >0">
+													<div class="listing-time opening" th:if="${car.discount} >0">
 														<span class="featured"
 															th:text="${car.discount}+'% For discount' "></span>
 													</div>
@@ -307,8 +281,7 @@
 														<div class="carousel-inner">
 															<div class="carousel-item active">
 																<div th:each="img: ${car.images}">
-																	<img
-																		style="height: 100; width: 100; object-fit: contain;"
+																	<img style="height: 100; width: 100; object-fit: contain;"
 																		th:if="${img.name =='frontImg'}"
 																		th:src="${img.urlImage}" alt="car">
 																</div>
@@ -317,8 +290,7 @@
 															<div class="carousel-item">
 																<div th:each="img: ${car.images}"
 																	class="d-block w-100 h-100">
-																	<img
-																		style="height: 100; width: 100; object-fit: contain;"
+																	<img style="height: 100; width: 100; object-fit: contain;"
 																		th:if="${img.name =='behindImg'}"
 																		th:src="${img.urlImage}" alt="car">
 																</div>
@@ -327,8 +299,7 @@
 															<div class="carousel-item">
 																<div th:each="img: ${car.images}"
 																	class="d-block w-100 h-100">
-																	<img
-																		style="height: 100; width: 100; object-fit: contain;"
+																	<img style="height: 100; width: 100; object-fit: contain;"
 																		th:if="${img.name =='leftImg'}"
 																		th:src="${img.urlImage}" alt="car">
 																</div>
@@ -337,8 +308,7 @@
 															<div class="carousel-item">
 																<div th:each="img: ${car.images}"
 																	class="d-block w-100 h-100">
-																	<img
-																		style="height: 100; width: 100; object-fit: contain;"
+																	<img style="height: 100; width: 100; object-fit: contain;"
 																		th:if="${img.name =='rightImg'}"
 																		th:src="${img.urlImage}" alt="car">
 																</div>
@@ -347,8 +317,7 @@
 															<div class="carousel-item">
 																<div th:each="img: ${car.images}"
 																	class="d-block w-100 h-100">
-																	<img
-																		style="height: 100; width: 100; object-fit: contain;"
+																	<img style="height: 100; width: 100; object-fit: contain;"
 																		th:if="${img.name =='insideImg'}"
 																		th:src="${img.urlImage}" alt="car">
 																</div>
@@ -375,36 +344,156 @@
 													</div>
 												</div>
 												<p class="btn btn-theme" th:text="${car.status}"></p>
+												<div class"mt-3">
+													<button style="position: absolute; top: 100px;" th:if="${car.orders.size() > 0}"
+														th:text="${car.orders.size()+' request(s)'}" data-toggle="modal"
+														th:attr="data-target=${'#carmodel-asdwdwad-' + car.carmodel.objectId}"
+														 class="btn btn-md btn-warning"></button>
+												</div>
+												<div class="modal fade bd-example-modal-lg" th:id="${'carmodel-asdwdwad-' + car.carmodel.objectId}"
+													tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+													aria-hidden="true">
+													<div class="modal-dialog modal-lg">
+														<div class="modal-content">
+															<div class="modal-header">
+																<h5 class="modal-title" id="exampleModalLabel">You have
+																	<span id="requestCount" th:text="${car.orders.size()}"></span> request(s) booking
+																</h5>
+																<button type="button" class="close" data-dismiss="modal"
+																	aria-label="Close">
+																	<span aria-hidden="true">&times;</span>
+																</button>
+															</div>
+															<div class="modal-body">
+																<table class="table">
+																	<tr class="text-center">
+																		<th>Email</th>
+																		<th>Created At</th>
+																		<th>Duration</th>
+																		<th colspan="2">Action</th>
+																	</tr>
+																	<tr class="text-center" th:each="item : ${__${'OrderListDto' + car.carmodel.objectId}__}">
+																		<td th:text="${item.user.email}"></td>
+																		<td th:text="${item.createdAt}"></td>
+																		<td th:text="${item.differenceDate}"></td>
+																		<td>
+												
+																				<a th:href="@{'/home/myplan/accepted/'+ ${item.id}}" style="position: relative;" class="btn btn-md btn-success">Accept</a>
+																		</td>
+																		<td>
+																				<a th:href="@{'/home/myplan/declined/'+ ${item.id}}" style="position: relative;" class="btn btn-md btn-warning">Decline</a>
+													
+																		</td>
+																	</tr>
+																</table>
+															</div>
+
+														</div>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<div class="tab-pane fade" id="two" role="tabpanel"
-									aria-labelledby="two-tab">
-									<div class="additional-details-list">
-										<p>Sed at leo sit amet mi bibendum aliquam. Interdum et
-											malesuada fames ac ante ipsum primis in faucibus. Praesent
-											cursus varius odio, non faucibus dui. Nunc vehicula lectus
-											sed velit suscipit aliquam vitae eu ipsum. adipiscing elit.</p>
-										<p>Aliquam ultricies nunc porta metus interdum mollis.
-											Donec porttitor libero augue, vehicula tincidunt lectus
-											placerat a. Sed tincidunt dolor non sem dictum dignissim.
-											Nulla vulputate orci felis, ac ornare purus ultricies a.
-											Fusce euismod magna orci, sit amet aliquam turpis dignissim
-											ac. In at tortor at ligula pharetra sollicitudin. Sed
-											tincidunt, purus eget laoreet elementum, felis est pharetra
-											ante, tincidunt feugiat libero enim sed risus.</p>
-										<p>Sed at leo sit amet mi bibendum aliquam. Interdum et
-											malesuada fames ac ante ipsum primis in faucibus. Praesent
-											cursus varius odio, non faucibus dui. Nunc vehicula lectus
-											sed velit suscipit aliquam vitae eu ipsum. adipiscing elit.</p>
+								<div class="tab-pane fade" id="two" role="tabpanel" aria-labelledby="two-tab">
+									<div class="car-box-5" th:each="item : ${orderList}">
+
+										<div class="row mt-2">
+											<div class="col-lg-3 col-md-5">
+
+												<a th:href="@{'/home/availablecars/details/' + ${item.car.id}}"
+													class="car-img">
+													<div class="listing-badges" th:if="${item.car.discount} == '0'">
+														<span class="featured">Featured</span>
+													</div>
+													<div class="listing-time opening" th:if="${item.car.discount} >0">
+														<span class="featured"
+															th:text="${item.car.discount}+'% For discount' "></span>
+													</div>
+													<div id="carouselExampleIndicators1" class="carousel slide"
+														data-ride="carousel">
+														<ol class="carousel-indicators">
+															<li data-target="#carouselExampleIndicators1"
+																data-slide-to="0" class="active"></li>
+															<li data-target="#carouselExampleIndicators1"
+																data-slide-to="1"></li>
+															<li data-target="#carouselExampleIndicators1"
+																data-slide-to="2"></li>
+														</ol>
+														<div class="carousel-inner">
+															<div class="carousel-item active">
+																<div th:each="img: ${item.car.images}">
+																	<img style="height: 100; width: 100; object-fit: contain;"
+																		th:if="${img.name =='frontImg'}"
+																		th:src="${img.urlImage}" alt="car">
+																</div>
+
+															</div>
+															<div class="carousel-item">
+																<div th:each="img: ${item.car.images}"
+																	class="d-block w-100 h-100">
+																	<img style="height: 100; width: 100; object-fit: contain;"
+																		th:if="${img.name =='behindImg'}"
+																		th:src="${img.urlImage}" alt="car">
+																</div>
+
+															</div>
+															<div class="carousel-item">
+																<div th:each="img: ${item.car.images}"
+																	class="d-block w-100 h-100">
+																	<img style="height: 100; width: 100; object-fit: contain;"
+																		th:if="${img.name =='leftImg'}"
+																		th:src="${img.urlImage}" alt="car">
+																</div>
+
+															</div>
+															<div class="carousel-item">
+																<div th:each="img: ${item.car.images}"
+																	class="d-block w-100 h-100">
+																	<img style="height: 100; width: 100; object-fit: contain;"
+																		th:if="${img.name =='rightImg'}"
+																		th:src="${img.urlImage}" alt="car">
+																</div>
+
+															</div>
+															<div class="carousel-item">
+																<div th:each="img: ${item.car.images}"
+																	class="d-block w-100 h-100">
+																	<img style="height: 100; width: 100; object-fit: contain;"
+																		th:if="${img.name =='insideImg'}"
+																		th:src="${img.urlImage}" alt="car">
+																</div>
+
+															</div>
+														</div>
+													</div>
+												</a>
+											</div>
+											<div class="col-lg-9 col-md-7">
+												<div class="detail ">
+													<h3 class="title">
+														<a href="car-details.html"
+															th:text="${item.car.carmodel.model}"></a>
+													</h3>
+
+													<div class="listing-price">
+														<span class="new" th:text="${item.car.price}+' $/day'"></span>
+													</div>
+													<div class="listing-price">
+														<p>
+															License Plates: <span class="new"
+																th:text="${item.car.licensePlates}"></span>
+														</p>
+													</div>
+												</div>
+												<p class="btn btn-theme" th:text="${item.status}"></p>
+											</div>
+										</div>
 									</div>
 								</div>
-								<div class="tab-pane fade " id="three" role="tabpanel"
-									aria-labelledby="three-tab">
+								<div class="tab-pane fade " id="three" role="tabpanel" aria-labelledby="three-tab">
 									<div class="form-group mb-3 col-12">
-										<div class="row col-10 offset-md-1"
-											th:if="${ImgLicense.size()}>0">
+										<div class="row col-10 offset-md-1" th:if="${ImgLicense.size()}>0">
 											<h5 class="col-12" style="font-weight: bold;">Your Car
 												Driving License</h5>
 											<h6 class="col-12">
@@ -416,8 +505,8 @@
 											<div class="form-group col-md-8">
 												<label for="frontImg">Front License: </label> <img
 													class="form-control-file imgCars" id="frontImg"
-													th:src="'license/'+${ImgLicense.get(0).ImageUrl}"
-													name="frontImg" style="height: 200px">
+													th:src="'license/'+${ImgLicense.get(0).ImageUrl}" name="frontImg"
+													style="height: 200px">
 
 
 											</div>
@@ -425,22 +514,20 @@
 											<div class="form-group col-md-8">
 												<label for="behindImg">Behind License: </label> <img
 													class="form-control-file imgCars" id="behindImg"
-													th:src="'license/'+${ImgLicense.get(1).ImageUrl}"
-													name="behindImg" style="height: 200px">
+													th:src="'license/'+${ImgLicense.get(1).ImageUrl}" name="behindImg"
+													style="height: 200px">
 
 											</div>
 
 										</div>
-										<div class="row col-10 offset-md-1"
-											th:unless="${ImgLicense.size()}>0">
+										<div class="row col-10 offset-md-1" th:unless="${ImgLicense.size()}>0">
 											<h5 class="col-12" style="font-weight: bold;">Upload
 												Your Car Driving License</h5>
 											<form th:action="@{/home/myplan/}" method="post"
 												enctype="multipart/form-data" id="uploadDriveLicense">
 												<div class="form-group col-md-8">
-													<label for="frontImg">Front License: </label> <input
-														type="file" class="form-control-file imgCars"
-														id="frontImg" name="frontImg"
+													<label for="frontImg">Front License: </label> <input type="file"
+														class="form-control-file imgCars" id="frontImg" name="frontImg"
 														onchange="previewImage('frontImg','frontImgPre')">
 
 													<div class="col-md-8">
@@ -449,9 +536,9 @@
 												</div>
 
 												<div class="form-group col-md-8">
-													<label for="behindImg">Behind License: </label> <input
-														type="file" class="form-control-file imgCars"
-														id="behindImg" name="behindImg"
+													<label for="behindImg">Behind License: </label> <input type="file"
+														class="form-control-file imgCars" id="behindImg"
+														name="behindImg"
 														onchange="previewImage('behindImg','behindImgPre')">
 													<div class="col-md-8">
 														<br> <img src="" id="behindImgPre" height="100px" />
@@ -478,8 +565,7 @@
 										</div>
 									</div>
 								</div>
-								<div class="tab-pane fade " id="four" role="tabpanel"
-									aria-labelledby="four-tab">
+								<div class="tab-pane fade " id="four" role="tabpanel" aria-labelledby="four-tab">
 									<p>History</p>
 								</div>
 							</div>
@@ -511,16 +597,12 @@
 					</ul>
 
 					<ul class="social-list clearfix">
-						<li><a href="#" class="facebook-bgh"><i
-								class="fa fa-facebook"></i></a></li>
-						<li><a href="#" class="twitter-bgh"><i
-								class="fa fa-twitter"></i></a></li>
-						<li><a href="#" class="google-bgh"><i
-								class="fa fa-google-plus"></i></a></li>
+						<li><a href="#" class="facebook-bgh"><i class="fa fa-facebook"></i></a></li>
+						<li><a href="#" class="twitter-bgh"><i class="fa fa-twitter"></i></a></li>
+						<li><a href="#" class="google-bgh"><i class="fa fa-google-plus"></i></a></li>
 						<li><a href="#" class="rss-bgh"><i class="fa fa-rss"></i></a>
 						</li>
-						<li><a href="#" class="linkedin-bgh"><i
-								class="fa fa-linkedin"></i></a></li>
+						<li><a href="#" class="linkedin-bgh"><i class="fa fa-linkedin"></i></a></li>
 					</ul>
 				</div>
 			</div>
@@ -547,8 +629,7 @@
 					<h4>Recent Posts</h4>
 					<div class="f-border"></div>
 					<div class="media mb-4">
-						<a class="pr-3" href="/"> <img
-							src="/assets/img/sub-car/sub-car.jpg" alt="car" />
+						<a class="pr-3" href="/"> <img src="/assets/img/sub-car/sub-car.jpg" alt="car" />
 						</a>
 						<div class="media-body align-self-center">
 							<h5>
@@ -561,8 +642,7 @@
 						</div>
 					</div>
 					<div class="media mb-4">
-						<a class="pr-3" href="/"> <img
-							src="/assets/img/sub-car/sub-car-2.jpg" alt="car" />
+						<a class="pr-3" href="/"> <img src="/assets/img/sub-car/sub-car-2.jpg" alt="car" />
 						</a>
 						<div class="media-body align-self-center">
 							<h5>
@@ -575,8 +655,7 @@
 						</div>
 					</div>
 					<div class="media">
-						<a class="pr-3" href="/"> <img
-							src="/assets/img/sub-car/sub-car-3.jpg" alt="car" />
+						<a class="pr-3" href="/"> <img src="/assets/img/sub-car/sub-car-3.jpg" alt="car" />
 						</a>
 						<div class="media-body align-self-center">
 							<h5>
@@ -599,8 +678,7 @@
 							culpa qui officia deserunt mollit.</p>
 						<form action="#" method="GET">
 							<p>
-								<input type="text" class="form-contact" name="email"
-									placeholder="Enter Address" />
+								<input type="text" class="form-contact" name="email" placeholder="Enter Address" />
 							</p>
 							<p>
 								<button type="submit" name="submitNewsletter"
@@ -638,8 +716,7 @@
 			</aside>
 			<aside class="canvas-widget">
 				<ul class="menu">
-					<li class="menu-item menu-item-has-children"><a
-						href="index.html">Home</a></li>
+					<li class="menu-item menu-item-has-children"><a href="index.html">Home</a></li>
 					<li class="menu-item"><a href="car-grid-leftside.html">Car
 							List</a></li>
 					<li class="menu-item"><a href="car-details.html">Car
@@ -662,6 +739,8 @@
 	</div>
 </div>
 
+
+
 <!-- External JS libraries -->
 <script src="/assets/js/jquery-2.2.0.min.js"></script>
 <script src="/assets/js/popper.min.js"></script>
@@ -681,17 +760,15 @@
 <script src="/assets/js/slick.min.js"></script>
 <script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
 <script src="/assets/js/ie-emulation-modes-warning.js"></script>
-<script src="https://kit.fontawesome.com/56c961acc9.js"
-	crossorigin="anonymous"></script>
-<script
-	th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
+<script src="https://kit.fontawesome.com/56c961acc9.js" crossorigin="anonymous"></script>
+<script th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
 
 <script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 
 <!-- Custom JS Script -->
 <script src="/assets/js/app.js"></script>
 
-<script>
+<script th:inline="javascript">
 	function validateImg() {
 		var frontImg = document.getElementById('frontImg').value;
 		var behindImg = document.getElementById('behindImg').value;
@@ -726,7 +803,7 @@
 			if (input && input.files && input.files[0]) {
 				var reader = new FileReader();
 
-				reader.onload = function(e) {
+				reader.onload = function (e) {
 					preview.src = e.target.result;
 				}
 
@@ -739,12 +816,12 @@
 		validateImg();
 
 		var ImgCheck = document.getElementById('validation-image').textContent
-				.trim().length;
+			.trim().length;
 		var ImgCheckNull = document.getElementById('validation-NUll-img').textContent
-				.trim().length;
+			.trim().length;
 		var ImgChecDuplicate = document
-				.getElementById('validation-Duplicate-image').textContent
-				.trim().length;
+			.getElementById('validation-Duplicate-image').textContent
+			.trim().length;
 
 		const sum = ImgCheck + ImgCheckNull + ImgChecDuplicate;
 		if (sum > 0) {
@@ -755,7 +832,19 @@
 			document.getElementById('toast-success-uploadDriveLicense').click();
 			return uploadDriveLicense.submit();
 		}
+
+
+	}
+	function openRequestList() {
+		/*<![CDATA[*/
+		orders = /*[[${car.orders}]]*/ '';
+		/*]]>*/
+
+		if (orders != null) {
+
+		}
 	}
 </script>
 </body>
+
 </html>
