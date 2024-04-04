@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+<title>Az CAR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<!-- External CSS libraries -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/magnific-popup.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.selectBox.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/rangeslider.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/animate.min.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/slick.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.mCustomScrollbar.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/flaticon/font/flaticon.css">
+
+<!-- Favicon icon -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico"
+	type="image/x-icon">
+
+<!-- Google fonts -->
+<link rel="stylesheet" type="text/css"
+	href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
+
+<!-- Custom Stylesheet -->
+<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" type="text/css" id="style_sheet"
+	href="/assets/css/skins/default.css">
+<link rel="stylesheet"
+	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
+<link
+	href="https://fonts.googleapis.com/css?family=Kaushan+Script|Source+Sans+Pro"
+	rel="stylesheet">
+
+<style type="text/css">
+* {
+	box-sizing: border-box;
+	/* outline:1px solid ;*/
+}
+
+body {
+	background: #ffffff;
+	background: linear-gradient(to bottom, #ffffff 0%, #e1e8ed 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff',
+		endColorstr='#e1e8ed', GradientType=0);
+	height: 100%;
+	margin: 0;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+}
+
+.wrapper-1 {
+	width: max-content;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.wrapper-2 {
+	width: max-content;
+	padding: 30px;
+	text-align: center;
+	padding: 30px;
+}
+
+h2 {
+	font-family: 'Kaushan Script', cursive;
+	font-size: 4em;
+	letter-spacing: 3px;
+	color: #5892FF;
+	margin: 0;
+	margin-bottom: 20px;
+}
+
+.wrapper-2 p {
+	margin: 0;
+	font-size: 1.3em;
+	color: #aaa;
+	font-family: 'Source Sans Pro', sans-serif;
+	letter-spacing: 1px;
+}
+
+.go-home {
+	color: #fff;
+	background: #5892FF;
+	border: none;
+	padding: 10px 50px;
+	margin: 30px 0;
+	border-radius: 30px;
+	text-transform: capitalize;
+	box-shadow: 0 10px 16px 1px rgba(174, 199, 251, 1);
+}
+
+.footer-like {
+	margin-top: auto;
+	background: #D7E6FE;
+	padding: 6px;
+	text-align: center;
+}
+
+.footer-like p {
+	margin: 0;
+	padding: 4px;
+	color: #5892FF;
+	font-family: 'Source Sans Pro', sans-serif;
+	letter-spacing: 1px;
+}
+
+.footer-like p a {
+	text-decoration: none;
+	color: #5892FF;
+	font-weight: 600;
+}
+
+@media ( min-width :360px) {
+	h1 {
+		font-size: 4.5em;
+	}
+	.go-home {
+		margin-bottom: 20px;
+	}
+}
+
+@media ( min-width :600px) {
+	.content {
+		max-width: 1000px;
+		margin: 0 auto;
+	}
+	.wrapper-1 {
+		height: initial;
+		max-width: fit-content;
+		margin: 0 auto;
+		margin-top: 50px;
+		box-shadow: 4px 8px 40px 8px rgba(88, 146, 255, 0.2);
+	}
+}
+</style>
+
+</head>
+
+<body id="top">
+	<!-- main header start -->
+	<header class="main-header sticky-header header-with-top"
+		id="main-header-2">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<nav class="navbar navbar-expand-lg navbar-light rounded">
+						<a class="navbar-brand logo navbar-brand d-flex mr-auto" href="/">
+							<img src="/assets/img/logos/black-logo.png" alt="logo">
+						</a>
+						<button class="navbar-toggler" type="button"
+							data-toggle="collapse" data-target="#navbar"
+							aria-controls="navbar" aria-expanded="false"
+							aria-label="Toggle navigation">
+							<span class="fa fa-bars"></span>
+						</button>
+						<div class="navbar-collapse collapse w-100" id="navbar">
+							<ul class="navbar-nav ml-auto">
+								<li class="nav-item"><a class="nav-link"
+									th:href="@{/home/availablecars/}">Available Cars</a></li>
+								<li class="nav-item" th:if="${session.user}"><a
+									class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
+								<li class="nav-item "><a class="nav-link" href="#">
+										About Us </a></li>
+
+								<li class="nav-item"><a class="nav-link" href="#">
+										Contact Us </a></li>
+
+
+								<li class="nav-item dropdown" th:if="${session.user}"><a
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									th:href="@{/user/profile/} + ${session.user}"
+									th:text="Hello+', ' +${session.user}"></a>
+									<button id="logout"
+										class="btn btn-sm btn-theme btn-round signup-link">Logout</button></li>
+
+
+								<li class="nav-item dropdown" th:if="${session.admin}"><a
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									th:href="@{/user/profile/}+ ${session.admin}"
+									th:text="Hello+', ' +${session.admin}"></a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/dashboard/">Dash board</a>
+									<button id="logout"
+										class="btn btn-sm btn-theme btn-round signup-link">Logout</button></li>
+								<li class="nav-item dropdown" th:unless="${session.isAuthen}"><a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/login">Login</a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/register">Register</a></li>
+
+							</ul>
+						</div>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- main header end -->
+
+	<!-- Sub banner start -->
+	<div class="sub-banner overview-bgi">
+		<div class="container">
+			<div class="page-name">
+				<h1>Reset Password</h1>
+			</div>
+		</div>
+		<div class="page-info">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-5">
+						<div class="breadcrumb-area">
+							<ul>
+								<li><a href="/">Index</a></li>
+
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-7">
+						<div class="contact-info">
+							<ul>
+								<li><i class="fa fa-phone"></i> +84-3939-7979</li>
+								<li><a href="tel:+84-3939-7979"
+									class="btn btn-md btn-theme">Contact us</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Sub banner end -->
+	<div class=content>
+		<div class="wrapper-1">
+			<div class="wrapper-2">
+				<h2>Link has been used!</h2>
+				<p>if you want to reset password you need click Forgot Password
+					again!!!</p>
+				<a class="go-home btn btn-theme" href="/">go home</a>
+			</div>
+			<div class="footer-like">
+				<p>Thank you !</p>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+	<!-- Footer start -->
+	<footer class="footer">
+		<div class="container footer-inner">
+			<div class="row">
+				<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+					<div class="footer-item">
+						<h4>Contact Us</h4>
+						<div class="f-border"></div>
+						<ul class="contact-info">
+							<li>Address: 20/F Green Road, Dhanmondi, Dhaka</li>
+							<li>Email: <a href="mailto:info@themevessel.com">info@themevessel.com</a>
+							</li>
+							<li>Phone: <a href="tel:+0477-85x6-552">+XXXX XXXX XXX</a>
+							</li>
+							<li>Fax: +XXXX XXXX XXX</li>
+						</ul>
+
+						<ul class="social-list clearfix">
+							<li><a href="#" class="facebook-bgh"><i
+									class="fa fa-facebook"></i></a></li>
+							<li><a href="#" class="twitter-bgh"><i
+									class="fa fa-twitter"></i></a></li>
+							<li><a href="#" class="google-bgh"><i
+									class="fa fa-google-plus"></i></a></li>
+							<li><a href="#" class="rss-bgh"><i class="fa fa-rss"></i></a></li>
+							<li><a href="#" class="linkedin-bgh"><i
+									class="fa fa-linkedin"></i></a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+					<div class="footer-item">
+						<h4>Useful Links</h4>
+						<div class="f-border"></div>
+						<ul class="links">
+							<li><a href="#"><i class="flaticon-arrows"></i>About us</a>
+							</li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Service</a></li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Car
+									Listing</a></li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Car Grid</a>
+							</li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Contact
+									Us</a></li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Blog</a></li>
+							<li><a href="#"><i class="flaticon-arrows"></i>Car
+									Details</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+					<div class="recent-posts footer-item">
+						<h4>Recent Posts</h4>
+						<div class="f-border"></div>
+						<div class="media mb-4">
+							<a class="pr-3" href="car-details.html"> <img
+								src="/assets/img/sub-car/sub-car.jpg" alt="car">
+							</a>
+							<div class="media-body align-self-center">
+								<h5>
+									<a href="car-details.html">2016 Audi S5 Coupe</a>
+								</h5>
+								<p>February 27, 2022</p>
+								<p>
+									<strong>$245,000</strong>
+								</p>
+							</div>
+						</div>
+						<div class="media mb-4">
+							<a class="pr-3" href="car-details.html"> <img
+								src="/assets/img/sub-car/sub-car-2.jpg" alt="car">
+							</a>
+							<div class="media-body align-self-center">
+								<h5>
+									<a href="car-details.html">2016 Audi R8</a>
+								</h5>
+								<p>February 27, 2022</p>
+								<p>
+									<strong>$245,000</strong>
+								</p>
+							</div>
+						</div>
+						<div class="media">
+							<a class="pr-3" href="car-details.html"> <img
+								src="/assets/img/sub-car/sub-car-3.jpg" alt="car">
+							</a>
+							<div class="media-body align-self-center">
+								<h5>
+									<a href="car-details.html">Read Audi A7 TDI</a>
+								</h5>
+								<p>February 27, 2022</p>
+								<p>
+									<strong>$245,000</strong>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+					<div class="footer-item clearfix">
+						<h4>Subscribe</h4>
+						<div class="f-border"></div>
+						<div class="Subscribe-box">
+							<p>Excepteur sint occaecat cupidatat non proident, sunt in
+								culpa qui officia deserunt mollit.</p>
+							<form action="#" method="GET">
+								<p>
+									<input type="text" class="form-contact" name="email"
+										placeholder="Enter Address">
+								</p>
+								<p>
+									<button type="submit" name="submitNewsletter"
+										class="btn btn-block btn-color">Subscribe</button>
+								</p>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xl-12">
+					<p class="copy">
+						&copy; 2022 <a href="http://themevessel.com/" target="_blank">Theme
+							Vessel</a>. Trademarks and brands are the car of their respective
+						owners.
+					</p>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- Footer end -->
+
+	<!-- Full Page Search -->
+	<div id="full-page-search">
+		<button type="button" class="close">×</button>
+		<form action="#">
+			<input type="search" value="" placeholder="type keyword(s) here" />
+			<button type="button" class="btn btn-sm btn-color">Search</button>
+		</form>
+	</div>
+
+	<!-- Off-canvas sidebar -->
+	<div class="off-canvas-sidebar">
+		<div class="off-canvas-sidebar-wrapper">
+			<div class="off-canvas-header">
+				<a class="close-offcanvas" href="#"><span class="fa fa-times"></span></a>
+			</div>
+			<div class="off-canvas-content">
+				<aside class="canvas-widget">
+					<div class="logo text-center">
+						<img src="/assets/img/logos/logo.png" alt="logo">
+					</div>
+				</aside>
+				<aside class="canvas-widget">
+					<ul class="menu">
+						<li class="menu-item menu-item-has-children"><a
+							href="index.html">Home</a></li>
+						<li class="menu-item"><a href="car-grid-leftside.html">Car
+								List</a></li>
+						<li class="menu-item"><a href="car-details.html">Car
+								Detail</a></li>
+						<li class="menu-item"><a
+							href="blog-single-sidebar-right.html">Blog</a></li>
+						<li class="menu-item"><a href="about-1.html">About US</a></li>
+						<li class="menu-item"><a href="contact-1.html">Contact US</a></li>
+					</ul>
+				</aside>
+				<aside class="canvas-widget">
+					<ul class="social-icons">
+						<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+						<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+						<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+						<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+						<li><a href="#"><i class="fa fa-vk"></i></a></li>
+					</ul>
+				</aside>
+			</div>
+		</div>
+	</div>
+
+	<script src="/assets/js/jquery-2.2.0.min.js"></script>
+	<script src="/assets/js/popper.min.js"></script>
+	<script src="/assets/js/bootstrap.min.js"></script>
+	<!-- <script src="/assets/js/jquery.selectBox.js"></script> -->
+	<script src="/assets/js/rangeslider.js"></script>
+	<script src="/assets/js/jquery.magnific-popup.min.js"></script>
+	<script src="/assets/js/jquery.filterizr.js"></script>
+	<script src="/assets/js/wow.min.js"></script>
+	<script src="/assets/js/backstretch.js"></script>
+	<script src="/assets/js/jquery.countdown.js"></script>
+	<script src="/assets/js/jquery.scrollUp.js"></script>
+	<script src="/assets/js/particles.min.js"></script>
+	<script src="/assets/js/typed.min.js"></script>
+	<script src="/assets/js/dropzone.js"></script>
+	<script src="/assets/js/jquery.mb.YTPlayer.js"></script>
+	<script src="/assets/js/slick.min.js"></script>
+	<script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
+
+	<script src="/assets/js/ie-emulation-modes-warning.js"></script>
+	<!-- Custom JS Script -->
+	<script src="/assets/js/app.js"></script>
+	<script
+		th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
+
+	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
+
+
+</body>
+
+</html>
