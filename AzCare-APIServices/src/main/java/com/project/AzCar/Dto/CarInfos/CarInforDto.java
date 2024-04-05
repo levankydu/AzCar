@@ -7,6 +7,7 @@ import java.util.List;
 import com.project.AzCar.Entities.Cars.CarImages;
 import com.project.AzCar.Entities.Cars.CarModelList;
 import com.project.AzCar.Entities.Cars.ExtraFee;
+import com.project.AzCar.Entities.Cars.OrderDetails;
 import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Users.Users;
 
@@ -54,4 +55,6 @@ public class CarInforDto implements Serializable {
 	private PlusServices carPlusModel;
 
 	private ExtraFee extraFeeModel;
+	
+	private List<OrderDetails> orders;
 }

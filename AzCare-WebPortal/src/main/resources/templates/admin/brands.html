@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Models - AzCar Admin Dashboard</title>
+<title>Models - Admin Dashboard</title>
 
 
 
@@ -115,8 +115,11 @@
 								</li>
 
 									<li class="submenu-item  "><a
-									th:href="@{/dashboard/carverify/}" class="submenu-link">Car Verify</a>
+									th:href="@{/dashboard/carverify/}" class="submenu-link">Cars Verify</a>
 								</li>
+								<li class="submenu-item"><a
+									th:href="@{/dashboard/platesVerify/}" class="submenu-link">Plates
+										Verify</a></li>
 							</ul></li>
 
 						<li class="sidebar-item  has-sub"><a href="#"
@@ -394,10 +397,7 @@
 	<script
 		th:src="@{/adminAssets/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
 
-
 	<script th:src="@{/adminAssets/assets/compiled/js/app.js}"></script>
-
-
 
 	<script th:src="@{/adminAssets/assets/extensions/jquery/jquery.min.js}"></script>
 	<script

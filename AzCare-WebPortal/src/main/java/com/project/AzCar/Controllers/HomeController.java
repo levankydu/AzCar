@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.mail.MessagingException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -26,7 +24,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -36,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
 import com.project.AzCar.Dto.Users.UserDto;
@@ -83,9 +79,11 @@ public class HomeController {
 
 	@Autowired
 	private FilesStorageServices fileStorageServices;
+	@Autowired
+	private UserServices userServices;
 
 	@GetMapping("/")
-	public String getHome(Model carRegisterList, Model carsInHcm, Model carsInHn, Model carsInDn, Model carsInBd) {
+	public String getHome(Model ModelView,HttpServletRequest request) {
 		List<CarInfor> list = carServices.findAll();
 		List<CarInforDto> listDto = new ArrayList<>();
 		List<CarInforDto> listcarsInHcm = new ArrayList<>();
@@ -105,6 +103,14 @@ public class HomeController {
 
 			listDto.add(itemDto);
 		}
+		listDto.removeIf(car -> !car.getStatus().equals(Constants.carStatus.READY));
+		if(request.getSession().getAttribute("emailLogin")!=null) {
+			String email = request.getSession().getAttribute("emailLogin").toString();
+			Users owner = userServices.findUserByEmail(email);
+			listDto.removeIf(car -> car.getCarOwnerId()==(int)owner.getId());
+		}
+		
+		
 		for (var item : listDto) {
 			if (item.getAddress().contains("Hồ Chí Minh")) {
 				listcarsInHcm.add(item);
@@ -125,12 +131,13 @@ public class HomeController {
 				listcarsInBd.add(item);
 			}
 		}
-		carsInHcm.addAttribute("carsInHcm", listcarsInHcm);
-		carsInHn.addAttribute("carsInHn", listcarsInHn);
-		carsInDn.addAttribute("carsInDn", listcarsInDn);
-		carsInBd.addAttribute("carsInBd", listcarsInBd);
+		ModelView.addAttribute("carsInHcm", listcarsInHcm);
+		ModelView.addAttribute("carsInHn", listcarsInHn);
+		ModelView.addAttribute("carsInDn", listcarsInDn);
+		ModelView.addAttribute("carsInBd", listcarsInBd);
 		listDto.removeIf(car -> car.getDiscount() == 0);
-		carRegisterList.addAttribute("carRegisterList", listDto);
+		
+		ModelView.addAttribute("carRegisterList", listDto);
 		return "index";
 	}
 
@@ -386,6 +393,27 @@ public class HomeController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
 				.body(file);
 	}
+	@GetMapping("/user/profile/flutter/avatar/{filename}")
+	public ResponseEntity<Resource> getImageToFlutter(@PathVariable("filename") String filename) throws IOException {
+		List<Users> list = uServices.findAllUsers();
+		String dir = "";
+		int i = 0;
+		while (i < list.size()) {
+			dir = "./UploadFiles/userImages/" + list.get(i).getEmail().replace(".", "-");
+			Resource fileResource = fileStorageServices.load(filename, dir);
+			if (fileResource == null) {
+				i++;
+
+			} else {
+				return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment; filename=\"" + fileResource.getFilename() + "\"").body(fileResource);
+			}
+
+		}
+		return null;
+
+	}
+
 
 	@PostMapping("/user/profile/edit/uploadFile")
 	public String uploadImage(@RequestParam(name = "image") MultipartFile image, HttpServletRequest request) {

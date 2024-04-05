@@ -2,10 +2,14 @@ package com.project.AzCar.Controllers;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,27 +32,34 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
-import com.project.AzCar.Entities.Cars.BrandImages;
+import com.project.AzCar.Dto.Orders.OrderDetailsDTO;
 import com.project.AzCar.Entities.Cars.CarImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Cars.ExtraFee;
+import com.project.AzCar.Entities.Cars.OrderDetails;
+import com.project.AzCar.Entities.Cars.PlateImages;
 import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
 import com.project.AzCar.Entities.Locations.Ward;
 import com.project.AzCar.Entities.Users.Users;
-import com.project.AzCar.Services.Cars.BrandImageServices;
+import com.project.AzCar.Entities.Users.Violation;
+import com.project.AzCar.Repositories.Orders.ViolationRepository;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
 import com.project.AzCar.Services.Cars.CarServices;
 import com.project.AzCar.Services.Cars.ExtraFeeServices;
+import com.project.AzCar.Services.Cars.PlateImageServices;
 import com.project.AzCar.Services.Cars.PlusServiceServices;
 import com.project.AzCar.Services.Locations.DistrictServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
 import com.project.AzCar.Services.Locations.WardServices;
+import com.project.AzCar.Services.Orders.OrderDetailsService;
+import com.project.AzCar.Services.Payments.PaymentService;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
+import com.project.AzCar.Utilities.OrderExtraFee;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -58,8 +69,6 @@ public class UserSideCarController {
 	private JavaMailSender mailSender;
 	@Autowired
 	private BrandServices brandServices;
-	@Autowired
-	private BrandImageServices brandImageServices;
 	@Autowired
 	private ProvinceServices provinceServices;
 	@Autowired
@@ -78,8 +87,18 @@ public class UserSideCarController {
 	private FilesStorageServices fileStorageServices;
 	@Autowired
 	private UserServices userServices;
+	@Autowired
+	private OrderDetailsService orderServices;
+	@Autowired
+	private PaymentService paymentServices;
+	@Autowired
+	private PlateImageServices plateImageServices;
+	
+	@Autowired
+	private ViolationRepository violationRepo;
 
 	@GetMapping("/home/carregister/")
+
 	public String getCarRegisterPage(Model brandList, Model provinceList) {
 
 		List<String> brands = brandServices.getBrandList();
@@ -192,11 +211,34 @@ public class UserSideCarController {
 		return "registerCar";
 
 	}
-	
+
 	@PostMapping("/home/availablecars/details/{carId}")
-	public String postRental(@PathVariable("carId") String carId, @ModelAttribute("differenceDate")String differenceDate) {
-		
-		return "";
+	public String postRental(HttpServletRequest request, @ModelAttribute("order") OrderDetails orderdetails,
+			@PathVariable("carId") String carId, @ModelAttribute("fromDate-string") String fromDate_string,
+			@ModelAttribute("toDate-string") String toDate_string,
+			@ModelAttribute("isSameProvince") String isSameProvince,
+			@ModelAttribute("isSameDistrict") String isSameDistrict,
+			@ModelAttribute("deliveryFee") String deliveryFee) {
+		var carExtraFee = extraFeeServices.findByCarId(Integer.parseInt(carId));
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users user = userServices.findUserByEmail(email);
+		orderdetails.setUserId((int) user.getId());
+		LocalTime currentTime = LocalTime.now();
+		orderdetails.setFromDate(LocalDateTime.parse(fromDate_string + " " + currentTime,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSSSSS")));
+		orderdetails.setToDate(LocalDateTime.parse(toDate_string + " " + currentTime,
+				DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSSSSS")));
+		orderdetails.setSameProvince(isSameProvince.equals("1"));
+		orderdetails.setSameDistrict(isSameDistrict.equals("1"));
+		OrderExtraFee extra = new OrderExtraFee(0, carExtraFee != null ? carExtraFee.getCleanningFee() : 0, carExtraFee != null ? carExtraFee.getDecorationFee() : 0);
+		if (isSameProvince.equals("1") && isSameDistrict.equals("0")) {
+			extra.setDeliveryFee(Float.parseFloat(deliveryFee));
+		}
+		orderdetails.setExtraFee(extra);
+		orderdetails.setStatus(Constants.orderStatus.WAITING);
+		orderServices.save(orderdetails);
+		paymentServices.createNewLock(user.getId(), orderdetails.getId(), orderdetails.getTotalAndFees());
+		return "redirect:/home/myplan/";
 	}
 
 	@GetMapping("/home/carregister/success/")
@@ -205,8 +247,7 @@ public class UserSideCarController {
 	}
 
 	@GetMapping("/home/availablecars/details/{carId}")
-	public String getDetailsPage(@PathVariable("carId") String carId, Model carDetails, Model address,
-			Model fastBooking, Model carPlus, Model extraFee, Model fullAddress, Model provinceList) {
+	public String getDetailsPage(HttpServletRequest request, @PathVariable("carId") String carId, Model ModelView) {
 		var model = carServices.findById(Integer.parseInt(carId));
 		var modelDto = carServices.mapToDto(model.getId());
 		List<String> listProvince = provinceServices.getListCityString();
@@ -214,25 +255,33 @@ public class UserSideCarController {
 		var carExtraFee = extraFeeServices.findByCarId(model.getId());
 		if (carExtraFee != null) {
 
-			extraFee.addAttribute("extraFee", carExtraFee);
+			ModelView.addAttribute("extraFee", carExtraFee);
 		}
 		var carPLusService = plusServiceServices.findByCarId(model.getId());
 		if (carPLusService != null) {
 
-			carPlus.addAttribute("plusService", carPLusService);
+			ModelView.addAttribute("plusService", carPLusService);
 		}
 		modelDto.setCarmodel(brandServices.getModel(model.getModelId()));
 		modelDto.setImages(carImageServices.getImgByCarId(model.getId()));
 		for (var c : listProvince) {
 			if (model.getAddress().contains(c)) {
-				address.addAttribute("address", c);
+				ModelView.addAttribute("address", c);
 			}
 		}
 		List<City> provinces = provinceServices.getListCity();
-		provinceList.addAttribute("provinceList", provinces);
-		
-		fullAddress.addAttribute("fullAddress", model.getAddress());
-		carDetails.addAttribute("carDetails", modelDto);
+		ModelView.addAttribute("provinceList", provinces);
+
+		ModelView.addAttribute("fullAddress", model.getAddress());
+		ModelView.addAttribute("carDetails", modelDto);
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users owner = userServices.findUserByEmail(email);
+		ModelView.addAttribute("user", owner);
+		System.out.println(owner.getPhone());
+		List<PlateImages> plates = plateImageServices.getAll();
+		plates.removeIf(item -> item.getUserId() != owner.getId());
+		plates.removeIf(item -> !item.getStatus().equals(Constants.plateStatus.ACCEPTED));
+		ModelView.addAttribute("isKhongHaveBangLai", plates.size() == 0);
 		return "carDetails";
 	}
 
@@ -247,27 +296,28 @@ public class UserSideCarController {
 			Resource fileResource = fileStorageServices.load(filename, dir);
 			if (fileResource == null) {
 				i++;
-
 			} else {
 				return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
 						"attachment; filename=\"" + fileResource.getFilename() + "\"").body(fileResource);
 			}
-
 		}
 		return null;
 	}
 
-	@GetMapping("/home/availablecars/")
-	public String getAvailableCarsPage(Model carRegisterList, Model listProvinces, Model listBrand,
-			Model listCategory) {
+	@GetMapping("/home/availablecars")
+	public String getAvailableCarsPage(Model ModelView, @RequestParam(name = "city", required = false) String city,
+			HttpServletRequest request) {
+
 		List<CarInfor> list = carServices.findAll();
 		List<CarInforDto> listDto = new ArrayList<>();
 		List<String> brands = brandServices.getBrandList();
 		List<String> categories = brandServices.getCategoryList();
 		List<String> listProvince = provinceServices.getListCityString();
 		List<City> provinces = provinceServices.getListCity();
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users owner = userServices.findUserByEmail(email);
 		for (var item : list) {
-			if (item.getStatus().equals(Constants.carStatus.READY)) {
+			if (item.getStatus().equals(Constants.carStatus.READY) && item.getCarOwnerId() != (int) owner.getId()) {
 				var itemDto = carServices.mapToDto(item.getId());
 				itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 				itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
@@ -276,57 +326,116 @@ public class UserSideCarController {
 						itemDto.setAddress(c);
 					}
 				}
-
 				listDto.add(itemDto);
 			}
+		}
+		if (city != null) {
+			var cityModel = provinceServices.findByCode(city);
+			ModelView.addAttribute("province", cityModel.getFull_name());
+			ModelView.addAttribute("listDistrict", districtServices.getDistricByProvinceCode(cityModel.getCode()));
+			listDto.removeIf(t -> !t.getAddress().contains(cityModel.getName()));
+			ModelView.addAttribute("carRegisterList", listDto);
 
 		}
-		listBrand.addAttribute("listBrand", brands);
-		listCategory.addAttribute("listCategory", categories);
-		listProvinces.addAttribute("provinceList", provinces);
-		carRegisterList.addAttribute("carRegisterList", listDto);
+
+		ModelView.addAttribute("listBrand", brands);
+		ModelView.addAttribute("listCategory", categories);
+		ModelView.addAttribute("provinceList", provinces);
+		ModelView.addAttribute("carRegisterList", listDto);
 		return "availableCars";
 	}
 
-	@PostMapping("/home/availablecars/")
-	public String getResultPage(Model carRegisterList, Model listProvinces, Model listBrand, Model listCategory,
+	@PostMapping("/home/availablecars")
+	public String getResultPage(Model ModelView, HttpServletRequest request,
 			@RequestParam(name = "isCarPlus", required = false, defaultValue = "false") boolean isCarPlus,
 			@RequestParam(name = "isFastBooking", required = false, defaultValue = "false") boolean isFastBooking,
 			@RequestParam(name = "isDiscount", required = false, defaultValue = "false") boolean isDiscount,
 			@RequestParam(name = "carAddress") String carAddress, @RequestParam(name = "carBrand") String carBrand,
-			@RequestParam(name = "carCate") String carCate) {
+			@RequestParam(name = "carCate") String carCate, @RequestParam(name = "province") String province,
+			@RequestParam(name = "districtSelect", defaultValue = "") String districtSelect,
+			@RequestParam(name = "wardSelect", defaultValue = "") String wardSelect) {
 		List<CarInfor> list = carServices.findAll();
 		List<CarInforDto> listDto = new ArrayList<>();
 		List<String> brands = brandServices.getBrandList();
 		List<String> categories = brandServices.getCategoryList();
 		List<String> listProvince = provinceServices.getListCityString();
 		List<City> provinces = provinceServices.getListCity();
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users owner = userServices.findUserByEmail(email);
 
 		for (var item : list) {
+
 			var itemDto = carServices.mapToDto(item.getId());
 			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
 			listDto.add(itemDto);
 		}
 		List<CarInforDto> filteredListDto = new ArrayList<>();
+
+		if (carAddress.contains("Select")) {
+			carAddress = "";
+		}
 		for (var item : listDto) {
 			if (carAddress.isEmpty() || item.getAddress().contains(carAddress)) {
 				filteredListDto.add(item);
 			}
 		}
+		if (!province.isEmpty() && !province.equals("--Select Province--")) {
+			var city = provinceServices.findById(province);
+			if (city != null) {
+				ModelView.addAttribute("province", city.getFull_name());
+				ModelView.addAttribute("listDistrict", districtServices.getDistricByProvinceCode(province));
+				filteredListDto.removeIf(item -> !item.getAddress().contains(city.getFull_name()));
 
-		if (!carBrand.isEmpty()) {
+			} else {
+				var city2 = provinceServices.findbyFullName(province);
+				ModelView.addAttribute("province", city2.getFull_name());
+				ModelView.addAttribute("listDistrict", districtServices.getDistricByProvinceCode(city2.getCode()));
+				filteredListDto.removeIf(item -> !item.getAddress().contains(city2.getFull_name()));
+
+			}
+
+		}
+		if (!districtSelect.isEmpty() && !districtSelect.equals("--Select District--")) {
+			var district = districtServices.findbyId(districtSelect);
+			if (district != null) {
+				ModelView.addAttribute("district", district.getFull_name());
+				ModelView.addAttribute("listWard", wardServices.getWardByDistrictCode(districtSelect));
+				filteredListDto.removeIf(item -> !item.getAddress().contains(district.getFull_name()));
+			} else {
+				var district2 = districtServices.findbyFullName(districtSelect);
+				ModelView.addAttribute("district", district2.getFull_name());
+				ModelView.addAttribute("listWard", wardServices.getWardByDistrictCode(district2.getCode()));
+				filteredListDto.removeIf(item -> !item.getAddress().contains(district2.getFull_name()));
+
+			}
+
+		}
+		if (!wardSelect.isEmpty() && !wardSelect.equals("--Select Ward--")) {
+			var ward = wardServices.findbyId(wardSelect);
+			if (ward != null) {
+				ModelView.addAttribute("ward", ward.getFull_name());
+			} else {
+				ModelView.addAttribute("ward", wardSelect);
+			}
+
+		}
+		if (!carBrand.isEmpty() && !carBrand.equals("--Select Brand--")) {
+			ModelView.addAttribute("carBrand", carBrand);
 			filteredListDto.removeIf(item -> !item.getCarmodel().getBrand().contains(carBrand));
 		}
 
-		if (!carCate.isEmpty()) {
+		if (!carCate.isEmpty() && !carCate.equals("--Select Category--")) {
+			ModelView.addAttribute("carCate", carCate);
 			filteredListDto.removeIf(item -> !item.getCarmodel().getCategory().contains(carCate));
 		}
 		if (isCarPlus) {
+			ModelView.addAttribute("carPlus", "true");
 			filteredListDto.removeIf(item -> !item.isCarPlus());
 		}
 
 		if (isDiscount) {
+			ModelView.addAttribute("discount", "true");
 			filteredListDto.removeIf(item -> item.getDiscount() == 0);
 		}
 
@@ -337,25 +446,55 @@ public class UserSideCarController {
 				}
 			}
 		}
-		listBrand.addAttribute("listBrand", brands);
-		listCategory.addAttribute("listCategory", categories);
-		listProvinces.addAttribute("provinceList", provinces);
-		carRegisterList.addAttribute("carRegisterList", filteredListDto);
+		filteredListDto.removeIf(t -> !t.getStatus().equals(Constants.carStatus.READY));
+		filteredListDto.removeIf(t -> t.getOwner().getId() == owner.getId());
+		ModelView.addAttribute("listBrand", brands);
+		ModelView.addAttribute("listCategory", categories);
+		ModelView.addAttribute("provinceList", provinces);
+		ModelView.addAttribute("carRegisterList", filteredListDto);
 		return "availableCars";
+	}
+	@GetMapping("/home/myplan/accepted/{orderId}")
+	public String acceptRequestBooking(@PathVariable(name="orderId") String orderId) {
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		order.setStatus(Constants.orderStatus.ACCEPTED);
+		orderServices.save(order);
+		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
+		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(2)));
+		
+		
+		return "redirect:/home/myplan/";
+	}
+	@GetMapping("/home/myplan/declined/{orderId}")
+	public String declinedRequestBooking(@PathVariable(name="orderId") String orderId) {
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
+		var car =carServices.findById(Integer.parseInt(order.getCarId()));
+		order.setStatus(Constants.orderStatus.DECLINED);
+		orderServices.save(order);
+		Violation vio = new Violation();
+		vio.setUserId(ownerId);
+		vio.setCarId(car.getId());
+		vio.setReason(Constants.violations.OWNER_DECLINED);
+		violationRepo.save(vio);
+		paymentServices.createNewRefund(order.getUserId(), order.getId() ,order.getTotalAndFees());
+		return "redirect:/home/myplan/";
 	}
 
 	@GetMapping("/home/myplan/")
-	public String getMyPlanPage(HttpServletRequest request, Model listCar, Model ImgLicense) {
+	public String getMyPlanPage(HttpServletRequest request, Model ModelView) {
+		orderServices.unrespondDetected();
 
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users user = userServices.findUserByEmail(email);
+		List<OrderDetailsDTO> orderList = orderServices.getDTOFromCreatedBy((int) user.getId());
 		List<CarInfor> list = carServices.getbyOwnerId((int) user.getId());
 		List<CarInforDto> listDto = new ArrayList<>();
-		List<BrandImages> listImg = brandImageServices.getAll();
+		List<PlateImages> listImg = plateImageServices.getAll();
+
 		List<String> urlLicense = new ArrayList<>();
 		for (var item : listImg) {
-			if (item.getBrandName()
-					.contains(user.getId() + "-" + user.getEmail().replace(".", "-").replace("@", "-"))) {
+			if (item.getUserId() == user.getId()) {
 				urlLicense.add(item.getImageUrl());
 			}
 
@@ -364,16 +503,37 @@ public class UserSideCarController {
 			var itemDto = carServices.mapToDto(item.getId());
 			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
-
+			List<OrderDetails> llll = orderServices.getFromCarId(item.getId());
+			var name = "OrderListDto"+itemDto.getCarmodel().getObjectId();
+			List<OrderDetailsDTO> mmmm = orderServices.getDTOFromCarId(item.getId());
+			mmmm.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.WAITING));
+			ModelView.addAttribute(name, mmmm);
+			llll.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.WAITING));
+			
+			itemDto.setOrders(llll);
 			listDto.add(itemDto);
 		}
-
-		ImgLicense.addAttribute("ImgLicense", urlLicense);
-		listCar.addAttribute("listCar", listDto);
+		listImg.removeIf(t -> t.getUserId() != user.getId());
+		listImg.removeIf(t -> t.getStatus().equals(Constants.plateStatus.DECLINED));
+		ModelView.addAttribute("orderList", orderList);
+		ModelView.addAttribute("ImgLicense", listImg);
+		ModelView.addAttribute("listCar", listDto);
+		ModelView.addAttribute("user", user);
 		return "myPlans";
 	}
 
-	@GetMapping("/home/availablecars/{filename}")
+	@PostMapping("/home/myplan/charge/")
+	public String charge(HttpServletRequest request) {
+
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users user = userServices.findUserByEmail(email);
+		user.setBalance(BigDecimal.valueOf(10000));
+		userServices.saveUserReset(user);
+
+		return "redirect:/home/myplan/";
+	}
+
+	@GetMapping("/home/availablecars/img/{filename}")
 	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename) throws IOException {
 		List<CarInfor> list = carServices.findAll();
 		String dir = "";
@@ -394,7 +554,7 @@ public class UserSideCarController {
 
 	}
 
-	@PostMapping("/home/myplan")
+	@PostMapping("/home/myplan/")
 	public String uploadDriveLicense(@RequestParam("frontImg") MultipartFile frontImg,
 			@RequestParam("behindImg") MultipartFile behindImg, HttpServletRequest request) {
 
@@ -404,34 +564,33 @@ public class UserSideCarController {
 		String dir = "./UploadFiles/userImages" + "/" + ownerId.getId() + "-"
 				+ ownerId.getEmail().replace(".", "-").replace("@", "-");
 		Path path = Paths.get(dir);
-		BrandImages frontImgModel = new BrandImages();
-		BrandImages behindImgModel = new BrandImages();
+		PlateImages frontImgModel = new PlateImages();
+		PlateImages behindImgModel = new PlateImages();
 		try {
 			Files.createDirectories(path);
 		} catch (IOException e) {
 			throw new RuntimeException("Could not initialize folder for upload!");
 		}
-
 		try {
 
 			fileStorageServices.save(frontImg, dir);
-			frontImgModel.setBrandName(
-					"front-" + ownerId.getId() + "-" + ownerId.getEmail().replace(".", "-").replace("@", "-"));
+			frontImgModel.setUserId(ownerId.getId());
+			frontImgModel.setStatus(Constants.plateStatus.WAITING);
 			frontImgModel.setImageUrl(frontImg.getOriginalFilename());
-			brandImageServices.saveImage(frontImgModel);
+			plateImageServices.save(frontImgModel);
 
 			fileStorageServices.save(behindImg, dir);
-			behindImgModel.setBrandName(
-					"behind-" + ownerId.getId() + "-" + ownerId.getEmail().replace(".", "-").replace("@", "-"));
+			behindImgModel.setUserId(ownerId.getId());
+			behindImgModel.setStatus(Constants.plateStatus.WAITING);
 			behindImgModel.setImageUrl(behindImg.getOriginalFilename());
 
-			brandImageServices.saveImage(behindImgModel);
+			plateImageServices.save(behindImgModel);
 
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 
-		return "myPlans";
+		return "redirect:/home/myplan/";
 	}
 
 	@GetMapping("/home/myplan/license/{filename}")

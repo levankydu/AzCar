@@ -12,4 +12,6 @@ public interface DistrictServices {
 	List<District> getDistricByProvinceCode(String code);
 
 	List<String> getListDistrictString();
+	District findbyId(String id);
+	District findbyFullName(String fullName);
 }
