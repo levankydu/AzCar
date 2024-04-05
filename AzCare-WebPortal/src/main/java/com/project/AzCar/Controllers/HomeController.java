@@ -434,12 +434,12 @@ public class HomeController {
 				fileStorageServices.save(image, dir);
 				user.setImage(image.getOriginalFilename());
 				uServices.saveUserReset(user);
-				return "redirect:/user/profile/"+user.getEmail() + "?succesUpdateImage";
+				return "redirect:/user/profile/"+user.getEmail();
 			} catch (Exception e) {
 				System.out.println(e);
 			}
 		}
-		return "redirect:/user/profile/"+user.getEmail()+"?failUpdateImage";
+		return "redirect:/user/profile/edit"+user.getEmail();
 	}
 
 
