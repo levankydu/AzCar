@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="tbextrafee")
-public class ExtraFee implements Serializable{
+@Table(name = "tbextrafee")
+public class ExtraFee implements Serializable {
 
 	/**
 	 * 
@@ -29,5 +29,5 @@ public class ExtraFee implements Serializable{
 	private long cleanningFee;
 	private long decorationFee;
 	private int carRegisterId;
-	
+
 }

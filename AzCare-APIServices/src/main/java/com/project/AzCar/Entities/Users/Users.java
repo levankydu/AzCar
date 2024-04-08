@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "tbusers")
 @Entity
 
-public class Users implements Serializable{
+public class Users implements Serializable {
 
 	private static final long serialVersionUID = -2727541742627038300L;
 
@@ -43,7 +43,7 @@ public class Users implements Serializable{
 	private long id;
 
 	@Transient
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST,targetEntity = CarModelList.class)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, targetEntity = CarModelList.class)
 	private List<CarModelList> cars = new ArrayList<>();
 	private String firstName;
 	private String lastName;
@@ -67,7 +67,7 @@ public class Users implements Serializable{
 	private int score;
 
 	private String image;
-	
+
 	private String address;
 
 	public Users(String firstName, String email, String password, List<Roles> roles) {

@@ -15,10 +15,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name= "tbprovinces")
+@Table(name = "tbprovinces")
 public class City implements Serializable {
-	
-	
+
 	/**
 	 * 
 	 */
@@ -26,11 +25,11 @@ public class City implements Serializable {
 
 	@Id
 	private String code;
-	
+
 	private String name;
 	private String name_en;
 	private String full_name;
 	private String full_name_en;
 	private String code_name;
-	
+
 }

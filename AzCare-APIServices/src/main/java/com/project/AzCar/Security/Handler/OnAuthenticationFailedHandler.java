@@ -17,8 +17,7 @@ public class OnAuthenticationFailedHandler implements AuthenticationFailureHandl
 		if (request != null) {
 			request.getSession().setAttribute("signin_error", "Wrong email or password!");
 		}
-		
-		
+
 		response.sendRedirect("/login");
 	}
 

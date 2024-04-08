@@ -55,6 +55,6 @@ public class CarInforDto implements Serializable {
 	private PlusServices carPlusModel;
 
 	private ExtraFee extraFeeModel;
-	
+
 	private List<OrderDetails> orders;
 }

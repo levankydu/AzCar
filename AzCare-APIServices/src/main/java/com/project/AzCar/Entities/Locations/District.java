@@ -15,10 +15,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = false)
-@Table(name="tbdistricts")
-public class District implements Serializable{/**
-	 * 
-	 */
+@Table(name = "tbdistricts")
+public class District implements Serializable {
+	/**
+	* 
+	*/
 	private static final long serialVersionUID = -5839000534796823465L;
 
 	@Id

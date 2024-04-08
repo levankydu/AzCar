@@ -11,11 +11,13 @@ public class PlusServiceServicesImpl implements PlusServiceServices {
 
 	@Autowired
 	private PlusServicesRepository plusServicesRepository;
+
 	@Override
 	public void save(PlusServices model) {
 		plusServicesRepository.save(model);
-		
+
 	}
+
 	@Override
 	public PlusServices findByCarId(int id) {
 		return plusServicesRepository.findByCarId(id);

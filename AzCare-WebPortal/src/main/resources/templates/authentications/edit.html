@@ -76,9 +76,9 @@
 						<div class="navbar-collapse collapse w-100" id="navbar">
 							<ul class="navbar-nav ml-auto">
 								<li class="nav-item"><a class="nav-link"
-									th:href="@{/home/availablecars/}">Available Cars</a></li>
+									th:href="@{/home/availablecars}">Available Cars</a></li>
 								<li class="nav-item" th:if="${session.user}"><a
-									class="nav-link" href="#">My Plan</a></li>
+									class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
 								<li class="nav-item "><a class="nav-link" href="#">
 										About Us </a></li>
 
@@ -241,7 +241,7 @@
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputBirthday">Birthday</label>
 										<input class="form-control" id="dob" type="text" name="dob"
-											th:value="*{dob}" onchange="validateDob();"> <span
+											th:value="${#dates.format(user.dob, 'dd-MM-yyyy')}"  onchange="validateDob();"> <span
 											id="validation-dob" class="text-danger"></span>
 									</div>
 								</div>
@@ -253,7 +253,7 @@
 											th:field="*{gender}">
 											<option value="male">Male</option>
 											<option value="female">Female</option>
-											<!-- Add more options as needed -->
+											
 										</select>
 									</div>
 								</div>
@@ -618,34 +618,34 @@
 				return true;
 			}
 		}
+		
 		$(document).ready(function() {
 		    $('#dob').datepicker({
 		        format: 'dd-mm-yyyy',
 		        autoclose: true,
 		        endDate: '0d'
 		    }).on('changeDate', function(e) {
-		        // Kiểm tra lại ngày sinh khi người dùng chọn
+		        $('#dob').attr('value', $('#dob').val());
 		        validateDob();
 		    });
 
-		    // Lấy giá trị ngày sinh mặc định
+		  
 		    var defaultDob = $('#dob').val();
 
-		    // Kiểm tra nếu giá trị mặc định tồn tại và không rỗng
 		    if (defaultDob) {
-		        // Tách phần ngày tháng năm từ giá trị mặc định
+		        
 		        var parts = defaultDob.split(' ');
 		        var datePart = parts[0]; // Lấy phần ngày tháng năm
-
-		        // Đặt lại giá trị ngày sinh chỉ với phần ngày tháng năm
+		        
 		        $('#dob').val(datePart);
+		        $('#dob').attr('value', datePart);
 		    }
 		});
 
 		function validateDob() {
 		    const dobValue = document.getElementById("dob").value;
 		    const dobDate = new Date(dobValue);
-		    const today = new Date();
+	
 
 		    if (dobValue === "") {
 		        document.getElementById('validation-dob').textContent = "Date of birth is required";
@@ -653,11 +653,8 @@
 		    } else {
 		        document.getElementById('validation-dob').textContent = "";
 
-		        // Kiểm tra nếu ngày sinh lớn hơn ngày hiện tại
-		        if (dobDate > today) {
-		            document.getElementById('validation-dob').textContent = "Date of birth can't be in the future";
-		            return false;
-		        }
+		        
+
 
 		        return true;
 		    }
@@ -690,12 +687,7 @@
 			return false;
 		}
 
-		$(document).ready(function() {
-			$('#dob').datepicker({
-				format : 'dd-mm-yyyy',
-				autoclose : true
-			});
-		});
+		
 		function onFilesChange() {
 			var value = image.value;
 			if (!value.match(/\.(jpg|jpeg|png|gif)$/i)) {

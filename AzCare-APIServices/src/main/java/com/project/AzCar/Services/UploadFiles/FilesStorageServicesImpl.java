@@ -47,19 +47,17 @@ public class FilesStorageServicesImpl implements FilesStorageServices {
 
 	@Override
 	public void save(MultipartFile file, String dirName) throws Exception {
-		
-		
+
 		try {
-			
-			Files.copy(file.getInputStream(),Paths.get(dirName).resolve(file.getOriginalFilename()));
-			
-			
+
+			Files.copy(file.getInputStream(), Paths.get(dirName).resolve(file.getOriginalFilename()));
+
 		} catch (Exception e) {
 			if (e instanceof FileAlreadyExistsException) {
-	            String newName = generateUniqueFilename(file);
-	            Path targetPath = Paths.get(dirName).resolve(newName);
-	     
-	            Files.copy(file.getInputStream(), targetPath);
+				String newName = generateUniqueFilename(file);
+				Path targetPath = Paths.get(dirName).resolve(newName);
+
+				Files.copy(file.getInputStream(), targetPath);
 			}
 
 			throw new RuntimeException(e.getMessage());
@@ -68,32 +66,32 @@ public class FilesStorageServicesImpl implements FilesStorageServices {
 	}
 
 	@Override
-	public Resource load(String filename,String dirName) {
+	public Resource load(String filename, String dirName) {
 		try {
-		      Path file = Paths.get(dirName).resolve(filename);
-		      Resource resource = new UrlResource(file.toUri());
+			Path file = Paths.get(dirName).resolve(filename);
+			Resource resource = new UrlResource(file.toUri());
 
-		      if (resource.exists() || resource.isReadable()) {
+			if (resource.exists() || resource.isReadable()) {
 //		    	  System.out.println(filename+"and"+dirName+" ok found");
-		        return resource;
-		      } else {
-		    	  
-		       System.out.println(filename+"and"+dirName+" not found");
-		       return null;
-		      }
-		    } catch (MalformedURLException e) {
-		      throw new RuntimeException("Error: " + e.getMessage());
-		    }
+				return resource;
+			} else {
+
+				System.out.println(filename + "and" + dirName + " not found");
+				return null;
+			}
+		} catch (MalformedURLException e) {
+			throw new RuntimeException("Error: " + e.getMessage());
+		}
 	}
 
 	@Override
-	public boolean delete(String filename,String dirName) {
+	public boolean delete(String filename, String dirName) {
 		try {
-		      Path file = Paths.get(dirName).resolve(filename);
-		      return Files.deleteIfExists(file);
-		    } catch (IOException e) {
-		      throw new RuntimeException("Error: " + e.getMessage());
-		    }
+			Path file = Paths.get(dirName).resolve(filename);
+			return Files.deleteIfExists(file);
+		} catch (IOException e) {
+			throw new RuntimeException("Error: " + e.getMessage());
+		}
 	}
 
 	@Override
@@ -105,29 +103,29 @@ public class FilesStorageServicesImpl implements FilesStorageServices {
 	@Override
 	public Stream<Path> loadAll(String dirName) {
 		try {
-		      return Files.walk(Paths.get(dirName), 1).filter(path -> !path.equals(Paths.get(dirName))).map(Paths.get(dirName)::relativize);
-		    } catch (IOException e) {
-		      throw new RuntimeException("Could not load the files!");
-		    }
-		  }
-	
+			return Files.walk(Paths.get(dirName), 1).filter(path -> !path.equals(Paths.get(dirName)))
+					.map(Paths.get(dirName)::relativize);
+		} catch (IOException e) {
+			throw new RuntimeException("Could not load the files!");
+		}
+	}
+
 	private String generateUniqueFilename(MultipartFile file) {
-	    // Extract the file extension
-	    String originalFilename = file.getOriginalFilename();
-	    String extension = "";
-	    int dotIndex = originalFilename.lastIndexOf('.');
-	    if (dotIndex > 0) {
-	        extension = originalFilename.substring(dotIndex);
-	    }
-	    
-	    // Generate a random number
-	    int min = 0; // Minimum value
-	    int max = 999999999; // Maximum value
-	    int rand = new Random().nextInt(max - min + 1) + min;
-	    
-	    // Construct the new filename
-	    String newName = originalFilename.substring(0, dotIndex) + "_duplicated_" + rand + extension;
-	    return newName;
+		// Extract the file extension
+		String originalFilename = file.getOriginalFilename();
+		String extension = "";
+		int dotIndex = originalFilename.lastIndexOf('.');
+		if (dotIndex > 0) {
+			extension = originalFilename.substring(dotIndex);
+		}
+
+		// Generate a random number
+		int min = 0; // Minimum value
+		int max = 999999999; // Maximum value
+		int rand = new Random().nextInt(max - min + 1) + min;
+
+		// Construct the new filename
+		String newName = originalFilename.substring(0, dotIndex) + "_duplicated_" + rand + extension;
+		return newName;
 	}
 }
-

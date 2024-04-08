@@ -141,7 +141,7 @@ public class UserServicesImpl implements UserServices {
 	@Override
 	public boolean existsByEmail(String email) {
 		var user = userRepo.findByEmail(email);
-		if(user!= null) {
+		if (user != null) {
 			return true;
 		}
 		return false;
