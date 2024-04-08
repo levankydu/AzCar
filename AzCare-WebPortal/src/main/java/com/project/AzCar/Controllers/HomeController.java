@@ -439,7 +439,7 @@ public class HomeController {
 				System.out.println(e);
 			}
 		}
-		return "redirect:/user/profile/edit"+user.getEmail();
+		return "redirect:/user/profile/edit/"+user.getEmail();
 	}
 
 

@@ -39,6 +39,7 @@ import com.project.AzCar.Entities.Cars.ExtraFee;
 import com.project.AzCar.Entities.Cars.OrderDetails;
 import com.project.AzCar.Entities.Cars.PlateImages;
 import com.project.AzCar.Entities.Cars.PlusServices;
+import com.project.AzCar.Entities.HintText.HintText;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
 import com.project.AzCar.Entities.Locations.Ward;
@@ -51,6 +52,7 @@ import com.project.AzCar.Services.Cars.CarServices;
 import com.project.AzCar.Services.Cars.ExtraFeeServices;
 import com.project.AzCar.Services.Cars.PlateImageServices;
 import com.project.AzCar.Services.Cars.PlusServiceServices;
+import com.project.AzCar.Services.HintText.HintTextServices;
 import com.project.AzCar.Services.Locations.DistrictServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
 import com.project.AzCar.Services.Locations.WardServices;
@@ -95,16 +97,24 @@ public class UserSideCarController {
 	private PlateImageServices plateImageServices;
 	
 	@Autowired
+	private HintTextServices hintTextServices;
+	@Autowired
 	private ViolationRepository violationRepo;
 
 	@GetMapping("/home/carregister/")
 
-	public String getCarRegisterPage(Model brandList, Model provinceList) {
+	public String getCarRegisterPage(Model ModelView) {
 
 		List<String> brands = brandServices.getBrandList();
 		List<City> provinces = provinceServices.getListCity();
-		brandList.addAttribute("brandList", brands);
-		provinceList.addAttribute("provinceList", provinces);
+		List<HintText> hintDescription = hintTextServices.findByType("description");
+		List<HintText> hintRule = hintTextServices.findByType("rule");
+		ModelView.addAttribute("rule", hintRule);
+		ModelView.addAttribute("description",hintDescription);
+		ModelView.addAttribute("brandList", brands);
+		ModelView.addAttribute("provinceList", provinces);
+		
+		
 		return "registerCar";
 	}
 

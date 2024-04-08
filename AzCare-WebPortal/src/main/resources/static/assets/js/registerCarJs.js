@@ -473,3 +473,20 @@ function backStep1() {
 			return registerRentCar.submit();
 		}
 	}
+	function hintDescriptionSubmit(){
+		var carDescription = document.getElementById("car-description");
+		var hint = document.getElementById("hintDescriptionSelect").value;
+		
+		carDescription.value = hint;
+		carDesciptionCheck();
+	}
+	
+	function hintRuleSubmit(){
+		var carRule = document.getElementById("rules");
+		var hint = document.getElementById("hintRuleSelect").value;
+		
+		carRule.value = hint;
+		ruleCheck();
+	}
+	
+	
