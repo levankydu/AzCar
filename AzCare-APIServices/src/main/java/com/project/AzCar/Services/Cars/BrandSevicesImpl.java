@@ -9,26 +9,26 @@ import com.project.AzCar.Entities.Cars.CarModelList;
 import com.project.AzCar.Repositories.Cars.BrandRepository;
 
 @Service
-public class BrandSevicesImpl implements BrandServices{
+public class BrandSevicesImpl implements BrandServices {
 
 	@Autowired
 	private BrandRepository brandRepo;
-	
+
 	@Override
 	public void saveBrand(CarModelList model) {
 		brandRepo.save(model);
-		
+
 	}
 
 	@Override
 	public void updateBrand(String idCarModel) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public List<String> getBrandList() {
-	
+
 		return brandRepo.getBrandList();
 	}
 
@@ -77,7 +77,5 @@ public class BrandSevicesImpl implements BrandServices{
 	public CarModelList getModel(String modelId) {
 		return brandRepo.getModelById(modelId);
 	}
-
-	
 
 }

@@ -10,5 +10,6 @@ import com.project.AzCar.Entities.Cars.CarImages;
 public interface CarImageServices {
 
 	void saveImg(CarImages model);
+
 	List<CarImages> getImgByCarId(int id);
 }

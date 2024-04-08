@@ -13,14 +13,17 @@ public class WardServiceImpl implements WardServices {
 
 	@Autowired
 	private WardRepository wardRepository;
+
 	@Override
 	public List<Ward> getWardByDistrictCode(String code) {
 		return wardRepository.getWardByDistrictCode(code);
 	}
+
 	@Override
 	public List<String> getWardListString() {
 		return wardRepository.getListString();
 	}
+
 	@Override
 	public Ward findbyId(String id) {
 		return wardRepository.findbyId(id);

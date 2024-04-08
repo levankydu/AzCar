@@ -10,12 +10,13 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "tbplusservices")
-public class PlusServices implements Serializable{
+public class PlusServices implements Serializable {
 
 	/**
 	 * 
@@ -25,10 +26,9 @@ public class PlusServices implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-	
+
 	private long fee;
-	
+
 	private int carRegisterId;
-	
+
 }

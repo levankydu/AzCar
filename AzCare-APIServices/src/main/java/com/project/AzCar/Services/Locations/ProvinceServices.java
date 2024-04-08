@@ -8,9 +8,13 @@ import com.project.AzCar.Entities.Locations.City;
 
 @Service
 public interface ProvinceServices {
- List<City> getListCity();
- List<String> getListCityString();
- City findById(String id);
- City findByCode(String name);
- City findbyFullName(String fullName);
+	List<City> getListCity();
+
+	List<String> getListCityString();
+
+	City findById(String id);
+
+	City findByCode(String name);
+
+	City findbyFullName(String fullName);
 }

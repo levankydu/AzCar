@@ -25,17 +25,16 @@ public interface BrandRepository extends JpaRepository<CarModelList, String> {
 
 	@Query("SELECT DISTINCT c.category FROM CarModelList c WHERE c.brand = ?1")
 	List<String> getCategoryListByBrand(String brandName);
-	
+
 	@Query("SELECT DISTINCT c.model FROM CarModelList c WHERE c.brand = ?1 AND c.category =?2")
-	List<String> getModelListByCateAndBrand(String brandName,String cateName);
-	
+	List<String> getModelListByCateAndBrand(String brandName, String cateName);
+
 	@Query("SELECT DISTINCT c.year FROM CarModelList c WHERE c.brand = ?1 AND c.category = ?2 AND c.model = ?3")
-	List<String> getYearList(String brandName, String cateName,String modelName);
-	
-	
+	List<String> getYearList(String brandName, String cateName, String modelName);
+
 	@Query("SELECT DISTINCT c.objectId FROM CarModelList c WHERE c.brand = ?1 AND c.category = ?2 AND c.model = ?3 AND c.year= ?4")
 	String getModelId(String brandName, String cateName, String modelName, int year);
-	
+
 	@Query("SELECT DISTINCT c FROM CarModelList c WHERE c.objectId = ?1")
-	CarModelList getModelById (String id);
+	CarModelList getModelById(String id);
 }

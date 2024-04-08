@@ -16,16 +16,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "tbbrandimages")
-public class BrandImages implements Serializable{/**
-	 * 
-	 */
+public class BrandImages implements Serializable {
+	/**
+	* 
+	*/
 	private static final long serialVersionUID = -4404387433056113055L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	private String ImageUrl= null;
+
+	private String ImageUrl = null;
 	private String brandName;
-	
+
 }

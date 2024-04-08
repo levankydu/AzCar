@@ -19,18 +19,17 @@ import jakarta.annotation.PostConstruct;
 public class PaymentServiceimpl implements PaymentService {
 	private Users admin;
 	private BigDecimal adminBalance;
-	
+
 	@Autowired
 	private UserServices userServices;
 	@Autowired
 	private PaymentRepository paymentRepository;
 
 	@PostConstruct
-    public void init() {
-        this.admin = userServices.findUserByEmail("admin@admin");
-        this.adminBalance = admin.getBalance() != null ? admin.getBalance() : BigDecimal.valueOf(0);
-    }
-	
+	public void init() {
+		this.admin = userServices.findUserByEmail("admin@admin");
+		this.adminBalance = admin.getBalance() != null ? admin.getBalance() : BigDecimal.valueOf(0);
+	}
 
 	@Override
 	public boolean save(Payment payment) {
@@ -60,7 +59,7 @@ public class PaymentServiceimpl implements PaymentService {
 		payment.setDescription("Admin refund tien bi khoa");
 		payment.setStatus(Constants.paymentStatus.REFUND);
 		paymentRepository.save(payment);
-		
+
 		user.setBalance(userBalance.add(amount));
 		admin.setBalance(adminBalance.subtract(amount));
 		userServices.saveUserReset(admin);
@@ -79,7 +78,7 @@ public class PaymentServiceimpl implements PaymentService {
 		payment.setDescription("Admin khoa tien thue xe");
 		payment.setStatus(Constants.paymentStatus.LOCKED);
 		paymentRepository.save(payment);
-		
+
 		user.setBalance(userBalance.subtract(amount));
 		admin.setBalance(adminBalance.add(amount));
 		userServices.saveUserReset(admin);
@@ -96,7 +95,7 @@ public class PaymentServiceimpl implements PaymentService {
 		payment.setDescription("User nap tien");
 		payment.setStatus(Constants.paymentStatus.DEPOSIT);
 		paymentRepository.save(payment);
-		
+
 		user.setBalance(userBalance.add(amount));
 		userServices.saveUserReset(user);
 
@@ -112,7 +111,7 @@ public class PaymentServiceimpl implements PaymentService {
 		payment.setDescription("User rut tien");
 		payment.setStatus(Constants.paymentStatus.DEPOSIT);
 		paymentRepository.save(payment);
-		
+
 		user.setBalance(userBalance.subtract(amount));
 		userServices.saveUserReset(user);
 
