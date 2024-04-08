@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cars Verify - Admin Dashboard</title>
+<title>Verify Plates - Admin Dashboard</title>
 
 
 
@@ -30,6 +30,112 @@
 
 <link rel="stylesheet"
 	href="/adminAssets/assets/compiled/css/table-datatable-jquery.css">
+<link rel="stylesheet" href="/assets/css/notiCss.css">
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+<script type="text/javascript" src="/assets/js/notiJs.js"></script>
+<style type="text/css">
+/* CSS */
+.button-54 {
+	font-family: "Open Sans", sans-serif;
+	font-size: 16px;
+	letter-spacing: 2px;
+	text-decoration: none;
+	text-transform: uppercase;
+	color: #000;
+	cursor: pointer;
+	border: 3px solid;
+	padding: 0.25em 0.5em;
+	box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px
+		0px 0px, 5px 5px 0px 0px;
+	position: relative;
+	user-select: none;
+	-webkit-user-select: none;
+	touch-action: manipulation;
+}
+
+.button-54:active {
+	box-shadow: 0px 0px 0px 0px;
+	top: 5px;
+	left: 5px;
+}
+
+@media ( min-width : 768px) {
+	.button-54 {
+		padding: 0.25em 0.75em;
+	}
+}
+
+/* CSS */
+.button-86 {
+	all: unset;
+	width: 100px;
+	height: 30px;
+	font-size: 16px;
+	background: transparent;
+	border: none;
+	position: relative;
+	color: #f0f0f0;
+	cursor: pointer;
+	z-index: 1;
+	padding: 10px 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	white-space: nowrap;
+	user-select: none;
+	-webkit-user-select: none;
+	touch-action: manipulation;
+}
+
+.button-86::after, .button-86::before {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	z-index: -99999;
+	transition: all .4s;
+}
+
+.button-86::before {
+	transform: translate(0%, 0%);
+	width: 100%;
+	height: 100%;
+	background: #28282d;
+	border-radius: 10px;
+}
+
+.button-86::after {
+	transform: translate(10px, 10px);
+	width: 35px;
+	height: 35px;
+	background: #ffffff15;
+	backdrop-filter: blur(5px);
+	-webkit-backdrop-filter: blur(5px);
+	border-radius: 50px;
+}
+
+.button-86:hover::before {
+	transform: translate(5%, 20%);
+	width: 110%;
+	height: 110%;
+}
+
+.button-86:hover::after {
+	border-radius: 10px;
+	transform: translate(0, 0);
+	width: 100%;
+	height: 100%;
+}
+
+.button-86:active::after {
+	transition: 0s;
+	transform: translate(0, 5%);
+}
+</style>
 </head>
 
 <body>
@@ -114,10 +220,10 @@
 								<li class="submenu-item"><a th:href="@{/dashboard/brands/}"
 									class="submenu-link">Brands</a></li>
 
-								<li class="submenu-item active"><a
+								<li class="submenu-item"><a
 									th:href="@{/dashboard/carverify/}" class="submenu-link">Cars
 										Verify</a></li>
-								<li class="submenu-item"><a
+								<li class="submenu-item active"><a
 									th:href="@{/dashboard/platesVerify/}" class="submenu-link">Plates
 										Verify</a></li>
 							</ul></li>
@@ -128,7 +234,7 @@
 						</a>
 							<ul class="submenu ">
 
-								<li class="submenu-item"><a th:href="@{/dashboard/ClientService}"
+								<li class="submenu-item active"><a th:href="@{/dashboard/ClientService}"
 									class="submenu-link">Client Service</a></li>
 
 								<li class="submenu-item  "><a
@@ -181,33 +287,51 @@
 								<table class="table" id="table1">
 									<thead>
 										<tr>
-											<th>Model Car</th>
+
 											<th>Email Owner</th>
-											<th>Phone</th>
-											<th>Address Car</th>
+											<th>Car Name</th>
+											<th>Description</th>
+											<th>Bill Image</th>
 											<th>Status</th>
+											<th>Action</th>
 										</tr>
 									</thead>
-									<tbody th:each="car:${carRegisterList}">
+									<tbody th:each="item:${list}">
 
 										<tr>
-											<td th:text="${car.carmodel.model+'-'+car.carmodel.year}"></td>
-											<td th:text="${car.owner.email}"></td>
-											<td th:text="${car.owner.phone}"></td>
-											<td th:text="${car.address}"></td>
+											<td th:text="${item.order.user.email}"></td>
+											<td th:text="${item.car.carmodel.model}"></td>
+											<td th:text="${item.decriptions}"></td>
+											<td>
+												<img th:src="${'/dashboard/ClientService/img/' + item.imgUrl}" width="100px">
+											</td>
+											<td th:text="${item.status}"></td>
+											<td >
+												<div th:if="${item.status == 'waiting_for_verify'}" class="row"
+													>
+													<form action="/dashboard/ClientService/" method="post"
+														class="col-4 offset-md-1" id="verify">
+														<input id="status" type="hidden" name="status"
+															value="accepted"> <input type="hidden"
+															name="orderId" th:value="${item.id}">
+														<button class="button-54" role="button" value="accepted"
+															name="status" id="accept-tuReview">Accept</button>
+													</form>
+													<form action="/dashboard/platesVerfy" method="post"
+														class="col-4 offset-md-1" id="declined">
+														<input id="status" type="hidden" name="status"
+															value="declined"> <input type="hidden"
+															name="orderId" th:value="${item.id}">
 
-											<td th:if="${car.status =='waiting_for_verify'}"><a
-												th:href="${car.id}"> <span class="badge bg-warning"
-													th:text="${car.status}"></span>
-											</a></td>
-											<td th:if="${car.status =='ready_for_booking'}"><a
-												th:href="${car.id}"> <span class="badge bg-success"
-													th:text="${car.status}"></span>
-											</a></td>
-											<td th:if="${car.status =='declined'}"><a
-												th:href="${car.id}"><span class="badge bg-danger"
-													th:if="${car.status =='declined'}" th:text="${car.status}"></span>
-											</a>
+														<button class="button-54" role="button"
+															id="decline-tuReview" value="declined" name="decline">Decline</button>
+
+
+													</form>
+												</div>
+												
+											</td>
+
 										</tr>
 
 									</tbody>
@@ -240,7 +364,10 @@
 	<script
 		th:src="@{/adminAssets/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
 
+
 	<script th:src="@{/adminAssets/assets/compiled/js/app.js}"></script>
+
+
 
 	<script th:src="@{/adminAssets/assets/extensions/jquery/jquery.min.js}"></script>
 	<script

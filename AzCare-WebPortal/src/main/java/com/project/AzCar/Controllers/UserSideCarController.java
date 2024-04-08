@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -42,16 +43,18 @@ import com.project.AzCar.Entities.Cars.ExtraFee;
 import com.project.AzCar.Entities.Cars.OrderDetails;
 import com.project.AzCar.Entities.Cars.PlateImages;
 import com.project.AzCar.Entities.Cars.PlusServices;
-import com.project.AzCar.Entities.HintText.HintText;
 import com.project.AzCar.Entities.Comments.Comments;
+import com.project.AzCar.Entities.HintText.HintText;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
 import com.project.AzCar.Entities.Locations.Ward;
 import com.project.AzCar.Entities.Reply.Reply;
 import com.project.AzCar.Entities.Reviews.Reviews;
+import com.project.AzCar.Entities.ServiceAfterBooking.ServiceAfterBooking;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Entities.Users.Violation;
 import com.project.AzCar.Repositories.Orders.ViolationRepository;
+import com.project.AzCar.Repositories.ServiceAfterBooking.ServiceBookingRepositories;
 import com.project.AzCar.Service.Comments.ICommentsService;
 import com.project.AzCar.Service.Reply.IReplyService;
 import com.project.AzCar.Services.Cars.BrandServices;
@@ -107,7 +110,8 @@ public class UserSideCarController {
 	private PlateImageServices plateImageServices;
 	@Autowired
 	private IReviewsService reviewsSv;
-
+	@Autowired
+	private ServiceBookingRepositories afterBookingRepositories;
 	@Autowired
 	private HintTextServices hintTextServices;
 	@Autowired
@@ -128,12 +132,69 @@ public class UserSideCarController {
 		List<HintText> hintDescription = hintTextServices.findByType("description");
 		List<HintText> hintRule = hintTextServices.findByType("rule");
 		ModelView.addAttribute("rule", hintRule);
-		ModelView.addAttribute("description",hintDescription);
+		ModelView.addAttribute("description", hintDescription);
 		ModelView.addAttribute("brandList", brands);
 		ModelView.addAttribute("provinceList", provinces);
-		
-		
+
 		return "registerCar";
+	}
+
+	@PostMapping("home/myplan/rentalReview")
+	public String retalReview(
+			@RequestParam(name = "clean-check", required = false, defaultValue = "false") boolean cleanCheck,
+			@RequestParam(name = "smell-check", required = false, defaultValue = "false") boolean smellCheck,
+			@RequestParam(name = "decriptions", required = false, defaultValue = "false") String decriptions,
+			@RequestParam(name = "carId", required = false, defaultValue = "false") String carId,
+			@RequestParam(name = "orderId", required = false, defaultValue = "false") String orderId,
+			@RequestParam(name = "imgUrl", required = false) MultipartFile imgUrl) {
+		ServiceAfterBooking tuReview = new ServiceAfterBooking();
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		var car = carServices.findById(Integer.parseInt(carId));
+		if (cleanCheck) {
+			paymentServices.createNewRefund(car.getCarOwnerId(), order.getId(),
+					BigDecimal.valueOf(order.getExtraFee().getCleanFee()));
+			tuReview.setCleanning(true);
+		} else {
+			paymentServices.createNewRefund(order.getUserId(), order.getId(),
+					BigDecimal.valueOf(order.getExtraFee().getCleanFee()));
+		}
+		if (smellCheck) {
+			paymentServices.createNewRefund(car.getCarOwnerId(), order.getId(),
+					BigDecimal.valueOf(order.getExtraFee().getSmellFee()));
+			tuReview.setSmelling(true);
+		} else {
+			paymentServices.createNewRefund(order.getUserId(), order.getId(),
+					BigDecimal.valueOf(order.getExtraFee().getSmellFee()));
+		}
+
+		order.setStatus(Constants.orderStatus.OWNER_TRIP_DONE);
+		orderServices.save(order);
+		tuReview.setOrderId(order.getId());
+		tuReview.setImgUrl(imgUrl.getOriginalFilename());
+		tuReview.setDecriptions(decriptions);
+		tuReview.setCarId(Integer.parseInt(carId));
+		System.out.println(tuReview);
+
+		tuReview = afterBookingRepositories.save(tuReview);
+
+		String dir = "./UploadFiles/tuImages" + "/" + tuReview.getCarId() + "-" + tuReview.getId();
+		Path path = Paths.get(dir);
+
+		try {
+			Files.createDirectories(path);
+		} catch (IOException e) {
+			throw new RuntimeException("Could not initialize folder for upload!");
+		}
+
+		try {
+
+			fileStorageServices.save(imgUrl, dir);
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		return "redirect:/home/myplan/";
 	}
 
 	@PostMapping("home/carregister")
@@ -252,10 +313,19 @@ public class UserSideCarController {
 		Users user = userServices.findUserByEmail(email);
 		orderdetails.setUserId((int) user.getId());
 		LocalTime currentTime = LocalTime.now();
-		orderdetails.setFromDate(LocalDateTime.parse(fromDate_string + " " + currentTime,
-				DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSSSSS")));
-		orderdetails.setToDate(LocalDateTime.parse(toDate_string + " " + currentTime,
-				DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSSSSS")));
+
+		try {
+			orderdetails.setFromDate(LocalDateTime.parse(fromDate_string + " " + currentTime,
+					DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSSSSS")));
+			orderdetails.setToDate(LocalDateTime.parse(toDate_string + " " + currentTime,
+					DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSSSSS")));
+		} catch (Exception e) {
+			orderdetails.setFromDate(LocalDateTime.parse(fromDate_string + " " + currentTime,
+					DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS")));
+			orderdetails.setToDate(LocalDateTime.parse(toDate_string + " " + currentTime,
+					DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS")));
+		}
+
 		orderdetails.setSameProvince(isSameProvince.equals("1"));
 		orderdetails.setSameDistrict(isSameDistrict.equals("1"));
 		OrderExtraFee extra = new OrderExtraFee(0, carExtraFee != null ? carExtraFee.getCleanningFee() : 0,
@@ -652,6 +722,18 @@ public class UserSideCarController {
 		return "redirect:/home/myplan/";
 	}
 
+	@GetMapping("/home/myplan/rental_done/{orderId}")
+	public String clientDoneRequestBooking(@PathVariable(name = "orderId") String orderId) {
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		order.setStatus(Constants.orderStatus.RENTOR_TRIP_DONE);
+		orderServices.save(order);
+		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
+		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(2)));
+		paymentServices.createNewLock(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(10)));
+
+		return "redirect:/home/myplan/";
+	}
+
 	@GetMapping("/home/myplan/")
 	public String getMyPlanPage(HttpServletRequest request, Model ModelView) {
 		orderServices.unrespondDetected();
@@ -659,6 +741,8 @@ public class UserSideCarController {
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users user = userServices.findUserByEmail(email);
 		List<OrderDetailsDTO> orderList = orderServices.getDTOFromCreatedBy((int) user.getId());
+		orderList.sort(Comparator.comparingLong(OrderDetailsDTO::getId).reversed());
+		List<OrderDetailsDTO> latestOrders = new ArrayList<>(orderList.subList(0, Math.min(orderList.size(), 5)));
 		List<CarInfor> list = carServices.getbyOwnerId((int) user.getId());
 		List<CarInforDto> listDto = new ArrayList<>();
 		List<PlateImages> listImg = plateImageServices.getAll();
@@ -686,7 +770,11 @@ public class UserSideCarController {
 		}
 		listImg.removeIf(t -> t.getUserId() != user.getId());
 		listImg.removeIf(t -> t.getStatus().equals(Constants.plateStatus.DECLINED));
-		ModelView.addAttribute("orderList", orderList);
+
+		OrderDetailsDTO rentorDone = orderServices.getDTORentorTripDoneOrder();
+
+		ModelView.addAttribute("rentorDone", rentorDone);
+		ModelView.addAttribute("orderList", latestOrders);
 		ModelView.addAttribute("ImgLicense", listImg);
 		ModelView.addAttribute("listCar", listDto);
 		ModelView.addAttribute("user", user);

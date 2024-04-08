@@ -29,4 +29,10 @@ public interface OrderDetailsService {
 	//Sally add
 	OrderDetails getOrderDetailsByCarIdandUserId(long carId,long userId);
 	
+	OrderDetails getRentorTripDoneOrder();
+	
+	OrderDetailsDTO getDTORentorTripDoneOrder();
+	
+	OrderDetailsDTO mapToDTO(int id);
+	
 }
