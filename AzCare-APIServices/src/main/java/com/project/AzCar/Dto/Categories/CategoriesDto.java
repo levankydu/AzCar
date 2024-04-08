@@ -9,15 +9,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoriesDto implements Serializable{
+public class CategoriesDto implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5809198163623824301L;
-	
-	public String cateName;
 
+	public String cateName;
 
 	public Long numberOfCars;
 

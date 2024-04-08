@@ -44,7 +44,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 	private ViolationRepository violationRepo;
 	@Autowired
 	private PaymentService paymentServices;
-	
+
 	@Autowired
 	private UserServices userServices;
 
@@ -85,7 +85,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 		}
 		return dtos;
 	}
-	
+
 	@Override
 	public List<OrderDetailsDTO> getDTOFromCarId(int id) {
 		List<OrderDetails> originOrders = orderRepository.getFromCarId(id);
@@ -120,8 +120,8 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 				violationRepo.save(vio);
 				order.setStatus(Constants.orderStatus.DECLINED);
 				orderRepository.save(order);
-				
-				paymentServices.createNewRefund(order.getUserId(), order.getId() ,order.getTotalAndFees());
+
+				paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFees());
 			}
 			List<Violation> violations = violationRepo.getByUserAndCarId(ownerId, car.getId());
 			if (violations.size() >= 3) {
@@ -134,6 +134,14 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 	@Override
 	public List<OrderDetails> getFromCarId(int carId) {
 		return orderRepository.getFromCarId(carId);
+	}
+
+	@Override
+	public OrderDetails getOrderDetailsByCarIdandUserId(long carId, long userId) {
+		// TODO Auto-generated method stub
+		
+		
+		return orderRepository.getOrderDetailByCarIdandUserId(carId, userId);
 	}
 
 }

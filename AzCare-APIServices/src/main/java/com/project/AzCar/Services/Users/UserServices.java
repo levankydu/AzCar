@@ -20,12 +20,13 @@ public interface UserServices {
 	Users findUserByEmail(String email);
 
 	List<Users> findAllUsers();
-	
+
 	Users findUserByToken(String token);
-	
+
 	void saveUserReset(Users user);
+
 	Users findById(long id);
-	
+
 	UserDto mapToDto(int id);
 
 	boolean existsByEmail(String email);

@@ -29,7 +29,6 @@ public class UserDto {
 
 	private String phone;
 
-	
 	private String gender;
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date dob;

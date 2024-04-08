@@ -12,16 +12,16 @@ import com.project.AzCar.Entities.Users.Violation;
 public interface ViolationRepository extends JpaRepository<Violation, Integer> {
 	@Query(value = "SELECT c FROM Violation c WHERE c.id=?1")
 	Violation getById(int id);
-	
+
 	@Query(value = "SELECT c FROM Violation c WHERE c.userId=?1")
 	List<Violation> getByUserId(long id);
-	
+
 	@Query(value = "SELECT c FROM Violation c WHERE c.carId=?1")
 	List<Violation> getByCarId(int id);
-	
+
 	@Query(value = "SELECT c FROM Violation c WHERE c.userId=?1 AND c.carId=?2")
 	List<Violation> getByUserAndCarId(long userId, int carId);
-	
+
 	@Query(value = "SELECT c FROM Violation c")
 	List<Violation> getAll();
 }

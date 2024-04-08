@@ -17,15 +17,16 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "tbcarimages")
 
-public class CarImages implements Serializable {/**
-	 * 
-	 */
+public class CarImages implements Serializable {
+	/**
+	* 
+	*/
 	private static final long serialVersionUID = -3271140619156877524L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String name;
 	private String urlImage;
 	private int carId;

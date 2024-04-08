@@ -1,6 +1,5 @@
 package com.project.AzCar.Services.UploadFiles;
 
-
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -11,13 +10,13 @@ public interface FilesStorageServices {
 
 	public void init();
 
-	  public void save(MultipartFile file,String dirName) throws Exception;
+	public void save(MultipartFile file, String dirName) throws Exception;
 
-	  public Resource load(String filename,String dirName);
+	public Resource load(String filename, String dirName);
 
-	  public boolean delete(String filename,String dirName);
-	  
-	  public void deleteAll();
+	public boolean delete(String filename, String dirName);
 
-	  public Stream<Path> loadAll(String dirName);
+	public void deleteAll();
+
+	public Stream<Path> loadAll(String dirName);
 }

@@ -10,6 +10,8 @@ import com.project.AzCar.Entities.Cars.PlateImages;
 public interface PlateImageServices {
 
 	void save(PlateImages model);
+
 	List<PlateImages> getAll();
+
 	List<Long> getUserIdList();
 }

@@ -18,9 +18,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "tbviolations")
 @Entity
-public class Violation implements Serializable{
+public class Violation implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
@@ -28,7 +28,7 @@ public class Violation implements Serializable{
 	private int carId;
 	private String reason;
 	private LocalDateTime createdAt;
-	
+
 	@PrePersist
 	protected void onCreate() {
 		createdAt = LocalDateTime.now();

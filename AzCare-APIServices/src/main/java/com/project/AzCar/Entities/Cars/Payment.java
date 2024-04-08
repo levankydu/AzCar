@@ -26,19 +26,19 @@ public class Payment implements Serializable {
 	private int id;
 
 	private int userId;
-	
+
 	private int toUserId;
-	
+
 	private Integer orderDetailsId;
-	
+
 	private BigDecimal amount;
-	
+
 	private String description;
-	
+
 	private String status;
-	
+
 	private LocalDateTime createdAt;
-	
+
 	@PrePersist
 	protected void onCreate() {
 		createdAt = LocalDateTime.now();

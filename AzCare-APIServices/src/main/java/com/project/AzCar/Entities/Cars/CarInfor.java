@@ -34,7 +34,6 @@ public class CarInfor implements Serializable {
 
 	private String services;
 
-
 	private String licensePlates;
 	private int carOwnerId;
 	private String modelId;
@@ -47,6 +46,5 @@ public class CarInfor implements Serializable {
 	private String rules;
 	private String address;
 	private String status;
-	
 
 }

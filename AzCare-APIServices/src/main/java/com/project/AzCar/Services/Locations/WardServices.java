@@ -12,5 +12,6 @@ public interface WardServices {
 	List<Ward> getWardByDistrictCode(String code);
 
 	List<String> getWardListString();
+
 	Ward findbyId(String id);
 }
