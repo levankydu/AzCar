@@ -103,9 +103,13 @@ public class UserSideCarController {
 	private PaymentService paymentServices;
 	@Autowired
 	private PlateImageServices plateImageServices;
+<<<<<<< Updated upstream
 	//Sally add
 		@Autowired
 		private IReviewsService reviewsSv;
+=======
+
+>>>>>>> Stashed changes
 	@Autowired
 	private ViolationRepository violationRepo;
 	@Autowired
@@ -248,7 +252,8 @@ public class UserSideCarController {
 				DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSSSSS")));
 		orderdetails.setSameProvince(isSameProvince.equals("1"));
 		orderdetails.setSameDistrict(isSameDistrict.equals("1"));
-		OrderExtraFee extra = new OrderExtraFee(0, carExtraFee != null ? carExtraFee.getCleanningFee() : 0, carExtraFee != null ? carExtraFee.getDecorationFee() : 0);
+		OrderExtraFee extra = new OrderExtraFee(0, carExtraFee != null ? carExtraFee.getCleanningFee() : 0,
+				carExtraFee != null ? carExtraFee.getDecorationFee() : 0);
 		if (isSameProvince.equals("1") && isSameDistrict.equals("0")) {
 			extra.setDeliveryFee(Float.parseFloat(deliveryFee));
 		}
@@ -632,22 +637,23 @@ public class UserSideCarController {
 		ModelView.addAttribute("carRegisterList", filteredListDto);
 		return "availableCars";
 	}
+
 	@GetMapping("/home/myplan/accepted/{orderId}")
-	public String acceptRequestBooking(@PathVariable(name="orderId") String orderId) {
+	public String acceptRequestBooking(@PathVariable(name = "orderId") String orderId) {
 		var order = orderServices.getById(Integer.parseInt(orderId));
 		order.setStatus(Constants.orderStatus.ACCEPTED);
 		orderServices.save(order);
 		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
 		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(2)));
-		
-		
+
 		return "redirect:/home/myplan/";
 	}
+
 	@GetMapping("/home/myplan/declined/{orderId}")
-	public String declinedRequestBooking(@PathVariable(name="orderId") String orderId) {
+	public String declinedRequestBooking(@PathVariable(name = "orderId") String orderId) {
 		var order = orderServices.getById(Integer.parseInt(orderId));
 		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
-		var car =carServices.findById(Integer.parseInt(order.getCarId()));
+		var car = carServices.findById(Integer.parseInt(order.getCarId()));
 		order.setStatus(Constants.orderStatus.DECLINED);
 		orderServices.save(order);
 		Violation vio = new Violation();
@@ -655,7 +661,7 @@ public class UserSideCarController {
 		vio.setCarId(car.getId());
 		vio.setReason(Constants.violations.OWNER_DECLINED);
 		violationRepo.save(vio);
-		paymentServices.createNewRefund(order.getUserId(), order.getId() ,order.getTotalAndFees());
+		paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFees());
 		return "redirect:/home/myplan/";
 	}
 
@@ -682,12 +688,12 @@ public class UserSideCarController {
 			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
 			List<OrderDetails> llll = orderServices.getFromCarId(item.getId());
-			var name = "OrderListDto"+itemDto.getCarmodel().getObjectId();
+			var name = "OrderListDto" + itemDto.getCarmodel().getObjectId();
 			List<OrderDetailsDTO> mmmm = orderServices.getDTOFromCarId(item.getId());
 			mmmm.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.WAITING));
 			ModelView.addAttribute(name, mmmm);
 			llll.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.WAITING));
-			
+
 			itemDto.setOrders(llll);
 			listDto.add(itemDto);
 		}
@@ -713,6 +719,27 @@ public class UserSideCarController {
 
 	@GetMapping("/home/availablecars/img/{filename}")
 	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename) throws IOException {
+		List<CarInfor> list = carServices.findAll();
+		String dir = "";
+		int i = 0;
+		while (i < list.size()) {
+			dir = "./UploadFiles/carImages/" + list.get(i).getModelId() + "-" + list.get(i).getId();
+			Resource fileResource = fileStorageServices.load(filename, dir);
+			if (fileResource == null) {
+				i++;
+
+			} else {
+				return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment; filename=\"" + fileResource.getFilename() + "\"").body(fileResource);
+			}
+
+		}
+		return null;
+
+	}
+
+	@GetMapping("/home/availablecars/flutter/img/{filename}")
+	public ResponseEntity<Resource> getFlutterImage(@PathVariable("filename") String filename) throws IOException {
 		List<CarInfor> list = carServices.findAll();
 		String dir = "";
 		int i = 0;
