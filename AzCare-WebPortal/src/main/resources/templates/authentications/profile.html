@@ -70,9 +70,9 @@
 						<div class="navbar-collapse collapse w-100" id="navbar">
 							<ul class="navbar-nav ml-auto">
 								<li class="nav-item"><a class="nav-link"
-									th:href="@{/home/availablecars/}">Available Cars</a></li>
+									th:href="@{/home/availablecars}">Available Cars</a></li>
 								<li class="nav-item" th:if="${session.user}"><a
-									class="nav-link" href="#">My Plan</a></li>
+									class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
 								<li class="nav-item "><a class="nav-link" href="#">
 										About Us </a></li>
 

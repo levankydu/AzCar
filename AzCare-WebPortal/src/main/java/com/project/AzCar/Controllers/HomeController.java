@@ -83,7 +83,7 @@ public class HomeController {
 	private UserServices userServices;
 
 	@GetMapping("/")
-	public String getHome(Model ModelView,HttpServletRequest request) {
+	public String getHome(Model ModelView, HttpServletRequest request) {
 		List<CarInfor> list = carServices.findAll();
 		List<CarInforDto> listDto = new ArrayList<>();
 		List<CarInforDto> listcarsInHcm = new ArrayList<>();
@@ -104,13 +104,12 @@ public class HomeController {
 			listDto.add(itemDto);
 		}
 		listDto.removeIf(car -> !car.getStatus().equals(Constants.carStatus.READY));
-		if(request.getSession().getAttribute("emailLogin")!=null) {
+		if (request.getSession().getAttribute("emailLogin") != null) {
 			String email = request.getSession().getAttribute("emailLogin").toString();
 			Users owner = userServices.findUserByEmail(email);
-			listDto.removeIf(car -> car.getCarOwnerId()==(int)owner.getId());
+			listDto.removeIf(car -> car.getCarOwnerId() == (int) owner.getId());
 		}
-		
-		
+
 		for (var item : listDto) {
 			if (item.getAddress().contains("Hồ Chí Minh")) {
 				listcarsInHcm.add(item);
@@ -136,7 +135,7 @@ public class HomeController {
 		ModelView.addAttribute("carsInDn", listcarsInDn);
 		ModelView.addAttribute("carsInBd", listcarsInBd);
 		listDto.removeIf(car -> car.getDiscount() == 0);
-		
+
 		ModelView.addAttribute("carRegisterList", listDto);
 		return "index";
 	}
@@ -177,26 +176,26 @@ public class HomeController {
 
 	@PostMapping("/register")
 	public ResponseEntity<?> registration(@Valid @ModelAttribute("user") UserDto userDto, BindingResult result) {
-	    Users existingUser = uServices.findUserByEmail(userDto.getEmail());
+		Users existingUser = uServices.findUserByEmail(userDto.getEmail());
 
-	    if (existingUser != null) {
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already registered !!!");
-	    }
-	    try {
-	        uServices.saveUser(userDto);
-	        try {
-	            Map<String, Object> templateModel = new HashMap<>();
-	            templateModel.put("recipientName", userDto.getEmail());
-	            templateModel.put("hello", "Welcome to AzCar");
-	            templateModel.put("text", "Cảm ơn Bạn đã sử dụng dịch vụ thuê xe của chúng tôi");
-	            emailService.sendMessageUsingThymeleafTemplate(userDto.getEmail(), "AzCar", templateModel);
-	            return ResponseEntity.ok("Registration successful.");
-	        } catch (Exception e) {
-	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error sending email.");
-	        }
-	    } catch (Exception e) {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred.");
-	    }
+		if (existingUser != null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already registered !!!");
+		}
+		try {
+			uServices.saveUser(userDto);
+			try {
+				Map<String, Object> templateModel = new HashMap<>();
+				templateModel.put("recipientName", userDto.getEmail());
+				templateModel.put("hello", "Welcome to AzCar");
+				templateModel.put("text", "Cảm ơn Bạn đã sử dụng dịch vụ thuê xe của chúng tôi");
+				emailService.sendMessageUsingThymeleafTemplate(userDto.getEmail(), "AzCar", templateModel);
+				return ResponseEntity.ok("Registration successful.");
+			} catch (Exception e) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error sending email.");
+			}
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred.");
+		}
 	}
 
 	@GetMapping(path = "/registeradmin", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -296,6 +295,7 @@ public class HomeController {
 	}
 
 	private Set<String> usedTokens = new HashSet<>();
+
 	@GetMapping("/forgot_password")
 	public String showForgotPassword(Model model) {
 		model.addAttribute("email", "Forgot Password");
@@ -304,68 +304,67 @@ public class HomeController {
 
 	@PostMapping("/forgot_password")
 	public ResponseEntity<String> processForgotPassword(@ModelAttribute("userForgot") UserDto userForgot,
-	                                                    HttpServletRequest request) {
-	    String email = userForgot.getEmail();
-	    if (email == null || email.isEmpty()) {
-	        return ResponseEntity.badRequest().body("Email is required.");
-	    }
+			HttpServletRequest request) {
+		String email = userForgot.getEmail();
+		if (email == null || email.isEmpty()) {
+			return ResponseEntity.badRequest().body("Email is required.");
+		}
 
-	    Users user = uServices.findUserByEmail(email);
-	    if (user != null) {
-	        String token = RandomString.make(10);
-	        System.out.println("Email: " + email);
-	        System.out.println("Token: " + token);
-	        try {
-	            uServices.updateResetPasswordToken(token, email);
-	            String resetPasswordLink = Utility.getSiteURL(request) + "/reset_password/token/" + token;
-	            sendEmail(email, resetPasswordLink);
-	            return ResponseEntity.ok("We have sent a reset password link to your email.");
-	        } catch (Exception e) {
-	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-	                    .body("Failed to send reset password link. Please try again later.");
-	        }
-	    } else {
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email not found. Please check your email address.");
-	    }
+		Users user = uServices.findUserByEmail(email);
+		if (user != null) {
+			String token = RandomString.make(10);
+			System.out.println("Email: " + email);
+			System.out.println("Token: " + token);
+			try {
+				uServices.updateResetPasswordToken(token, email);
+				String resetPasswordLink = Utility.getSiteURL(request) + "/reset_password/token/" + token;
+				sendEmail(email, resetPasswordLink);
+				return ResponseEntity.ok("We have sent a reset password link to your email.");
+			} catch (Exception e) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+						.body("Failed to send reset password link. Please try again later.");
+			}
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body("Email not found. Please check your email address.");
+		}
 	}
-
 
 	@GetMapping("/reset_password/token/{token}")
 	public String showResetPasswordForm(@PathVariable("token") String token, Model user, Model tokenModel) {
-	   
-	    if (usedTokens.contains(token)) {
-	        
-	        return "authentications/tokenErrorPage";
-	    }
 
-	    var codeModel = uServices.findUserByToken(token);
-	    if (codeModel != null) {
-	        user.addAttribute("user", codeModel);
-	        tokenModel.addAttribute("tokenModel", token);
-	        return "/authentications/reset_password";
-	    } else {
-	        return "redirect:/authentications/login";
-	    }
+		if (usedTokens.contains(token)) {
+
+			return "authentications/tokenErrorPage";
+		}
+
+		var codeModel = uServices.findUserByToken(token);
+		if (codeModel != null) {
+			user.addAttribute("user", codeModel);
+			tokenModel.addAttribute("tokenModel", token);
+			return "/authentications/reset_password";
+		} else {
+			return "redirect:/authentications/login";
+		}
 	}
 
 	@PostMapping("/reset_password/token")
 	public ResponseEntity<String> processResetPassword(@ModelAttribute("password") String password,
-	                                                   @ModelAttribute("tokenModel") String tokenModel) {
-	    if (usedTokens.contains(tokenModel)) {
-	        return ResponseEntity.badRequest().body("Token has already been used.");
-	    }
+			@ModelAttribute("tokenModel") String tokenModel) {
+		if (usedTokens.contains(tokenModel)) {
+			return ResponseEntity.badRequest().body("Token has already been used.");
+		}
 
-	    var codeModel = uServices.findUserByToken(tokenModel);
-	    if (codeModel != null) {
-	        codeModel.setPassword(passwordEncoder.encode(password));
-	        uServices.saveUserReset(codeModel);
-	        usedTokens.add(tokenModel); // Đánh dấu token đã được sử dụng
-	        return ResponseEntity.ok("Password changed successfully.");
-	    } else {
-	        return ResponseEntity.notFound().build();
-	    }
+		var codeModel = uServices.findUserByToken(tokenModel);
+		if (codeModel != null) {
+			codeModel.setPassword(passwordEncoder.encode(password));
+			uServices.saveUserReset(codeModel);
+			usedTokens.add(tokenModel); // Đánh dấu token đã được sử dụng
+			return ResponseEntity.ok("Password changed successfully.");
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
-	
 
 	@GetMapping("/user/profile/avatar/{filename}")
 	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename, HttpServletRequest request) {
@@ -393,6 +392,7 @@ public class HomeController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
 				.body(file);
 	}
+
 	@GetMapping("/user/profile/flutter/avatar/{filename}")
 	public ResponseEntity<Resource> getImageToFlutter(@PathVariable("filename") String filename) throws IOException {
 		List<Users> list = uServices.findAllUsers();
@@ -414,7 +414,6 @@ public class HomeController {
 
 	}
 
-
 	@PostMapping("/user/profile/edit/uploadFile")
 	public String uploadImage(@RequestParam(name = "image") MultipartFile image, HttpServletRequest request) {
 
@@ -434,14 +433,13 @@ public class HomeController {
 				fileStorageServices.save(image, dir);
 				user.setImage(image.getOriginalFilename());
 				uServices.saveUserReset(user);
-				return "redirect:/user/profile/"+user.getEmail() + "?succesUpdateImage";
+				return "redirect:/user/profile/" + user.getEmail();
 			} catch (Exception e) {
 				System.out.println(e);
 			}
 		}
-		return "redirect:/user/profile/"+user.getEmail()+"?failUpdateImage";
+		return "redirect:/user/profile/" + user.getEmail();
 	}
-
 
 	private void sendEmail(String email, String resetPasswordLink)
 			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
