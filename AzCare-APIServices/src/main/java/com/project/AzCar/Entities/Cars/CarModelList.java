@@ -29,7 +29,6 @@ public class CarModelList implements Serializable {
 	@Id
 	private String objectId;
 
-
 	private String brand;
 	private String category;
 	@Transient
@@ -39,6 +38,5 @@ public class CarModelList implements Serializable {
 	private String model;
 
 	private Long year;
-	
-	
+
 }

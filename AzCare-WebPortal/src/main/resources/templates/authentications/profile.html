@@ -70,9 +70,10 @@
 						<div class="navbar-collapse collapse w-100" id="navbar">
 							<ul class="navbar-nav ml-auto">
 								<li class="nav-item"><a class="nav-link"
-									th:href="@{/home/availablecars/}">Available Cars</a></li>
+
+									th:href="@{/home/availablecars}">Available Cars</a></li>
 								<li class="nav-item" th:if="${session.user}"><a
-									class="nav-link" href="#">My Plan</a></li>
+									class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
 								<li class="nav-item "><a class="nav-link" href="#">
 										About Us </a></li>
 
@@ -148,90 +149,89 @@
 		<!-- Account page navigation-->
 		<nav class="nav nav-borders">
 			<a class="nav-link active ms-0"
-				th:href="@{/user/profile/{email} (email=${email})}">Profile</a>
-			<a class="nav-link"
+				th:href="@{/user/profile/{email} (email=${email})}">Profile</a> <a
+				class="nav-link"
 				th:href="@{/user/profile/changePassword/{email} (email=${email})}">Change
 				Password</a> <a class="nav-link"
 				th:href="@{/user/profile/edit/{email} (email=${email})}">Edit</a>
 		</nav>
 		<hr class="mt-0 mb-4">
-		
-			<div class="row">
-				<div class="col-xl-4">
-					<!-- Profile picture card-->
-					<div class="card">
-						<div class="card-header">Profile Picture</div>
-						<div class="card-body text-center">
-							<!-- Profile picture image-->
-							<img class="img-account-profile rounded-circle mb-2"  style="width:300px"
-								th:src="'avatar/'+${user.image}" alt="">
-						</div>
-					</div>
-				</div>
-				<div class="col-xl-8">
-					<!-- Account details card-->
-					<div class="card mb-4">
-						<div class="card-header">Account Details</div>
-						<div class="card-body">
 
-
-
-							<div class="mb-3">
-								<label class="small mb-1" for="inputUsername">Email</label> <input
-									class="form-control" id="inputUsername" type="text"
-									th:value="${user.email}" readonly>
-							</div>
-							<!-- Form Row-->
-							<div class="row gx-3 mb-3">
-								<!-- Form Group (first name)-->
-								<div class="col-md-6">
-									<label class="small mb-1" for="inputFirstName">First
-										name</label> <input class="form-control" id="inputFirstName"
-										type="text" th:value="${user.firstName}" readonly>
-								</div>
-								<!-- Form Group (last name)-->
-								<div class="col-md-6">
-									<label class="small mb-1" for="inputLastName">Last name</label>
-									<input class="form-control" id="inputLastName" type="text"
-										th:value="${user.lastName}" readonly>
-								</div>
-							</div>
-							<!-- Form Row        -->
-
-
-
-							<!-- Form Row-->
-							<div class="row gx-3 mb-3">
-								<!-- Form Group (phone number)-->
-								<div class="col-md-6">
-									<label class="small mb-1" for="inputPhone">Phone number</label>
-									<input class="form-control" id="inputPhone" type="tel"
-										th:value="${user.phone}" readonly>
-								</div>
-								<!-- Form Group (birthday)-->
-								<div class="col-md-6">
-									<label class="small mb-1" for="inputBirthday">Birthday</label>
-									<input class="form-control" id="dob" name="dob"
-										th:value="${#dates.format(user.dob, 'dd-MM-yyyy')}" readonly>
-								</div>
-							</div>
-							<div class="row gx-3 mb-3">
-								<!-- Form Group (phone number)-->
-								<div class="col-md-6">
-									<label class="small mb-1" for="inputPhone">Gender: </label> <input
-										class="form-control" id="inputPhone" type="text"
-
-										th:value="${user.gender}" readonly>
-
-								</div>
-
-
-							</div>
-
-						</div>
+		<div class="row">
+			<div class="col-xl-4">
+				<!-- Profile picture card-->
+				<div class="card">
+					<div class="card-header">Profile Picture</div>
+					<div class="card-body text-center">
+						<!-- Profile picture image-->
+						<img class="img-account-profile rounded-circle mb-2"
+							style="width: 300px" th:src="'avatar/'+${user.image}" alt="">
 					</div>
 				</div>
 			</div>
+			<div class="col-xl-8">
+				<!-- Account details card-->
+				<div class="card mb-4">
+					<div class="card-header">Account Details</div>
+					<div class="card-body">
+
+
+
+						<div class="mb-3">
+							<label class="small mb-1" for="inputUsername">Email</label> <input
+								class="form-control" id="inputUsername" type="text"
+								th:value="${user.email}" readonly>
+						</div>
+						<!-- Form Row-->
+						<div class="row gx-3 mb-3">
+							<!-- Form Group (first name)-->
+							<div class="col-md-6">
+								<label class="small mb-1" for="inputFirstName">First
+									name</label> <input class="form-control" id="inputFirstName"
+									type="text" th:value="${user.firstName}" readonly>
+							</div>
+							<!-- Form Group (last name)-->
+							<div class="col-md-6">
+								<label class="small mb-1" for="inputLastName">Last name</label>
+								<input class="form-control" id="inputLastName" type="text"
+									th:value="${user.lastName}" readonly>
+							</div>
+						</div>
+						<!-- Form Row        -->
+
+
+
+						<!-- Form Row-->
+						<div class="row gx-3 mb-3">
+							<!-- Form Group (phone number)-->
+							<div class="col-md-6">
+								<label class="small mb-1" for="inputPhone">Phone number</label>
+								<input class="form-control" id="inputPhone" type="tel"
+									th:value="${user.phone}" readonly>
+							</div>
+							<!-- Form Group (birthday)-->
+							<div class="col-md-6">
+								<label class="small mb-1" for="inputBirthday">Birthday</label> <input
+									class="form-control" id="dob" name="dob"
+									th:value="${#dates.format(user.dob, 'dd-MM-yyyy')}" readonly>
+							</div>
+						</div>
+						<div class="row gx-3 mb-3">
+							<!-- Form Group (phone number)-->
+							<div class="col-md-6">
+								<label class="small mb-1" for="inputPhone">Gender: </label> <input
+									class="form-control" id="inputPhone" type="text"
+									th:value="${user.gender}" readonly>
+
+							</div>
+
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<!-- Footer start -->
@@ -529,38 +529,38 @@
 	<!-- Custom JS Script -->
 	<script src="/assets/js/app.js"></script>
 	<script type="text/javascript">
-	function checkSubmitLogout() {
-		var xhr = new XMLHttpRequest();
-		xhr.open('POST', '/logout', true);
-		xhr.setRequestHeader('Content-Type', 'application/json');
-		xhr.onload = function() {
-			if (xhr.status === 200) {
+		function checkSubmitLogout() {
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', '/logout', true);
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.onload = function() {
+				if (xhr.status === 200) {
 
-				localStorage.setItem('logoutSuccess', 'true');
+					localStorage.setItem('logoutSuccess', 'true');
 
-				window.location.href = "/";
-			} else {
+					window.location.href = "/";
+				} else {
+					console.error('Logout request failed');
+				}
+			};
+			xhr.onerror = function() {
 				console.error('Logout request failed');
-			}
-		};
-		xhr.onerror = function() {
-			console.error('Logout request failed');
-		};
-		xhr.send();
-	}
-	document.addEventListener("DOMContentLoaded", function() {
-
-		const logoutSuccess = localStorage.getItem('logoutSuccess');
-
-		if (logoutSuccess === 'true') {
-			Swal2.fire({
-				icon : "success",
-				title : "Logout successful",
-			});
-
-			localStorage.removeItem('logoutSuccess');
+			};
+			xhr.send();
 		}
-	});
+		document.addEventListener("DOMContentLoaded", function() {
+
+			const logoutSuccess = localStorage.getItem('logoutSuccess');
+
+			if (logoutSuccess === 'true') {
+				Swal2.fire({
+					icon : "success",
+					title : "Logout successful",
+				});
+
+				localStorage.removeItem('logoutSuccess');
+			}
+		});
 	</script>
 </body>
 </html>

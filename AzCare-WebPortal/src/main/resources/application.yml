@@ -12,8 +12,8 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/azcarsdb
     username: root
-    password: 
-
+    password: tincute1
+    
   jpa:
     hibernate:
       ddl-auto: update

@@ -18,10 +18,7 @@ public class BrandsDto implements Serializable {
 
 	public String brandName;
 
-	public String brandLogo =null;
+	public String brandLogo = null;
 	public Long numberOfCars;
-	
-	
-
 
 }

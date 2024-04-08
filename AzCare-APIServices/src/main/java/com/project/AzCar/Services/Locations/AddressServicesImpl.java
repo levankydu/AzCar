@@ -7,16 +7,15 @@ import com.project.AzCar.Entities.Locations.Addreess;
 import com.project.AzCar.Repositories.Locations.AddressRepository;
 
 @Service
-public class AddressServicesImpl implements AddressServices{
+public class AddressServicesImpl implements AddressServices {
 
-	
 	@Autowired
 	private AddressRepository addressRepository;
+
 	@Override
 	public void save(Addreess model) {
 		addressRepository.save(model);
-		
+
 	}
 
-	
 }

@@ -23,10 +23,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name="tbaddress")
-public class Addreess implements Serializable{/**
-	 * 
-	 */
+@Table(name = "tbaddress")
+public class Addreess implements Serializable {
+	/**
+	* 
+	*/
 	private static final long serialVersionUID = -618553071289003810L;
 
 	@Id
@@ -36,13 +37,12 @@ public class Addreess implements Serializable{/**
 	private String idCtiy;
 	private String idDistrict;
 	private String idWard;
-	
-	
+
 	@Transient
 	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 	@JoinTable(name = "address_car")
 	private List<CarInfor> cars;
-	
+
 	private int idCarRegister;
-	
+
 }

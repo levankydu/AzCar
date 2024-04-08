@@ -41,7 +41,7 @@ public class OrderDetails implements Serializable {
 	private String deliveryAddress;
 	private boolean isSameProvince;
 	private boolean isSameDistrict;
-
+	private boolean isReview = false;
 	@Convert(converter = OrderExtraFeeConverter.class)
 	private OrderExtraFee extraFee;
 
@@ -60,7 +60,7 @@ public class OrderDetails implements Serializable {
 	protected void onUpdate() {
 		updatedAt = LocalDateTime.now();
 	}
-	
+
 	public BigDecimal getTotalAndFees() {
 		BigDecimal deliFee = BigDecimal.valueOf(this.extraFee.getDeliveryFee());
 		BigDecimal cleanFee = BigDecimal.valueOf(this.extraFee.getCleanFee());

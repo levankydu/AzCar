@@ -9,15 +9,15 @@ import org.springframework.stereotype.Repository;
 import com.project.AzCar.Entities.Locations.Ward;
 
 @Repository
-public interface WardRepository extends JpaRepository<Ward, String>{
-	
+public interface WardRepository extends JpaRepository<Ward, String> {
+
 	@Query(value = "SELECT c FROM Ward c WHERE c.district_code =?1")
 	List<Ward> getWardByDistrictCode(String districtCode);
-	
+
 	@Query(value = "SELECT DISTINCT c.name FROM Ward c")
 	List<String> getListString();
-	
+
 	@Query(value = "SELECT c FROM Ward c WHERE c.id=?1")
 	Ward findbyId(String id);
-	
+
 }

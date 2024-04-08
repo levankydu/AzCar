@@ -30,9 +30,9 @@ public class AzCareApiServicesApplication implements CommandLineRunner {
 		storageService.init();
 
 	}
-	
+
 	@Bean
-	  ModelMapper getModelMapper() {
-	        return new ModelMapper();
-	    }
+	ModelMapper getModelMapper() {
+		return new ModelMapper();
+	}
 }
