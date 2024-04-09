@@ -12,7 +12,9 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/azcarsdb
     username: root
-    password: 1410
+    password: 
+
+
     
   jpa:
     hibernate:

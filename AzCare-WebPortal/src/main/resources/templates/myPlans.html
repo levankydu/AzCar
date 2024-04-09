@@ -345,19 +345,23 @@
 												</div>
 												<p class="btn btn-theme" th:text="${car.status}"></p>
 												<div class"mt-3">
-													<button style="position: absolute; top: 100px;" th:if="${car.orders.size() > 0}"
+													<button style="position: absolute; top: 100px;"
+														th:if="${car.orders.size() > 0}"
 														th:text="${car.orders.size()+' request(s)'}" data-toggle="modal"
 														th:attr="data-target=${'#carmodel-asdwdwad-' + car.carmodel.objectId}"
-														 class="btn btn-md btn-warning"></button>
+														class="btn btn-md btn-warning"></button>
 												</div>
-												<div class="modal fade bd-example-modal-lg" th:id="${'carmodel-asdwdwad-' + car.carmodel.objectId}"
+												<div class="modal fade bd-example-modal-lg"
+													th:id="${'carmodel-asdwdwad-' + car.carmodel.objectId}"
 													tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
 													aria-hidden="true">
 													<div class="modal-dialog modal-lg">
 														<div class="modal-content">
 															<div class="modal-header">
 																<h5 class="modal-title" id="exampleModalLabel">You have
-																	<span id="requestCount" th:text="${car.orders.size()}"></span> request(s) booking
+																	<span id="requestCount"
+																		th:text="${car.orders.size()}"></span>
+																	request(s) booking
 																</h5>
 																<button type="button" class="close" data-dismiss="modal"
 																	aria-label="Close">
@@ -372,23 +376,135 @@
 																		<th>Duration</th>
 																		<th colspan="2">Action</th>
 																	</tr>
-																	<tr class="text-center" th:each="item : ${__${'OrderListDto' + car.carmodel.objectId}__}">
+																	<tr class="text-center"
+																		th:each="item : ${__${'OrderListDto' + car.carmodel.objectId}__}">
 																		<td th:text="${item.user.email}"></td>
 																		<td th:text="${item.createdAt}"></td>
 																		<td th:text="${item.differenceDate}"></td>
 																		<td>
-												
-																				<a th:href="@{'/home/myplan/accepted/'+ ${item.id}}" style="position: relative;" class="btn btn-md btn-success">Accept</a>
+
+																			<a th:href="@{'/home/myplan/accepted/'+ ${item.id}}"
+																				style="position: relative;"
+																				class="btn btn-md btn-success">Accept</a>
 																		</td>
 																		<td>
-																				<a th:href="@{'/home/myplan/declined/'+ ${item.id}}" style="position: relative;" class="btn btn-md btn-warning">Decline</a>
-													
+																			<a th:href="@{'/home/myplan/declined/'+ ${item.id}}"
+																				style="position: relative;"
+																				class="btn btn-md btn-warning">Decline</a>
+
 																		</td>
 																	</tr>
 																</table>
 															</div>
 
 														</div>
+													</div>
+												</div>
+
+												<div
+													th:if="${rentorDone != null && #strings.toString(car.id) == rentorDone.carId}">
+													<!-- Client Rental Review Modal trigger modal -->
+													<button style="top: 130px" type="button" class="btn btn-primary"
+														data-toggle="modal" data-target="#owner_trip_done_modal">
+														Rental Review
+													</button>
+
+													<!-- Client Rental Review Modal -->
+													<div class="modal fade bd-example-modal-lg"
+														id="owner_trip_done_modal" tabindex="-1" role="dialog"
+														aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+														<div class="modal-dialog modal-dialog-centered modal-lg"
+															role="document">
+															<form th:action="@{/home/myplan/rentalReview}" method="post"
+																id="tuReview" enctype="multipart/form-data">
+																<input type="hidden" th:value="${car.id}"
+																	name="carId"></input>
+																<input type="hidden" th:value="${rentorDone.id}"
+																	name="orderId"></input>
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title"
+																			id="exampleModalLongTitle">
+																			Client Rental Review</h5>
+																	</div>
+																	<div class="modal-body">
+																		<table class="table">
+																			<tr>
+																				<th class="text-left">Client email:</th>
+																				<td class="text-right"
+																					th:text="${rentorDone.user.email}">
+																				</td>
+																			</tr>
+																			<tr>
+																				<th class="text-left">From:</th>
+																				<td class="text-right"
+																					th:text="${rentorDone.fromDate}">
+																				</td>
+																			</tr>
+																			<tr>
+																				<th class="text-left">To:</th>
+																				<td class="text-right"
+																					th:text="${rentorDone.toDate}"></td>
+																			</tr>
+																			<tr>
+																				<th class="text-left">Need to Clean:
+																				</th>
+																				<td class="text-right"><input
+																						class="form-check-input"
+																						type="checkbox"
+																						name="clean-check"
+																						id="clean-check"></td>
+																			</tr>
+																			<tr>
+																				<th class="text-left">Need to defuse
+																					smell
+																				</th>
+																				<td class="text-right">
+																					<input class="form-check-input"
+																						type="checkbox"
+																						name="smell-check"
+																						id="smell-check">
+																				</td>
+																			</tr>
+																			<tr>
+																				<th class="text-left">Unintended
+																					Incidents
+																				</th>
+																				<td class="text-right">
+																					<textarea
+																						placeholder="Leave empty if there is no problem"
+																						id="description"
+																						name="decriptions"
+																						onkeyup="return descriptionSubmit()"></textarea>
+																				</td>
+																			</tr>
+																			<tr id="imgShow" class="d-none">
+																				<td>
+																					<label for="frontImg">Bill Image:
+																					</label> <input type="file"
+																						class="form-control-file imgCars"
+																						id="frontImg" name="imgUrl"
+																						onchange="previewImage()">
+
+
+																				</td>
+																				<td class="text-right">
+																					<br> <img src="" id="frontImgPre"
+																						style="max-width: 50%;" />
+																				</td>
+																			</tr>
+																		</table>
+																	</div>
+																	<div class="modal-footer">
+																		<button type="button" class="btn btn-secondary"
+																			data-dismiss="modal">Close</button>
+																		<button type="button" class="btn btn-primary"
+																			onclick="return tuReview.submit()">Submit</button>
+																	</div>
+																</div>
+															</form>
+														</div>
+
 													</div>
 												</div>
 											</div>
@@ -412,14 +528,6 @@
 													</div>
 													<div id="carouselExampleIndicators1" class="carousel slide"
 														data-ride="carousel">
-														<ol class="carousel-indicators">
-															<li data-target="#carouselExampleIndicators1"
-																data-slide-to="0" class="active"></li>
-															<li data-target="#carouselExampleIndicators1"
-																data-slide-to="1"></li>
-															<li data-target="#carouselExampleIndicators1"
-																data-slide-to="2"></li>
-														</ol>
 														<div class="carousel-inner">
 															<div class="carousel-item active">
 																<div th:each="img: ${item.car.images}">
@@ -427,43 +535,6 @@
 																		th:if="${img.name =='frontImg'}"
 																		th:src="${img.urlImage}" alt="car">
 																</div>
-
-															</div>
-															<div class="carousel-item">
-																<div th:each="img: ${item.car.images}"
-																	class="d-block w-100 h-100">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='behindImg'}"
-																		th:src="${img.urlImage}" alt="car">
-																</div>
-
-															</div>
-															<div class="carousel-item">
-																<div th:each="img: ${item.car.images}"
-																	class="d-block w-100 h-100">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='leftImg'}"
-																		th:src="${img.urlImage}" alt="car">
-																</div>
-
-															</div>
-															<div class="carousel-item">
-																<div th:each="img: ${item.car.images}"
-																	class="d-block w-100 h-100">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='rightImg'}"
-																		th:src="${img.urlImage}" alt="car">
-																</div>
-
-															</div>
-															<div class="carousel-item">
-																<div th:each="img: ${item.car.images}"
-																	class="d-block w-100 h-100">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='insideImg'}"
-																		th:src="${img.urlImage}" alt="car">
-																</div>
-
 															</div>
 														</div>
 													</div>
@@ -487,6 +558,10 @@
 													</div>
 												</div>
 												<p class="btn btn-theme" th:text="${item.status}"></p>
+												<a th:if="${item.status == 'accepted' and #dates.createNow().isAfter(#dates.create(item.fromDate)) and #dates.createNow().isBefore(#dates.create(item.toDate))}"
+													th:href="@{'/home/myplan/rental_done/'+ ${item.id}}"
+													style="position: relative; right: -520px; top: -10px;"
+													class="btn btn-md btn-success">Click to finish rental</a>
 											</div>
 										</div>
 									</div>
@@ -835,6 +910,33 @@
 
 
 	}
+	function descriptionSubmit() {
+		var imgShow = document.getElementById('imgShow');
+		imgShow.classList.remove('d-none');
+
+	}
+	function previewImage() {
+		var input = document.getElementById("frontImg");
+		var preview = document.getElementById("frontImgPre");
+
+
+		if (input.files && input.files[0]) {
+			var reader = new FileReader();
+
+			reader.onload = function (e) {
+
+				preview.src = e.target.result;
+			};
+
+
+			reader.readAsDataURL(input.files[0]);
+		} else {
+			preview.src = "";
+		}
+	}
+
+
+
 </script>
 </body>
 
