@@ -54,7 +54,6 @@ import com.project.AzCar.Services.Cars.PlateImageServices;
 import com.project.AzCar.Services.Cars.PlusServiceServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
 import com.project.AzCar.Services.Orders.OrderDetailsService;
-import com.project.AzCar.Services.Payments.PaymentService;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
@@ -95,8 +94,6 @@ public class AdminController {
 	private PlateImageServices plateImageServices;
 	@Autowired
 	private ServiceBookingRepositories afterBookingRepositories;
-	@Autowired
-	private PaymentService paymentService;
 
 	@GetMapping("/dashboard/")
 	public String getDashboard(Model model, Authentication authentication) {

@@ -374,11 +374,14 @@ public class UserSideCarController {
 
 		ModelView.addAttribute("fullAddress", model.getAddress());
 		ModelView.addAttribute("carDetails", modelDto);
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users customer = userServices.findUserByEmail(email);
 		Users owner = userServices.findById(modelDto.getCarOwnerId());
+		ModelView.addAttribute("customer", customer);
 		ModelView.addAttribute("user", owner);
 		System.out.println(owner.getPhone());
 		List<PlateImages> plates = plateImageServices.getAll();
-		plates.removeIf(item -> item.getUserId() != owner.getId());
+		plates.removeIf(item -> item.getUserId() != customer.getId());
 		plates.removeIf(item -> !item.getStatus().equals(Constants.plateStatus.ACCEPTED));
 		ModelView.addAttribute("isKhongHaveBangLai", plates.size() == 0);
 
