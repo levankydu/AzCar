@@ -42,8 +42,8 @@ import com.project.AzCar.Entities.Cars.ExtraFee;
 import com.project.AzCar.Entities.Cars.OrderDetails;
 import com.project.AzCar.Entities.Cars.PlateImages;
 import com.project.AzCar.Entities.Cars.PlusServices;
-import com.project.AzCar.Entities.HintText.HintText;
 import com.project.AzCar.Entities.Comments.Comments;
+import com.project.AzCar.Entities.HintText.HintText;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
 import com.project.AzCar.Entities.Locations.Ward;
@@ -128,11 +128,10 @@ public class UserSideCarController {
 		List<HintText> hintDescription = hintTextServices.findByType("description");
 		List<HintText> hintRule = hintTextServices.findByType("rule");
 		ModelView.addAttribute("rule", hintRule);
-		ModelView.addAttribute("description",hintDescription);
+		ModelView.addAttribute("description", hintDescription);
 		ModelView.addAttribute("brandList", brands);
 		ModelView.addAttribute("provinceList", provinces);
-		
-		
+
 		return "registerCar";
 	}
 
@@ -304,8 +303,7 @@ public class UserSideCarController {
 
 		ModelView.addAttribute("fullAddress", model.getAddress());
 		ModelView.addAttribute("carDetails", modelDto);
-		String email = request.getSession().getAttribute("emailLogin").toString();
-		Users owner = userServices.findUserByEmail(email);
+		Users owner = userServices.findById(modelDto.getCarOwnerId());
 		ModelView.addAttribute("user", owner);
 		System.out.println(owner.getPhone());
 		List<PlateImages> plates = plateImageServices.getAll();
