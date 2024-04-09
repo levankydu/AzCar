@@ -1,5 +1,6 @@
 package com.project.AzCar.Dto.Users;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -20,7 +21,7 @@ public class UserDto {
 	private String fullName;
 
 	private String email;
-
+	private BigDecimal balance;
 	private String password;
 
 	private String confirmPassword;

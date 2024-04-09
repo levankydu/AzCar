@@ -374,8 +374,7 @@ public class UserSideCarController {
 
 		ModelView.addAttribute("fullAddress", model.getAddress());
 		ModelView.addAttribute("carDetails", modelDto);
-		String email = request.getSession().getAttribute("emailLogin").toString();
-		Users owner = userServices.findUserByEmail(email);
+		Users owner = userServices.findById(modelDto.getCarOwnerId());
 		ModelView.addAttribute("user", owner);
 		System.out.println(owner.getPhone());
 		List<PlateImages> plates = plateImageServices.getAll();
