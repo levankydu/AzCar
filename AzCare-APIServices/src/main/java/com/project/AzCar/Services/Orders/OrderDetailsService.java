@@ -1,11 +1,14 @@
 package com.project.AzCar.Services.Orders;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.project.AzCar.Dto.Orders.OrderDetailsDTO;
 import com.project.AzCar.Entities.Cars.OrderDetails;
+
+import jakarta.mail.MessagingException;
 
 @Service
 public interface OrderDetailsService {
@@ -35,4 +38,5 @@ public interface OrderDetailsService {
 	
 	OrderDetailsDTO mapToDTO(int id);
 	
+	void sendOrderEmail(String email, String subject, String content) throws UnsupportedEncodingException, MessagingException;
 }

@@ -44,6 +44,18 @@
 		}
 	</style>
 	<style>
+		.highlighted-date {
+
+			border-radius: 0.25rem;
+			line-height: 2rem;
+			background-color: #ffcccc !important;
+			font-size: 0.875rem;
+			/* Màu nền cho các ngày bị disable */
+			color: #000000 !important;
+			/* Màu chữ cho các ngày bị disable */
+
+		}
+
 		.container .rating {
 			background-image: url("https://www.toptal.com/designers/subtlepatterns/patterns/concrete-texture.png");
 			display: flex;
@@ -551,7 +563,8 @@
 								</div>
 								<div class="pull-right">
 									<h3>
-										<span class="text-right" th:text="'$'+${carDetails.price}+'/day'"></span>
+										<span class="text-right"
+											th:text="'$'+${carDetails.price - (carDetails.price * carDetails.discount / 100)}+'/day'"></span>
 									</h3>
 									<p>
 										<i class="fa fa-star-half-o"></i> <i class="fa fa-star"></i> <i
@@ -1395,7 +1408,7 @@
 													Message</button>
 												<button type="submit" value="Submit"> Gửi của thảo</button>
 											</div>
-									
+
 										</div>
 									</div>
 								</form>
@@ -1462,7 +1475,9 @@
 								<input type="hidden" name="totalRent" value="0"> <input type="hidden"
 									name="isSameProvince" value="0"> <input type="hidden" name="isSameDistrict"
 									value="0"> <input type="hidden" name="deliveryFee">
-								<h2 class="" th:text="'$'+${carDetails.price}+'/day'"></h2>
+								<h2 class=""
+									th:text="'$'+${carDetails.price - (carDetails.price * carDetails.discount / 100)}+'/day'">
+								</h2>
 								<div class="row">
 									<div class="col-12">
 										<div class="row">
@@ -1480,6 +1495,9 @@
 															onChange="return updateTotalRent();">
 													</label>
 												</div>
+											</div>
+											<div class="col-12">
+												<p class="text-danger" id="alert-notice-datepicker"></p>
 											</div>
 										</div>
 									</div>
@@ -1535,17 +1553,25 @@
 												<p class="float-right" th:text="'$'+${carDetails.price}+'/day'"></p>
 											</div>
 											<div class="col-6">
+												<p class="float-left"
+													th:text="'After Discount ' + ${carDetails.discount} + '%'"></p>
+											</div>
+											<div class="col-6">
+												<p class="float-right"
+													th:text="'$'+${carDetails.price - (carDetails.price * carDetails.discount / 100)}+'/day'">
+												</p>
+											</div>
+											<div class="col-6">
 												<p class="float-left">Details:</p>
 											</div>
 											<div class="col-6">
-												<p class="float-right" th:attr="data-price=${carDetails.price}"
+												<p class="float-right"
+													th:attr="data-price=${carDetails.price - (carDetails.price * carDetails.discount / 100)}"
 													id="form-details-amount"></p>
 											</div>
 											<div class="col-6">
 
-												<p
-													th:attr="data-uqwfjwissa=${customer.balance != null ? customer.balance : 0}"
-
+												<p th:attr="data-uqwfjwissa=${customer.balance != null ? customer.balance : 0}"
 													class="float-left">Delivery Fee:</p>
 											</div>
 											<div class="col-6">
@@ -1567,9 +1593,7 @@
 									</div>
 								</div>
 
-								<div
-									th:if="${!isKhongHaveBangLai && customer.phone != null && customer.id!=user.id}"
-
+								<div th:if="${!isKhongHaveBangLai && customer.phone != null && customer.id!=user.id}"
 									class="text-center mt-5">
 									<input type="hidden" name="differenceDate" id="form-differenceDate"> <input
 										type="hidden" th:attr="data-car-model=${carDetails.carmodel.model}">
@@ -1577,19 +1601,16 @@
 									<button href="" id="form-submit-btn" class="btn btn-md btn-color">Rent Now</button>
 								</div>
 
-								<div
-									th:if="${isKhongHaveBangLai || customer.phone == null || customer.id==user.id}"
-
+								<div th:if="${isKhongHaveBangLai || customer.phone == null || customer.id==user.id}"
 									class="text-center mt-5">
 									<p th:if="${isKhongHaveBangLai}" class="text-danger">You
 										must update your driving license before rent</p>
 									<p th:if="${customer.phone == null}" class="text-danger">You
 										must update your phone number before rent</p>
 
-									<p th:if="${customer.id==user.id}"
-										class="text-danger">You can not booking your car</p>
-									<a class="btn btn-md btn-color"
-										th:href="@{/user/profile/} + ${session.user}">Go to
+									<p th:if="${customer.id==user.id}" class="text-danger">You can not booking your car
+									</p>
+									<a class="btn btn-md btn-color" th:href="@{/user/profile/} + ${session.user}">Go to
 
 										profile</a>
 								</div>
@@ -1891,6 +1912,10 @@
 		/*<![CDATA[*/
 		var extraFeeeeeee = /*[[${extraFee}]]*/ '';
 		/*]]>*/
+		/*<![CDATA[*/
+		var orderDetailsOfThisCar = /*[[${orderDetailsOfThisCar}]]*/ '';
+		/*]]>*/
+		console.table(orderDetailsOfThisCar);
 		var carFeatures = document.getElementById('resultFeatures').value;
 		var listResult = document
 			.getElementsByClassName("col-3 mx-4 my-2 car-services");
@@ -1908,40 +1933,116 @@
 		}
 
 		$(function () {
-			var today = new Date();
-			var todayFormatted = $.datepicker.formatDate("dd-mm-yy", today);
-			var tomorrow = new Date(today);
-			tomorrow.setDate(tomorrow.getDate());
-			var tomorrowFormatted = $.datepicker.formatDate("dd-mm-yy", tomorrow);
+    var today = new Date();
+    var todayFormatted = $.datepicker.formatDate("dd-mm-yy", today);
+    var tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    var tomorrowFormatted = $.datepicker.formatDate("dd-mm-yy", tomorrow);
 
-			var fromDateInput = $("#form-fromDate");
-			var toDateInput = $("#form-toDate");
+    var fromDateInput = $("#form-fromDate");
+    var toDateInput = $("#form-toDate");
 
-			$("#form-fromDate").datepicker({
-				dateFormat: "dd-mm-yy",
-				duration: "fast",
-				minDate: 0, // Tối thiểu là hôm nay
-				beforeShowDay: function (date) {
-					// Disable các ngày trước hôm nay
-					return [date = today];
-				},
-				onSelect: function (selectedDate) {
-					// Cập nhật giá trị minDate của toDateInput
-					toDateInput.datepicker("option", "minDate", selectedDate);
-					updateTotalRent();
-				}
-			}).datepicker("setDate", todayFormatted);
+    // Mảng chứa các ngày bị disable
+    var disabledDates = [];
 
-			$("#form-toDate").datepicker({
-				dateFormat: "dd-mm-yy",
-				duration: "fast",
-				minDate: 0, // Tối thiểu là ngày mai
-				beforeShowDay: function (date) {
-					// Disable các ngày trước hôm nay
-					return [date = today];
-				}
-			}).datepicker("setDate", tomorrowFormatted); // Đặt giá trị mặc định là hôm nay
-		});
+    orderDetailsOfThisCar.forEach(function (obj) {
+        var fromDate = new Date(obj.fromDate);
+        var toDate = new Date(obj.toDate);
+
+        var currentDate = new Date(fromDate);
+        while (currentDate <= toDate) {
+            var year = currentDate.getFullYear();
+            var month = currentDate.getMonth() + 1; // Thêm 1 vào chỉ số tháng
+            var day = currentDate.getDate();
+
+            // Kiểm tra xem ngày này đã tồn tại trong disabledDates chưa
+            var found = false;
+            for (var i = 0; i < disabledDates.length; i++) {
+                if (disabledDates[i][0] === year && disabledDates[i][1] === month && disabledDates[i][2] === day) {
+                    found = true;
+                    break;
+                }
+            }
+
+            // Nếu không tìm thấy, thêm ngày vào disabledDates
+            if (!found) {
+                disabledDates.push([year, month, day]);
+            }
+
+            // Tăng ngày lên 1
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+    });
+
+    console.log(disabledDates);
+
+    $("#form-fromDate, #form-toDate").datepicker({
+        dateFormat: "dd-mm-yy",
+        duration: "fast",
+        minDate: 0, // Tối thiểu là hôm nay
+        beforeShowDay: function (date) {
+            // Disable các ngày trước hôm nay
+            return [date >= today];
+        },
+        onSelect: function (selectedDate) {
+            // Cập nhật giá trị minDate của toDateInput
+            toDateInput.datepicker("option", "minDate", selectedDate);
+            updateTotalRent();
+
+            // Kiểm tra nếu có ngày bị disable trong khoảng từ fromDate đến toDate
+            var fromDate = $("#form-fromDate").datepicker("getDate");
+            var toDate = $("#form-toDate").datepicker("getDate");
+            var currentDate = new Date(fromDate);
+
+            var disableMessage = "";
+            while (currentDate <= toDate) {
+                var year = currentDate.getFullYear();
+                var month = currentDate.getMonth() + 1;
+                var day = currentDate.getDate();
+
+                for (var i = 0; i < disabledDates.length; i++) {
+                    if (year === disabledDates[i][0] && month === disabledDates[i][1] && day === disabledDates[i][2]) {
+                        disableMessage = "There are disabled dates within the selected time period. Please choose a start date again before selecting an end date.";
+                        break;
+                    }
+                }
+
+                if (disableMessage !== "") {
+                    break;
+                }
+
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            $("#alert-notice-datepicker").text(disableMessage);
+        }
+    }).datepicker("setDate", todayFormatted);
+
+    $("#form-toDate").datepicker({
+        dateFormat: "dd-mm-yy",
+        duration: "fast",
+        minDate: 0, // Tối thiểu là ngày mai
+        beforeShowDay: function (date) {
+            // Disable các ngày trước hôm nay
+            return [date >= tomorrow];
+        }
+    }).datepicker("setDate", tomorrowFormatted); // Đặt giá trị mặc định là hôm nay
+
+    $("#form-fromDate, #form-toDate").datepicker('option', 'beforeShowDay', function (date) {
+        var m = date.getMonth(),
+            d = date.getDate(),
+            y = date.getFullYear();
+
+        for (var i = 0; i < disabledDates.length; i++) {
+            if (y === disabledDates[i][0] && m === disabledDates[i][1] - 1 && d === disabledDates[i][2]) {
+                // Highlight các ngày bị disable
+                return [false, "highlighted-date"];
+            }
+        }
+        return [true];
+    });
+});
+
 
 
 		function updateTotalRent() {
@@ -2007,7 +2108,7 @@
 			$.ajax({
 				url: "/home/carregister/getDistrict",
 				type: "get",
-				data: { provinceCode: $("#provinceSelect").val() },
+				data: {provinceCode: $("#provinceSelect").val()},
 				success: function (res) {
 					$(districtSelect).removeAttr('disabled');
 					$(districtSelect).html('<option value ="">--Select District--</option>');
@@ -2025,7 +2126,7 @@
 			$.ajax({
 				url: "/home/carregister/getWard",
 				type: "get",
-				data: { districtCode: $("#districtSelect").val() },
+				data: {districtCode: $("#districtSelect").val()},
 				success: function (res) {
 					$(wardSelect).removeAttr('disabled');
 					$(wardSelect).html('<option value ="">--Select Ward--</option>');

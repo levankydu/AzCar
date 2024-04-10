@@ -32,6 +32,8 @@ public class OrderDetailsDTO {
 	private String deliveryAddress;
 	private boolean isSameProvince;
 	private boolean isSameDistrict;
+	private BigDecimal originPrice;
+	private int discount;
 
 	@Convert(converter = OrderExtraFeeConverter.class)
 	private OrderExtraFee extraFee;
