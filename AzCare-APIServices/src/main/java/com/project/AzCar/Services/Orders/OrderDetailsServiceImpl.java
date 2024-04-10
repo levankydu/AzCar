@@ -1,5 +1,7 @@
 package com.project.AzCar.Services.Orders;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -7,6 +9,8 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
@@ -27,7 +31,8 @@ import com.project.AzCar.Utilities.Constants;
 
 @Service
 public class OrderDetailsServiceImpl implements OrderDetailsService {
-
+	@Autowired
+	private JavaMailSender mailSender;
 	@Autowired
 	private OrderRepository orderRepository;
 	@Autowired
@@ -168,6 +173,21 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 		Users user = userServices.findById(car.getUserId());
 		carDto.setUser(user);
 		return carDto;
+	}
+
+	@Override
+	public void sendOrderEmail(String email, String subject, String content)
+			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+				StandardCharsets.UTF_8.name());
+
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
 	}
 
 }

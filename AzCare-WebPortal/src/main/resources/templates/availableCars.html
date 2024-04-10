@@ -466,7 +466,7 @@
 									<a th:href="@{/home/availablecars/details/}+${car.id}"
 										th:text="${car.carmodel.model}"></a>
 								</div>
-								<div class="price pull-right" th:text="${car.price}+'$'">
+								<div class="price pull-right" th:text="'$' + ${car.price - (car.price * car.discount / 100)}">
 
 								</div>
 							</div>

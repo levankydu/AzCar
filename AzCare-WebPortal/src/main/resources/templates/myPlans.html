@@ -651,8 +651,7 @@
 													</div>
 												</div>
 												<p class="btn btn-theme" th:text="${item.status}"></p>
-												<a
-													th:if="${item.status == 'accepted' and #dates.createNow().isAfter(#dates.create(item.fromDate)) and #dates.createNow().isBefore(#dates.create(item.toDate))}"
+												<a th:if="${item.status == 'accepted' and item.fromDate &lt; #temporals.createNow() and item.toDate &gt; #temporals.createNow()}"
 													th:href="@{'/home/myplan/rental_done/'+ ${item.id}}"
 													style="position: relative; right: -520px; top: -10px;"
 													class="btn btn-md btn-success">Click to finish rental</a>

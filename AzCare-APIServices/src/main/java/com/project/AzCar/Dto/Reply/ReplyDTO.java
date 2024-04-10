@@ -7,6 +7,6 @@ public class ReplyDTO {
 	String content;
 	int comment_id;
 	long carId;
-	String user_id;
+	String user_name;
 
 }
