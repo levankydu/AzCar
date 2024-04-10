@@ -311,16 +311,20 @@ public class UserSideCarController {
 		{
 			for(Reviews re : reviews)
 			{
-				ReviewsDTO reDTO = new ReviewsDTO();
-				reDTO.setId(re.getId());
-				reDTO.setCarId(re.getCarInfor().getId());
-				reDTO.setComment(re.getComment());
-				reDTO.setRating(re.getRating());
-				reDTO.setStatus(re.getStatus());
+				if(re.getStatus().toString() !="Decline")
+				{
+					ReviewsDTO reDTO = new ReviewsDTO();
+					reDTO.setId(re.getId());
+					reDTO.setCarId(re.getCarInfor().getId());
+					reDTO.setComment(re.getComment());
+					reDTO.setRating(re.getRating());
+					reDTO.setStatus(re.getStatus());
+					reDTO.setReviewDate(re.getReviewDate());
+					Users user1 = userServices.findById(re.getUser().getId());
+					reDTO.setUserName(user1.getFirstName());
+					listReviewsDTO.add(reDTO);
+				}
 				
-				Users user1 = userServices.findById(re.getUser().getId());
-				reDTO.setUserName(user1.getFirstName());
-				listReviewsDTO.add(reDTO);
 				
 			}
 			
@@ -406,6 +410,7 @@ public class UserSideCarController {
 			repDTO.setComment_id(re.getComment_id().getId());
 			repDTO.setCarId(re.getComment_id().getCar_id().getId());
 			repDTO.setContent(re.getContent());
+			repDTO.setUser_name(re.getComment_id().getUser_id().getLastName());
 			lrepDTO.add(repDTO);
 			
 		}

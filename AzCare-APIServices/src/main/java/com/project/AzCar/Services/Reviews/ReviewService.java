@@ -245,4 +245,10 @@ public class ReviewService implements ReviewRepository {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Reviews getReviewById(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -13,5 +13,10 @@ public interface IReviewsService {
 	public List<Reviews> findRecentReviews();
 	
 	Reviews  updateStatus(Long reviewId, ReviewStatus newStatus);
+	public List<Reviews> findAllReviews();
+	
+	Reviews findById(long id);
+	
+	
 	
 }

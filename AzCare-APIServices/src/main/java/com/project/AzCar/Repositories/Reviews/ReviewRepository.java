@@ -21,5 +21,9 @@ public interface ReviewRepository extends JpaRepository<Reviews, Long> {
     @Query(value = "SELECT * FROM tb_reviews r ORDER BY r.review_date DESC",nativeQuery = true)
     List <Reviews> findRecentReviews();
     
+    // Tìm theo id custom
+    @Query(value = "Select * from tb_reviews r where r.id = :id" , nativeQuery = true)
+    Reviews getReviewById(@Param("id") Long id);
+    
     
 }
