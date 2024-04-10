@@ -3,6 +3,8 @@ package com.project.AzCar.Entities.Users;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,6 +30,7 @@ public class Roles {
 	@Column(nullable = false, unique = true)
 	private String name;
 	@ManyToMany(mappedBy = "roles")
+	@JsonIgnore
 	private List<Users> users = new ArrayList<>();
 
 	public Roles(String name) {

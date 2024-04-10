@@ -30,6 +30,22 @@ public class ReviewsServiceImpl implements IReviewsService{
 	        review.setStatus(newStatus);
 	      return   reviewRepository.save(review);
 	    }
+	@Override
+	public List<Reviews> findAllReviews() {
+		// TODO Auto-generated method stub
+		
+		List<Reviews> lreviews = reviewRepository.findAll();
+		
+		return lreviews;
+	}
+	@Override
+	public Reviews findById(long id) {
+		
+		// TODO Auto-generated method stub
+		
+		
+		return reviewRepository.getReviewById(id);
+	}
 	
 
 }

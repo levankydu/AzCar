@@ -1,6 +1,8 @@
 package com.project.AzCar.Controllers;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.AzCar.Entities.Cars.OrderDetails;
+import com.project.AzCar.Entities.IgnoreKeyword.IgnoreKeyword;
 import com.project.AzCar.Entities.Reviews.ReviewStatus;
 import com.project.AzCar.Entities.Reviews.Reviews;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Services.Cars.CarServices;
+import com.project.AzCar.Services.IgnoreKeyword.IIgnoreKeywordService;
 import com.project.AzCar.Services.Orders.OrderDetailsService;
 import com.project.AzCar.Services.Reviews.IReviewsService;
 import com.project.AzCar.Services.Reviews.ReviewService;
@@ -38,19 +42,33 @@ public class ReviewsController {
 	private IReviewsService reviewsService;
 	@Autowired
 	private OrderDetailsService orderServices;
+	@Autowired
+	private IIgnoreKeywordService keywordService;
+	@Autowired
+	private IIgnoreKeywordService ignoreService;
 
 	@GetMapping("/dashboard/reviews")
 	public String showReviewForm(Model model)
 	{
-		reviewsService.findRecentReviews();
+		List<Reviews> lReview = reviewsService.findAllReviews();
 		
-		model.addAttribute(model);
+		
+		
+		model.addAttribute("listreviews",lReview);
 		
 		return "admin/reviewManager";
 	}
+	@GetMapping("/dashboard/ListIgnoreKey/")
+	public String showListIgnoreKey(Model model)
+	{
+		List<IgnoreKeyword> lkeyword = keywordService.listkeyword();
+		System.out.println(lkeyword);
+		model.addAttribute("listkeyword" , lkeyword);
+		return "admin/ListIgnoreKey";
+	}
 	
     @PostMapping("/reviews/add")
-	public String submitReview(@RequestParam(name="userId",required = false, defaultValue = "false") String email, 
+	public ResponseEntity<?> submitReview(@RequestParam(name="userId",required = false, defaultValue = "false") String email, 
 			@RequestParam(name="carId" ,required = false, defaultValue = "false") String carId,
 			@RequestParam(name="rating", required = false, defaultValue = "false")int rating, 
 			@RequestParam(name="comment", required = false, defaultValue = "false") String comment) {
@@ -70,6 +88,7 @@ public class ReviewsController {
 		review.setCarInfor(car);
 		review.setUser(user);
 		review.setRating(rating);
+		
 		review.setComment(comment);
 		review.setStatus( ReviewStatus.valueOf("Pending"));
 		Date currentDate = new Date();
@@ -79,19 +98,12 @@ public class ReviewsController {
 
 		reviewServices.save(review);
 		System.out.println(review.getComment());
-		return "redirect:/";
+		return new ResponseEntity<String>("",HttpStatus.OK);
+		
+		
+		
 	}
     
-    @PostMapping("reviews/update-status")
-    public ResponseEntity<?> updateStatus(@RequestParam("reviewId") String reviewIdStr, 
-    		@RequestParam("newStatus") String newStatus) {
-    Long reviewId = Long.parseLong(reviewIdStr);
-    	ReviewStatus statusEnum = ReviewStatus.valueOf(newStatus);
-         Reviews updatedReview = reviewsService.updateStatus(reviewId, statusEnum);
-         if (updatedReview != null) {
-             return ResponseEntity.ok( newStatus);
-         } else {
-             return ResponseEntity.badRequest().body("có lỗi ở đây");
-         }
-    }
+ 
+    
 }

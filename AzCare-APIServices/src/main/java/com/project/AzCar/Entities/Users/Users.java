@@ -89,4 +89,13 @@ public class Users implements Serializable {
 		}
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return "Users [id=" + id + ", cars=" + cars + ", firstName=" + firstName + ", lastName=" + lastName + ", phone="
+				+ phone + ", email=" + email + ", password=" + password + ", roles=" + roles + ", dob=" + dob
+				+ ", isEnabled=" + isEnabled + ", changePassword=" + changePassword + ", resetPasswordToken="
+				+ resetPasswordToken + ", gender=" + gender + ", balance=" + balance + ", score=" + score + ", image="
+				+ image + ", address=" + address + "]";
+	}
 }
