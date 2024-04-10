@@ -783,6 +783,19 @@ public class UserSideCarController {
 		return "myPlans";
 	}
 
+	@PostMapping("/home/myplan/updateCar")
+	public String updateCar(@ModelAttribute("newDiscount") String newDiscount,
+			@ModelAttribute("newPrice") String newPrice, @ModelAttribute("carId") String carId) {
+		CarInfor car = carServices.findById(Integer.parseInt(carId));
+		car.setDiscount(Integer.parseInt(newDiscount));
+		car.setPrice(new BigDecimal(newPrice));
+		carServices.saveCarRegister(car);
+		System.out.println(carId);
+		System.out.println(newPrice);
+		System.out.println(newDiscount);
+		return "redirect:/home/myplan/";
+	}
+
 	@PostMapping("/home/myplan/charge/")
 	public String charge(HttpServletRequest request) {
 
