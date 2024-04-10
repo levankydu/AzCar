@@ -3,6 +3,7 @@ package com.project.AzCar.Controllers;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -39,8 +40,11 @@ import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Cars.CarModelList;
 import com.project.AzCar.Entities.Cars.PlateImages;
 import com.project.AzCar.Entities.Locations.City;
+import com.project.AzCar.Entities.ServiceAfterBooking.ServiceAfterBooking;
+import com.project.AzCar.Entities.ServiceAfterBooking.ServiceAfterBookingDTO;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Notification.Message;
+import com.project.AzCar.Repositories.ServiceAfterBooking.ServiceBookingRepositories;
 import com.project.AzCar.Services.Cars.BrandImageServices;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
@@ -49,6 +53,7 @@ import com.project.AzCar.Services.Cars.ExtraFeeServices;
 import com.project.AzCar.Services.Cars.PlateImageServices;
 import com.project.AzCar.Services.Cars.PlusServiceServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
+import com.project.AzCar.Services.Orders.OrderDetailsService;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
@@ -63,6 +68,8 @@ public class AdminController {
 
 	@Autowired
 	private BrandServices brandServices;
+	@Autowired
+	private OrderDetailsService orderServices;
 	@Autowired
 	BrandImageServices brandImageServices;
 	@Autowired
@@ -85,6 +92,8 @@ public class AdminController {
 	SimpMessagingTemplate simpMessagingTemplate;
 	@Autowired
 	private PlateImageServices plateImageServices;
+	@Autowired
+	private ServiceBookingRepositories afterBookingRepositories;
 
 	@GetMapping("/dashboard/")
 	public String getDashboard(Model model, Authentication authentication) {
@@ -285,13 +294,15 @@ public class AdminController {
 		}
 
 	}
+
 	@GetMapping("/dashboard/platesVerfy/{filename}")
 	public ResponseEntity<Resource> getPlateImage(@PathVariable("filename") String filename) {
 		List<Users> list = userServices.findAllUsers();
 		String dir = "";
 		int i = 0;
 		while (i < list.size()) {
-			dir = "./UploadFiles/userImages/" +list.get(i).getId()+"-" +list.get(i).getEmail().replace(".", "-").replace("@", "-");
+			dir = "./UploadFiles/userImages/" + list.get(i).getId() + "-"
+					+ list.get(i).getEmail().replace(".", "-").replace("@", "-");
 			Resource fileResource = fileStorageServices.load(filename, dir);
 			if (fileResource == null) {
 				i++;
@@ -304,7 +315,6 @@ public class AdminController {
 		}
 		return null;
 	}
-	
 
 	@GetMapping("/dashboard/brands/{filename}")
 	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename) {
@@ -413,10 +423,65 @@ public class AdminController {
 
 	@GetMapping("/dashboard/ListAccount")
 	public String getfindAll(Model model) {
-
 		List<Users> userlists = userServices.findAllUsers();
 		model.addAttribute("userlists", userlists);
 		return "admin/ListAccount";
+	}
+
+	@GetMapping("/dashboard/ClientService")
+	public String clientService(Model ModelView) {
+		List<ServiceAfterBooking> list = afterBookingRepositories.findAll();
+		List<ServiceAfterBookingDTO> listDTO = new ArrayList<>();
+		for (var item : list) {
+			var car = carServices.mapToDto(item.getCarId());
+			var itemDto = carServices.afterServiceMapToDto(item.getId());
+			var orderDto = orderServices.mapToDTO(item.getOrderId());
+			itemDto.setCar(car);
+			itemDto.setOrder(orderDto);
+			listDTO.add(itemDto);
+		}
+		ModelView.addAttribute("list", listDTO);
+		return "admin/tuReview";
+	}
+
+	@GetMapping("/dashboard/ClientService/img/{filename}")
+	public ResponseEntity<Resource> getTuImage(@PathVariable("filename") String filename) throws IOException {
+		List<ServiceAfterBooking> list = afterBookingRepositories.findAll();
+		String dir = "";
+		int i = 0;
+		while (i < list.size()) {
+			dir = "./UploadFiles/tuImages" + "/" + list.get(i).getCarId() + "-" + list.get(i).getId();
+			Resource fileResource = fileStorageServices.load(filename, dir);
+			if (fileResource == null) {
+				i++;
+
+			} else {
+				return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment; filename=\"" + fileResource.getFilename() + "\"").body(fileResource);
+			}
+
+		}
+		return null;
+
+	}
+
+	@PostMapping("/dashboard/ClientService/")
+	public String postTuReview(@ModelAttribute("status") String status, @ModelAttribute("orderId") String orderId) {
+
+		System.out.println(orderId);
+		System.out.println(status);
+		if (status.equals("accepted")) {
+			ServiceAfterBooking model = afterBookingRepositories.findById(Integer.parseInt(orderId)).get();
+			model.setStatus("Accepted");
+			afterBookingRepositories.save(model);
+		}
+		if (status.equals("declined")) {
+			ServiceAfterBooking model = afterBookingRepositories.findById(Integer.parseInt(orderId)).get();
+			model.setStatus("Declined");
+			afterBookingRepositories.save(model);
+		}
+
+		return "redirect:/dashboard/ClientService";
 	}
 
 	private void sendEmailAccept(String email, CarInforDto carDetails)
@@ -445,7 +510,8 @@ public class AdminController {
 	private void sendEmailDecline(String email, CarInforDto carDetails)
 			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
 		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message);
+		MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+				StandardCharsets.UTF_8.name());
 
 		helper.setFrom("AzCar@gmail.com", "AzCar");
 		helper.setTo(email);

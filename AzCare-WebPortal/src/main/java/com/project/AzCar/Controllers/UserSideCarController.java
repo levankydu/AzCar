@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -43,14 +44,17 @@ import com.project.AzCar.Entities.Cars.OrderDetails;
 import com.project.AzCar.Entities.Cars.PlateImages;
 import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Comments.Comments;
+import com.project.AzCar.Entities.HintText.HintText;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
 import com.project.AzCar.Entities.Locations.Ward;
 import com.project.AzCar.Entities.Reply.Reply;
 import com.project.AzCar.Entities.Reviews.Reviews;
+import com.project.AzCar.Entities.ServiceAfterBooking.ServiceAfterBooking;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Entities.Users.Violation;
 import com.project.AzCar.Repositories.Orders.ViolationRepository;
+import com.project.AzCar.Repositories.ServiceAfterBooking.ServiceBookingRepositories;
 import com.project.AzCar.Service.Comments.ICommentsService;
 import com.project.AzCar.Service.Reply.IReplyService;
 import com.project.AzCar.Services.Cars.BrandServices;
@@ -59,6 +63,7 @@ import com.project.AzCar.Services.Cars.CarServices;
 import com.project.AzCar.Services.Cars.ExtraFeeServices;
 import com.project.AzCar.Services.Cars.PlateImageServices;
 import com.project.AzCar.Services.Cars.PlusServiceServices;
+import com.project.AzCar.Services.HintText.HintTextServices;
 import com.project.AzCar.Services.Locations.DistrictServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
 import com.project.AzCar.Services.Locations.WardServices;
@@ -103,9 +108,12 @@ public class UserSideCarController {
 	private PaymentService paymentServices;
 	@Autowired
 	private PlateImageServices plateImageServices;
-	//Sally add
-		@Autowired
-		private IReviewsService reviewsSv;
+	@Autowired
+	private IReviewsService reviewsSv;
+	@Autowired
+	private ServiceBookingRepositories afterBookingRepositories;
+	@Autowired
+	private HintTextServices hintTextServices;
 	@Autowired
 	private ViolationRepository violationRepo;
 	@Autowired
@@ -114,16 +122,79 @@ public class UserSideCarController {
 	private ICommentsService commentsService;
 	@Autowired
 	private IReplyService repService;
-	
+
 	@GetMapping("/home/carregister/")
 
-	public String getCarRegisterPage(Model brandList, Model provinceList) {
+	public String getCarRegisterPage(Model ModelView) {
 
 		List<String> brands = brandServices.getBrandList();
 		List<City> provinces = provinceServices.getListCity();
-		brandList.addAttribute("brandList", brands);
-		provinceList.addAttribute("provinceList", provinces);
+		List<HintText> hintDescription = hintTextServices.findByType("description");
+		List<HintText> hintRule = hintTextServices.findByType("rule");
+		ModelView.addAttribute("rule", hintRule);
+		ModelView.addAttribute("description", hintDescription);
+		ModelView.addAttribute("brandList", brands);
+		ModelView.addAttribute("provinceList", provinces);
+
 		return "registerCar";
+	}
+
+	@PostMapping("home/myplan/rentalReview")
+	public String retalReview(
+			@RequestParam(name = "clean-check", required = false, defaultValue = "false") boolean cleanCheck,
+			@RequestParam(name = "smell-check", required = false, defaultValue = "false") boolean smellCheck,
+			@RequestParam(name = "decriptions", required = false, defaultValue = "false") String decriptions,
+			@RequestParam(name = "carId", required = false, defaultValue = "false") String carId,
+			@RequestParam(name = "orderId", required = false, defaultValue = "false") String orderId,
+			@RequestParam(name = "imgUrl", required = false) MultipartFile imgUrl) {
+		ServiceAfterBooking tuReview = new ServiceAfterBooking();
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		var car = carServices.findById(Integer.parseInt(carId));
+		if (cleanCheck) {
+			paymentServices.createNewRefund(car.getCarOwnerId(), order.getId(),
+					BigDecimal.valueOf(order.getExtraFee().getCleanFee()));
+			tuReview.setCleanning(true);
+		} else {
+			paymentServices.createNewRefund(order.getUserId(), order.getId(),
+					BigDecimal.valueOf(order.getExtraFee().getCleanFee()));
+		}
+		if (smellCheck) {
+			paymentServices.createNewRefund(car.getCarOwnerId(), order.getId(),
+					BigDecimal.valueOf(order.getExtraFee().getSmellFee()));
+			tuReview.setSmelling(true);
+		} else {
+			paymentServices.createNewRefund(order.getUserId(), order.getId(),
+					BigDecimal.valueOf(order.getExtraFee().getSmellFee()));
+		}
+
+		order.setStatus(Constants.orderStatus.OWNER_TRIP_DONE);
+		orderServices.save(order);
+		tuReview.setOrderId(order.getId());
+		tuReview.setImgUrl(imgUrl.getOriginalFilename());
+		tuReview.setDecriptions(decriptions);
+		tuReview.setCarId(Integer.parseInt(carId));
+		System.out.println(tuReview);
+
+		tuReview = afterBookingRepositories.save(tuReview);
+
+		String dir = "./UploadFiles/tuImages" + "/" + tuReview.getCarId() + "-" + tuReview.getId();
+		Path path = Paths.get(dir);
+
+		try {
+			Files.createDirectories(path);
+		} catch (IOException e) {
+			throw new RuntimeException("Could not initialize folder for upload!");
+		}
+
+		try {
+
+			fileStorageServices.save(imgUrl, dir);
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		return "redirect:/home/myplan/";
 	}
 
 	@PostMapping("home/carregister")
@@ -242,13 +313,23 @@ public class UserSideCarController {
 		Users user = userServices.findUserByEmail(email);
 		orderdetails.setUserId((int) user.getId());
 		LocalTime currentTime = LocalTime.now();
-		orderdetails.setFromDate(LocalDateTime.parse(fromDate_string + " " + currentTime,
-				DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSSSSS")));
-		orderdetails.setToDate(LocalDateTime.parse(toDate_string + " " + currentTime,
-				DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSSSSS")));
+
+		try {
+			orderdetails.setFromDate(LocalDateTime.parse(fromDate_string + " " + currentTime,
+					DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSSSSS")));
+			orderdetails.setToDate(LocalDateTime.parse(toDate_string + " " + currentTime,
+					DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSSSSS")));
+		} catch (Exception e) {
+			orderdetails.setFromDate(LocalDateTime.parse(fromDate_string + " " + currentTime,
+					DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS")));
+			orderdetails.setToDate(LocalDateTime.parse(toDate_string + " " + currentTime,
+					DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS")));
+		}
+
 		orderdetails.setSameProvince(isSameProvince.equals("1"));
 		orderdetails.setSameDistrict(isSameDistrict.equals("1"));
-		OrderExtraFee extra = new OrderExtraFee(0, carExtraFee != null ? carExtraFee.getCleanningFee() : 0, carExtraFee != null ? carExtraFee.getDecorationFee() : 0);
+		OrderExtraFee extra = new OrderExtraFee(0, carExtraFee != null ? carExtraFee.getCleanningFee() : 0,
+				carExtraFee != null ? carExtraFee.getDecorationFee() : 0);
 		if (isSameProvince.equals("1") && isSameDistrict.equals("0")) {
 			extra.setDeliveryFee(Float.parseFloat(deliveryFee));
 		}
@@ -294,18 +375,20 @@ public class UserSideCarController {
 		ModelView.addAttribute("fullAddress", model.getAddress());
 		ModelView.addAttribute("carDetails", modelDto);
 		String email = request.getSession().getAttribute("emailLogin").toString();
-		Users owner = userServices.findUserByEmail(email);
+		Users customer = userServices.findUserByEmail(email);
+		Users owner = userServices.findById(modelDto.getCarOwnerId());
+		ModelView.addAttribute("customer", customer);
 		ModelView.addAttribute("user", owner);
 		System.out.println(owner.getPhone());
 		List<PlateImages> plates = plateImageServices.getAll();
-		plates.removeIf(item -> item.getUserId() != owner.getId());
+		plates.removeIf(item -> item.getUserId() != customer.getId());
 		plates.removeIf(item -> !item.getStatus().equals(Constants.plateStatus.ACCEPTED));
 		ModelView.addAttribute("isKhongHaveBangLai", plates.size() == 0);
-		
-		//Sally add
+
+		// Sally add
 		// Lấy danh sách các review cho chiếc xe và thêm vào model
-	    List<Reviews> reviews = reviewServices.findAllReviewsByCarId(Integer.parseInt(carId));
-	   
+		List<Reviews> reviews = reviewServices.findAllReviewsByCarId(Integer.parseInt(carId));
+
 		List<ReviewsDTO> listReviewsDTO = new ArrayList<>();
 		if(!reviews.isEmpty())
 		{
@@ -324,99 +407,85 @@ public class UserSideCarController {
 					reDTO.setUserName(user1.getFirstName());
 					listReviewsDTO.add(reDTO);
 				}
-				
-				
+
 			}
-			
+
 		}
-		int fiveStar= 0,fourStar=0,threeStar=0,twoStar=0,oneStar=0;
-		
-		ModelView.addAttribute("reviews",listReviewsDTO);
+		int fiveStar = 0, fourStar = 0, threeStar = 0, twoStar = 0, oneStar = 0;
+
+		ModelView.addAttribute("reviews", listReviewsDTO);
 		System.out.println("list Review" + listReviewsDTO);
-		System.out.println("Order Details: " + model.getId()  + " & " );
-		 if(!listReviewsDTO.isEmpty())
-		 {
-			 System.out.println("reviews Details: " + listReviewsDTO  + " & " );
-			 for(ReviewsDTO reviewsDTO : listReviewsDTO)
-				{
-					if(reviewsDTO.getRating()==5)
-					{
-						fiveStar++;
-						
-					}
-					if(reviewsDTO.getRating()==4)
-					{
-						fourStar++;
-						
-					}
-					if(reviewsDTO.getRating()==3)
-					{
-						threeStar++;
-						
-					}
-					if(reviewsDTO.getRating()==2)
-					{
-						twoStar++;
-						
-					}
-					if(reviewsDTO.getRating()==1)
-					{
-						oneStar++;
-						
-					}
+		System.out.println("Order Details: " + model.getId() + " & ");
+		if (!listReviewsDTO.isEmpty()) {
+			System.out.println("reviews Details: " + listReviewsDTO + " & ");
+			for (ReviewsDTO reviewsDTO : listReviewsDTO) {
+				if (reviewsDTO.getRating() == 5) {
+					fiveStar++;
+
 				}
-				
-					
-		 }
-				ModelView.addAttribute("fiveStar",fiveStar );
-				ModelView.addAttribute("fourStar",fourStar);
-				ModelView.addAttribute("threeStar",threeStar);
-				ModelView.addAttribute("twoStar",twoStar);
-				ModelView.addAttribute("oneStar",oneStar);
-				
-			 System.out.println("Order Details 123 : " + model.getId()  + " & " );
-			ModelView.addAttribute("reviews",listReviewsDTO);
-		
-			List<CommentsDTO> lcmtDTO ;
-			lcmtDTO = getCommentsByCarId(model.getId());
-			
-			System.out.println(model.getId());
-			System.out.println(lcmtDTO);
-			ModelView.addAttribute("comments",lcmtDTO);
-			
-			System.out.println("id Car Details: " + model.getId()  + " " );
-			OrderDetails order = getOrderDetailsByCaridandUserid(model.getId(),owner.getId());
-			// lấy status
-			
-			System.out.println("Order Details: " + order + " & " );
-				ModelView.addAttribute("Status_detail", order);
-			
-			
-			
-		
+				if (reviewsDTO.getRating() == 4) {
+					fourStar++;
+
+				}
+				if (reviewsDTO.getRating() == 3) {
+					threeStar++;
+
+				}
+				if (reviewsDTO.getRating() == 2) {
+					twoStar++;
+
+				}
+				if (reviewsDTO.getRating() == 1) {
+					oneStar++;
+
+				}
+			}
+
+		}
+		ModelView.addAttribute("fiveStar", fiveStar);
+		ModelView.addAttribute("fourStar", fourStar);
+		ModelView.addAttribute("threeStar", threeStar);
+		ModelView.addAttribute("twoStar", twoStar);
+		ModelView.addAttribute("oneStar", oneStar);
+
+		System.out.println("Order Details 123 : " + model.getId() + " & ");
+		ModelView.addAttribute("reviews", listReviewsDTO);
+
+		List<CommentsDTO> lcmtDTO;
+		lcmtDTO = getCommentsByCarId(model.getId());
+
+		System.out.println(model.getId());
+		System.out.println(lcmtDTO);
+		ModelView.addAttribute("comments", lcmtDTO);
+
+		System.out.println("id Car Details: " + model.getId() + " ");
+		OrderDetails order = getOrderDetailsByCaridandUserid(model.getId(), owner.getId());
+		// lấy status
+
+		System.out.println("Order Details: " + order + " & ");
+		ModelView.addAttribute("Status_detail", order);
+
 		return "carDetails";
 	}
-	public List<ReplyDTO> getAllReplyByComment_id(int id)
-	{
-		List<Reply> repl =  repService.getAllReplyByCommentId(id);
-		if(repl == null)
-		{
+
+	public List<ReplyDTO> getAllReplyByComment_id(int id) {
+		List<Reply> repl = repService.getAllReplyByCommentId(id);
+		if (repl == null) {
 			return null;
 		}
 		List<ReplyDTO> lrepDTO = new ArrayList<>();
-		for(Reply re: repl)
-		{
+		for (Reply re : repl) {
 			ReplyDTO repDTO = new ReplyDTO();
 			repDTO.setComment_id(re.getComment_id().getId());
 			repDTO.setCarId(re.getComment_id().getCar_id().getId());
 			repDTO.setContent(re.getContent());
 			repDTO.setUser_name(re.getComment_id().getUser_id().getLastName());
 			lrepDTO.add(repDTO);
-			
+
 		}
 		return lrepDTO;
 	}
-	
+
 	@GetMapping("/home/availablecars/details/{carId}/{filename}")
 	public ResponseEntity<Resource> getDetailsImage(@PathVariable("carId") String carId,
 			@PathVariable("filename") String filename) {
@@ -474,60 +543,56 @@ public class UserSideCarController {
 		ModelView.addAttribute("listCategory", categories);
 		ModelView.addAttribute("provinceList", provinces);
 		ModelView.addAttribute("carRegisterList", listDto);
-		
+
 		return "availableCars";
 	}
-	//get Comments by Car Id
-		public List<CommentsDTO> getCommentsByCarId(int car_id)
-		{
-			List<Comments> Lcomments = 	commentsService.getAllCommentsByCarId(car_id);
-			List<CommentsDTO> commentDTO = new ArrayList<>();
-			
-			if(Lcomments != null)
-			{
-				for(Comments tempC : Lcomments)
-				{
-					CommentsDTO tempDTO = new CommentsDTO();
-					tempDTO.setId(tempC.getId());
-					tempDTO.setContent(tempC.getContent());
-					tempDTO.setUser_id(tempC.getUser_id().getId());
-					tempDTO.setUser_name(tempC.getUser_id().getFirstName());
-					tempDTO.setCar_id(car_id);
-					List<ReplyDTO> reply = getAllReplyByComment_id(tempC.getId());
-					tempDTO.setReply(reply);
-					
-					commentDTO.add(tempDTO);
+
+	// get Comments by Car Id
+	public List<CommentsDTO> getCommentsByCarId(int car_id) {
+		List<Comments> Lcomments = commentsService.getAllCommentsByCarId(car_id);
+		List<CommentsDTO> commentDTO = new ArrayList<>();
+
+		if (Lcomments != null) {
+			for (Comments tempC : Lcomments) {
+				CommentsDTO tempDTO = new CommentsDTO();
+				tempDTO.setId(tempC.getId());
+				tempDTO.setContent(tempC.getContent());
+				tempDTO.setUser_id(tempC.getUser_id().getId());
+				tempDTO.setUser_name(tempC.getUser_id().getFirstName());
+				tempDTO.setCar_id(car_id);
+				List<ReplyDTO> reply = getAllReplyByComment_id(tempC.getId());
+				tempDTO.setReply(reply);
+
+				commentDTO.add(tempDTO);
+			}
+
+			return commentDTO;
+		}
+		return null;
+
+	}
+
+	// getorderDetailsBycaridanduserid
+	public OrderDetails getOrderDetailsByCaridandUserid(long carid, long userid) {
+		System.out.println("Order Details: " + " & " + carid + " & " + userid);
+		OrderDetails order = orderServices.getOrderDetailsByCarIdandUserId(carid, userid);
+		if (order != null) {
+			System.out.println("Order Details: đây " + order.getStatus());
+			if (order.getStatus().contains("accepted")) {
+				if (order.isReview()) {
+					System.out.println("nếu nó đã review thì ko review nữa" + order.isReview());
+					return null;
 				}
-				
-				return commentDTO;
+				System.out.println("dòng này ");
+				return order;
 			}
 			return null;
-			
+
 		}
-		
-	//getorderDetailsBycaridanduserid	
-		public OrderDetails getOrderDetailsByCaridandUserid(long carid,long userid)
-		{System.out.println("Order Details: "  +  " & " +carid +   " & " +userid );
-			OrderDetails order = orderServices.getOrderDetailsByCarIdandUserId(carid, userid);
-			if(order != null)
-			{
-				System.out.println("Order Details: đây " + order.getStatus());
-				if(order.getStatus().contains("accepted"))
-				{
-					if(order.isReview())
-					{ System.out.println("nếu nó đã review thì ko review nữa" + order.isReview());
-						return null;
-					}
-				System.out.println("dòng này " );
-					return order;
-				}
-				return null;
-			
-				
-			}
-			System.out.println("Order Details: " + order +  " &" +carid +   " &" +userid );
-			return null;
-		}
+		System.out.println("Order Details: " + order + " &" + carid + " &" + userid);
+		return null;
+	}
+
 	@PostMapping("/home/availablecars")
 	public String getResultPage(Model ModelView, HttpServletRequest request,
 			@RequestParam(name = "isCarPlus", required = false, defaultValue = "false") boolean isCarPlus,
@@ -637,22 +702,23 @@ public class UserSideCarController {
 		ModelView.addAttribute("carRegisterList", filteredListDto);
 		return "availableCars";
 	}
+
 	@GetMapping("/home/myplan/accepted/{orderId}")
-	public String acceptRequestBooking(@PathVariable(name="orderId") String orderId) {
+	public String acceptRequestBooking(@PathVariable(name = "orderId") String orderId) {
 		var order = orderServices.getById(Integer.parseInt(orderId));
 		order.setStatus(Constants.orderStatus.ACCEPTED);
 		orderServices.save(order);
 		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
 		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(2)));
-		
-		
+
 		return "redirect:/home/myplan/";
 	}
+
 	@GetMapping("/home/myplan/declined/{orderId}")
-	public String declinedRequestBooking(@PathVariable(name="orderId") String orderId) {
+	public String declinedRequestBooking(@PathVariable(name = "orderId") String orderId) {
 		var order = orderServices.getById(Integer.parseInt(orderId));
 		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
-		var car =carServices.findById(Integer.parseInt(order.getCarId()));
+		var car = carServices.findById(Integer.parseInt(order.getCarId()));
 		order.setStatus(Constants.orderStatus.DECLINED);
 		orderServices.save(order);
 		Violation vio = new Violation();
@@ -660,7 +726,19 @@ public class UserSideCarController {
 		vio.setCarId(car.getId());
 		vio.setReason(Constants.violations.OWNER_DECLINED);
 		violationRepo.save(vio);
-		paymentServices.createNewRefund(order.getUserId(), order.getId() ,order.getTotalAndFees());
+		paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFees());
+		return "redirect:/home/myplan/";
+	}
+
+	@GetMapping("/home/myplan/rental_done/{orderId}")
+	public String clientDoneRequestBooking(@PathVariable(name = "orderId") String orderId) {
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		order.setStatus(Constants.orderStatus.RENTOR_TRIP_DONE);
+		orderServices.save(order);
+		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
+		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(2)));
+		paymentServices.createNewLock(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(10)));
+
 		return "redirect:/home/myplan/";
 	}
 
@@ -671,6 +749,8 @@ public class UserSideCarController {
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users user = userServices.findUserByEmail(email);
 		List<OrderDetailsDTO> orderList = orderServices.getDTOFromCreatedBy((int) user.getId());
+		orderList.sort(Comparator.comparingLong(OrderDetailsDTO::getId).reversed());
+		List<OrderDetailsDTO> latestOrders = new ArrayList<>(orderList.subList(0, Math.min(orderList.size(), 5)));
 		List<CarInfor> list = carServices.getbyOwnerId((int) user.getId());
 		List<CarInforDto> listDto = new ArrayList<>();
 		List<PlateImages> listImg = plateImageServices.getAll();
@@ -687,18 +767,22 @@ public class UserSideCarController {
 			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
 			List<OrderDetails> llll = orderServices.getFromCarId(item.getId());
-			var name = "OrderListDto"+itemDto.getCarmodel().getObjectId();
+			var name = "OrderListDto" + itemDto.getCarmodel().getObjectId();
 			List<OrderDetailsDTO> mmmm = orderServices.getDTOFromCarId(item.getId());
 			mmmm.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.WAITING));
 			ModelView.addAttribute(name, mmmm);
 			llll.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.WAITING));
-			
+
 			itemDto.setOrders(llll);
 			listDto.add(itemDto);
 		}
 		listImg.removeIf(t -> t.getUserId() != user.getId());
 		listImg.removeIf(t -> t.getStatus().equals(Constants.plateStatus.DECLINED));
-		ModelView.addAttribute("orderList", orderList);
+
+		OrderDetailsDTO rentorDone = orderServices.getDTORentorTripDoneOrder();
+
+		ModelView.addAttribute("rentorDone", rentorDone);
+		ModelView.addAttribute("orderList", latestOrders);
 		ModelView.addAttribute("ImgLicense", listImg);
 		ModelView.addAttribute("listCar", listDto);
 		ModelView.addAttribute("user", user);
@@ -718,6 +802,27 @@ public class UserSideCarController {
 
 	@GetMapping("/home/availablecars/img/{filename}")
 	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename) throws IOException {
+		List<CarInfor> list = carServices.findAll();
+		String dir = "";
+		int i = 0;
+		while (i < list.size()) {
+			dir = "./UploadFiles/carImages/" + list.get(i).getModelId() + "-" + list.get(i).getId();
+			Resource fileResource = fileStorageServices.load(filename, dir);
+			if (fileResource == null) {
+				i++;
+
+			} else {
+				return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment; filename=\"" + fileResource.getFilename() + "\"").body(fileResource);
+			}
+
+		}
+		return null;
+
+	}
+
+	@GetMapping("/home/availablecars/flutter/img/{filename}")
+	public ResponseEntity<Resource> getFlutterImage(@PathVariable("filename") String filename) throws IOException {
 		List<CarInfor> list = carServices.findAll();
 		String dir = "";
 		int i = 0;

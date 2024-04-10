@@ -144,4 +144,30 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 		return orderRepository.getOrderDetailByCarIdandUserId(carId, userId);
 	}
 
+	@Override
+	public OrderDetails getRentorTripDoneOrder() {
+		return orderRepository.getRentorTripDoneOrder();
+	}
+
+	@Override
+	public OrderDetailsDTO getDTORentorTripDoneOrder() {
+		OrderDetails orderRaw = this.getRentorTripDoneOrder();
+		if(orderRaw != null) {
+			OrderDetailsDTO dto = this.modelMapper.map(orderRaw, OrderDetailsDTO.class);
+			Users user = userServices.findById(dto.getUserId());
+			dto.setUser(user);
+			return dto;
+		}
+		return null;
+	}
+
+	@Override
+	public OrderDetailsDTO mapToDTO(int id) {
+		OrderDetails car = this.orderRepository.findById(id).get();
+		OrderDetailsDTO carDto = this.modelMapper.map(car, OrderDetailsDTO.class);
+		Users user = userServices.findById(car.getUserId());
+		carDto.setUser(user);
+		return carDto;
+	}
+
 }

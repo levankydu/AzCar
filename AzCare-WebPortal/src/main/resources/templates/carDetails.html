@@ -1542,7 +1542,10 @@
 													id="form-details-amount"></p>
 											</div>
 											<div class="col-6">
-												<p th:attr="data-uqwfjwissa=${user.balance != null ? user.balance : 0}"
+
+												<p
+													th:attr="data-uqwfjwissa=${customer.balance != null ? customer.balance : 0}"
+
 													class="float-left">Delivery Fee:</p>
 											</div>
 											<div class="col-6">
@@ -1563,22 +1566,30 @@
 										</div>
 									</div>
 								</div>
-								<div th:if="${!isKhongHaveBangLai && user.phone != null || carDetails.carOwnerId==user.id}"
+
+								<div
+									th:if="${!isKhongHaveBangLai && customer.phone != null && customer.id!=user.id}"
+
 									class="text-center mt-5">
 									<input type="hidden" name="differenceDate" id="form-differenceDate"> <input
 										type="hidden" th:attr="data-car-model=${carDetails.carmodel.model}">
 									<input type="hidden" th:attr="data-car-year=${carDetails.carmodel.year}">
 									<button href="" id="form-submit-btn" class="btn btn-md btn-color">Rent Now</button>
 								</div>
-								<div th:if="${isKhongHaveBangLai || user.phone == null || carDetails.carOwnerId==user.id}"
+
+								<div
+									th:if="${isKhongHaveBangLai || customer.phone == null || customer.id==user.id}"
+
 									class="text-center mt-5">
 									<p th:if="${isKhongHaveBangLai}" class="text-danger">You
 										must update your driving license before rent</p>
-									<p th:if="${user.phone == null}" class="text-danger">You
+									<p th:if="${customer.phone == null}" class="text-danger">You
 										must update your phone number before rent</p>
-									<p th:if="${carDetails.carOwnerId==user.id}" class="text-danger">You can not booking
-										your car</p>
-									<a class="btn btn-md btn-color" th:href="@{/user/profile/} + ${session.user}">Go to
+
+									<p th:if="${customer.id==user.id}"
+										class="text-danger">You can not booking your car</p>
+									<a class="btn btn-md btn-color"
+										th:href="@{/user/profile/} + ${session.user}">Go to
 
 										profile</a>
 								</div>

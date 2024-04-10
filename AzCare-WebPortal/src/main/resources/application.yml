@@ -12,10 +12,10 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/azcarsdb
     username: root
-    password: 1234
+    password: 1410
 
 
-
+    
   jpa:
     hibernate:
       ddl-auto: update
