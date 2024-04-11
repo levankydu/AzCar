@@ -104,6 +104,7 @@ function backStep1() {
 			}
 		});
 	};
+	
 	function categorySubmit() {
 		const categorySelect = $("#categorySelect").get(0);
 		const modelSelect = $("#modelSelect").get(0);
@@ -122,7 +123,46 @@ function backStep1() {
 				
 			}
 		});
+		priceRangeHint();
 	};
+	
+	function priceRangeHint(){
+		var categorySelected =$("#categorySelect option:selected").text();
+		var priceSelected= document.getElementById("priceRent").value;
+		if(categorySelected || categorySelected=="--Select Category--" ){
+			const count = categorySelected.split(",").length - 1;
+			
+			if(count ==3){
+				document.getElementById('recommendPrice').textContent = "Recommended price for your Car's category : 1000-1500 $/day ";
+				if(priceSelected<=1500 &&priceSelected>=1000){
+					document.getElementById('recommendPrice').textContent="";
+				}
+		}
+		if(count ==2){
+				document.getElementById('recommendPrice').textContent = "Recommended price for your Car's category : 700-999 $/day ";
+				if(priceSelected<=999 &&priceSelected>=700){
+					document.getElementById('recommendPrice').textContent="";
+				}
+		}
+		
+		if(count ==1){
+				document.getElementById('recommendPrice').textContent = "Recommended price for your Car's category : 400-699 $/day ";
+				if(priceSelected<=699 &&priceSelected>=400){
+					document.getElementById('recommendPrice').textContent="";
+				}
+		}
+		if(count ==0){
+				document.getElementById('recommendPrice').textContent = "Recommended price for your Car's category : 100-399 $/day ";
+				if(priceSelected<=399 &&priceSelected>=100){
+					document.getElementById('recommendPrice').textContent="";
+				}
+		}
+		}
+		
+		
+		
+		
+	}
 	function modelSubmit() {
 		const categorySelect = $("#categorySelect").get(0);
 		const modelSelect = $("#modelSelect").get(0);
@@ -351,8 +391,9 @@ function backStep1() {
 	}
 
 	function priceRentCheck(){
+		priceRangeHint();
 		const priceRent = document.getElementById("priceRent").value;
-		if(priceRent <1){
+		if(priceRent <1 ||priceRent % 1 !== 0){
 			document.getElementById('validation-priceRent').textContent = "Price is not valid";
 		}else{
 			
@@ -462,14 +503,16 @@ function backStep1() {
 		var ImgCheckNull =document.getElementById('validation-NUll-img').textContent.trim().length;
 		var ImgChecDuplicate =document.getElementById('validation-Duplicate-image').textContent.trim().length;
 		var AddressCheckNull = document.getElementById('validation-NULL-address').textContent.trim().length;
-		
-		const sum = plateCheck+carBasicCheck+descriptionCheck+priceCheck+addressCheck+ruleCheck+ImgCheck+ImgCheckNull+ImgChecDuplicate+AddressCheckNull;
+		var recommendPriceCheckNull = document.getElementById('recommendPrice').textContent.trim().length;
+		const sum = plateCheck+carBasicCheck+descriptionCheck+priceCheck+addressCheck+ruleCheck+ImgCheck+ImgCheckNull+ImgChecDuplicate+AddressCheckNull+recommendPriceCheckNull;
 		if(sum>0){
 			console.log(sum);
 			document.getElementById('toast-failed-register-car').click();
 			return false;
 		}else{
 			document.getElementById('toast-success-registered-car').click();
+			var pageLoader = document.querySelector('.page_loader');
+			pageLoader.style.display = 'block';
 			return registerRentCar.submit();
 		}
 	}

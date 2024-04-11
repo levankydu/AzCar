@@ -375,86 +375,162 @@
 																th:text="${car.licensePlates}"></span>
 														</p>
 													</div>
-													<div class="listing-price">
-														<p>
-															<button style="position: static; border-radius: 0"
-																data-toggle="modal"
-																th:attr="data-target=${'#carmodel-edit-' + car.carmodel.objectId}"
-																class="btn btn-md btn-success">CLick to update
-																Car Price</button>
-																<p id="toast-failed-updated-car" hidden="true"
-						class="btn btn-outline-primary btn-lg btn-block">Failed
-						Example</p>
-														</p>
+													<div class="row">
+														<div class="listing-price">
+															<p>
+																<button style="position: static; border-radius: 0"
+																	data-toggle="modal"
+																	th:attr="data-target=${'#' + car.carmodel.objectId}"
+																	class="btn btn-md btn-success">Update Car
+																	Price</button>
+															<p id="toast-failed-updated-car" hidden="true"
+																class="btn btn-outline-primary btn-lg btn-block">Failed
+																Example</p>
 
-														<div class="modal fade bd-example-modal-lg"
-															th:id="${'carmodel-edit-' + car.carmodel.objectId}"
-															tabindex="-1" role="dialog"
-															aria-labelledby="myLargeModalLabel" aria-hidden="true">
-															<div class="modal-dialog modal-lg">
-																<div class="modal-content">
-																	<div class="modal-header">
-																		<h5 class="modal-title" id="exampleModalLabel">
+
+															<div class="modal fade bd-example-modal-lg"
+																th:id="${car.carmodel.objectId}" tabindex="-1"
+																role="dialog" aria-labelledby="myLargeModalLabel"
+																aria-hidden="true">
+																<div class="modal-dialog modal-lg">
+																	<div class="modal-content">
+																		<div class="modal-header">
+																			<h5 class="modal-title" id="exampleModalLabel">
+
+																				<span id="requestCount" class="text-success"
+																					th:text="${car.carmodel.model +'-'+car.carmodel.year}"></span>
+																				is on updating:
+
+																			</h5>
+																			<button type="button" class="close"
+																				data-dismiss="modal" aria-label="Close">
+																				<span aria-hidden="true">&times;</span>
+																			</button>
+																		</div>
+																		<div class="modal-body">
+																			<form th:action="@{/home/myplan/updateCar}"
+																				method="post"
+																				th:id="'updateCar-' + ${car.carmodel.objectId}">
+																				<input type="hidden" th:value="${car.id}"
+																					name="carId"> <input
+																					th:id="'carCate-'+${car.carmodel.objectId}"
+																					th:value="${car.carmodel.category}" type="hidden">
+																				<table class="table">
+																					<tr>
+																						<th class="text-left">Old Price:</th>
+																						<td class="text-right"
+																							th:text="${'$'+car.price +'/day'}"></td>
+																					</tr>
+																					<tr>
+																						<th class="text-left text-success">New Price
+																							($/day):</th>
+																						<td class="text-right"><input type="number"
+																							name="newPrice"
+																							th:id="'newPrice-'+${car.carmodel.objectId}"
+																							th:attr="onkeyup='return checkNewPrice(\'' + ${#strings.escapeJavaScript(car.carmodel.objectId)} + '\')'"></td>
+																					</tr>
+																					<tr>
+																						<td class="text-right text-danger" colspan="2"
+																							th:id="'recommendPrice-'+${car.carmodel.objectId}"></td>
+																					</tr>
+																					<tr>
+																						<td class="text-right text-danger" colspan="2"
+																							th:id="'newPriceValidate-'+${car.carmodel.objectId}"></td>
+																					</tr>
+
+																					<tr>
+																						<th class="text-left">Old Discount:</th>
+																						<td class="text-right"
+																							th:text="${car.discount+'%'}"></td>
+																					</tr>
+																					<tr>
+																						<th class="text-left text-success">New
+																							Discount (%):</th>
+																						<td class="text-right"><input
+																							name="newDiscount"
+																							th:id="'newDiscount-'+${car.carmodel.objectId}"
+																							th:attr="onkeyup='return checkNewDiscount(\'' + ${#strings.escapeJavaScript(car.carmodel.objectId)} + '\')'"
+																							type="number"></td>
+
+																					</tr>
+																					<tr>
+																						<td class="text-right text-danger" colspan="2"
+																							th:id="'newDiscountValidate-'+${car.carmodel.objectId}"></td>
+																					</tr>
+																					<tr>
+																						<td colspan="2" class="text-right"><button
+																								class="btn btn-success"
+																								style="position: static; border-radius: 0"
+																								th:attr="onclick='return submitValidation(\'' + ${#strings.escapeJavaScript(car.carmodel.objectId)} + '\')'">
+																								Save</button></td>
+																					</tr>
+																				</table>
+																			</form>
+																		</div>
+
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="listing-price ml-2">
+															<p>
+																<button style="position: static; border-radius: 0"
+																	data-toggle="modal"
+																	th:attr="data-target=${'#historyBooking-' + car.carmodel.objectId}"
+																	class="btn btn-md btn-info">History Booking</button>
+															<div class="modal fade bd-example-modal-lg"
+																th:id="${'historyBooking-'+car.carmodel.objectId}" tabindex="-1"
+																role="dialog" aria-labelledby="myLargeModalLabel"
+																aria-hidden="true">
+																<div class="modal-dialog modal-lg" style="box-shadow:0 0 15px rgba(0,0,0,0.3)">
+																	<div class="modal-content">
+																		<div class="modal-header">
+																			<h5 class="modal-title" id="exampleModalLabel">
+
+																				You are looking-up <span id="requestCount" class="text-success"
+																					th:text="${car.carmodel.model +'-'+car.carmodel.year}"></span>
+																				history booking:
+
+																			</h5>
+																			<button type="button" class="close"
+																				data-dismiss="modal" aria-label="Close">
+																				<span aria-hidden="true">&times;</span>
+																			</button>
+																		</div>
+																		<div class="modal-body">
+																			
+																				<table class="table">
+																	<tr class="text-center">
+																		<th>Email</th>
+																		<th>From Date At</th>
+																		<th>To Date</th>
+																		<th>Duration</th>
+																		<th>Total Price</th>
+																		<th>Status</th>
+																	</tr>
+																	<tr class="text-center"
+																		th:each="item : ${__${'historyBooking' + car.carmodel.objectId}__}">
+																		<td th:text="${item.user.email}"></td>
+																		<td th:text="${#temporals.format(item.fromDate, 'dd/MM/yyyy')}"></td>
+																		<td th:text="${#temporals.format(item.toDate, 'dd/MM/yyyy')}"></td>
+																		<td th:text="${item.differenceDate+' day(s)'}"></td>
+																		<td th:text="${'$ '+item.getTotalAndFees()}"></td>
+																		<td th:text="${item.status}" th:class="${item.status == 'declined' ? 'badge badge-danger text-wrap mt-2' : 'badge badge-success text-wrap mt-2'}">
 																		
-																			<span id="requestCount" class="text-success"
-																				th:text="${car.carmodel.model +'-'+car.carmodel.year}"></span>
-																			is on updating:
+																		</td>
+																		
+																	</tr>
+																</table>
+																			
+																		</div>
 
-																		</h5>
-																		<button type="button" class="close"
-																			data-dismiss="modal" aria-label="Close">
-																			<span aria-hidden="true">&times;</span>
-																		</button>
 																	</div>
-																	<div class="modal-body">
-																		<form th:action="@{/home/myplan/updateCar}"
-																			method="post" id="updateCar">
-																			<input type="hidden" th:value="${car.id}"
-																				name="carId">
-																			<table class="table">
-																				<tr>
-																					<th class="text-left">Old Price:</th>
-																					<td class="text-right" th:text="${'$'+car.price +'/day'}"></td>
-																				</tr>
-																				<tr>
-																					<th class="text-left text-success">New Price ($/day):</th>
-																					<td class="text-right"><input type="number"
-																						name="newPrice" id="newPrice"
-																						onkeyup="return checkNewPrice()"></td>
-																				</tr>
-																				<tr>
-																					<td class="text-right text-danger" colspan="2" id="newPrice-validation" ></td>
-																				</tr>
-																				<tr>
-																					<th class="text-left">Old Discount:</th>
-																					<td class="text-right"
-																						th:text="${car.discount+'%'}"></td>
-																				</tr>
-																				<tr>
-																					<th class="text-left text-success">New
-																						Discount (%):</th>
-																					<td class="text-right"><input
-																						name="newDiscount" id="newDiscount"
-																						onkeyup="return checkNewDiscount()" type="number"></td>
-
-																				</tr>
-																				<tr>
-																					<td class="text-right text-danger" colspan="2" id="newDiscount-validation" ></td>
-																				</tr>
-																				<tr>
-																					<td colspan="2" class="text-right"><button
-																							class="btn btn-success"
-																							style="position: static; border-radius: 0"
-																							onclick="return submitValidation()">Save</button></td>
-																				</tr>
-																			</table>
-																		</form>
-																	</div>
-
 																</div>
 															</div>
 														</div>
 													</div>
+
+
 												</div>
 												<p class="btn btn-theme" th:text="${car.status}"></p>
 												<div class="mt-3">
@@ -951,145 +1027,7 @@
 
 <!-- Custom JS Script -->
 <script src="/assets/js/app.js"></script>
-
-<script th:inline="javascript">
-	function validateImg() {
-		var frontImg = document.getElementById('frontImg').value;
-		var behindImg = document.getElementById('behindImg').value;
-
-		if (frontImg == "" || behindImg == "") {
-			document.getElementById('validation-NUll-img').textContent = "All neccessary images must be uploaded";
-		} else {
-			document.getElementById('validation-NUll-img').textContent = "";
-		}
-		if (frontImg == behindImg) {
-
-			document.getElementById('validation-Duplicate-image').textContent = "Images are duplicated name, Please try again";
-		} else {
-			document.getElementById('validation-Duplicate-image').textContent = "";
-		}
-	}
-	function previewImage(inputId, previewId) {
-
-		validateImg();
-		var input = document.getElementById(inputId);
-		var preview = document.getElementById(previewId);
-		var value = input.value;
-
-		if (!value.match(/\.(jpg|jpeg|png|gif)$/i)) {
-
-			input.setAttribute('value', '');
-			preview.setAttribute('src', '');
-			document.getElementById('validation-image').textContent = "Some Images are not valid";
-		} else {
-
-			document.getElementById('validation-image').textContent = "";
-			if (input && input.files && input.files[0]) {
-				var reader = new FileReader();
-
-				reader.onload = function(e) {
-					preview.src = e.target.result;
-				}
-
-				reader.readAsDataURL(input.files[0]);
-			}
-		}
-	}
-	validateImg();
-	function checkImg() {
-		validateImg();
-
-		var ImgCheck = document.getElementById('validation-image').textContent
-				.trim().length;
-		var ImgCheckNull = document.getElementById('validation-NUll-img').textContent
-				.trim().length;
-		var ImgChecDuplicate = document
-				.getElementById('validation-Duplicate-image').textContent
-				.trim().length;
-
-		const sum = ImgCheck + ImgCheckNull + ImgChecDuplicate;
-		if (sum > 0) {
-			console.log(sum);
-			document.getElementById('toast-failed-uploadDriveLicense').click();
-			return false;
-		} else {
-			document.getElementById('toast-success-uploadDriveLicense').click();
-			return uploadDriveLicense.submit();
-		}
-
-	}
-	function descriptionSubmit() {
-		var imgShow = document.getElementById('imgShow');
-		imgShow.classList.remove('d-none');
-
-	}
-	function previewImage() {
-		var input = document.getElementById("frontImg");
-		var preview = document.getElementById("frontImgPre");
-
-		if (input.files && input.files[0]) {
-			var reader = new FileReader();
-
-			reader.onload = function(e) {
-
-				preview.src = e.target.result;
-			};
-
-			reader.readAsDataURL(input.files[0]);
-		} else {
-			preview.src = "";
-		}
-	}
-
-	function checkNewDiscount() {
-		var newDiscount = parseFloat(document.getElementById("newDiscount").value);
-		var validationMessage = "";
-		if (newDiscount ==0|| newDiscount ==null) {
-			  validationMessage = "New discount must be valid numbers.";
-		}
-
-		if (newDiscount < 0 || newDiscount % 1 !== 0) {
-			validationMessage = "New discount must be positive number.";
-		}
-		if (validationMessage !== "") {
-            document.getElementById("newDiscount-validation").innerHTML = validationMessage;
-           
-        } else {
-            document.getElementById("newDiscount-validation").innerHTML = ""; 
-        }
-	
-
-	}
-	function checkNewPrice() {
-		var newPrice = parseFloat(document.getElementById("newPrice").value);
-		var validationMessage = "";
-		if (newPrice ==0|| newPrice ==null) {
-			validationMessage = "New Price must be valid numbers.";
-		}
-
-		if (newPrice <= 0 || newPrice % 1 !== 0) {
-			validationMessage = "New price must be positive number.";
-		}
-		if (validationMessage !== "") {
-            document.getElementById("newPrice-validation").innerHTML = validationMessage;
-           
-        } else {
-            document.getElementById("newPrice-validation").innerHTML = ""; 
-        }
-
-	}
-	function submitValidation(){
-		 var check1 = document.getElementById("newPrice-validation").innerHTML;
-		 var check2 = document.getElementById("newDiscount-validation").innerHTML;
-		 if(check1===''&& check2===''){
-			 return form.submit();
-		 }else{
-			 document.getElementById("toast-failed-updated-car").click();
-			
-			 return false;
-		 }
-	}
-</script>
+<script type="text/javascript" src="/assets/js/myPlans.js"></script>
 </body>
 
 </html>

@@ -806,11 +806,15 @@ public class UserSideCarController {
 			var itemDto = carServices.mapToDto(item.getId());
 			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
+			var historyBooking = "historyBooking" + itemDto.getCarmodel().getObjectId();
+			List<OrderDetailsDTO> historyBookingList = orderServices.getDTOFromCarId(item.getId());
+			ModelView.addAttribute(historyBooking, historyBookingList);
 			List<OrderDetails> llll = orderServices.getFromCarId(item.getId());
 			var name = "OrderListDto" + itemDto.getCarmodel().getObjectId();
 			List<OrderDetailsDTO> mmmm = orderServices.getDTOFromCarId(item.getId());
 			mmmm.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.WAITING));
 			ModelView.addAttribute(name, mmmm);
+
 			llll.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.WAITING));
 
 			itemDto.setOrders(llll);
