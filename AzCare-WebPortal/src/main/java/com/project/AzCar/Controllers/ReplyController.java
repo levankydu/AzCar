@@ -38,29 +38,31 @@ public class ReplyController {
 	 {
 		 Reply rep = new Reply();
 		 Comments cmt =cmtService.getCommentById(repDTO.getComment_id());
-		 if(cmt!=null)
-		 {	
-			List<IgnoreKeyword> lIgnore = ignoreService.listkeyword();
+		 List<IgnoreKeyword> lIgnore = ignoreService.listkeyword();
 			List<String> lkeyword = new ArrayList<>();
 			for(IgnoreKeyword a: lIgnore)
 			{
 				lkeyword.add(a.getKeyword());
 				
 			}
+		 List<String> ab =ignoreService.isIgnore(repDTO.getContent(), lkeyword);
+		 if(cmt!=null)
+		 {	
 			System.out.println("List Ignore: " + lkeyword);
-			if(!ignoreService.isIgnore(repDTO.getContent(), lkeyword))
+			if(ab == null)
 			{
 			 rep.setComment_id(cmt);
 			 rep.setContent(repDTO.getContent());
 			 replySer.saveReply(rep);
 			 return ResponseEntity.ok().build();
 			}
+			 else
+			 {
+				 return new ResponseEntity<List<String>>(ab,HttpStatus.BAD_REQUEST); 
+			 }
+			 
 		 }
-		 else
-		 {
-			 return new ResponseEntity<String>("something will wrong",HttpStatus.BAD_REQUEST); 
-		 }
-		 
+		
 		 return new ResponseEntity<String>("something will wrong",HttpStatus.BAD_REQUEST); 
 		 
 		

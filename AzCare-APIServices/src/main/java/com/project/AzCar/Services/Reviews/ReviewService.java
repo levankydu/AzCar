@@ -27,6 +27,7 @@ public class ReviewService implements ReviewRepository {
 	private final ReviewRepository reviewRepository;
 	private final CarRepository carInforRepository;
 	private final UserServices userServices;
+
 	@Autowired
 	public ReviewService(ReviewRepository reviewRepository, CarRepository carInforRepository,
 			UserServices usersRepository) {
@@ -44,15 +45,13 @@ public class ReviewService implements ReviewRepository {
 	public List<Reviews> findAllReviewsByUserId(Long userId) {
 		return reviewRepository.findByUserId(userId);
 	}
-	
-	// Lấy tất cả đánh giá theo thời gian gần nhất
-	public List<Reviews> findRecentReviews()
-	{
-		
-		return reviewRepository.findRecentReviews();
-		
-	}
 
+	// Lấy tất cả đánh giá theo thời gian gần nhất
+	public List<Reviews> findRecentReviews() {
+
+		return reviewRepository.findRecentReviews();
+
+	}
 
 	@Override
 	public void flush() {

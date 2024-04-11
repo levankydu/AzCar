@@ -126,7 +126,7 @@
 										class="submenu-link">Comment</a>
 								</li>
 								<li class="submenu-item  "><a th:href="@{/dashboard/ListIgnoreKey/}"
-										class="submenu-link">Lisst Ignore Key</a>
+										class="submenu-link">List Ignore Key</a>
 								</li>
 							</ul>
 						</li>
@@ -487,32 +487,31 @@
 					<div class="card">
 						<div class="card-header">
 							<h5 class="card-title">Users</h5>
-							<button class="create-keyword">Create New Key Word</button>
 						</div>
 						<div class="card-body">
 							<div class="table-responsive datatable-minimal">
-								<table class="table" id="table2" th:if="${not #lists.isEmpty(listkeyword)}">
+								<table class="table" id="table2">
 									<thead>
 										<tr>
 											<th>Id</th>
-											<th>Key Word</th>
+											<th>Comment</th>
+											<th>Linense Plate</th>
+											<th>User Name</th>
+											<th>Status</th>
 											<th>Action</th>
-											<th></th>
+										
 
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="keyword : ${listkeyword}">
-											<td th:text="${keyword.id}"></td>
-											<td th:text="${keyword.keyword}">
-
-											</td>
-											<td><button class="change-status" th:data-review-id="${keyword.id}"
-													th:data-status="${keyword.keyword}" th:text="Change"></button>
-												<btn></btn>
-											</td>
-											<td><button class="delete-keyword" th:data-keyword-id="${keyword.id}">
-													Delete</button></td>
+										<tr th:each="cmt : ${listComments}">
+											<td th:text="${cmt.id}"></td>
+											<td th:text="${cmt.content}"></td>
+											<td th:text="${cmt.car_name}"></td>
+											<td th:text="${cmt.user_name}"></td>
+											<td th:id="'status_'+ ${cmt.id}" th:text="${cmt.status}"></td>
+											<td><button class="change-status" th:data-cmt-id="${cmt.id}"
+													th:data-status="${cmt.content}" th:text="Change"></button></td>
 											<!-- <td><a th:href="@{/dashboard/ListAccount/profile/{email} (email=${email})} "><i
 														class="bi bi-person"></i></a></td> -->
 										</tr>
@@ -521,176 +520,62 @@
 							</div>
 						</div>
 					</div>
-					<!-- dialog chỉnh sửa -->
-					<!-- Modal chỉnh sửa keyword -->
-					<div class="modal fade" id="editKeywordModal" tabindex="-1" role="dialog"
-						aria-labelledby="editKeywordModalLabel" aria-hidden="true">
-						<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="editKeywordModalLabel">Edit Keyword</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									<form id="editKeywordForm">
-										<div class="form-group">
-											<label for="editKeywordInput">Keyword:</label>
-											<input type="text" class="form-control" id="editKeywordInput">
-											<input type="hidden" id="keywordIdInput">
-										</div>
-									</form>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" id="closeChangeBtn"
-										data-dismiss="modal">Close</button>
-									<button type="button" class="btn btn-primary" id="saveChangesBtn">Save
-										changes</button>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- Modal them moi keyword -->
-					<div class="modal fade" id="createnewkeyword" tabindex="-1" role="dialog"
-						aria-labelledby="createKeywordModalLabel" aria-hidden="true">
-						<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="createKeywordModalLabel">Create New Keyword</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									<form id="createKeywordForm">
-										<div class="form-group">
-											<label for="createKeywordInput">Keyword:</label>
-											<input type="text" class="form-control" id="createnewKeywordInput">
-
-										</div>
-									</form>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" id="closeChangeBtn"
-										data-dismiss="modal">Close</button>
-									<button type="button" class="btn btn-primary" id="savenewkeywordChangesBtn">Save
-										changes</button>
-								</div>
-							</div>
-						</div>
-					</div>
-
-
-					<script th:inline="javascript">
-						// DELETE
-						$(document).ready(function () {
-							$(".delete-keyword").click(function () {
-								var keywordId = $(this).data("keyword-id");
-
-								// Gửi yêu cầu DELETE thông qua AJAX
-								$.ajax({
-									url: "/deleteKeyword/" + keywordId,
-									type: "DELETE",
-									success: function (response) {
-										console.log("Keyword deleted successfully");
-										// Thực hiện bất kỳ công việc cần thiết sau khi xóa
-										location.reload();
-									},
-									error: function (xhr, status, error) {
-										console.error("Error deleting keyword:", error);
-									}
-								});
-							});
-						});
-						//PUT
-						$(document).ready(function () {
-							// Xử lý khi button "Change" được bấm
-							$('.change-status').on('click', function () {
-								var keywordId = $(this).data('review-id');
-								var originalKeyword = $(this).data('status');
-
-								// Đổ dữ liệu ban đầu vào dialog
-								$('#editKeywordInput').val(originalKeyword);
-								$('#keywordIdInput').val(keywordId);
-
-								// Hiển thị dialog
-								$('#editKeywordModal').modal('show');
-							});
-							//Xử lý khi btn "close" click
-							$('#closeChangeBtn').on('click', function () {
-								$('#editKeywordModal').modal('hide'); // Đóng dialog 
-							})
-
-
-
-							// Xử lý khi button "Save changes" trong dialog được bấm
-							$('#saveChangesBtn').on('click', function () {
-								var editedKeyword = $('#editKeywordInput').val();
-								var keywordId = $('#keywordIdInput').val();
-								data1 = {
-									id: keywordId,
-									keyword: editedKeyword
-								}
-								console.log(data1);
-								// Gửi AJAX request để lưu thay đổi
-								$.ajax({
-									type: 'PUT',
-									url: '/editKeyword/' + keywordId,
-									contentType: 'application/json',
-									data: JSON.stringify(data1),
-									success: function (response) {
-										// Thực hiện cập nhật trên giao diện nếu cần
-										// $('#keyword_' + keywordId).text = editedKeyword;
-										location.reload();
-										console.log(response);
-										$('#editKeywordModal').modal('hide'); // Đóng dialog sau khi lưu thành công
-									},
-									error: function (xhr, status, error) {
-										console.error(error);
-									}
-								});
-							});
-						});
-						// Post 
-
-					</script>
 					<script>
 						$(document).ready(function () {
-							// Xử lý khi button "Change" được bấm
-							$('.create-keyword').on('click', function () {
+							// Bắt sự kiện click vào phần tử có class "change-status"
+							$(".change-status").click(function () {
+								// Lấy giá trị của status từ data-status attribute
+								
 
-								// Hiển thị dialog
-								$('#createnewkeyword').modal('show');
-							});
-							//Xử lý khi btn "close" click
-							$('#closeChangeBtn').on('click', function () {
-								$('#createnewkeyword').modal('hide'); // Đóng dialog 
-							})
-							// Xử lý khi button "Save changes" trong dialog được bấm
-							$('#savenewkeywordChangesBtn').on('click', function () {
-								var createkw = $('#createnewKeywordInput').val();
 
-								// Gửi AJAX request để lưu thay đổi
+								var cmtid = $(this).data("cmt-id");
+
+								var statusElement = document.getElementById('status_' + cmtid);
+								var newStatus = statusElement.textContent.trim();
+
+								// Kiểm tra và chuyển đổi trạng thái
+								if (newStatus === "Pending" || newStatus === "") {
+									newStatus = "Decline";
+								} else if (newStatus === "Decline") {
+									newStatus = "Pending";
+								}
+
+
+								console.log(cmtid, newStatus);
+
+								data = {
+									id: cmtid,
+									status: newStatus
+								}
+								console.log(data);
+								// Định nghĩa options cho yêu cầu POST
+								const requestOptions = {
+									method: 'PUT',
+									headers: {
+										'Content-Type': 'application/json'
+									},
+									body: JSON.stringify(data)
+								};
+								// Gửi request AJAX để cập nhật status
 								$.ajax({
-									type: 'POST',
-									url: '/createkeyword',
-									contentType: 'application/json',
-									data: JSON.stringify({ keyword: createkw }),
+									...requestOptions,
+									url: "/comment/update-comment/"+ cmtid, // Địa chỉ endpoint xử lý cập nhật status
+									data: JSON.stringify(data),
 									success: function (response) {
-										// Thực hiện cập nhật trên giao diện nếu cần
-										location.reload();
-										$('#createnewkeyword').modal('hide'); // Đóng dialog sau khi lưu thành công
+										console.log("success: " + newStatus);
+										// Nếu thành công, cập nhật trực tiếp trên giao diện
+
+										document.getElementById("status_" + cmtid).innerHTML = newStatus;
+
 									},
 									error: function (xhr, status, error) {
+										// Xử lý lỗi nếu có
 										console.error(error);
 									}
 								});
 							});
 						});
 					</script>
-
-
 				</section>
 			</div>
 

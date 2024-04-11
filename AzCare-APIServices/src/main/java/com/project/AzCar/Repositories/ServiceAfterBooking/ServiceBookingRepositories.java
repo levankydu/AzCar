@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.project.AzCar.Entities.ServiceAfterBooking.ServiceAfterBooking;
 
 @Repository
-public interface ServiceBookingRepositories extends JpaRepository<ServiceAfterBooking, Integer>  {
+public interface ServiceBookingRepositories extends JpaRepository<ServiceAfterBooking, Integer> {
 	@Query(value = "SELECT c FROM ServiceAfterBooking c WHERE c.carId=?1")
 	List<ServiceAfterBooking> getFromCarId(int carId);
 }

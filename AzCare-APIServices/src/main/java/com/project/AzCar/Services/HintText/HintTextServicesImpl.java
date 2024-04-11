@@ -11,9 +11,9 @@ import com.project.AzCar.Repositories.HintText.HintTextRepositories;
 @Service
 public class HintTextServicesImpl implements HintTextServices {
 
-	
 	@Autowired
 	private HintTextRepositories hintTextRepositories;
+
 	@Override
 	public List<HintText> findByType(String type) {
 		return hintTextRepositories.findByType(type);

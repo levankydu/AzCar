@@ -144,8 +144,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 	@Override
 	public OrderDetails getOrderDetailsByCarIdandUserId(long carId, long userId) {
 		// TODO Auto-generated method stub
-		
-		
+
 		return orderRepository.getOrderDetailByCarIdandUserId(carId, userId);
 	}
 
@@ -157,7 +156,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 	@Override
 	public OrderDetailsDTO getDTORentorTripDoneOrder() {
 		OrderDetails orderRaw = this.getRentorTripDoneOrder();
-		if(orderRaw != null) {
+		if (orderRaw != null) {
 			OrderDetailsDTO dto = this.modelMapper.map(orderRaw, OrderDetailsDTO.class);
 			Users user = userServices.findById(dto.getUserId());
 			dto.setUser(user);

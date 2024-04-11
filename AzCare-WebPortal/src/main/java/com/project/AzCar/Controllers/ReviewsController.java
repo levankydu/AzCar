@@ -68,12 +68,10 @@ public class ReviewsController {
 	}
 	
     @PostMapping("/reviews/add")
-	public ResponseEntity<?> submitReview(@RequestParam(name="userId",required = false, defaultValue = "false") String email, 
+	public String submitReview(@RequestParam(name="userId",required = false, defaultValue = "false") String email, 
 			@RequestParam(name="carId" ,required = false, defaultValue = "false") String carId,
 			@RequestParam(name="rating", required = false, defaultValue = "false")int rating, 
 			@RequestParam(name="comment", required = false, defaultValue = "false") String comment) {
-
-		
 
 		var car = carServices.findById(Integer.parseInt(carId));
 		
@@ -98,7 +96,7 @@ public class ReviewsController {
 
 		reviewServices.save(review);
 		System.out.println(review.getComment());
-		return new ResponseEntity<String>("",HttpStatus.OK);
+		return "redirect:/";
 		
 		
 		

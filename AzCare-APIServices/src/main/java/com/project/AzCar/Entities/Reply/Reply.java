@@ -1,8 +1,5 @@
 package com.project.AzCar.Entities.Reply;
 
-
-
-
 import java.io.Serializable;
 
 import com.project.AzCar.Entities.Comments.Comments;
@@ -29,16 +26,14 @@ import lombok.Setter;
 @Setter
 public class Reply implements Serializable {
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@ManyToOne
 	@JoinColumn(name = "comment_id")
 	private Comments comment_id;
-	
+
 	private String content;
-	
+
 	private long user_id;
-	
-	
 
 }

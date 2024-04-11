@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.project.AzCar.Entities.HintText.HintText;
+
 @Repository
-public interface HintTextRepositories extends JpaRepository<HintText,Long> {
-	
-	@Query(value="SELECT c FROM HintText c WHERE c.type=?1 ")
-	List<HintText> findByType (String type);
+public interface HintTextRepositories extends JpaRepository<HintText, Long> {
+
+	@Query(value = "SELECT c FROM HintText c WHERE c.type=?1 ")
+	List<HintText> findByType(String type);
 
 }
