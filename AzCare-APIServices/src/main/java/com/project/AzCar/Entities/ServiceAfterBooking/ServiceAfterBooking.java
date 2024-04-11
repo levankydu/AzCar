@@ -17,12 +17,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="tbafterbooking")
-public class ServiceAfterBooking implements Serializable{
+@Table(name = "tbafterbooking")
+public class ServiceAfterBooking implements Serializable {
 
 	private static final long serialVersionUID = 6359437150901778703L;
-	
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
@@ -35,10 +34,11 @@ public class ServiceAfterBooking implements Serializable{
 	private LocalDateTime createdAt;
 	private boolean isCleanning;
 	private boolean isSmelling;
+
 	@PrePersist
 	protected void onCreate() {
 		createdAt = LocalDateTime.now();
-		status ="waiting_for_verify";
+		status = "waiting_for_verify";
 	}
 
 }

@@ -2,7 +2,6 @@ package com.project.AzCar.Entities.Comments;
 
 import java.io.Serializable;
 
-
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Reply.Reply;
 import com.project.AzCar.Entities.Reviews.ReviewStatus;
@@ -19,6 +18,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
 @Entity
 @Table(name = "tb_comments")
 @Data
@@ -26,20 +26,19 @@ import jakarta.persistence.ManyToOne;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Comments  implements Serializable{
+public class Comments implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	private String content;
 	private ReviewStatus status;
-	
 
-    @ManyToOne
-    @JoinColumn(name = "car_id")
-    private CarInfor car_id;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private Users user_id;
+	@ManyToOne
+	@JoinColumn(name = "car_id")
+	private CarInfor car_id;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private Users user_id;
 
 }
