@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,11 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.project.AzCar.Dto.Comments.CommentsDTO;
 import com.project.AzCar.Dto.KeywordIgnore.KeyWordIgnoreDTO;
 import com.project.AzCar.Dto.Reviews.ReviewsDTO;
+import com.project.AzCar.Entities.Comments.Comments;
 import com.project.AzCar.Entities.IgnoreKeyword.IgnoreKeyword;
 import com.project.AzCar.Entities.Reviews.ReviewStatus;
 import com.project.AzCar.Entities.Reviews.Reviews;
+import com.project.AzCar.Service.Comments.ICommentsService;
 import com.project.AzCar.Services.IgnoreKeyword.IIgnoreKeywordService;
 import com.project.AzCar.Services.Reviews.IReviewsService;
 import com.project.AzCar.Services.Reviews.ReviewService;
@@ -31,7 +35,11 @@ public class APIReviewManager {
 	private IReviewsService reviewsService;
 		@Autowired
 	private IIgnoreKeywordService keywordService;
+		@Autowired
+		private ICommentsService cmtService;
+		
 	   @PostMapping("/reviews/update-status")
+
 	    public ResponseEntity<?> updateStatus(@RequestBody ReviewsDTO  dto) {
 		   System.out.println("Review id: " + dto);
 		   
@@ -68,10 +76,11 @@ public class APIReviewManager {
 	   public ResponseEntity<?> updateKeyWord(@PathVariable("id") int id,@RequestBody KeyWordIgnoreDTO IgnoreDTO)
 	   {
 		   IgnoreKeyword ignore = keywordService.findByid(id);
+		   
 		   if(ignore !=null)
 		   {
 			   ignore.setKeyword(IgnoreDTO.getKeyword());
-			   
+			   keywordService.savekeyword(ignore);
 			   return ResponseEntity.ok().body(IgnoreDTO);
 		   }
 		   else {
@@ -88,5 +97,26 @@ public class APIReviewManager {
 	        } else {
 	            return ResponseEntity.notFound().build();
 	        }
+	    }
+	    
+	    //update Status Comments
+	    @PutMapping(value="comment/update-comment/{id}")
+	    public ResponseEntity<?> updateStatusComment(@PathVariable("id") int id,
+	    		@RequestBody CommentsDTO dto)
+	    {
+	    	Comments cmt = cmtService.getCommentById(id);
+	    	if(cmt !=null)
+	    	{
+	    		cmt.setStatus( ReviewStatus.valueOf(dto.getStatus()));
+	    		cmtService.saveComment(cmt);
+	    		return new ResponseEntity<String>("Đã Change",HttpStatus.OK);
+	    		
+	    	}
+	    	else
+	    	{
+	    		return new ResponseEntity<String>("wrong",HttpStatus.BAD_REQUEST);
+	    	}
+	    	
+	    
 	    }
 }

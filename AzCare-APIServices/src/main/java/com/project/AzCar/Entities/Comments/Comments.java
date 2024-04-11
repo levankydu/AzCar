@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Reply.Reply;
+import com.project.AzCar.Entities.Reviews.ReviewStatus;
 import com.project.AzCar.Entities.Users.Users;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,6 +32,7 @@ public class Comments  implements Serializable{
 	private int id;
 	
 	private String content;
+	private ReviewStatus status;
 	
 
     @ManyToOne

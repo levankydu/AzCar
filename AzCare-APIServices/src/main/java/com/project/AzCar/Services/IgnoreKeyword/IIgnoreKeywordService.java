@@ -13,5 +13,5 @@ public interface IIgnoreKeywordService {
 	List<IgnoreKeyword> listkeyword();
 	IgnoreKeyword findByid(int id);
 	void deleteByid(int id);
-	boolean isIgnore(String a, List<String> b);
+	List<String> isIgnore(String a, List<String> b);
 	}

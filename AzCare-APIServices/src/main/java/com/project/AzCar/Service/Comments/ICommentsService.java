@@ -10,5 +10,6 @@ public interface ICommentsService {
 	 public List<Comments> getAllCommentsByCarId(int id);
 	 public Comments getCommentById(int id);
 	 public Comments saveComment(Comments comment);
+	 public List<Comments> getAllComment();
 }
 	

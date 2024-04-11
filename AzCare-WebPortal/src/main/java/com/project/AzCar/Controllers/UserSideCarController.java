@@ -393,7 +393,7 @@ public class UserSideCarController {
 		if(!reviews.isEmpty())
 		{
 			for(Reviews re : reviews)
-			{
+			{	
 				if(re.getStatus().toString() !="Decline")
 				{
 					ReviewsDTO reDTO = new ReviewsDTO();
@@ -459,7 +459,7 @@ public class UserSideCarController {
 		ModelView.addAttribute("comments", lcmtDTO);
 
 		System.out.println("id Car Details: " + model.getId() + " ");
-		OrderDetails order = getOrderDetailsByCaridandUserid(model.getId(), owner.getId());
+		OrderDetails order = getOrderDetailsByCaridandUserid(model.getId(), customer.getId());
 		// lấy status
 
 		System.out.println("Order Details: " + order + " & ");
@@ -554,16 +554,20 @@ public class UserSideCarController {
 
 		if (Lcomments != null) {
 			for (Comments tempC : Lcomments) {
-				CommentsDTO tempDTO = new CommentsDTO();
-				tempDTO.setId(tempC.getId());
-				tempDTO.setContent(tempC.getContent());
-				tempDTO.setUser_id(tempC.getUser_id().getId());
-				tempDTO.setUser_name(tempC.getUser_id().getFirstName());
-				tempDTO.setCar_id(car_id);
-				List<ReplyDTO> reply = getAllReplyByComment_id(tempC.getId());
-				tempDTO.setReply(reply);
+				if(tempC.getStatus().toString().contains("Pending"))
+				{
+					CommentsDTO tempDTO = new CommentsDTO();
+					tempDTO.setId(tempC.getId());
+					tempDTO.setContent(tempC.getContent());
+					tempDTO.setUser_id(tempC.getUser_id().getId());
+					tempDTO.setUser_name(tempC.getUser_id().getFirstName());
+					tempDTO.setCar_id(car_id);
+					List<ReplyDTO> reply = getAllReplyByComment_id(tempC.getId());
+					tempDTO.setReply(reply);
 
-				commentDTO.add(tempDTO);
+					commentDTO.add(tempDTO);
+				}
+			
 			}
 
 			return commentDTO;

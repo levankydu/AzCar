@@ -959,12 +959,8 @@
 												<script th:inline="javascript">
 													function submitReply(cmtId, car_id) {
 														console.log(cmtId + " và " + car_id);
-
-
-
 														//var carId = /*[[${comment.car_id}]]*/
 														var replyText = document.getElementById("replyText_" + cmtId).value;
-
 														var data = {
 															carId: car_id,
 															comment_id: cmtId,
@@ -988,6 +984,7 @@
 																		location.reload();
 																	}
 																	if (xhr.status === 400 || xhr.status === 500) {
+																		console.log(xhr.responseText);
 
 																		$('#errorModalBody').text(xhr.responseText); // Hiển thị thông báo lỗi từ server
 																		$('#errorDialog').modal('show'); // Hiển thị dialog
@@ -1080,7 +1077,7 @@
 
 								<div class="d-grid gap-2">
 									<button class="btn btn-primary" type="submit"
-										onclick="return commentForm.submit(e)">Submit Comment</button>
+										>Submit Comment</button>
 								</div>
 							</form>
 						</div>
@@ -1096,7 +1093,8 @@
 									</button>
 								</div>
 								<div class="modal-body">
-									<p>There was an error creating the comment.</p>
+									<p>The input <span id="errorModalBody"></span>  contains a keyword that violates the standards</p>
+									
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1109,9 +1107,9 @@
 						$(document).ready(function () {
 							$('#commentForm').submit(function (e) {
 								e.preventDefault();
-								var userId = $('#userId').val();
-								var carId = $('#carId').val();
-								var content = $('#content').val();
+								var userId = document.getElementById('userId').value ;
+								var carId = document.getElementById('carId').value ;
+								var content = document.getElementById('content').value ;
 
 								$.ajax({
 									type: 'POST',
@@ -1127,8 +1125,10 @@
 									},
 									error: function (xhr, status, error) {
 										// Xử lý khi có lỗi
+										console.log(xhr.responseText);
 										$('#errorModalBody').text(xhr.responseText); // Hiển thị thông báo lỗi từ server
 										$('#errorDialog').modal('show'); // Hiển thị dialog
+										
 									}
 								});
 							});

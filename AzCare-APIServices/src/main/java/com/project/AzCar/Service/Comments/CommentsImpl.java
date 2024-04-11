@@ -46,6 +46,12 @@ public class CommentsImpl implements ICommentsService{
 		return commentsRepo.save(comment);
 	}
 
+	@Override
+	public List<Comments> getAllComment() {
+		// TODO Auto-generated method stub
+		return commentsRepo.findAll();
+	}
+
 	
 
 }

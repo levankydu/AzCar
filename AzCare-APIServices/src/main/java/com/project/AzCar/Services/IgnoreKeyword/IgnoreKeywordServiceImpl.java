@@ -1,5 +1,6 @@
 package com.project.AzCar.Services.IgnoreKeyword;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,20 +47,22 @@ public class IgnoreKeywordServiceImpl  implements IIgnoreKeywordService{
 	}
 
 	@Override
-	public boolean isIgnore(String a, List<String> b) {
+	public List<String> isIgnore(String a, List<String> b) {
 		
 		// TODO Auto-generated method stub
 		a = a.toLowerCase();
+		List<String> lIgnore = new ArrayList<>();
 		for(String temp : b)
 		{
 			if(a.contains((String) temp))
 			{
-				return true;
+				lIgnore.add(temp);
+				return  lIgnore;
 				
 			}
 			
 		}
-		return false;
+		return null;
 	}
 
 }
