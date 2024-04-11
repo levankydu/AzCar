@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
 import com.project.AzCar.Dto.Orders.OrderDetailsDTO;
 import com.project.AzCar.Entities.Cars.CarInfor;
+import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
 import com.project.AzCar.Services.Cars.CarServices;
 import com.project.AzCar.Services.Cars.ExtraFeeServices;
 import com.project.AzCar.Services.Cars.PlusServiceServices;
+import com.project.AzCar.Services.Locations.ProvinceServices;
 import com.project.AzCar.Services.Orders.OrderDetailsService;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
@@ -44,6 +46,8 @@ public class ApiCarsController {
 	private UserServices userServices;
 	@Autowired
 	private OrderDetailsService orderServices;
+	@Autowired
+	private ProvinceServices provinceServices;
 
 	@GetMapping("/getAllCars")
 	public List<CarInforDto> getMethodName() {
@@ -109,6 +113,11 @@ public class ApiCarsController {
 		mmmm.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.DECLINED));
 		return mmmm;
 
+	}
+
+	@GetMapping("/getProvinces")
+	public List<City> getProvince() {
+		return provinceServices.getListCity();
 	}
 
 }

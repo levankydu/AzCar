@@ -344,6 +344,55 @@
 			padding-top: 0.2rem !important;
 			padding-bottom: 0.2rem !important;
 		}
+
+		.carousel-inner .carousel-item img {
+			width: 100%;
+			/* Đảm bảo hình ảnh chiếm toàn bộ chiều rộng của carousel */
+			height: 500px;
+			/* Thiết lập chiều cao cố định cho hình ảnh */
+			object-fit: cover;
+			/* Giữ tỷ lệ khung hình và cắt hình ảnh để lấp đầy toàn bộ khu vực */
+		}
+
+		.carousel-indicators .list-inline-item img {
+			max-height: 110px;
+			min-height: 110px;
+		}
+
+		.carousel-indicators .active {
+			background-color: #010209;
+		}
+
+		.selected {
+			border: none;
+		}
+
+		@keyframes tremble {
+			0% {
+				transform: translate(0, 0);
+			}
+
+			25% {
+				transform: translate(-4px, 4px);
+			}
+
+			50% {
+				transform: translate(6px, -6px);
+			}
+
+			75% {
+				transform: translate(-4px, 4px);
+			}
+
+			100% {
+				transform: translate(0, 0);
+			}
+		}
+
+		.tremble {
+			animation: tremble 0.85s infinite;
+			/* Áp dụng animation với tên "tremble", thời gian là 0.5s và lặp vô hạn */
+		}
 	</style>
 
 </head>
@@ -480,26 +529,6 @@
 			<div class="row">
 				<div class="col-lg-8 col-md-12">
 					<div id="carDetailsSlider" class="carousel car-details-sliders slide mb-60">
-						<div class="heading-car">
-							<div class="row">
-								<div class="col-md-12">
-									<div class="pull-left">
-										<h3 th:text="${carDetails.carmodel.model}"></h3>
-										<p th:text="${carDetails.address}">
-											<i class="fa fa-map-marker"></i>
-										</p>
-									</div>
-									<div class="p-r">
-										<h3>$420,00</h3>
-										<p>
-											<i class="fa fa-star"></i><i class="fa fa-star"></i><i
-												class="fa fa-star"></i><i class="fa fa-star"></i><i
-												class="fa fa-star"></i>
-										</p>
-									</div>
-								</div>
-							</div>
-						</div>
 						<!-- main slider carousel items -->
 						<div class="carousel-inner">
 							<div class="active item carousel-item" data-slide-number="0">
@@ -552,26 +581,12 @@
 								</a></li>
 						</ul>
 					</div>
-					<div class="heading-car-2 mb-60">
+					<div th:if="${carDetails.discount != null && carDetails.discount != 0}"
+						class="heading-car-2 mb-60 rounded">
 						<div class="row">
-							<div class="col-md-12">
-								<div class="pull-left">
-									<h3 th:text="${carDetails.carmodel.model}"></h3>
-									<p th:text="${carDetails.address}">
-										<i class="fa fa-map-marker"></i>
-									</p>
-								</div>
-								<div class="pull-right">
-									<h3>
-										<span class="text-right"
-											th:text="'$'+${carDetails.price - (carDetails.price * carDetails.discount / 100)}+'/day'"></span>
-									</h3>
-									<p>
-										<i class="fa fa-star-half-o"></i> <i class="fa fa-star"></i> <i
-											class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-											class="fa fa-star"></i>
-									</p>
-								</div>
+							<div class="col-md-12 text-center">
+								<h1 class="text-uppercase text-white tremble">HOT SALES <span
+										th:text="${carDetails.discount} + '%'"></span></h1>
 							</div>
 						</div>
 					</div>
@@ -659,8 +674,7 @@
 									360</span> <input class="d-none" id="car-features-temp1" name="features[camera360]"
 									type="checkbox">
 							</div>
-						</div>
-						<div class="row">
+
 							<div class="col-3 mx-4 my-2 car-services" id="parkingCamera-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
@@ -685,8 +699,7 @@
 									Camera</span> <input class="d-none" id="car-features-temp1"
 									name="features[camera360]" type="checkbox">
 							</div>
-						</div>
-						<div class="row">
+
 							<div class="col-3 mx-4 my-2 car-services" id="tireSensor-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
@@ -710,8 +723,7 @@
 								<span style="display: block;">Head Up</span> <input class="d-none"
 									id="car-features-temp1" name="features[camera360]" type="checkbox">
 							</div>
-						</div>
-						<div class="row">
+
 							<div class="col-3 mx-4 my-2 car-services" id="sunRoof-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
@@ -734,8 +746,7 @@
 									seat</span> <input class="d-none" id="car-features-temp1" name="features[camera360]"
 									type="checkbox">
 							</div>
-						</div>
-						<div class="row">
+
 							<div class="col-3 mx-4 my-2 car-services" id="usb-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
@@ -758,8 +769,7 @@
 									style="display: block;">DVD </span> <input class="d-none" id="car-features-temp1"
 									name="features[camera360]" type="checkbox">
 							</div>
-						</div>
-						<div class="row">
+
 							<div class="col-3 mx-4 my-2 car-services" id="bonnet-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
@@ -1499,6 +1509,18 @@
 											<div class="col-12">
 												<p class="text-danger" id="alert-notice-datepicker"></p>
 											</div>
+											<div class="col-12">
+												<p>The car owner will <span style="font-weight: 700;">deliver</span> the
+													vehicle to you between <span style="font-weight: 700;">22:30 -
+														23:30</span> on the start date, and you must <span
+														style="font-weight: 700;">return</span> the car between <span
+														style="font-weight: 700;">20:00 - 21:00</span> on the end date.
+												</p>
+												<p>If you return the car before the specified time, no additional fees
+													will be charged.</p>
+												<p>However, if you return the car later than the specified time, you
+													will need to contact the car owner to resolve the issue.</p>
+											</div>
 										</div>
 									</div>
 									<div class="col-12">
@@ -1527,18 +1549,23 @@
 									</div>
 									<div class="col-12">
 										<hr>
-										<h3 class="sidebar-title">Location</h3>
+										<h3 class="sidebar-title">Car Location</h3>
 										<p th:attr="data-full-address=${fullAddress}" th:text="${fullAddress}"></p>
 									</div>
 									<div class="col-12" th:if="carDetails.isCarPlus">
 										<h6 class="">Choose your current location:</h6>
 										<div class="input-group-prepend">
-											<input type="text" readonly class="form-control" name="deliveryAddress"
-												placeholder="Click to enter address" onclick="return openModal.click();"
-												id="carAddress" value="">
+											<input style="cursor: pointer;text-align: center;" type="text" readonly
+												class="form-control" name="deliveryAddress"
+												placeholder="Click here to enter custom address"
+												onclick="return openModal.click();" id="carAddress" value="">
 											<a href="#" data-toggle="modal" data-target="#addressModal" id="openModal"
 												hidden="true">Click me</a>
 										</div>
+										<span th:if="${customer.address != null}" style="width: 100%;"
+											id="form-use-user-address" class="btn btn-outline-primary btn-sm">Or use
+											Your
+											Current Address</span>
 										<div class="col-12 text-danger text-center">
 											<span id="validation-NULL-address"></span>
 										</div>
@@ -1553,8 +1580,8 @@
 												<p class="float-right" th:text="'$'+${carDetails.price}+'/day'"></p>
 											</div>
 											<div class="col-6">
-												<p class="float-left"
-													th:text="'After Discount ' + ${carDetails.discount} + '%'"></p>
+												<p class="float-left">After Discount <span style="font-weight: 800;"
+														th:text="${carDetails.discount} + '%'"></span></p>
 											</div>
 											<div class="col-6">
 												<p class="float-right"
@@ -1598,7 +1625,8 @@
 									<input type="hidden" name="differenceDate" id="form-differenceDate"> <input
 										type="hidden" th:attr="data-car-model=${carDetails.carmodel.model}">
 									<input type="hidden" th:attr="data-car-year=${carDetails.carmodel.year}">
-									<button href="" id="form-submit-btn" class="btn btn-md btn-color">Rent Now</button>
+									<button href="" id="form-submit-btn" class="btn btn-outline-primary btn-lg">Rent
+										Now</button>
 								</div>
 
 								<div th:if="${isKhongHaveBangLai || customer.phone == null || customer.id==user.id}"
@@ -1799,8 +1827,8 @@
 						<div class="col-lg-6 modal-left">
 							<div class="modal-left-content">
 								<div id="modalCarousel" class="carousel slide" data-ride="carousel">
-									<div class="carousel-inner" role="listbox">
-										<div class="carousel-item active">
+									<div class="" role="listbox">
+										<div class="">
 											<img src="/assets/img/icon-services/address.jpg" alt="">
 										</div>
 									</div>
@@ -1933,115 +1961,116 @@
 		}
 
 		$(function () {
-    var today = new Date();
-    var todayFormatted = $.datepicker.formatDate("dd-mm-yy", today);
-    var tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    var tomorrowFormatted = $.datepicker.formatDate("dd-mm-yy", tomorrow);
+			var today = new Date();
+			var todayFormatted = $.datepicker.formatDate("dd-mm-yy", today);
+			var tomorrow = new Date(today);
+			tomorrow.setDate(tomorrow.getDate() + 1);
+			var tomorrowFormatted = $.datepicker.formatDate("dd-mm-yy", tomorrow);
 
-    var fromDateInput = $("#form-fromDate");
-    var toDateInput = $("#form-toDate");
+			var fromDateInput = $("#form-fromDate");
+			var toDateInput = $("#form-toDate");
 
-    // Mảng chứa các ngày bị disable
-    var disabledDates = [];
+			// Mảng chứa các ngày bị disable
+			var disabledDates = [];
 
-    orderDetailsOfThisCar.forEach(function (obj) {
-        var fromDate = new Date(obj.fromDate);
-        var toDate = new Date(obj.toDate);
+			orderDetailsOfThisCar.forEach(function (obj) {
+				var fromDate = new Date(obj.fromDate);
+				var toDate = new Date(obj.toDate);
+				toDate.setDate(toDate.getDate() - 1);
 
-        var currentDate = new Date(fromDate);
-        while (currentDate <= toDate) {
-            var year = currentDate.getFullYear();
-            var month = currentDate.getMonth() + 1; // Thêm 1 vào chỉ số tháng
-            var day = currentDate.getDate();
+				var currentDate = new Date(fromDate);
+				while (currentDate <= toDate) {
+					var year = currentDate.getFullYear();
+					var month = currentDate.getMonth() + 1; // Thêm 1 vào chỉ số tháng
+					var day = currentDate.getDate();
 
-            // Kiểm tra xem ngày này đã tồn tại trong disabledDates chưa
-            var found = false;
-            for (var i = 0; i < disabledDates.length; i++) {
-                if (disabledDates[i][0] === year && disabledDates[i][1] === month && disabledDates[i][2] === day) {
-                    found = true;
-                    break;
-                }
-            }
+					// Kiểm tra xem ngày này đã tồn tại trong disabledDates chưa
+					var found = false;
+					for (var i = 0; i < disabledDates.length; i++) {
+						if (disabledDates[i][0] === year && disabledDates[i][1] === month && disabledDates[i][2] === day) {
+							found = true;
+							break;
+						}
+					}
 
-            // Nếu không tìm thấy, thêm ngày vào disabledDates
-            if (!found) {
-                disabledDates.push([year, month, day]);
-            }
+					// Nếu không tìm thấy, thêm ngày vào disabledDates
+					if (!found) {
+						disabledDates.push([year, month, day]);
+					}
 
-            // Tăng ngày lên 1
-            currentDate.setDate(currentDate.getDate() + 1);
-        }
-    });
+					// Tăng ngày lên 1
+					currentDate.setDate(currentDate.getDate() + 1);
+				}
+			});
 
-    console.log(disabledDates);
+			console.log(disabledDates);
 
-    $("#form-fromDate, #form-toDate").datepicker({
-        dateFormat: "dd-mm-yy",
-        duration: "fast",
-        minDate: 0, // Tối thiểu là hôm nay
-        beforeShowDay: function (date) {
-            // Disable các ngày trước hôm nay
-            return [date >= today];
-        },
-        onSelect: function (selectedDate) {
-            // Cập nhật giá trị minDate của toDateInput
-            toDateInput.datepicker("option", "minDate", selectedDate);
-            updateTotalRent();
+			$("#form-fromDate, #form-toDate").datepicker({
+				dateFormat: "dd-mm-yy",
+				duration: "fast",
+				minDate: 0, // Tối thiểu là hôm nay
+				beforeShowDay: function (date) {
+					// Disable các ngày trước hôm nay
+					return [date >= today];
+				},
+				onSelect: function (selectedDate) {
+					// Cập nhật giá trị minDate của toDateInput
+					toDateInput.datepicker("option", "minDate", selectedDate);
+					updateTotalRent();
 
-            // Kiểm tra nếu có ngày bị disable trong khoảng từ fromDate đến toDate
-            var fromDate = $("#form-fromDate").datepicker("getDate");
-            var toDate = $("#form-toDate").datepicker("getDate");
-            var currentDate = new Date(fromDate);
+					// Kiểm tra nếu có ngày bị disable trong khoảng từ fromDate đến toDate
+					var fromDate = $("#form-fromDate").datepicker("getDate");
+					var toDate = $("#form-toDate").datepicker("getDate");
+					var currentDate = new Date(fromDate);
 
-            var disableMessage = "";
-            while (currentDate <= toDate) {
-                var year = currentDate.getFullYear();
-                var month = currentDate.getMonth() + 1;
-                var day = currentDate.getDate();
+					var disableMessage = "";
+					while (currentDate <= toDate) {
+						var year = currentDate.getFullYear();
+						var month = currentDate.getMonth() + 1;
+						var day = currentDate.getDate();
 
-                for (var i = 0; i < disabledDates.length; i++) {
-                    if (year === disabledDates[i][0] && month === disabledDates[i][1] && day === disabledDates[i][2]) {
-                        disableMessage = "There are disabled dates within the selected time period. Please choose a start date again before selecting an end date.";
-                        break;
-                    }
-                }
+						for (var i = 0; i < disabledDates.length; i++) {
+							if (year === disabledDates[i][0] && month === disabledDates[i][1] && day === disabledDates[i][2]) {
+								disableMessage = "There are disabled dates within the selected time period. Please choose a start date again before selecting an end date.";
+								break;
+							}
+						}
 
-                if (disableMessage !== "") {
-                    break;
-                }
+						if (disableMessage !== "") {
+							break;
+						}
 
-                currentDate.setDate(currentDate.getDate() + 1);
-            }
+						currentDate.setDate(currentDate.getDate() + 1);
+					}
 
-            $("#alert-notice-datepicker").text(disableMessage);
-        }
-    }).datepicker("setDate", todayFormatted);
+					$("#alert-notice-datepicker").text(disableMessage);
+				}
+			}).datepicker("setDate", todayFormatted);
 
-    $("#form-toDate").datepicker({
-        dateFormat: "dd-mm-yy",
-        duration: "fast",
-        minDate: 0, // Tối thiểu là ngày mai
-        beforeShowDay: function (date) {
-            // Disable các ngày trước hôm nay
-            return [date >= tomorrow];
-        }
-    }).datepicker("setDate", tomorrowFormatted); // Đặt giá trị mặc định là hôm nay
+			$("#form-toDate").datepicker({
+				dateFormat: "dd-mm-yy",
+				duration: "fast",
+				minDate: 0, // Tối thiểu là ngày mai
+				beforeShowDay: function (date) {
+					// Disable các ngày trước hôm nay
+					return [date >= tomorrow];
+				}
+			}).datepicker("setDate", tomorrowFormatted); // Đặt giá trị mặc định là hôm nay
 
-    $("#form-fromDate, #form-toDate").datepicker('option', 'beforeShowDay', function (date) {
-        var m = date.getMonth(),
-            d = date.getDate(),
-            y = date.getFullYear();
+			$("#form-fromDate, #form-toDate").datepicker('option', 'beforeShowDay', function (date) {
+				var m = date.getMonth(),
+					d = date.getDate(),
+					y = date.getFullYear();
 
-        for (var i = 0; i < disabledDates.length; i++) {
-            if (y === disabledDates[i][0] && m === disabledDates[i][1] - 1 && d === disabledDates[i][2]) {
-                // Highlight các ngày bị disable
-                return [false, "highlighted-date"];
-            }
-        }
-        return [true];
-    });
-});
+				for (var i = 0; i < disabledDates.length; i++) {
+					if (y === disabledDates[i][0] && m === disabledDates[i][1] - 1 && d === disabledDates[i][2]) {
+						// Highlight các ngày bị disable
+						return [false, "highlighted-date"];
+					}
+				}
+				return [true];
+			});
+		});
 
 
 
@@ -2075,7 +2104,7 @@
 				console.log("timeDifference:", timeDifference);
 
 				// Chuyển đổi từ mili giây sang ngày
-				var daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24)) + 1;
+				var daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
 				document.getElementById("form-differenceDate").value = daysDifference;
 
 				console.log("daysDifference:", daysDifference);
@@ -2136,38 +2165,41 @@
 				}
 			});
 		};
-		function addressSubmit() {
-			const houseNo = document.getElementById('houseNo').value;
-			const street = document.getElementById('street').value;
-			if (houseNo == "" || street == "") {
-				document.getElementById('validation-address').textContent = "Address is not valid";
-				validateAddress();
-				return false;
-			} else {
 
-				document.getElementById('validation-address').textContent = "";
-				var address = $("#houseNo").val() + ", " + $("#street").val() + ", " + $("#wardSelect option:selected").text() + ", " + $("#districtSelect option:selected").text() + ", " + $("#provinceSelect option:selected").text();
-				$("#carAddress").val(address);
-				console.log(address);
-				console.log($("#carAddress").val());
+		$('#form-use-user-address').on('click', function (e) {
+			e.preventDefault();
+			/*<![CDATA[*/
+			var userAddress = /*[[${customer.address}]]*/ '';
+			/*]]>*/
+			addressSubmit(userAddress);
+		});
 
+		function addressSubmit(customAddress = null) {
+			if (customAddress) {
+				$("#carAddress").val(customAddress);
 				carAddress.setAttribute("value", address);
+			} else {
+				const houseNo = document.getElementById('houseNo').value;
+				const street = document.getElementById('street').value;
+				if (houseNo == "" || street == "") {
+					document.getElementById('validation-address').textContent = "Address is not valid";
+					validateAddress();
+					return false;
+				} else {
+					document.getElementById('validation-address').textContent = "";
+					var address = $("#houseNo").val() + ", " + $("#street").val() + ", " + $("#wardSelect option:selected").text() + ", " + $("#districtSelect option:selected").text() + ", " + $("#provinceSelect option:selected").text();
+					$("#carAddress").val(address);
+					console.log(address);
+					console.log($("#carAddress").val());
 
-				offModal.click();
-				validateAddress();
-				getDeliveryFee();
+					carAddress.setAttribute("value", address);
+
+					offModal.click();
+					validateAddress();
+
+				}
 			}
-			/* document.getElementById('validation-address').textContent = "";
-			const address =
-				($("#wardSelect option:selected").text() == "--Select Ward--" ? "" : $("#wardSelect option:selected").text() + ", ")
-				+ ($("#districtSelect option:selected").text() == "--Select District--" ? "" : $("#districtSelect option:selected").text() + ", ")
-				+ $("#provinceSelect option:selected").text();
-			$("#carAddress").val(address);
-			carAddress.setAttribute("value", address);
-
-			validateAddress();
-			getDeliveryFee();
-			offModal.click(); */
+			getDeliveryFee(customAddress);
 		}
 
 		function validateAddress() {
@@ -2176,18 +2208,22 @@
 
 			if (addressResult == "") {
 
-				document.getElementById('validation-NULL-address').textContent = "Car address must be declared";
+				document.getElementById('validation-NULL-address').textContent = "Your address must be declared";
 			} else {
 				document.getElementById('validation-NULL-address').textContent = "";
 			}
 
 		}
 
-		function getDeliveryFee() {
+		function getDeliveryFee(customAddress = null) {
+			let userAddressArr = null;
+			if (customAddress) {
+				userAddressArr = customAddress.split(", ");
+			}
 			$('#form-submit-btn').attr('disabled', 'disabled');
 			const fullAddress = document.querySelector("p[data-full-address]");
 			const carRawAddress = fullAddress.getAttribute('data-full-address');
-			if (!carRawAddress.includes($("#provinceSelect option:selected").text())) {
+			if (!carRawAddress.includes(userAddressArr ? userAddressArr[4] : $("#provinceSelect option:selected").text())) {
 				console.log('ko trùng tinh - khong giao xe');
 				$('#form-delivery-fee').text('No delivery to your location');
 				$('#form-delivery-fee').addClass('text-danger');
@@ -2195,7 +2231,7 @@
 				$("#form-car-rental input[name='isSameDistrict']").val(0);
 				updateTotalRent();
 			} else {
-				if (carRawAddress.includes($("#districtSelect option:selected").text())) {
+				if (carRawAddress.includes(userAddressArr ? userAddressArr[3] : $("#districtSelect option:selected").text())) {
 					console.log('trung quan(thanhpho) - giao free');
 					$('#form-delivery-fee').text('$0');
 					$('#form-submit-btn').removeAttr('disabled');
@@ -2316,6 +2352,10 @@
 							text: "Waiting for car owner to accept your rental (2 minutes)",
 							html: `
 								<a href="/home/myplan/">You can check your request booking here</a>
+								<button class="btn btn-primary" type="button" disabled>
+								  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+								  Sending mail...
+								</button>
 							`,
 							icon: "success"
 						});
