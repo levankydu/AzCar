@@ -42,6 +42,8 @@ public class OrderDetails implements Serializable {
 	private boolean isSameProvince;
 	private boolean isSameDistrict;
 	private boolean isReview = false;
+	private BigDecimal originPrice;
+	private int discount;
 	@Convert(converter = OrderExtraFeeConverter.class)
 	private OrderExtraFee extraFee;
 

@@ -32,6 +32,8 @@ public class OrderDetailsDTO {
 	private String deliveryAddress;
 	private boolean isSameProvince;
 	private boolean isSameDistrict;
+	private BigDecimal originPrice;
+	private int discount;
 
 	@Convert(converter = OrderExtraFeeConverter.class)
 	private OrderExtraFee extraFee;
@@ -40,5 +42,13 @@ public class OrderDetailsDTO {
 
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
+
+	public BigDecimal getTotalAndFees() {
+		BigDecimal deliFee = BigDecimal.valueOf(this.extraFee.getDeliveryFee());
+		BigDecimal cleanFee = BigDecimal.valueOf(this.extraFee.getCleanFee());
+		BigDecimal smellFee = BigDecimal.valueOf(this.extraFee.getSmellFee());
+		BigDecimal insuranceFee = BigDecimal.valueOf(this.extraFee.getInsurance());
+		return this.getTotalRent().add(deliFee).add(cleanFee).add(smellFee).add(insuranceFee);
+	}
 
 }

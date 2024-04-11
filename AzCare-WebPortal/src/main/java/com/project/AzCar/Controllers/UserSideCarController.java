@@ -76,6 +76,7 @@ import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
 import com.project.AzCar.Utilities.OrderExtraFee;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
@@ -306,12 +307,15 @@ public class UserSideCarController {
 			@PathVariable("carId") String carId, @ModelAttribute("fromDate-string") String fromDate_string,
 			@ModelAttribute("toDate-string") String toDate_string,
 			@ModelAttribute("isSameProvince") String isSameProvince,
-			@ModelAttribute("isSameDistrict") String isSameDistrict,
-			@ModelAttribute("deliveryFee") String deliveryFee) {
+			@ModelAttribute("isSameDistrict") String isSameDistrict, @ModelAttribute("deliveryFee") String deliveryFee)
+			throws UnsupportedEncodingException, MessagingException {
 		var carExtraFee = extraFeeServices.findByCarId(Integer.parseInt(carId));
+		CarInfor carDetails = carServices.findById(Integer.parseInt(orderdetails.getCarId()));
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users user = userServices.findUserByEmail(email);
 		orderdetails.setUserId((int) user.getId());
+		orderdetails.setDiscount(carDetails.getDiscount());
+		orderdetails.setOriginPrice(carDetails.getPrice());
 		LocalTime currentTime = LocalTime.now();
 
 		try {
@@ -338,6 +342,40 @@ public class UserSideCarController {
 		orderdetails.setReview(false);
 		orderServices.save(orderdetails);
 		paymentServices.createNewLock(user.getId(), orderdetails.getId(), orderdetails.getTotalAndFees());
+		CarInforDto carDetailsDto = carServices.mapToDto(carDetails.getId());
+		BigDecimal discountAmount = orderdetails.getOriginPrice()
+				.multiply(BigDecimal.valueOf(orderdetails.getDiscount()).divide(BigDecimal.valueOf(100)));
+		BigDecimal priceAfterDiscount = orderdetails.getOriginPrice().subtract(discountAmount);
+		BigDecimal subTotal = priceAfterDiscount.multiply(BigDecimal.valueOf(orderdetails.getDifferenceDate()))
+				.add(BigDecimal.valueOf(orderdetails.getExtraFee().getDeliveryFee()));
+		carDetailsDto.setCarmodel(brandServices.getModel(carDetails.getModelId()));
+		String mailContent = "<p>Hello," + email + "</p>" + "<p>Thank you for ordering with AzCar.</p>"
+				+ "<p>Below are some main details of your car:</p>" + "<table>" + "<tr>" + "<th>Model: </th>" + "<td>"
+				+ "[" + carDetailsDto.getCarmodel().getBrand() + "] " + carDetailsDto.getCarmodel().getModel() + "</td>"
+				+ "</tr>" + "<tr>" + "<th>Year: </th>" + "<td>" + carDetailsDto.getCarmodel().getYear() + "</td>"
+				+ "</tr>" + "<tr>" + "<th>Rental per day: </th>" + "<td>$" + orderdetails.getOriginPrice() + "</td>"
+				+ "</tr>" + "<tr>" + "<th>Discount: </th>" + "<td>" + orderdetails.getDiscount() + "% </td>" + "</tr>"
+				+ "<tr>" + "<th>Price After Discount: </th>" + "<td>$" + priceAfterDiscount + "</td>" + "</tr>" + "<tr>"
+				+ "<th>From: </th>" + "<td>"
+				+ orderdetails.getFromDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "</td>" + "</tr>"
+				+ "<tr>" + "<th>To: </th>" + "<td>"
+				+ orderdetails.getToDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "</td>" + "</tr>"
+				+ "<tr>" + "<th>Total days: </th>" + "<td>" + orderdetails.getDifferenceDate() + "</td>" + "</tr>"
+				+ "<tr>" + "<th>Delivery fee: </th>" + "<td>$" + orderdetails.getExtraFee().getDeliveryFee() + "</td>"
+				+ "</tr>" + "<tr>" + "<th>Sub Total: </th>" + "<td> <h4>$" + subTotal + "</h4></td>" + "</tr>" + "<tr>"
+				+ "<td colspan=2 class=text-center>Extra Fee</td>" + "</tr>" + "<tr>"
+				+ "<td class=text-left>Cleanning Fee: </td>" + "<td class=text-right>$"
+				+ orderdetails.getExtraFee().getCleanFee() + "</td>" + "</tr>" + "<tr>"
+				+ "<td class=text-left>Smell Fee: </td>" + "<td class=text-right>$"
+				+ orderdetails.getExtraFee().getSmellFee() + "</td>" + "</tr>" + "<tr>"
+				+ "<td class=text-left>Insurance Fee: </td>" + "<td class=text-right>$200</td>" + "</tr>" + "<tr>"
+				+ "<th>Total: </th>" + "<td>" + "<h4>$"
+				+ orderdetails.getTotalAndFees()
+						.subtract(BigDecimal.valueOf(orderdetails.getExtraFee().getDeliveryFee()))
+				+ "</h4>" + "</td>" + "</tr>" + "</table>"
+				+ "<p>This is to confirm that we already got your order, We will send you an email after car owner accept or declined your order</p>"
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
+		orderServices.sendOrderEmail(email, "Place Order Successfully", mailContent);
 		return "redirect:/home/myplan/";
 	}
 
@@ -369,6 +407,11 @@ public class UserSideCarController {
 				ModelView.addAttribute("address", c);
 			}
 		}
+		List<OrderDetails> orderDetailsOfThisCar = orderServices.getFromCarId(Integer.parseInt(carId));
+		orderDetailsOfThisCar.removeIf(item -> !item.getStatus().equals(Constants.plateStatus.WAITING)
+				&& !item.getStatus().equals(Constants.plateStatus.ACCEPTED));
+		ModelView.addAttribute("orderDetailsOfThisCar", orderDetailsOfThisCar);
+
 		List<City> provinces = provinceServices.getListCity();
 		ModelView.addAttribute("provinceList", provinces);
 
@@ -770,11 +813,15 @@ public class UserSideCarController {
 			var itemDto = carServices.mapToDto(item.getId());
 			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
+			var historyBooking = "historyBooking" + itemDto.getCarmodel().getObjectId();
+			List<OrderDetailsDTO> historyBookingList = orderServices.getDTOFromCarId(item.getId());
+			ModelView.addAttribute(historyBooking, historyBookingList);
 			List<OrderDetails> llll = orderServices.getFromCarId(item.getId());
 			var name = "OrderListDto" + itemDto.getCarmodel().getObjectId();
 			List<OrderDetailsDTO> mmmm = orderServices.getDTOFromCarId(item.getId());
 			mmmm.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.WAITING));
 			ModelView.addAttribute(name, mmmm);
+
 			llll.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.WAITING));
 
 			itemDto.setOrders(llll);
@@ -791,6 +838,19 @@ public class UserSideCarController {
 		ModelView.addAttribute("listCar", listDto);
 		ModelView.addAttribute("user", user);
 		return "myPlans";
+	}
+
+	@PostMapping("/home/myplan/updateCar")
+	public String updateCar(@ModelAttribute("newDiscount") String newDiscount,
+			@ModelAttribute("newPrice") String newPrice, @ModelAttribute("carId") String carId) {
+		CarInfor car = carServices.findById(Integer.parseInt(carId));
+		car.setDiscount(Integer.parseInt(newDiscount));
+		car.setPrice(new BigDecimal(newPrice));
+		carServices.saveCarRegister(car);
+		System.out.println(carId);
+		System.out.println(newPrice);
+		System.out.println(newDiscount);
+		return "redirect:/home/myplan/";
 	}
 
 	@PostMapping("/home/myplan/charge/")
@@ -992,5 +1052,4 @@ public class UserSideCarController {
 		helper.setText(content, true);
 		mailSender.send(message);
 	}
-
 }

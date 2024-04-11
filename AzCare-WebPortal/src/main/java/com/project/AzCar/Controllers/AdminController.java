@@ -125,7 +125,8 @@ public class AdminController {
 	}
 
 	@PostMapping("/dashboard/platesVerfy/")
-	public String confirmPlateVerify(@ModelAttribute("status") String status, @ModelAttribute("userId") String userId) {
+	public String confirmPlateVerify(@ModelAttribute("status") String status, @ModelAttribute("userId") String userId,
+			@ModelAttribute("reason") String reason) {
 
 		var user = userServices.findById(Long.parseLong(userId));
 		List<PlateImages> list = plateImageServices.getAll();
@@ -156,7 +157,7 @@ public class AdminController {
 			}
 
 			try {
-				sendEmailDeclinePlate(user.getEmail());
+				sendEmailDeclinePlate(user.getEmail(), reason);
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -203,16 +204,15 @@ public class AdminController {
 	}
 
 	@GetMapping("/dashboard/carverify/{carId}")
-	public String getVerifyDetailsPage(@PathVariable("carId") String carId, Model carDetails, Model checkPlate) {
+	public String getVerifyDetailsPage(@PathVariable("carId") String carId, Model ModelView) {
 		var listAcceptedCar = carServices.findAll();
 
 		var model = carServices.findById(Integer.parseInt(carId));
 		for (var item : listAcceptedCar) {
 			if (model.getLicensePlates().equals(item.getLicensePlates())) {
-				checkPlate.addAttribute("checkPlate", "Duplicate License Plate");
+				ModelView.addAttribute("checkPlate", "Duplicate License Plate");
 			}
 		}
-
 		var modelDto = carServices.mapToDto(model.getId());
 		modelDto.setCarmodel(brandServices.getModel(model.getModelId()));
 		modelDto.setImages(carImageServices.getImgByCarId(model.getId()));
@@ -220,14 +220,10 @@ public class AdminController {
 		if (model.isCarPlus()) {
 			modelDto.setCarPlusModel(plusServiceServices.findByCarId(model.getId()));
 		}
-
 		if (model.isExtraFee()) {
-
 			modelDto.setExtraFeeModel(extraFeeServices.findByCarId(model.getId()));
 		}
-		checkPlate.addAttribute("checkPlate", "");
-		carDetails.addAttribute("carDetails", modelDto);
-
+		ModelView.addAttribute("carDetails", modelDto);
 		return "admin/verifyDetails";
 	}
 
@@ -381,7 +377,8 @@ public class AdminController {
 	}
 
 	@PostMapping("/dashboard/confirmCarverify")
-	public String verifyCar(@ModelAttribute("status") String status, @ModelAttribute("carId") String carId) {
+	public String verifyCar(@ModelAttribute("status") String status, @ModelAttribute("carId") String carId,
+			@ModelAttribute("reason") String reason) {
 
 		var model = carServices.findById(Integer.parseInt(carId));
 		var modelDto = carServices.mapToDto(model.getId());
@@ -407,7 +404,7 @@ public class AdminController {
 			model.setStatus(Constants.carStatus.DECLINED);
 			carServices.saveCarRegister(model);
 			try {
-				sendEmailDecline(modelDto.getOwner().getEmail(), modelDto);
+				sendEmailDecline(modelDto.getOwner().getEmail(), modelDto, reason);
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -507,7 +504,7 @@ public class AdminController {
 		mailSender.send(message);
 	}
 
-	private void sendEmailDecline(String email, CarInforDto carDetails)
+	private void sendEmailDecline(String email, CarInforDto carDetails, String reason)
 			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
 		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
@@ -522,9 +519,8 @@ public class AdminController {
 				+ carDetails.getCarmodel().getBrand() + "</p>" + "<p>" + "Model: " + carDetails.getCarmodel().getModel()
 				+ "</p>" + "<p>" + "Price: " + carDetails.getPrice() + " $/day" + "</p>" + "<p>" + "License Plates: "
 				+ carDetails.getLicensePlates() + "</p>" + "<p>" + "Pick-up Location: " + carDetails.getAddress()
-				+ "</p>" +
-
-				"<p>This is to confirm that your car is not meet our rules</p>"
+				+ "</p>" + "<p>Reason : <span>" + reason + "</span></p>"
+				+ "<p>This is to confirm that your car is not meet our rules</p>"
 				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
 		helper.setSubject(subject);
 		helper.setText(content, true);
@@ -550,7 +546,7 @@ public class AdminController {
 		mailSender.send(message);
 	}
 
-	private void sendEmailDeclinePlate(String email)
+	private void sendEmailDeclinePlate(String email, String reason)
 			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
 		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -559,9 +555,9 @@ public class AdminController {
 		helper.setTo(email);
 
 		String subject = "Verify your License Plate not succesfully";
-		String content = "<p>Hello," + email + "</p>" + "<p>Sorry,Your License Plate is not verified with AzCar.</p>" +
-
-				"<p>This is to confirm that we already verify your information</p>"
+		String content = "<p>Hello," + email + "</p>" + "<p>Sorry,Your License Plate is not verified with AzCar.</p>"
+				+ "</p>" + "<p>Reason : <span>" + reason + "</span></p>"
+				+ "<p>This is to confirm that we already verify your information</p>"
 				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
 		helper.setSubject(subject);
 		helper.setText(content, true);
