@@ -2,7 +2,6 @@ package com.project.AzCar.Controllers;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -228,11 +227,11 @@ public class AdminController {
 	}
 
 	@GetMapping("/dashboard/brands/")
-	public String getBrandPage(Model brandsData, Model cateData, Model sessionUpdateBrandLogo, Model createdCarModel,
-			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public String getBrandPage(Model ModelView, HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 		List<String> brands = brandServices.getBrandList();
-		List<BrandsDto> brandList = new ArrayList<>();
 		List<String> categories = brandServices.getCategoryList();
+		List<BrandsDto> brandList = new ArrayList<>();
 		List<CategoriesDto> categoryList = new ArrayList<>();
 		for (int i = 0; i < brands.size(); i++) {
 			BrandsDto brandsDto = new BrandsDto();
@@ -255,19 +254,18 @@ public class AdminController {
 			categoryList.add(cateDto);
 		}
 		if (request.getSession().getAttribute("update_brandLogo") != null) {
-			sessionUpdateBrandLogo.addAttribute("update_brandLogo",
-					request.getSession().getAttribute("update_brandLogo"));
+			ModelView.addAttribute("update_brandLogo", request.getSession().getAttribute("update_brandLogo"));
 			request.getSession().removeAttribute("update_brandLogo");
 
 		}
 		if (request.getSession().getAttribute("created_carModel") != null) {
-			createdCarModel.addAttribute("created_carModel", request.getSession().getAttribute("created_carModel"));
+			ModelView.addAttribute("created_carModel", request.getSession().getAttribute("created_carModel"));
 			request.getSession().removeAttribute("created_carModel");
 
 		}
 
-		cateData.addAttribute("categoryList", categoryList);
-		brandsData.addAttribute("brandsList", brandList);
+		ModelView.addAttribute("categoryList", categoryList);
+		ModelView.addAttribute("brandsList", brandList);
 
 		return "admin/brands";
 	}
@@ -275,14 +273,22 @@ public class AdminController {
 	@PostMapping("/dashboard/brands/addNewModel")
 	public String addNewModel(@ModelAttribute("carModel") CarModelList carModel, BindingResult bindingResult,
 			HttpServletRequest request) {
-		byte[] array = new byte[7]; // length is bounded by 7
-		new Random().nextBytes(array);
-		String generatedString = new String(array, Charset.forName("UTF-8"));
+		Random random = new Random();
+		StringBuilder sb = new StringBuilder(10);
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		for (int i = 0; i < 10; i++) {
+
+			int randomIndex = random.nextInt(characters.length());
+
+			sb.append(characters.charAt(randomIndex));
+		}
+		String resultId = sb.toString();
+
 		if (bindingResult.hasErrors()) {
 			// Handle validation errors
 			return "admin/brands" + "?error";
 		} else {
-			carModel.setObjectId(generatedString);
+			carModel.setObjectId(resultId);
 
 			brandServices.saveBrand(carModel);
 			request.getSession().setAttribute("created_carModel", "done");
