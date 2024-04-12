@@ -1628,7 +1628,7 @@
 									<input type="hidden" name="differenceDate" id="form-differenceDate"> <input
 										type="hidden" th:attr="data-car-model=${carDetails.carmodel.model}">
 									<input type="hidden" th:attr="data-car-year=${carDetails.carmodel.year}">
-									<button th:if="${userViolated == false}" href="" id="form-submit-btn" class="btn btn-outline-primary btn-lg">Rent
+									<button th:if="${userViolated == false && carDetails.status != 'declined'}" href="" id="form-submit-btn" class="btn btn-outline-primary btn-lg">Rent
 										Now</button>
 								</div>
 
@@ -1969,6 +1969,50 @@
 						});
 					}
 				}
+			});
+		}
+		
+		/*<![CDATA[*/
+		const carDetails = /*[[${carDetails}]]*/ '';
+		/*]]>*/
+		/*<![CDATA[*/
+		const user = /*[[${user}]]*/ '';
+		/*]]>*/
+		if (carDetails.status == 'declined' && carDetails.owner.id == user.id) {
+			swal.fire({
+				title: "CAR BANNED TEMPORARY",
+				text: "Your car are being banned temporary because of declinding too many orders in a month. You must pay $200 to reopen your car service",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#3085d6",
+				cancelButtonColor: "#d33",
+				confirmButtonText: "Yes, pay it!",
+				cancelButtonText: "Got it, I will think about it",
+			}).then((result) => {
+				if (result.isConfirmed) {
+					if (user.balance >= 200) {
+						window.location.href = "/home/myplan/ownerCarPayFine/" + carDetails.id;
+					} else {
+						Swal.fire({
+							title: "Balance is not enough",
+							text: "Your balance is less than $200, deposit and try again",
+							icon: "warning",
+							confirmButtonColor: "#3754ec",
+						});
+					}
+				}
+			});
+		}
+		if (carDetails.status == 'declined' && carDetails.owner.id != user.id){
+			swal.fire({
+				title: "CAR BANNED TEMPORARY",
+				text: "This car is being banned, please pick another car",
+				icon: "warning",
+				showCancelButton: false,
+				confirmButtonColor: "#3085d6",
+				confirmButtonText: "OK, I got it",
+			}).then((result) => {
+				window.location.href = "/home/availablecars";
 			});
 		}
 

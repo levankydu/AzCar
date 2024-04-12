@@ -19,8 +19,8 @@ public interface ViolationRepository extends JpaRepository<Violation, Integer> {
 	@Query(value = "SELECT c FROM Violation c WHERE c.carId=?1")
 	List<Violation> getByCarId(int id);
 
-	@Query(value = "SELECT c FROM Violation c WHERE c.userId=?1 AND c.carId=?2 AND c.isEnabled=true")
-	List<Violation> getByUserAndCarId(long userId, int carId);
+	@Query(value = "SELECT c FROM Violation c WHERE c.userId=?1 AND c.carId=?2 AND c.isEnabled=?3 AND c.reason=?4")
+	List<Violation> getByUserAndCarId(long userId, int carId, boolean isEnabled, String reason);
 
 	@Query(value = "SELECT c FROM Violation c")
 	List<Violation> getAll();

@@ -716,3 +716,16 @@ $(function () {
         }
     }).trigger("resize");
 })(jQuery);
+
+jQuery(document).ready(function($) {
+    const urlPath = window.location.pathname;
+    const navElement = "nav.navbar .navbar-nav a.nav-link";
+    
+    $(navElement).each(function(index, element) {
+        const href = $(element).attr("href");
+        if (urlPath === href) {
+            $(element).addClass("active");
+            $(element).closest(".nav-item").addClass("active"); // Thêm lớp active vào thẻ li có class nav-item
+        }
+    });
+});

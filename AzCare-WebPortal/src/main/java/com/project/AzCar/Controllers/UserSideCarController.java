@@ -770,8 +770,32 @@ public class UserSideCarController {
 		Users owner = userServices.findUserByEmail(email);
 		owner.setEnabled(true);
 		userServices.saveUserReset(owner);
-		List<Violation> violations = violationRepo.getByUserAndCarId(owner.getId(), 0);
+		List<Violation> violations = violationRepo.getByUserAndCarId(owner.getId(), 0, true,
+				Constants.violations.USER_DECLINDED);
 		for (Violation vio : violations) {
+			vio.setEnabled(false);
+			violationRepo.save(vio);
+		}
+		paymentServices.createNewLock(owner.getId(), 0, BigDecimal.valueOf(200));
+
+		return "redirect:/home/myplan/";
+	}
+
+	@GetMapping("/home/myplan/ownerCarPayFine/{carId}")
+	public String ownerCarPayFine(HttpServletRequest request, @PathVariable(name = "carId") String carId) {
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users owner = userServices.findUserByEmail(email);
+		CarInfor car = carServices.findById(Integer.parseInt(carId));
+		car.setStatus(Constants.carStatus.READY);
+		List<Violation> violations = violationRepo.getByUserAndCarId(owner.getId(), Integer.parseInt(carId), true,
+				Constants.violations.OWNER_DECLINED);
+		for (Violation vio : violations) {
+			vio.setEnabled(false);
+			violationRepo.save(vio);
+		}
+		List<Violation> no_violations = violationRepo.getByUserAndCarId(owner.getId(), Integer.parseInt(carId), true,
+				Constants.violations.NO_RESPONSE);
+		for (Violation vio : no_violations) {
 			vio.setEnabled(false);
 			violationRepo.save(vio);
 		}
@@ -825,6 +849,7 @@ public class UserSideCarController {
 
 		Violation vio = new Violation();
 		vio.setUserId(order.getUserId());
+		vio.setCarId(Integer.parseInt(order.getCarId()));
 		vio.setReason(Constants.violations.USER_DECLINDED);
 		violationRepo.save(vio);
 
