@@ -349,14 +349,13 @@ public class UserSideCarController {
 		BigDecimal subTotal = priceAfterDiscount.multiply(BigDecimal.valueOf(orderdetails.getDifferenceDate()))
 				.add(BigDecimal.valueOf(orderdetails.getExtraFee().getDeliveryFee()));
 		carDetailsDto.setCarmodel(brandServices.getModel(carDetails.getModelId()));
-		String mailContent = "<p>Hello," + email + "</p>" + "<p>Thank you for ordering with AzCar.</p>"
-				+ "<p>Below are some main details of your car:</p>" + "<table>" + "<tr>" + "<th>Model: </th>" + "<td>"
-				+ "[" + carDetailsDto.getCarmodel().getBrand() + "] " + carDetailsDto.getCarmodel().getModel() + "</td>"
-				+ "</tr>" + "<tr>" + "<th>Year: </th>" + "<td>" + carDetailsDto.getCarmodel().getYear() + "</td>"
-				+ "</tr>" + "<tr>" + "<th>Rental per day: </th>" + "<td>$" + orderdetails.getOriginPrice() + "</td>"
-				+ "</tr>" + "<tr>" + "<th>Discount: </th>" + "<td>" + orderdetails.getDiscount() + "% </td>" + "</tr>"
-				+ "<tr>" + "<th>Price After Discount: </th>" + "<td>$" + priceAfterDiscount + "</td>" + "</tr>" + "<tr>"
-				+ "<th>From: </th>" + "<td>"
+		String mailContent = "<p>Below are some main details of your car:</p>" + "<table>" + "<tr>" + "<th>Model: </th>"
+				+ "<td>" + "[" + carDetailsDto.getCarmodel().getBrand() + "] " + carDetailsDto.getCarmodel().getModel()
+				+ "</td>" + "</tr>" + "<tr>" + "<th>Year: </th>" + "<td>" + carDetailsDto.getCarmodel().getYear()
+				+ "</td>" + "</tr>" + "<tr>" + "<th>Rental per day: </th>" + "<td>$" + orderdetails.getOriginPrice()
+				+ "</td>" + "</tr>" + "<tr>" + "<th>Discount: </th>" + "<td>" + orderdetails.getDiscount() + "% </td>"
+				+ "</tr>" + "<tr>" + "<th>Price After Discount: </th>" + "<td>$" + priceAfterDiscount + "</td>"
+				+ "</tr>" + "<tr>" + "<th>From: </th>" + "<td>"
 				+ orderdetails.getFromDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "</td>" + "</tr>"
 				+ "<tr>" + "<th>To: </th>" + "<td>"
 				+ orderdetails.getToDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "</td>" + "</tr>"
@@ -372,10 +371,14 @@ public class UserSideCarController {
 				+ "<th>Total: </th>" + "<td>" + "<h4>$"
 				+ orderdetails.getTotalAndFees()
 						.subtract(BigDecimal.valueOf(orderdetails.getExtraFee().getDeliveryFee()))
-				+ "</h4>" + "</td>" + "</tr>" + "</table>"
+				+ "</h4>" + "</td>" + "</tr>" + "</table>";
+		orderServices.sendOrderEmail(email, "Place Order Successfully", "<p>Hello," + email + "</p>"
+				+ "<p>Thank you for ordering with AzCar.</p>" + mailContent
 				+ "<p>This is to confirm that we already got your order, We will send you an email after car owner accept or declined your order</p>"
-				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
-		orderServices.sendOrderEmail(email, "Place Order Successfully", mailContent);
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>");
+		Users carOwner = userServices.findById(carDetails.getCarOwnerId());
+		orderServices.sendOrderEmail(carOwner.getEmail(), "An order of" + "[" + carDetailsDto.getCarmodel().getBrand()
+				+ "] " + carDetailsDto.getCarmodel().getModel() + "has been placed", mailContent);
 		return "redirect:/home/myplan/";
 	}
 
@@ -419,6 +422,12 @@ public class UserSideCarController {
 		ModelView.addAttribute("carDetails", modelDto);
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users customer = userServices.findUserByEmail(email);
+		if (customer.isEnabled() == false) {
+			ModelView.addAttribute("userViolated", true);
+			ModelView.addAttribute("userBalanceeeeee", customer.getBalance());
+		} else {
+			ModelView.addAttribute("userViolated", false);
+		}
 		Users owner = userServices.findById(modelDto.getCarOwnerId());
 		ModelView.addAttribute("customer", customer);
 		ModelView.addAttribute("user", owner);
@@ -557,6 +566,7 @@ public class UserSideCarController {
 		List<City> provinces = provinceServices.getListCity();
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users owner = userServices.findUserByEmail(email);
+
 		for (var item : list) {
 			if (item.getStatus().equals(Constants.carStatus.READY) && item.getCarOwnerId() != (int) owner.getId()) {
 				var itemDto = carServices.mapToDto(item.getId());
@@ -754,6 +764,22 @@ public class UserSideCarController {
 		return "redirect:/home/myplan/";
 	}
 
+	@GetMapping("/home/myplan/payFine")
+	public String userPayFine(HttpServletRequest request) {
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users owner = userServices.findUserByEmail(email);
+		owner.setEnabled(true);
+		userServices.saveUserReset(owner);
+		List<Violation> violations = violationRepo.getByUserAndCarId(owner.getId(), 0);
+		for (Violation vio : violations) {
+			vio.setEnabled(false);
+			violationRepo.save(vio);
+		}
+		paymentServices.createNewLock(owner.getId(), 0, BigDecimal.valueOf(200));
+
+		return "redirect:/home/myplan/";
+	}
+
 	@GetMapping("/home/myplan/declined/{orderId}")
 	public String declinedRequestBooking(@PathVariable(name = "orderId") String orderId) {
 		var order = orderServices.getById(Integer.parseInt(orderId));
@@ -777,17 +803,47 @@ public class UserSideCarController {
 		orderServices.save(order);
 		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
 		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(2)));
-		paymentServices.createNewLock(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(10)));
+		paymentServices.createNewLock(ownerId, order.getId(), order.getTotalRent().multiply(BigDecimal.valueOf(0.1)));
+
+		return "redirect:/home/myplan/";
+	}
+
+	@GetMapping("/home/myplan/cancel_from_user/{orderId}")
+	public String clientCancelBooking(@PathVariable(name = "orderId") String orderId) {
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		String status = order.getStatus();
+		if (status.equals("accepted")) {
+			// return only 90% of totalRent and fees with insurance
+			paymentServices.createNewRefund(order.getUserId(), order.getId(),
+					order.getTotalAndFeesWithoutInsurance().multiply(BigDecimal.valueOf(0.9)));
+		}
+		if (status.equals("waiting_for_verify")) {
+
+		}
+		order.setStatus(Constants.orderStatus.RENTOR_DECLINED);
+		orderServices.save(order);
+
+		Violation vio = new Violation();
+		vio.setUserId(order.getUserId());
+		vio.setReason(Constants.violations.USER_DECLINDED);
+		violationRepo.save(vio);
 
 		return "redirect:/home/myplan/";
 	}
 
 	@GetMapping("/home/myplan/")
 	public String getMyPlanPage(HttpServletRequest request, Model ModelView) {
-		orderServices.unrespondDetected();
-
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users user = userServices.findUserByEmail(email);
+		if (user.isEnabled() == false) {
+			ModelView.addAttribute("userViolated", true);
+			ModelView.addAttribute("userBalanceeeeee", user.getBalance());
+		} else {
+			ModelView.addAttribute("userViolated", false);
+		}
+
+		orderServices.unrespondDetected(user);
+
 		List<OrderDetailsDTO> orderList = orderServices.getDTOFromCreatedBy((int) user.getId());
 		orderList.sort(Comparator.comparingLong(OrderDetailsDTO::getId).reversed());
 		List<OrderDetailsDTO> latestOrders = new ArrayList<>(orderList.subList(0, Math.min(orderList.size(), 5)));

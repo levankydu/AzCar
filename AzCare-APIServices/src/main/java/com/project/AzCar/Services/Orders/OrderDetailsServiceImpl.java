@@ -110,7 +110,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 	}
 
 	@Override
-	public void unrespondDetected() {
+	public void unrespondDetected(Users currentUser) {
 		List<OrderDetails> orderList = orderRepository.getAll();
 		orderList.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING));
 		for (OrderDetails order : orderList) {
@@ -132,6 +132,11 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 			if (violations.size() >= 3) {
 				car.setStatus(Constants.carStatus.DECLINED);
 				carRepo.save(car);
+			}
+			List<Violation> userViolations = violationRepo.getByUserAndCarId(currentUser.getId(), 0);
+			if (userViolations.size() >= 3) {
+				currentUser.setEnabled(false);
+				userServices.saveUserReset(currentUser);
 			}
 		}
 	}

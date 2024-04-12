@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.AzCar.Dto.Orders.OrderDetailsDTO;
 import com.project.AzCar.Entities.Cars.OrderDetails;
+import com.project.AzCar.Entities.Users.Users;
 
 import jakarta.mail.MessagingException;
 
@@ -24,7 +25,7 @@ public interface OrderDetailsService {
 
 	List<OrderDetailsDTO> getDTOFromCreatedBy(int id);
 
-	void unrespondDetected();
+	void unrespondDetected(Users currentUser);
 
 	List<OrderDetailsDTO> getDTOFromCarId(int id);
 	
