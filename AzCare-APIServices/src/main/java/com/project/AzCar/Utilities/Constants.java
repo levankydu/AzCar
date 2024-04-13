@@ -26,6 +26,7 @@ public class Constants {
 		String WAITING = "waiting_for_accept";
 		String ACCEPTED = "accepted";
 		String DECLINED = "declined";
+		String RENTOR_DECLINED = "rentor_declined";
 		String RENTOR_TRIP_DONE = "rentor_trip_done";
 		String OWNER_TRIP_DONE = "owner_trip_done";
 	}
@@ -50,5 +51,6 @@ public class Constants {
 	public static interface violations {
 		String NO_RESPONSE = "no_response_after_2_minutes";
 		String OWNER_DECLINED = "onwer_declined";
+		String USER_DECLINDED = "user_declined";
 	}
 }

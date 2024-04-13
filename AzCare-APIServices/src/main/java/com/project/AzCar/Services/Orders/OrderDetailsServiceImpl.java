@@ -110,29 +110,36 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 	}
 
 	@Override
-	public void unrespondDetected() {
+	public void unrespondDetected(Users currentUser) {
 		List<OrderDetails> orderList = orderRepository.getAll();
-		orderList.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING));
 		for (OrderDetails order : orderList) {
-			long seconds = Duration.between(order.getCreatedAt(), LocalDateTime.now()).getSeconds();
 			CarInfor car = carServices.findById(Integer.parseInt(order.getCarId()));
 			long ownerId = car.getCarOwnerId();
-			if (seconds >= 120) {
-				Violation vio = new Violation();
-				vio.setUserId(ownerId);
-				vio.setCarId(car.getId());
-				vio.setReason(Constants.violations.NO_RESPONSE);
-				violationRepo.save(vio);
-				order.setStatus(Constants.orderStatus.DECLINED);
-				orderRepository.save(order);
+			if(order.getStatus().equals(Constants.orderStatus.WAITING)) {
+				long seconds = Duration.between(order.getCreatedAt(), LocalDateTime.now()).getSeconds();
+				if (seconds >= 9999999) {
+					Violation vio = new Violation();
+					vio.setUserId(ownerId);
+					vio.setCarId(car.getId());
+					vio.setReason(Constants.violations.NO_RESPONSE);
+					violationRepo.save(vio);
+					order.setStatus(Constants.orderStatus.DECLINED);
+					orderRepository.save(order);
 
-				paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFees());
+					paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFees());
+				}
 			}
-			List<Violation> violations = violationRepo.getByUserAndCarId(ownerId, car.getId());
-			if (violations.size() >= 3) {
+			List<Violation> noRes_violations = violationRepo.getByUserAndCarId(ownerId, car.getId(), true, Constants.violations.NO_RESPONSE);
+			List<Violation> declined_violations = violationRepo.getByUserAndCarId(ownerId, car.getId(), true, Constants.violations.OWNER_DECLINED);
+			if (noRes_violations.size() + declined_violations.size() >= 3) {
 				car.setStatus(Constants.carStatus.DECLINED);
 				carRepo.save(car);
 			}
+		}
+		List<Violation> userViolations = violationRepo.getByUserAndCarId(currentUser.getId(), 0, true, Constants.violations.USER_DECLINDED);
+		if (userViolations.size() >= 3) {
+			currentUser.setEnabled(false);
+			userServices.saveUserReset(currentUser);
 		}
 	}
 

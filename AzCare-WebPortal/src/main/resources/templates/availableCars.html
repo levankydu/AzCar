@@ -29,6 +29,7 @@
 	<!-- Custom Stylesheet -->
 	<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
 	<link rel="stylesheet" type="text/css" id="style_sheet" href="/assets/css/skins/default.css">
+	<link rel="stylesheet" href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
 
 	<link rel="stylesheet" href="/assets/css/notiCss.css">
 
@@ -642,10 +643,11 @@
 		<script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
 		<script src="/assets/js/ie-emulation-modes-warning.js"></script>
 		<script src="https://kit.fontawesome.com/56c961acc9.js"></script>
+		<script th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
 
+		<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 		<!-- Custom JS Script -->
 		<script src="/assets/js/app.js"></script>
-
 		<script>
 			function provinceSubmit() {
 				const districtSelect = $("#districtSelect").get(0);
