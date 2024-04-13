@@ -1628,7 +1628,8 @@
 									<input type="hidden" name="differenceDate" id="form-differenceDate"> <input
 										type="hidden" th:attr="data-car-model=${carDetails.carmodel.model}">
 									<input type="hidden" th:attr="data-car-year=${carDetails.carmodel.year}">
-									<button th:if="${userViolated == false && carDetails.status != 'declined'}" href="" id="form-submit-btn" class="btn btn-outline-primary btn-lg">Rent
+									<button th:if="${userViolated == false && carDetails.status != 'declined'}" href=""
+										id="form-submit-btn" class="btn btn-outline-primary btn-lg">Rent
 										Now</button>
 								</div>
 
@@ -1971,7 +1972,7 @@
 				}
 			});
 		}
-		
+
 		/*<![CDATA[*/
 		const carDetails = /*[[${carDetails}]]*/ '';
 		/*]]>*/
@@ -2003,7 +2004,7 @@
 				}
 			});
 		}
-		if (carDetails.status == 'declined' && carDetails.owner.id != user.id){
+		if (carDetails.status == 'declined' && carDetails.owner.id != user.id) {
 			swal.fire({
 				title: "CAR BANNED TEMPORARY",
 				text: "This car is being banned, please pick another car",
@@ -2468,22 +2469,26 @@
 					confirmButtonText: "Yes, do it!"
 				}).then((result) => {
 					if (result.isConfirmed) {
-						Swal.fire({
-							title: "Rented!",
-							text: "Waiting for car owner to accept your rental (2 minutes)",
-							html: `
-								<a href="/home/myplan/">You can check your request booking here</a>
-								<button class="btn btn-primary" type="button" disabled>
-								  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-								  Sending mail...
-								</button>
-							`,
-							icon: "success"
-						});
 						setTimeout(function () {
 							const RENTAL_FORM = $('#form-car-rental').get(0);
 							RENTAL_FORM.submit();
 						}, 2000);
+						Swal.fire({
+							title: "Rented!",
+							text: "Waiting for car owner to accept your rental (atleast 1 hour)",
+							icon: "success",
+							html: `
+								<a href="/home/myplan/">You can check your request booking here</a>
+								<p> Sending mail... </p>
+							`,
+							timerProgressBar: true,
+							didOpen: () => {
+								Swal.showLoading();
+							},
+							willClose: () => {
+								clearInterval(timerInterval);
+							}
+						});
 					}
 				});
 			}

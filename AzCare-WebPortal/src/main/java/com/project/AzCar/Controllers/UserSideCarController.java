@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -75,6 +77,7 @@ import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
 import com.project.AzCar.Utilities.OrderExtraFee;
+import com.project.AzCar.payments.paypal.PaypalService;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -123,6 +126,14 @@ public class UserSideCarController {
 	private ICommentsService commentsService;
 	@Autowired
 	private IReplyService repService;
+
+	@Autowired
+	private PaypalService paypalService;
+
+	private Logger log = LoggerFactory.getLogger(getClass());
+
+	public static final String PAYPAL_SUCCESS_URL = "checkout/pay/success";
+	public static final String PAYPAL_CANCEL_URL = "checkout/pay/cancel";
 
 	@GetMapping("/home/carregister/")
 
@@ -935,6 +946,15 @@ public class UserSideCarController {
 		user.setBalance(BigDecimal.valueOf(10000));
 		userServices.saveUserReset(user);
 
+		return "redirect:/home/myplan/";
+	}
+
+	@PostMapping("/home/myplan/paypal-charge/")
+	public String paypalCharge(HttpServletRequest request) {
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users user = userServices.findUserByEmail(email);
+		user.setBalance(BigDecimal.valueOf(10000));
+		userServices.saveUserReset(user);
 		return "redirect:/home/myplan/";
 	}
 
