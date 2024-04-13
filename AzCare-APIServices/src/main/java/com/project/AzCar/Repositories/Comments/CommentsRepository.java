@@ -8,9 +8,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.project.AzCar.Entities.Comments.Comments;
+
 @Repository
-public interface CommentsRepository  extends JpaRepository<Comments, Integer>{
+public interface CommentsRepository extends JpaRepository<Comments, Integer> {
 	// lấy 5 cmt bởi id tạo mới nhất
-	@Query(value = "SELECT * FROM tb_comments r where r.car_id = :id order by r.id desc limit 5;",nativeQuery = true)
+	@Query(value = "SELECT * FROM tb_comments r where r.car_id = :id order by r.id desc limit 5;", nativeQuery = true)
 	List<Comments> getAllCommentsByCarId(@Param("id") int id);
 }

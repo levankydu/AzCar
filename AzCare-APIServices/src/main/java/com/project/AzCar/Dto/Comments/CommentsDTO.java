@@ -17,5 +17,7 @@ public class CommentsDTO {
 	long user_id;
 	String user_name;
 	long car_id;
+	String car_name;
 	List<ReplyDTO> reply;
+	String status;
 }

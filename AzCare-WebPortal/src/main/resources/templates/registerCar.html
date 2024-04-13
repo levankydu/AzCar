@@ -60,12 +60,43 @@
 	width: 150px;
 	height: 150px;
 	margin: 5px;
+	}
+	
+.link {
+  color: #2175FF;
+  cursor: pointer;
+  font-weight: 400;
+  text-decoration: none;
 }
+
+.link--arrowed {
+  display: inline-block;
+  height: 2rem;
+  line-height: 2rem;
+}
+.link--arrowed .arrow-icon {
+  position: relative;
+  top: -1px;
+  transition: transform 0.3s ease;
+  vertical-align: middle;
+}
+.link--arrowed .arrow-icon--circle {
+  transition: stroke-dashoffset 0.3s ease;
+  stroke-dasharray: 95;
+  stroke-dashoffset: 95;
+}
+.link--arrowed:hover .arrow-icon {
+  transform: translate3d(5px, 0, 0);
+}
+.link--arrowed:hover .arrow-icon--circle {
+  stroke-dashoffset: 0;
+}
+
 </style>
 </head>
 
 <body id="top">
-<div class="page_loader"></div>
+	<div class="page_loader"></div>
 
 	<!-- main header start -->
 	<header class="main-header sticky-header header-with-top"
@@ -293,6 +324,19 @@
 													</div>
 													<div class="col-12 text-danger text-center">
 														<span id="validation-result-final"></span>
+													</div>
+													<div class="col-12 text-danger text-center">
+														<a class="link link--arrowed text-success" th:href="@{/home/carregister/addNewModel/}">Click here if you do not see your car model <svg class="arrow-icon"
+																xmlns="http://www.w3.org/2000/svg" width="32"
+																height="32" viewBox="0 0 32 32">
+      <g fill="none" stroke="#28A745" stroke-width="1.5"
+																	stroke-linejoin="round" stroke-miterlimit="10">
+        <circle class="arrow-icon--circle" cx="16" cy="16" r="15.12"></circle>
+        <path class="arrow-icon--arrow"
+																	d="M16.14 9.93L22.21 16l-6.07 6.07M8.23 16h13.98"></path>
+      </g>
+    </svg>
+														</a>
 													</div>
 
 
@@ -531,11 +575,11 @@
 														<h5 style="font-weight: bold;">Default Price</h5>
 														<p>This price is applied for all days .</p>
 														<div class="row">
-														<div class="col-12 text-danger text-center">
+															<div class="col-12 text-danger text-center">
 																<span id="recommendPrice"></span>
 															</div>
 															<div class="col-6">
-																
+
 																<div class="input-group-prepend">
 																	<div class="input-group-text">$/day</div>
 																	<input type="number" class="form-control"

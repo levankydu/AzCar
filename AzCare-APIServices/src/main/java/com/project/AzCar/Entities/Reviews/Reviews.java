@@ -22,6 +22,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
 @Entity
 @Table(name = "tbReviews")
 @Data
@@ -30,36 +31,36 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Reviews implements Serializable {
-    
-    private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    @JoinColumn(name = "car_id", nullable = false)
-    private CarInfor carInfor;
-    
-    @ManyToOne()
-    @JsonIgnore
-    @JoinColumn(name = "user_id", nullable = false)
-    private Users user;
-    
-    @Enumerated(EnumType.STRING)
-    private ReviewStatus status;
-    
-    private int rating; // Đánh giá từ 1 đến 5
-    private String comment;
-    private Date reviewDate;
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
+	@JoinColumn(name = "car_id", nullable = false)
+	private CarInfor carInfor;
+
+	@ManyToOne()
+	@JsonIgnore
+	@JoinColumn(name = "user_id", nullable = false)
+	private Users user;
+
+	@Enumerated(EnumType.STRING)
+	private ReviewStatus status;
+
+	private int rating; // Đánh giá từ 1 đến 5
+	private String comment;
+	private Date reviewDate;
+
 	@Override
 	public String toString() {
 		return "Reviews [id=" + id + ", carInfor=" + carInfor + ", user=" + user + ", status=" + status + ", rating="
 				+ rating + ", comment=" + comment + ", reviewDate=" + reviewDate + "]";
 	}
 
-    // Constructors, Getters, and Setters
-    
-}
+	// Constructors, Getters, and Setters
 
+}

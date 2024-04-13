@@ -9,43 +9,46 @@ import org.springframework.stereotype.Service;
 import com.project.AzCar.Entities.Reviews.ReviewStatus;
 import com.project.AzCar.Entities.Reviews.Reviews;
 import com.project.AzCar.Repositories.Reviews.ReviewRepository;
+
 @Service
-public class ReviewsServiceImpl implements IReviewsService{
+public class ReviewsServiceImpl implements IReviewsService {
 	@Autowired
-	 ReviewRepository reviewRepository;
+	ReviewRepository reviewRepository;
+
 	@Override
 	public List<Reviews> findRecentReviews() {
 		// TODO Auto-generated method stub
-		
-		List <Reviews> list = reviewRepository.findRecentReviews();
-		
+
+		List<Reviews> list = reviewRepository.findRecentReviews();
+
 		return list;
 	}
-	@Override
-	 public Reviews  updateStatus(Long reviewId, ReviewStatus newStatus) {
-		
-	        Reviews review = reviewRepository.findById(reviewId)
-	                .orElseThrow(() -> new RuntimeException("Review not found"));
 
-	        review.setStatus(newStatus);
-	      return   reviewRepository.save(review);
-	    }
+	@Override
+	public Reviews updateStatus(Long reviewId, ReviewStatus newStatus) {
+
+		Reviews review = reviewRepository.findById(reviewId)
+				.orElseThrow(() -> new RuntimeException("Review not found"));
+
+		review.setStatus(newStatus);
+		return reviewRepository.save(review);
+	}
+
 	@Override
 	public List<Reviews> findAllReviews() {
 		// TODO Auto-generated method stub
-		
+
 		List<Reviews> lreviews = reviewRepository.findAll();
-		
+
 		return lreviews;
 	}
+
 	@Override
 	public Reviews findById(long id) {
-		
+
 		// TODO Auto-generated method stub
-		
-		
+
 		return reviewRepository.getReviewById(id);
 	}
-	
 
 }

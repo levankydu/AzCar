@@ -119,10 +119,12 @@
 									class="bi bi-car-front-fill"></i> <span>Review
 									Management</span> </a>
 							<ul class="submenu ">
-								<li class="submenu-item"><a th:href="@{/dashboard/review/}"
+								<li class="submenu-item"><a th:href="@{/dashboard/reviews}"
 										class="submenu-link">Review</a>
 								</li>
-
+								<li class="submenu-item"><a th:href="@{/dashboard/comments}"
+										class="submenu-link">Comment</a>
+								</li>
 								<li class="submenu-item  "><a th:href="@{/dashboard/ListIgnoreKey/}"
 										class="submenu-link">Lisst Ignore Key</a>
 								</li>
@@ -485,7 +487,7 @@
 					<div class="card">
 						<div class="card-header">
 							<h5 class="card-title">Users</h5>
-							<button class="create-keyword" >Create New Key Word</button>
+							<button class="create-keyword">Create New Key Word</button>
 						</div>
 						<div class="card-body">
 							<div class="table-responsive datatable-minimal">
@@ -509,7 +511,8 @@
 													th:data-status="${keyword.keyword}" th:text="Change"></button>
 												<btn></btn>
 											</td>
-											<td><button class="delete-keyword" th:data-keyword-id="${keyword.id}"> Delete</button></td>
+											<td><button class="delete-keyword" th:data-keyword-id="${keyword.id}">
+													Delete</button></td>
 											<!-- <td><a th:href="@{/dashboard/ListAccount/profile/{email} (email=${email})} "><i
 														class="bi bi-person"></i></a></td> -->
 										</tr>
@@ -548,7 +551,35 @@
 							</div>
 						</div>
 					</div>
+					<!-- Modal them moi keyword -->
+					<div class="modal fade" id="createnewkeyword" tabindex="-1" role="dialog"
+						aria-labelledby="createKeywordModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="createKeywordModalLabel">Create New Keyword</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<form id="createKeywordForm">
+										<div class="form-group">
+											<label for="createKeywordInput">Keyword:</label>
+											<input type="text" class="form-control" id="createnewKeywordInput">
 
+										</div>
+									</form>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" id="closeChangeBtn"
+										data-dismiss="modal">Close</button>
+									<button type="button" class="btn btn-primary" id="savenewkeywordChangesBtn">Save
+										changes</button>
+								</div>
+							</div>
+						</div>
+					</div>
 
 
 					<script th:inline="javascript">
@@ -572,7 +603,7 @@
 								});
 							});
 						});
-					//PUT
+						//PUT
 						$(document).ready(function () {
 							// Xử lý khi button "Change" được bấm
 							$('.change-status').on('click', function () {
@@ -597,20 +628,22 @@
 							$('#saveChangesBtn').on('click', function () {
 								var editedKeyword = $('#editKeywordInput').val();
 								var keywordId = $('#keywordIdInput').val();
-								data = {
-									id : keywordId,
-									keyword : editedKeyword
+								data1 = {
+									id: keywordId,
+									keyword: editedKeyword
 								}
+								console.log(data1);
 								// Gửi AJAX request để lưu thay đổi
 								$.ajax({
 									type: 'PUT',
 									url: '/editKeyword/' + keywordId,
 									contentType: 'application/json',
-									data: JSON.stringify(data),
+									data: JSON.stringify(data1),
 									success: function (response) {
 										// Thực hiện cập nhật trên giao diện nếu cần
 										// $('#keyword_' + keywordId).text = editedKeyword;
-										// location.reload();
+										location.reload();
+										console.log(response);
 										$('#editKeywordModal').modal('hide'); // Đóng dialog sau khi lưu thành công
 									},
 									error: function (xhr, status, error) {
@@ -620,24 +653,24 @@
 							});
 						});
 						// Post 
-					
+
 					</script>
 					<script>
-							$(document).ready(function () {
+						$(document).ready(function () {
 							// Xử lý khi button "Change" được bấm
 							$('.create-keyword').on('click', function () {
-							
+
 								// Hiển thị dialog
-								$('#editKeywordModal').modal('show');
+								$('#createnewkeyword').modal('show');
 							});
 							//Xử lý khi btn "close" click
 							$('#closeChangeBtn').on('click', function () {
-								$('#editKeywordModal').modal('hide'); // Đóng dialog 
+								$('#createnewkeyword').modal('hide'); // Đóng dialog 
 							})
 							// Xử lý khi button "Save changes" trong dialog được bấm
-							$('#saveChangesBtn').on('click', function () {
-								var createkw = $('#editKeywordInput').val();
-							
+							$('#savenewkeywordChangesBtn').on('click', function () {
+								var createkw = $('#createnewKeywordInput').val();
+
 								// Gửi AJAX request để lưu thay đổi
 								$.ajax({
 									type: 'POST',
@@ -646,8 +679,8 @@
 									data: JSON.stringify({ keyword: createkw }),
 									success: function (response) {
 										// Thực hiện cập nhật trên giao diện nếu cần
-										// location.reload();
-										$('#editKeywordModal').modal('hide'); // Đóng dialog sau khi lưu thành công
+										location.reload();
+										$('#createnewkeyword').modal('hide'); // Đóng dialog sau khi lưu thành công
 									},
 									error: function (xhr, status, error) {
 										console.error(error);

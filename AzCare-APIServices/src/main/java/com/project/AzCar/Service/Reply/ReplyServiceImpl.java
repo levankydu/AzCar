@@ -7,9 +7,10 @@ import org.springframework.stereotype.Service;
 
 import com.project.AzCar.Entities.Reply.Reply;
 import com.project.AzCar.Repositories.Reply.ReplyRepository;
+
 @Service
-public class ReplyServiceImpl implements IReplyService{
-	
+public class ReplyServiceImpl implements IReplyService {
+
 	@Autowired
 	private ReplyRepository replyRepo;
 
@@ -18,16 +19,15 @@ public class ReplyServiceImpl implements IReplyService{
 		// TODO Auto-generated method stub
 		return replyRepo.findAll();
 	}
-	
+
 	public List<Reply> getAllReplyByCommentId(int id) {
-		
+
 		// TODO Auto-generated method stub
 		List<Reply> replies = replyRepo.getAllReplyByCommentId(id);
-		if(replies.isEmpty())
-		{
-			   return null;
+		if (replies.isEmpty()) {
+			return null;
 		}
-		
+
 		return replies;
 	}
 

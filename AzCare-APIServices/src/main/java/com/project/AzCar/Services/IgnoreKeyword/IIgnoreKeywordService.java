@@ -9,9 +9,14 @@ import com.project.AzCar.Entities.IgnoreKeyword.IgnoreKeyword;
 @Service
 public interface IIgnoreKeywordService {
 	public IgnoreKeyword savekeyword(IgnoreKeyword s);
+
 	public IgnoreKeyword addkeyword(IgnoreKeyword s);
+
 	List<IgnoreKeyword> listkeyword();
+
 	IgnoreKeyword findByid(int id);
+
 	void deleteByid(int id);
-	boolean isIgnore(String a, List<String> b);
-	}
+
+	List<String> isIgnore(String a, List<String> b);
+}

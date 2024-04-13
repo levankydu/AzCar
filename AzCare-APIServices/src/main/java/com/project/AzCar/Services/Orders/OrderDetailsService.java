@@ -28,16 +28,16 @@ public interface OrderDetailsService {
 	void unrespondDetected(Users currentUser);
 
 	List<OrderDetailsDTO> getDTOFromCarId(int id);
-	
-	
-	//Sally add
-	OrderDetails getOrderDetailsByCarIdandUserId(long carId,long userId);
-	
+
+	// Sally add
+	OrderDetails getOrderDetailsByCarIdandUserId(long carId, long userId);
+
 	OrderDetails getRentorTripDoneOrder();
-	
+
 	OrderDetailsDTO getDTORentorTripDoneOrder();
-	
+
 	OrderDetailsDTO mapToDTO(int id);
-	
+
 	void sendOrderEmail(String email, String subject, String content) throws UnsupportedEncodingException, MessagingException;
+
 }

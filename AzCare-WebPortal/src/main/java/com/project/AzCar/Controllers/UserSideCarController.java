@@ -41,6 +41,7 @@ import com.project.AzCar.Dto.Reply.ReplyDTO;
 import com.project.AzCar.Dto.Reviews.ReviewsDTO;
 import com.project.AzCar.Entities.Cars.CarImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
+import com.project.AzCar.Entities.Cars.CarModelList;
 import com.project.AzCar.Entities.Cars.ExtraFee;
 import com.project.AzCar.Entities.Cars.OrderDetails;
 import com.project.AzCar.Entities.Cars.PlateImages;
@@ -519,7 +520,7 @@ public class UserSideCarController {
 		ModelView.addAttribute("comments", lcmtDTO);
 
 		System.out.println("id Car Details: " + model.getId() + " ");
-		OrderDetails order = getOrderDetailsByCaridandUserid(model.getId(), owner.getId());
+		OrderDetails order = getOrderDetailsByCaridandUserid(model.getId(), customer.getId());
 		// lấy status
 
 		System.out.println("Order Details: " + order + " & ");
@@ -615,16 +616,19 @@ public class UserSideCarController {
 
 		if (Lcomments != null) {
 			for (Comments tempC : Lcomments) {
-				CommentsDTO tempDTO = new CommentsDTO();
-				tempDTO.setId(tempC.getId());
-				tempDTO.setContent(tempC.getContent());
-				tempDTO.setUser_id(tempC.getUser_id().getId());
-				tempDTO.setUser_name(tempC.getUser_id().getFirstName());
-				tempDTO.setCar_id(car_id);
-				List<ReplyDTO> reply = getAllReplyByComment_id(tempC.getId());
-				tempDTO.setReply(reply);
+				if (tempC.getStatus().toString().contains("Pending")) {
+					CommentsDTO tempDTO = new CommentsDTO();
+					tempDTO.setId(tempC.getId());
+					tempDTO.setContent(tempC.getContent());
+					tempDTO.setUser_id(tempC.getUser_id().getId());
+					tempDTO.setUser_name(tempC.getUser_id().getFirstName());
+					tempDTO.setCar_id(car_id);
+					List<ReplyDTO> reply = getAllReplyByComment_id(tempC.getId());
+					tempDTO.setReply(reply);
 
-				commentDTO.add(tempDTO);
+					commentDTO.add(tempDTO);
+				}
+
 			}
 
 			return commentDTO;
@@ -762,6 +766,44 @@ public class UserSideCarController {
 		ModelView.addAttribute("provinceList", provinces);
 		ModelView.addAttribute("carRegisterList", filteredListDto);
 		return "availableCars";
+	}
+
+	@GetMapping("/home/carregister/addNewModel/")
+	public String getAddNewModelPage(Model ModelView) {
+		List<String> brands = brandServices.getBrandList();
+		List<String> categories = brandServices.getCategoryList();
+
+		ModelView.addAttribute("categoryList", categories);
+		ModelView.addAttribute("brandsList", brands);
+
+		return "ifCarModelNotFound";
+
+	}
+
+	@PostMapping("/home/carregister/addNewModel")
+	public String postAddNewModelPage(@ModelAttribute("carModel") CarModelList carModel, BindingResult bindingResult,
+			HttpServletRequest request) {
+		Random random = new Random();
+		StringBuilder sb = new StringBuilder(10);
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		for (int i = 0; i < 10; i++) {
+
+			int randomIndex = random.nextInt(characters.length());
+
+			sb.append(characters.charAt(randomIndex));
+		}
+		String resultId = sb.toString();
+
+		if (bindingResult.hasErrors()) {
+//			return "";
+			return "redirect:/home/carregister/addNewModel/" + "?error";
+		} else {
+			carModel.setObjectId(resultId);
+			brandServices.saveBrand(carModel);
+		}
+//		return "";
+		return "redirect:/home/carregister/addNewModel/";
+
 	}
 
 	@GetMapping("/home/myplan/accepted/{orderId}")
