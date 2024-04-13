@@ -93,6 +93,7 @@
 			box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 			border-radius: 7px;
 		}
+
 	</style>
 </head>
 
@@ -236,13 +237,220 @@
 					Your balance: $ <span th:text="${user.balance!=null?user.balance :'0'}"></span>
 
 				</h4>
-				<form class="col-4 offset-md-8" style="text-align: center" id="charge"
-					th:action="@{/home/myplan/charge/}" method="post">
-					<button class="search-button btn-md btn-color" type="submit"
-						style="border-width: 0; border-radius: 0" onclick="return charge.submit()">Charge</button>
-						
-				</form>
+				<!-- khi click charge sẽ hiển thị dialog -->
+				<!-- Button to open the modal -->
+				<div class="col-4 offset-md-8" style="text-align: center" >
+					
+					<button id="openModalBtn" class="search-button btn-md btn-color" 
+					style="border-width: 0; border-radius: 0" >Deposit</button>
+				</div>
+				<!-- The Modal -->
+				<div id="myModal" class="modal" style="z-index: 9999999">
+					<div class="modal-content">
+						<span class="close">&times;</span>
+						<h2>Deposit</h2>
+						<form id="paymentForm">
+							<div class="row g-2">
+								<div class="col-md">
+									<label for="userId">User Name:</label>
+									<input type="email" class="form-control" th:value="${user.firstName}" readonly>
+									<label for="userId">Email:</label>
+									<input type="email" class="form-control" th:value="${user.email}" readonly>
+									<input type="text" th:id="${user.Id}" name="userId" th:value="${user.Id}" readonly hidden><br><br>
+									<label for="amount">Amount:</label>
+									<div>
+										<input type="number" id="customAmount" name="customAmount" min="100000"
+											step="1000" placeholder="Nhập số tiền tùy ý">
+									</div>
+									<div>
+										<button type="button" class="amount-btn" data-amount="500000">500,000
+											VNĐ</button>
+										<button type="button" class="amount-btn" data-amount="1000000">1,000,000
+											VNĐ</button>
+										<button type="button" class="amount-btn" data-amount="2000000">2,000,000
+											VNĐ</button>
+									</div>
+									<input type="hidden" id="amount" name="amount" required>
+									<!-- Field hidden để lưu giá trị số tiền -->
 
+									<label for="referenceNumber">Reference Number:</label>
+									<input type="text" id="referenceNumber" name="referenceNumber" readonly><br><br>
+									<button type="submit">Nạp Tiền</button>
+								</div>
+								<div class="col-md">
+									<div class="form-floating">
+										<label for="floatingInputGrid">Bank NAME</label>
+										<input class="form-control" type="text"th:value="${cardbank.bankName}" readonly>
+
+									</div>
+									<div class="form-floating">
+										<label for="floatingInputGrid">Bank ID</label>
+										<input class="form-control" type="text" th:value="${cardbank.bankNumber}" readonly>
+
+									</div>
+									<div class="form-floating">
+										<label for="floatingInputGrid"> BENEFICIARY NAME</label>
+										<input class="form-control" type="text" th:value="${cardbank.beneficiaryName}"
+											readonly>
+
+									</div>
+									<div class="form-floating">
+										<label for="floatingInputGrid">ADDRESS</label>
+										<input class="form-control" type="text"
+										th:value="${cardbank.addressbank}" readonly>
+
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<style>
+					.modal {
+						display: none;
+						position: fixed;
+						z-index: 1;
+						left: 0;
+						top: 0;
+						width: 100%;
+						height: 100%;
+						overflow: auto;
+						background-color: rgba(0, 0, 0, 0.4);
+					}
+
+					.modal-content {
+						background-color: #fefefe;
+						margin: 15% auto;
+						padding: 20px;
+						border: 1px solid #888;
+						width: 80%;
+					}
+
+					.close {
+						color: #aaa;
+						float: right;
+						font-size: 28px;
+						font-weight: bold;
+					}
+
+					.close:hover,
+					.close:focus {
+						color: black;
+						text-decoration: none;
+						cursor: pointer;
+					}
+
+					button {
+						background-color: #4CAF50;
+						color: white;
+						padding: 10px 20px;
+						margin: 8px 0;
+						border: none;
+						cursor: pointer;
+						border-radius: 4px;
+					}
+
+					select {
+						padding: 8px;
+						border-radius: 4px;
+					}
+
+					.amount-btn {
+						margin-right: 10px;
+					}
+				</style>
+				<script>
+
+					// Get the modal
+					var modal = document.getElementById("myModal");
+
+					// Get the button that opens the modal
+					var openModalBtn = document.getElementById("openModalBtn");
+
+					// Get the <span> element that closes the modal
+					var span = document.getElementsByClassName("close")[0];
+
+					// When the user clicks on the button, open the modal
+					openModalBtn.onclick = function () {
+						// Tạo một referenceNumber ngẫu nhiên
+						var referenceNumber = generateReferenceNumber();
+						// Gán giá trị referenceNumber vào input trong form
+						document.getElementById("referenceNumber").value = referenceNumber;
+						modal.style.display = "block";
+					}
+					// Handle amount button clicks
+					var amountButtons = document.querySelectorAll(".amount-btn");
+					amountButtons.forEach(function (button) {
+						button.addEventListener('click', function () {
+							var amount = this.getAttribute('data-amount');
+							document.getElementById("amount").value = amount;
+							document.getElementById("customAmount").value = amount; // Reset giá trị của ô nhập số tiền tùy ý
+						});
+					});
+					// Function để tạo referenceNumber ngẫu nhiên
+					function generateReferenceNumber() {
+						var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+						var length = 8;
+						var result = '';
+						for (var i = 0; i < length; i++) {
+							result += characters.charAt(Math.floor(Math.random() * characters.length));
+						}
+						return result;
+					}
+
+					// When the user clicks on <span> (x), close the modal
+					span.onclick = function () {
+						modal.style.display = "none";
+					}
+
+					// When the user clicks anywhere outside of the modal, close it
+					window.onclick = function (event) {
+						if (event.target == modal) {
+							modal.style.display = "none";
+						}
+					}
+
+					// Submit form data
+					var form = document.getElementById("paymentForm");
+					form.addEventListener('submit', function (event) {
+						event.preventDefault();
+						var referenceNumber = document.getElementById("referenceNumber").value;
+						console.log(referenceNumber);
+						var formData = new FormData(form);
+						var jsonObject = {};
+						formData.forEach(function (value, key) {
+							jsonObject[key] = value;
+						});
+						var jsonData = JSON.stringify(jsonObject);
+
+						console.log(jsonData)
+						fetch('createpayments/deposit/' + referenceNumber, {
+							method: 'POST',
+							body: jsonData,
+							headers: {
+								'Content-Type': 'application/json'
+							},
+
+						})
+							.then(response => {
+								if (!response.ok) {
+									throw new Error('Network response was not ok');
+								}
+								// return response.json();
+								return response.ok;
+							})
+							.then(data => {
+								alert('Nạp tiền thành công!');
+								modal.style.display = "none";
+							})
+							.catch(error => {
+							
+								console.error('There was an error!', error);
+								alert('Có lỗi xảy ra. Vui lòng thử lại sau!');
+							});
+					});
+
+				</script>
 				<div class="col-10 offset-md-1">
 
 
@@ -280,6 +488,7 @@
 												<a th:href="@{'/home/availablecars/details/' + ${car.id}}"
 													class="car-img">
 													<div class="listing-badges" th:if="${car.discount} > 0">
+
 														<span class="featured"
 															th:text="'SALES ' + ${car.discount}+'%'"></span>
 													</div>
@@ -289,6 +498,7 @@
 															<div class="carousel-item active">
 																<div th:each="img: ${car.images}">
 																	<img th:if="${img.name =='frontImg'}"
+
 																		th:src="${img.urlImage}" alt="car">
 																</div>
 															</div>
@@ -296,6 +506,7 @@
 																<div th:each="img: ${car.images}"
 																	class="d-block w-100 h-100">
 																	<img th:if="${img.name =='behindImg'}"
+
 																		th:src="${img.urlImage}" alt="car">
 																</div>
 
@@ -304,6 +515,7 @@
 																<div th:each="img: ${car.images}"
 																	class="d-block w-100 h-100">
 																	<img th:if="${img.name =='leftImg'}"
+
 																		th:src="${img.urlImage}" alt="car">
 																</div>
 
@@ -312,6 +524,7 @@
 																<div th:each="img: ${car.images}"
 																	class="d-block w-100 h-100">
 																	<img th:if="${img.name =='rightImg'}"
+
 																		th:src="${img.urlImage}" alt="car">
 																</div>
 
@@ -320,6 +533,7 @@
 																<div th:each="img: ${car.images}"
 																	class="d-block w-100 h-100">
 																	<img th:if="${img.name =='insideImg'}"
+
 																		th:src="${img.urlImage}" alt="car">
 																</div>
 
@@ -526,6 +740,7 @@
 																					<td th:text="${item.getStatusOnView()}"
 																						th:class="${item.status == 'declined' || item.status == 'rentor_declined' ? 'badge badge-danger text-wrap mt-2' : 'badge badge-success text-wrap mt-2'}">
 
+
 																					</td>
 
 																				</tr>
@@ -596,6 +811,7 @@
 																				class="btn btn-warning"
 																				onclick="onGetBookRequestSweetAlert(this)"
 																				>Decline</a>
+
 																		</td>
 																	</tr>
 																</table>
@@ -713,12 +929,14 @@
 											<div class="col-lg-3 col-md-5">
 												<a th:href="@{'/home/availablecars/details/' + ${item.car.id}}"
 													class="car-img">
+
 													<div id="carouselExampleIndicators1" class="carousel slide"
 														data-ride="carousel">
 														<div class="carousel-inner">
 															<div class="carousel-item active">
 																<div th:each="img: ${item.car.images}">
 																	<img th:if="${img.name =='frontImg'}"
+
 																		th:src="${img.urlImage}" alt="car">
 																</div>
 															</div>

@@ -47,6 +47,7 @@ import com.project.AzCar.Entities.Cars.OrderDetails;
 import com.project.AzCar.Entities.Cars.PlateImages;
 import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Comments.Comments;
+import com.project.AzCar.Entities.Deposit.Cardbank;
 import com.project.AzCar.Entities.HintText.HintText;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
@@ -59,6 +60,7 @@ import com.project.AzCar.Entities.Users.Violation;
 import com.project.AzCar.Repositories.Orders.ViolationRepository;
 import com.project.AzCar.Repositories.ServiceAfterBooking.ServiceBookingRepositories;
 import com.project.AzCar.Service.Comments.ICommentsService;
+import com.project.AzCar.Service.Deposit.ICarbankService;
 import com.project.AzCar.Service.Reply.IReplyService;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
@@ -86,6 +88,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class UserSideCarController {
+	@Autowired
+	private ICarbankService cardService;
 	@Autowired
 	private JavaMailSender mailSender;
 	@Autowired
@@ -997,7 +1001,11 @@ public class UserSideCarController {
 		listImg.removeIf(t -> t.getStatus().equals(Constants.plateStatus.DECLINED));
 
 		OrderDetailsDTO rentorDone = orderServices.getDTORentorTripDoneOrder();
-
+		
+		Cardbank c = cardService.findCardbankbyId(1);
+		ModelView.addAttribute("cardbank", c);
+		
+		
 		ModelView.addAttribute("rentorDone", rentorDone);
 		ModelView.addAttribute("orderList", latestOrders);
 		ModelView.addAttribute("ImgLicense", listImg);
@@ -1018,17 +1026,17 @@ public class UserSideCarController {
 		System.out.println(newDiscount);
 		return "redirect:/home/myplan/";
 	}
-
-	@PostMapping("/home/myplan/charge/")
-	public String charge(HttpServletRequest request) {
-
-		String email = request.getSession().getAttribute("emailLogin").toString();
-		Users user = userServices.findUserByEmail(email);
-		user.setBalance(BigDecimal.valueOf(10000));
-		userServices.saveUserReset(user);
-
-		return "redirect:/home/myplan/";
-	}
+// chổ này làm ảnh hưởng phần nạp nên sally xóa
+//	@PostMapping("/home/myplan/charge/")
+//	public String charge(HttpServletRequest request) {
+//
+//		String email = request.getSession().getAttribute("emailLogin").toString();
+//		Users user = userServices.findUserByEmail(email);
+//		user.setBalance(BigDecimal.valueOf(10000));
+//		userServices.saveUserReset(user);
+//
+//		return "redirect:/home/myplan/";
+//	}
 
 	@PostMapping("/home/myplan/paypal-charge/")
 	public String paypalCharge(HttpServletRequest request) {
