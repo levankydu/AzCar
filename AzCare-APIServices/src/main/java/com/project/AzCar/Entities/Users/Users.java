@@ -69,7 +69,9 @@ public class Users implements Serializable {
 	private String image;
 
 	private String address;
-
+	
+	
+	
 	public Users(String firstName, String email, String password, List<Roles> roles) {
 		this.firstName = firstName;
 		this.email = email;
