@@ -2,8 +2,12 @@ package com.project.AzCar.Controllers;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -34,6 +38,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import com.project.AzCar.Dto.Brands.BrandsDto;
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
 import com.project.AzCar.Dto.Categories.CategoriesDto;
+import com.project.AzCar.Dto.Payments.PaymentDTO;
 import com.project.AzCar.Dto.PlateVerify.PlateVerifyDto;
 import com.project.AzCar.Entities.Cars.BrandImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
@@ -54,6 +59,7 @@ import com.project.AzCar.Services.Cars.PlateImageServices;
 import com.project.AzCar.Services.Cars.PlusServiceServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
 import com.project.AzCar.Services.Orders.OrderDetailsService;
+import com.project.AzCar.Services.Payments.PaymentService;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
@@ -94,6 +100,8 @@ public class AdminController {
 	private PlateImageServices plateImageServices;
 	@Autowired
 	private ServiceBookingRepositories afterBookingRepositories;
+	@Autowired
+	private PaymentService paymentService;
 
 	@GetMapping("/dashboard/")
 	public String getDashboard(Model model, Authentication authentication) {
@@ -228,11 +236,11 @@ public class AdminController {
 	}
 
 	@GetMapping("/dashboard/brands/")
-	public String getBrandPage(Model brandsData, Model cateData, Model sessionUpdateBrandLogo, Model createdCarModel,
-			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	public String getBrandPage(Model ModelView, HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 		List<String> brands = brandServices.getBrandList();
-		List<BrandsDto> brandList = new ArrayList<>();
 		List<String> categories = brandServices.getCategoryList();
+		List<BrandsDto> brandList = new ArrayList<>();
 		List<CategoriesDto> categoryList = new ArrayList<>();
 		for (int i = 0; i < brands.size(); i++) {
 			BrandsDto brandsDto = new BrandsDto();
@@ -255,34 +263,216 @@ public class AdminController {
 			categoryList.add(cateDto);
 		}
 		if (request.getSession().getAttribute("update_brandLogo") != null) {
-			sessionUpdateBrandLogo.addAttribute("update_brandLogo",
-					request.getSession().getAttribute("update_brandLogo"));
+			ModelView.addAttribute("update_brandLogo", request.getSession().getAttribute("update_brandLogo"));
 			request.getSession().removeAttribute("update_brandLogo");
 
 		}
 		if (request.getSession().getAttribute("created_carModel") != null) {
-			createdCarModel.addAttribute("created_carModel", request.getSession().getAttribute("created_carModel"));
+			ModelView.addAttribute("created_carModel", request.getSession().getAttribute("created_carModel"));
 			request.getSession().removeAttribute("created_carModel");
 
 		}
 
-		cateData.addAttribute("categoryList", categoryList);
-		brandsData.addAttribute("brandsList", brandList);
+		ModelView.addAttribute("categoryList", categoryList);
+		ModelView.addAttribute("brandsList", brandList);
 
 		return "admin/brands";
+	}
+
+	@GetMapping("/dashboard/profit/")
+	public String getMethodName(Model ModelView) {
+		List<PaymentDTO> listPayment = paymentService.findListDTO();
+		List<PaymentDTO> listFrom = new ArrayList<>();
+		List<PaymentDTO> listTo = new ArrayList<>();
+		for (var item : listPayment) {
+			if (!item.getFromUser().getEmail().equals("admin@admin")) {
+				listFrom.add(item);
+			}
+		}
+		for (var item : listPayment) {
+			if (!item.getToUser().getEmail().equals("admin@admin")) {
+				listTo.add(item);
+			}
+		}
+		List<String> dayList = paymentService.getDayStringFomart();
+		List<BigDecimal> totalIn = new ArrayList<>();
+		List<BigDecimal> totalOut = new ArrayList<>();
+		for (var item : dayList) {
+			List<PaymentDTO> out = paymentService
+					.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
+			out.removeIf(i -> !i.getToUser().getEmail().equals("admin@admin"));
+			BigDecimal totalOutByDate = BigDecimal.ZERO;
+			for (var i : out) {
+				totalOutByDate = totalOutByDate.add(i.getAmount());
+			}
+			totalIn.add(totalOutByDate);
+			List<PaymentDTO> in = paymentService
+					.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
+			in.removeIf(i -> !i.getFromUser().getEmail().equals("admin@admin"));
+			BigDecimal totalInByDate = BigDecimal.ZERO;
+
+			for (var i : in) {
+				totalInByDate = totalInByDate.add(i.getAmount());
+			}
+			totalOut.add(totalInByDate);
+		}
+		System.out.println(dayList);
+		System.out.println(totalIn);
+		System.out.println(totalOut);
+		ModelView.addAttribute("dayList", dayList);
+		ModelView.addAttribute("totalIn", totalIn);
+		ModelView.addAttribute("totalOut", totalOut);
+		ModelView.addAttribute("listPaymentFrom", listFrom);
+		ModelView.addAttribute("listPaymentTo", listTo);
+
+		return "admin/profit";
+	}
+
+	@PostMapping("/dashboard/profit/searchIn")
+	public String postSearchIn(@RequestParam("dateRange") String dateRange, Model ModelView) throws ParseException {
+		List<PaymentDTO> listTo = new ArrayList<>();
+		List<PaymentDTO> list = paymentService.findListDTO();
+		for (var item : list) {
+			if (!item.getToUser().getEmail().equals("admin@admin")) {
+				listTo.add(item);
+			}
+		}
+		ModelView.addAttribute("listPaymentTo", listTo);
+
+		if (dateRange.isBlank() || dateRange.isEmpty()) {
+			List<PaymentDTO> listPayment = paymentService.findListDTO();
+			List<PaymentDTO> listFrom = new ArrayList<>();
+			for (var item : listPayment) {
+				if (!item.getFromUser().getEmail().equals("admin@admin")) {
+					listFrom.add(item);
+				}
+			}
+			ModelView.addAttribute("listPaymentFrom", listFrom);
+			return "admin/profit";
+		} else if (dateRange.contains("to")) {
+			String[] dates = dateRange.split(" to ");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+			LocalDate startDate = LocalDate.parse(dates[0], formatter);
+			LocalDate endDate = LocalDate.parse(dates[1], formatter);
+			LocalDateTime localDateTimeStart = startDate.atStartOfDay();
+			LocalDateTime localDateTimeEnd = endDate.atTime(23, 59, 59);
+
+			List<PaymentDTO> listPayment = paymentService.findListDTO();
+			List<PaymentDTO> listFrom = new ArrayList<>();
+			for (var item : listPayment) {
+				if (!item.getFromUser().getEmail().equals("admin@admin")
+						&& item.getCreatedAt().isAfter(localDateTimeStart)
+						&& item.getCreatedAt().isBefore(localDateTimeEnd)) {
+					listFrom.add(item);
+				}
+
+			}
+			ModelView.addAttribute("listPaymentFrom", listFrom);
+			ModelView.addAttribute("dataRange", dateRange);
+			return "admin/profit";
+		} else {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+			LocalDate startDate = LocalDate.parse(dateRange, formatter);
+			LocalDateTime localDateTimeStart = startDate.atStartOfDay();
+
+			List<PaymentDTO> listPayment = paymentService.findListDTO();
+			List<PaymentDTO> listFrom = new ArrayList<>();
+			for (var item : listPayment) {
+				if (!item.getFromUser().getEmail().equals("admin@admin")
+						&& item.getCreatedAt().toLocalDate().isEqual(localDateTimeStart.toLocalDate())) {
+					listFrom.add(item);
+				}
+
+			}
+			ModelView.addAttribute("listPaymentFrom", listFrom);
+			ModelView.addAttribute("dataRange", dateRange);
+			return "admin/profit";
+		}
+
+	}
+
+	@PostMapping("/dashboard/profit/searchOut")
+	public String postSearchOut(@RequestParam("dateRange") String dateRange, Model ModelView) throws ParseException {
+		List<PaymentDTO> listFrom = new ArrayList<>();
+		List<PaymentDTO> list = paymentService.findListDTO();
+		for (var item : list) {
+			if (!item.getFromUser().getEmail().equals("admin@admin")) {
+				listFrom.add(item);
+			}
+		}
+		ModelView.addAttribute("listPaymentTo", listFrom);
+
+		if (dateRange.isBlank() || dateRange.isEmpty()) {
+			List<PaymentDTO> listPayment = paymentService.findListDTO();
+			List<PaymentDTO> listTo = new ArrayList<>();
+			for (var item : listPayment) {
+				if (!item.getToUser().getEmail().equals("admin@admin")) {
+					listFrom.add(item);
+				}
+			}
+			ModelView.addAttribute("listPaymentTo", listTo);
+			return "admin/profit";
+		} else if (dateRange.contains("to")) {
+			String[] dates = dateRange.split(" to ");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+			LocalDate startDate = LocalDate.parse(dates[0], formatter);
+			LocalDate endDate = LocalDate.parse(dates[1], formatter);
+			LocalDateTime localDateTimeStart = startDate.atStartOfDay();
+			LocalDateTime localDateTimeEnd = endDate.atTime(23, 59, 59);
+
+			List<PaymentDTO> listPayment = paymentService.findListDTO();
+			List<PaymentDTO> listTo = new ArrayList<>();
+			for (var item : listPayment) {
+				if (!item.getToUser().getEmail().equals("admin@admin")
+						&& item.getCreatedAt().isAfter(localDateTimeStart)
+						&& item.getCreatedAt().isBefore(localDateTimeEnd)) {
+					listFrom.add(item);
+				}
+
+			}
+
+			ModelView.addAttribute("listPaymentTo", listTo);
+			ModelView.addAttribute("dataRange", dateRange);
+			return "admin/profit";
+		} else {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+			LocalDate startDate = LocalDate.parse(dateRange, formatter);
+			LocalDateTime localDateTimeStart = startDate.atStartOfDay();
+			List<PaymentDTO> listPayment = paymentService.findListDTO();
+			List<PaymentDTO> listTo = new ArrayList<>();
+			for (var item : listPayment) {
+				if (!item.getToUser().getEmail().equals("admin@admin")
+						&& item.getCreatedAt().toLocalDate().isEqual(localDateTimeStart.toLocalDate())) {
+					listTo.add(item);
+				}
+
+			}
+			ModelView.addAttribute("listPaymentTo", listTo);
+			ModelView.addAttribute("dataRange", dateRange);
+			return "admin/profit";
+		}
+
 	}
 
 	@PostMapping("/dashboard/brands/addNewModel")
 	public String addNewModel(@ModelAttribute("carModel") CarModelList carModel, BindingResult bindingResult,
 			HttpServletRequest request) {
-		byte[] array = new byte[7]; // length is bounded by 7
-		new Random().nextBytes(array);
-		String generatedString = new String(array, Charset.forName("UTF-8"));
+		Random random = new Random();
+		StringBuilder sb = new StringBuilder(10);
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		for (int i = 0; i < 10; i++) {
+
+			int randomIndex = random.nextInt(characters.length());
+
+			sb.append(characters.charAt(randomIndex));
+		}
+		String resultId = sb.toString();
+
 		if (bindingResult.hasErrors()) {
 			// Handle validation errors
 			return "admin/brands" + "?error";
 		} else {
-			carModel.setObjectId(generatedString);
+			carModel.setObjectId(resultId);
 
 			brandServices.saveBrand(carModel);
 			request.getSession().setAttribute("created_carModel", "done");

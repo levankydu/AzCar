@@ -2,8 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-
-
 	<title>Az CAR</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta charset="UTF-8">
@@ -74,6 +72,28 @@
 			cursor: pointer;
 			padding: .1em .3em;
 		}
+
+		.car-img img {
+			min-height: 210px;
+			max-height: 210px;
+		}
+
+		.my-cars-hehe {
+			background-color: #f1f0f0;
+			min-height: 200px;
+			max-height: 230px;
+			box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+			border-radius: 7px;
+		}
+
+		.my-booking-hehe {
+			background-color: #f1f0f0;
+			min-height: 240px;
+			max-height: 250px;
+			box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+			border-radius: 7px;
+		}
+
 	</style>
 </head>
 
@@ -282,9 +302,6 @@
 									</div>
 								</div>
 							</div>
-
-
-
 						</form>
 					</div>
 				</div>
@@ -463,35 +480,33 @@
 										</a>
 
 									</div>
-									<div class="car-box-5" th:each="car : ${listCar}">
+									<div class="car-box-5 my-cars-hehe" th:each="car : ${listCar}">
 
 										<div class="row mt-2">
 											<div class="col-lg-3 col-md-5">
 
 												<a th:href="@{'/home/availablecars/details/' + ${car.id}}"
 													class="car-img">
-													<div class="listing-badges" th:if="${car.discount} == '0'">
-														<span class="featured">Featured</span>
-													</div>
-													<div class="listing-time opening" th:if="${car.discount} >0">
+													<div class="listing-badges" th:if="${car.discount} > 0">
+
 														<span class="featured"
-															th:text="${car.discount}+'% For discount' "></span>
+															th:text="'SALES ' + ${car.discount}+'%'"></span>
 													</div>
 													<div id="carouselExampleIndicators1" class="carousel slide"
 														data-ride="carousel">
-														<ol class="carousel-indicators">
-															<li data-target="#carouselExampleIndicators1"
-																data-slide-to="0" class="active"></li>
-															<li data-target="#carouselExampleIndicators1"
-																data-slide-to="1"></li>
-															<li data-target="#carouselExampleIndicators1"
-																data-slide-to="2"></li>
-														</ol>
 														<div class="carousel-inner">
 															<div class="carousel-item active">
 																<div th:each="img: ${car.images}">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='frontImg'}"
+																	<img th:if="${img.name =='frontImg'}"
+
+																		th:src="${img.urlImage}" alt="car">
+																</div>
+															</div>
+															<div class="carousel-item">
+																<div th:each="img: ${car.images}"
+																	class="d-block w-100 h-100">
+																	<img th:if="${img.name =='behindImg'}"
+
 																		th:src="${img.urlImage}" alt="car">
 																</div>
 
@@ -499,8 +514,8 @@
 															<div class="carousel-item">
 																<div th:each="img: ${car.images}"
 																	class="d-block w-100 h-100">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='behindImg'}"
+																	<img th:if="${img.name =='leftImg'}"
+
 																		th:src="${img.urlImage}" alt="car">
 																</div>
 
@@ -508,8 +523,8 @@
 															<div class="carousel-item">
 																<div th:each="img: ${car.images}"
 																	class="d-block w-100 h-100">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='leftImg'}"
+																	<img th:if="${img.name =='rightImg'}"
+
 																		th:src="${img.urlImage}" alt="car">
 																</div>
 
@@ -517,17 +532,8 @@
 															<div class="carousel-item">
 																<div th:each="img: ${car.images}"
 																	class="d-block w-100 h-100">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='rightImg'}"
-																		th:src="${img.urlImage}" alt="car">
-																</div>
+																	<img th:if="${img.name =='insideImg'}"
 
-															</div>
-															<div class="carousel-item">
-																<div th:each="img: ${car.images}"
-																	class="d-block w-100 h-100">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='insideImg'}"
 																		th:src="${img.urlImage}" alt="car">
 																</div>
 
@@ -537,14 +543,19 @@
 												</a>
 											</div>
 											<div class="col-lg-9 col-md-7">
-												<div class="detail ">
+												<div class="">
 													<h3 class="title">
 														<a href="car-details.html"
 															th:text="${car.carmodel.model +'-'+car.carmodel.year}"></a>
 													</h3>
 
 													<div class="listing-price">
-														<span class="new" th:text="${car.price}+' $/day'"></span>
+														Origin Price: <span class="new"
+															th:text="'$' + ${car.price}+'/day'"></span>
+													</div>
+													<div class="listing-price">
+														Current Discount: <span class="new"
+															th:text="${car.discount > 0 ? car.discount + '%' : 'No discount'}"></span>
 													</div>
 													<div class="listing-price">
 														<p>
@@ -724,10 +735,11 @@
 																						th:text="${item.differenceDate+' day(s)'}">
 																					</td>
 																					<td
-																						th:text="${'$ '+item.getTotalAndFees()}">
+																						th:text="${'$ '+item.totalRent}">
 																					</td>
-																					<td th:text="${item.status}"
-																						th:class="${item.status == 'declined' ? 'badge badge-danger text-wrap mt-2' : 'badge badge-success text-wrap mt-2'}">
+																					<td th:text="${item.getStatusOnView()}"
+																						th:class="${item.status == 'declined' || item.status == 'rentor_declined' ? 'badge badge-danger text-wrap mt-2' : 'badge badge-success text-wrap mt-2'}">
+
 
 																					</td>
 
@@ -744,13 +756,16 @@
 
 
 												</div>
-												<p class="btn btn-theme" th:text="${car.status}"></p>
+												<p class="btn"
+													th:classappend="${car.status == 'declined' || car.status == 'blocked' || car.status == 'violation_blocked' ? 'badge-danger' : (car.status == 'ready_for_booking' ? 'badge-success' : (car.status == 'waiting_for_verify' ? 'badge-warning' : 'badge-info'))}"
+													th:text="${car.getStatusOnView()}"></p>
+												<a style="top: 60px; cursor: pointer;" th:attr="data-car='${car}'" onclick="onGetEmergencyService(this)" class="btn btn-warning btn-lg">Emergency contact?</a>
 												<div class="mt-3">
 													<button style="position: absolute; top: 100px;"
 														th:if="${car.orders.size() > 0}"
 														th:text="${car.orders.size()+' request(s)'}" data-toggle="modal"
 														th:attr="data-target=${'#carmodel-asdwdwad-' + car.carmodel.objectId}"
-														class="btn btn-md btn-warning"></button>
+														class="btn btn-md btn-info"></button>
 												</div>
 												<div class="modal fade bd-example-modal-lg"
 													th:id="${'carmodel-asdwdwad-' + car.carmodel.objectId}"
@@ -774,22 +789,29 @@
 																<table class="table">
 																	<tr class="text-center">
 																		<th>Email</th>
-																		<th>Created At</th>
+																		<th>From</th>
+																		<th>To</th>
 																		<th>Duration</th>
+																		<th>Total Price</th>
 																		<th colspan="2">Action</th>
 																	</tr>
 																	<tr class="text-center"
 																		th:each="item : ${__${'OrderListDto' + car.carmodel.objectId}__}">
 																		<td th:text="${item.user.email}"></td>
-																		<td th:text="${item.createdAt}"></td>
+																		<td th:text="${item.dateFormat(item.fromDate)}"></td>
+																		<td th:text="${item.dateFormat(item.toDate)}"></td>
 																		<td th:text="${item.differenceDate}"></td>
+																		<td th:text="'$' + ${item.totalRent}"></td>
 																		<td><a th:href="@{'/home/myplan/accepted/'+ ${item.id}}"
 																				style="position: relative;"
-																				class="btn btn-md btn-success">Accept</a>
+																				class="btn badge-success">Accept</a>
 																		</td>
-																		<td><a th:href="@{'/home/myplan/declined/'+ ${item.id}}"
-																				style="position: relative;"
-																				class="btn btn-md btn-warning">Decline</a>
+																		<td><a th:attr="data-book-request-url=@{'/home/myplan/declined/'+ ${item.id}}"
+																				style="position: relative; cursor: pointer;"
+																				class="btn btn-warning"
+																				onclick="onGetBookRequestSweetAlert(this)"
+																				>Decline</a>
+
 																		</td>
 																	</tr>
 																</table>
@@ -902,27 +924,19 @@
 									</div>
 								</div>
 								<div class="tab-pane fade" id="two" role="tabpanel" aria-labelledby="two-tab">
-									<div class="car-box-5" th:each="item : ${orderList}">
-
+									<div class="car-box-5 my-booking-hehe" th:each="item : ${orderList}">
 										<div class="row mt-2">
 											<div class="col-lg-3 col-md-5">
-
 												<a th:href="@{'/home/availablecars/details/' + ${item.car.id}}"
 													class="car-img">
-													<div class="listing-badges" th:if="${item.car.discount} == '0'">
-														<span class="featured">Featured</span>
-													</div>
-													<div class="listing-time opening" th:if="${item.car.discount} >0">
-														<span class="featured"
-															th:text="${item.car.discount}+'% For discount' "></span>
-													</div>
+
 													<div id="carouselExampleIndicators1" class="carousel slide"
 														data-ride="carousel">
 														<div class="carousel-inner">
 															<div class="carousel-item active">
 																<div th:each="img: ${item.car.images}">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='frontImg'}"
+																	<img th:if="${img.name =='frontImg'}"
+
 																		th:src="${img.urlImage}" alt="car">
 																</div>
 															</div>
@@ -931,27 +945,45 @@
 												</a>
 											</div>
 											<div class="col-lg-9 col-md-7">
-												<div class="detail ">
+												<div class="">
 													<h3 class="title">
 														<a href="car-details.html"
-															th:text="${item.car.carmodel.model}"></a>
+															th:text="${item.car.carmodel.model + ' (' + item.car.licensePlates + ')'}"></a>
 													</h3>
 
 													<div class="listing-price">
-														<span class="new" th:text="${item.car.price}+' $/day'"></span>
+														Price: <span class="new"
+															th:text="'$' + ${item.originPrice - (item.discount * item.originPrice / 100)}+'/day' + (${item.discount} > 0 ? ' (Discounted ' + ${item.discount}+ '%)' : '')"></span>
 													</div>
 													<div class="listing-price">
-														<p>
-															License Plates: <span class="new"
-																th:text="${item.car.licensePlates}"></span>
-														</p>
+														From: <span class="new"
+															th:text="${item.dateFormat(item.fromDate)}"></span>
+													</div>
+													<div class="listing-price">
+														To: <span class="new"
+															th:text="${item.dateFormat(item.toDate)}"></span>
+													</div>
+													<div class="listing-price">
+														To: <span class="new"
+															th:text="${item.differenceDate} + ' day(s)'"></span>
+													</div>
+													<div class="listing-price">
+														Total: <span class="new"
+															th:text="'$' + ${item.totalRent - (item.discount * item.totalRent / 100)}"></span>
 													</div>
 												</div>
-												<p class="btn btn-theme" th:text="${item.status}"></p>
+												<p class="btn text-white"
+													th:classappend="${item.status == 'declined' ? 'badge-danger' : (item.status == 'owner_trip_done' ? 'badge-success' : (item.status == 'rentor_trip_done' ? 'badge-warning' : 'badge-info'))}"
+													th:text="${item.getStatusOnView()}"></p>
 												<a th:if="${item.status == 'accepted' and item.fromDate &lt; #temporals.createNow() and item.toDate &gt; #temporals.createNow()}"
 													th:href="@{'/home/myplan/rental_done/'+ ${item.id}}"
-													style="position: relative; right: -520px; top: -10px;"
+													style="position: relative; right: -520px; top: -13px;"
 													class="btn btn-md btn-success">Click to finish rental</a>
+												<a th:if="${(item.status == 'accepted' || item.status == 'waiting_for_verify') and (#temporals.createNow() lt item.fromDate or #temporals.createNow() gt item.toDate)}"
+													style="position: relative; right: -568px; top: -48px;"
+													class="btn btn-md btn-warning text-white"
+													th:attr="data-url=@{'/home/myplan/cancel_from_user/' + ${item.id}}"
+													onclick="showOrderCancelConfirm()">Cancel Order</a>
 											</div>
 										</div>
 									</div>
@@ -1233,6 +1265,104 @@
 <!-- Custom JS Script -->
 <script src="/assets/js/app.js"></script>
 <script type="text/javascript" src="/assets/js/myPlans.js"></script>
+
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	const userBalance = /*[[${userBalanceeeeee}]]*/ '';
+	/*]]>*/
+	/*<![CDATA[*/
+	const userViolated = /*[[${userViolated}]]*/ '';
+	/*]]>*/
+	if (userViolated == true) {
+		swal.fire({
+			title: "BANNED TEMPORARY",
+			text: "Your are being banned temporary because of declinding too many cars in a month. You must pay $200 to keep using our service, you are not allowed to withdraw money on your wallet until you pay your fine (deposit is allowed)",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Yes, pay it!",
+			cancelButtonText: "Got it, I will think about it",
+		}).then((result) => {
+			if (result.isConfirmed) {
+				if (userBalance >= 200) {
+					window.location.href = "/home/myplan/payFine";
+				} else {
+					Swal.fire({
+						title: "Balance is not enough",
+						text: "Your balance is less than $200, deposit and try again",
+						icon: "warning",
+						confirmButtonColor: "#3754ec",
+					});
+				}
+			}
+		});
+	}
+	
+	
+	function showOrderCancelConfirm() {
+		const a = document.querySelector("a[data-url]");
+		const url = a.getAttribute('data-url');
+		swal.fire({
+			title: "Are you sure?",
+			text: "Once canceled, you will not be able to recover this order!",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Yes, cancel it!",
+			cancelButtonText: "No, keep it"
+		}).then((result) => {
+			if (result.isConfirmed) {
+				// Redirect to cancel action with the provided URL
+				window.location.href = url;
+			}
+		});
+	}
+	
+	function onGetBookRequestSweetAlert(element){
+		const url = element.getAttribute('data-book-request-url');
+		swal.fire({
+			title: "Are you sure?",
+			text: "Once canceled, you will not be able to recover this order!",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Yes, cancel it!",
+			cancelButtonText: "No, keep it"
+		}).then((result) => {
+			if (result.isConfirmed) {
+				// Redirect to cancel action with the provided URL
+				window.location.href = url;
+			}
+		});
+	}
+	function onGetEmergencyService(element) {
+		const car = element.getAttribute('data-car');
+		swal.fire({
+			title: "Emergency Service",
+			html: `
+				<form>
+					<input type="hidden" name="carId" value="${car.id}">
+					<div class="form-group">
+					    <label for="">Description</label>
+					    <input type="text" name="description" class="form-control" placeholder="Describe your situation">
+					 </div>
+				</form>
+			`,
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Help me",
+			cancelButtonText: "Cancel"
+		}).then((result) => {
+			if (result.isConfirmed) {
+	
+			}
+		});
+	}
+</script>
 </body>
 
 </html>

@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -39,6 +41,7 @@ import com.project.AzCar.Dto.Reply.ReplyDTO;
 import com.project.AzCar.Dto.Reviews.ReviewsDTO;
 import com.project.AzCar.Entities.Cars.CarImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
+import com.project.AzCar.Entities.Cars.CarModelList;
 import com.project.AzCar.Entities.Cars.ExtraFee;
 import com.project.AzCar.Entities.Cars.OrderDetails;
 import com.project.AzCar.Entities.Cars.PlateImages;
@@ -77,6 +80,7 @@ import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
 import com.project.AzCar.Utilities.OrderExtraFee;
+import com.project.AzCar.payments.paypal.PaypalService;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -127,6 +131,14 @@ public class UserSideCarController {
 	private ICommentsService commentsService;
 	@Autowired
 	private IReplyService repService;
+
+	@Autowired
+	private PaypalService paypalService;
+
+	private Logger log = LoggerFactory.getLogger(getClass());
+
+	public static final String PAYPAL_SUCCESS_URL = "checkout/pay/success";
+	public static final String PAYPAL_CANCEL_URL = "checkout/pay/cancel";
 
 	@GetMapping("/home/carregister/")
 
@@ -353,14 +365,13 @@ public class UserSideCarController {
 		BigDecimal subTotal = priceAfterDiscount.multiply(BigDecimal.valueOf(orderdetails.getDifferenceDate()))
 				.add(BigDecimal.valueOf(orderdetails.getExtraFee().getDeliveryFee()));
 		carDetailsDto.setCarmodel(brandServices.getModel(carDetails.getModelId()));
-		String mailContent = "<p>Hello," + email + "</p>" + "<p>Thank you for ordering with AzCar.</p>"
-				+ "<p>Below are some main details of your car:</p>" + "<table>" + "<tr>" + "<th>Model: </th>" + "<td>"
-				+ "[" + carDetailsDto.getCarmodel().getBrand() + "] " + carDetailsDto.getCarmodel().getModel() + "</td>"
-				+ "</tr>" + "<tr>" + "<th>Year: </th>" + "<td>" + carDetailsDto.getCarmodel().getYear() + "</td>"
-				+ "</tr>" + "<tr>" + "<th>Rental per day: </th>" + "<td>$" + orderdetails.getOriginPrice() + "</td>"
-				+ "</tr>" + "<tr>" + "<th>Discount: </th>" + "<td>" + orderdetails.getDiscount() + "% </td>" + "</tr>"
-				+ "<tr>" + "<th>Price After Discount: </th>" + "<td>$" + priceAfterDiscount + "</td>" + "</tr>" + "<tr>"
-				+ "<th>From: </th>" + "<td>"
+		String mailContent = "<p>Below are some main details of your car:</p>" + "<table>" + "<tr>" + "<th>Model: </th>"
+				+ "<td>" + "[" + carDetailsDto.getCarmodel().getBrand() + "] " + carDetailsDto.getCarmodel().getModel()
+				+ "</td>" + "</tr>" + "<tr>" + "<th>Year: </th>" + "<td>" + carDetailsDto.getCarmodel().getYear()
+				+ "</td>" + "</tr>" + "<tr>" + "<th>Rental per day: </th>" + "<td>$" + orderdetails.getOriginPrice()
+				+ "</td>" + "</tr>" + "<tr>" + "<th>Discount: </th>" + "<td>" + orderdetails.getDiscount() + "% </td>"
+				+ "</tr>" + "<tr>" + "<th>Price After Discount: </th>" + "<td>$" + priceAfterDiscount + "</td>"
+				+ "</tr>" + "<tr>" + "<th>From: </th>" + "<td>"
 				+ orderdetails.getFromDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "</td>" + "</tr>"
 				+ "<tr>" + "<th>To: </th>" + "<td>"
 				+ orderdetails.getToDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "</td>" + "</tr>"
@@ -376,10 +387,14 @@ public class UserSideCarController {
 				+ "<th>Total: </th>" + "<td>" + "<h4>$"
 				+ orderdetails.getTotalAndFees()
 						.subtract(BigDecimal.valueOf(orderdetails.getExtraFee().getDeliveryFee()))
-				+ "</h4>" + "</td>" + "</tr>" + "</table>"
+				+ "</h4>" + "</td>" + "</tr>" + "</table>";
+		orderServices.sendOrderEmail(email, "Place Order Successfully", "<p>Hello," + email + "</p>"
+				+ "<p>Thank you for ordering with AzCar.</p>" + mailContent
 				+ "<p>This is to confirm that we already got your order, We will send you an email after car owner accept or declined your order</p>"
-				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
-		orderServices.sendOrderEmail(email, "Place Order Successfully", mailContent);
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>");
+		Users carOwner = userServices.findById(carDetails.getCarOwnerId());
+		orderServices.sendOrderEmail(carOwner.getEmail(), "An order of" + "[" + carDetailsDto.getCarmodel().getBrand()
+				+ "] " + carDetailsDto.getCarmodel().getModel() + "has been placed", mailContent);
 		return "redirect:/home/myplan/";
 	}
 
@@ -423,6 +438,12 @@ public class UserSideCarController {
 		ModelView.addAttribute("carDetails", modelDto);
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users customer = userServices.findUserByEmail(email);
+		if (customer.isEnabled() == false) {
+			ModelView.addAttribute("userViolated", true);
+			ModelView.addAttribute("userBalanceeeeee", customer.getBalance());
+		} else {
+			ModelView.addAttribute("userViolated", false);
+		}
 		Users owner = userServices.findById(modelDto.getCarOwnerId());
 		ModelView.addAttribute("customer", customer);
 		ModelView.addAttribute("user", owner);
@@ -437,12 +458,9 @@ public class UserSideCarController {
 		List<Reviews> reviews = reviewServices.findAllReviewsByCarId(Integer.parseInt(carId));
 
 		List<ReviewsDTO> listReviewsDTO = new ArrayList<>();
-		if(!reviews.isEmpty())
-		{
-			for(Reviews re : reviews)
-			{	
-				if(re.getStatus().toString() !="Decline")
-				{
+		if (!reviews.isEmpty()) {
+			for (Reviews re : reviews) {
+				if (re.getStatus().toString() != "Decline") {
 					ReviewsDTO reDTO = new ReviewsDTO();
 					reDTO.setId(re.getId());
 					reDTO.setCarId(re.getCarInfor().getId());
@@ -564,6 +582,7 @@ public class UserSideCarController {
 		List<City> provinces = provinceServices.getListCity();
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users owner = userServices.findUserByEmail(email);
+
 		for (var item : list) {
 			if (item.getStatus().equals(Constants.carStatus.READY) && item.getCarOwnerId() != (int) owner.getId()) {
 				var itemDto = carServices.mapToDto(item.getId());
@@ -601,8 +620,7 @@ public class UserSideCarController {
 
 		if (Lcomments != null) {
 			for (Comments tempC : Lcomments) {
-				if(tempC.getStatus().toString().contains("Pending"))
-				{
+				if (tempC.getStatus().toString().contains("Pending")) {
 					CommentsDTO tempDTO = new CommentsDTO();
 					tempDTO.setId(tempC.getId());
 					tempDTO.setContent(tempC.getContent());
@@ -614,7 +632,7 @@ public class UserSideCarController {
 
 					commentDTO.add(tempDTO);
 				}
-			
+
 			}
 
 			return commentDTO;
@@ -754,6 +772,44 @@ public class UserSideCarController {
 		return "availableCars";
 	}
 
+	@GetMapping("/home/carregister/addNewModel/")
+	public String getAddNewModelPage(Model ModelView) {
+		List<String> brands = brandServices.getBrandList();
+		List<String> categories = brandServices.getCategoryList();
+
+		ModelView.addAttribute("categoryList", categories);
+		ModelView.addAttribute("brandsList", brands);
+
+		return "ifCarModelNotFound";
+
+	}
+
+	@PostMapping("/home/carregister/addNewModel")
+	public String postAddNewModelPage(@ModelAttribute("carModel") CarModelList carModel, BindingResult bindingResult,
+			HttpServletRequest request) {
+		Random random = new Random();
+		StringBuilder sb = new StringBuilder(10);
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		for (int i = 0; i < 10; i++) {
+
+			int randomIndex = random.nextInt(characters.length());
+
+			sb.append(characters.charAt(randomIndex));
+		}
+		String resultId = sb.toString();
+
+		if (bindingResult.hasErrors()) {
+//			return "";
+			return "redirect:/home/carregister/addNewModel/" + "?error";
+		} else {
+			carModel.setObjectId(resultId);
+			brandServices.saveBrand(carModel);
+		}
+//		return "";
+		return "redirect:/home/carregister/addNewModel/";
+
+	}
+
 	@GetMapping("/home/myplan/accepted/{orderId}")
 	public String acceptRequestBooking(@PathVariable(name = "orderId") String orderId) {
 		var order = orderServices.getById(Integer.parseInt(orderId));
@@ -761,6 +817,46 @@ public class UserSideCarController {
 		orderServices.save(order);
 		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
 		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(2)));
+
+		return "redirect:/home/myplan/";
+	}
+
+	@GetMapping("/home/myplan/payFine")
+	public String userPayFine(HttpServletRequest request) {
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users owner = userServices.findUserByEmail(email);
+		owner.setEnabled(true);
+		userServices.saveUserReset(owner);
+		List<Violation> violations = violationRepo.getByUserAndCarId(owner.getId(), 0, true,
+				Constants.violations.USER_DECLINDED);
+		for (Violation vio : violations) {
+			vio.setEnabled(false);
+			violationRepo.save(vio);
+		}
+		paymentServices.createNewLock(owner.getId(), 0, BigDecimal.valueOf(200));
+
+		return "redirect:/home/myplan/";
+	}
+
+	@GetMapping("/home/myplan/ownerCarPayFine/{carId}")
+	public String ownerCarPayFine(HttpServletRequest request, @PathVariable(name = "carId") String carId) {
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users owner = userServices.findUserByEmail(email);
+		CarInfor car = carServices.findById(Integer.parseInt(carId));
+		car.setStatus(Constants.carStatus.READY);
+		List<Violation> violations = violationRepo.getByUserAndCarId(owner.getId(), Integer.parseInt(carId), true,
+				Constants.violations.OWNER_DECLINED);
+		for (Violation vio : violations) {
+			vio.setEnabled(false);
+			violationRepo.save(vio);
+		}
+		List<Violation> no_violations = violationRepo.getByUserAndCarId(owner.getId(), Integer.parseInt(carId), true,
+				Constants.violations.NO_RESPONSE);
+		for (Violation vio : no_violations) {
+			vio.setEnabled(false);
+			violationRepo.save(vio);
+		}
+		paymentServices.createNewLock(owner.getId(), 0, BigDecimal.valueOf(200));
 
 		return "redirect:/home/myplan/";
 	}
@@ -788,17 +884,48 @@ public class UserSideCarController {
 		orderServices.save(order);
 		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
 		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(2)));
-		paymentServices.createNewLock(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(10)));
+		paymentServices.createNewLock(ownerId, order.getId(), order.getTotalRent().multiply(BigDecimal.valueOf(0.1)));
+
+		return "redirect:/home/myplan/";
+	}
+
+	@GetMapping("/home/myplan/cancel_from_user/{orderId}")
+	public String clientCancelBooking(@PathVariable(name = "orderId") String orderId) {
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		String status = order.getStatus();
+		if (status.equals("accepted")) {
+			// return only 90% of totalRent and fees with insurance
+			paymentServices.createNewRefund(order.getUserId(), order.getId(),
+					order.getTotalAndFeesWithoutInsurance().multiply(BigDecimal.valueOf(0.9)));
+		}
+		if (status.equals("waiting_for_verify")) {
+
+		}
+		order.setStatus(Constants.orderStatus.RENTOR_DECLINED);
+		orderServices.save(order);
+
+		Violation vio = new Violation();
+		vio.setUserId(order.getUserId());
+		vio.setCarId(Integer.parseInt(order.getCarId()));
+		vio.setReason(Constants.violations.USER_DECLINDED);
+		violationRepo.save(vio);
 
 		return "redirect:/home/myplan/";
 	}
 
 	@GetMapping("/home/myplan/")
 	public String getMyPlanPage(HttpServletRequest request, Model ModelView) {
-		orderServices.unrespondDetected();
-
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users user = userServices.findUserByEmail(email);
+		if (user.isEnabled() == false) {
+			ModelView.addAttribute("userViolated", true);
+			ModelView.addAttribute("userBalanceeeeee", user.getBalance());
+		} else {
+			ModelView.addAttribute("userViolated", false);
+		}
+
+		orderServices.unrespondDetected(user);
+
 		List<OrderDetailsDTO> orderList = orderServices.getDTOFromCreatedBy((int) user.getId());
 		orderList.sort(Comparator.comparingLong(OrderDetailsDTO::getId).reversed());
 		List<OrderDetailsDTO> latestOrders = new ArrayList<>(orderList.subList(0, Math.min(orderList.size(), 5)));
@@ -871,6 +998,15 @@ public class UserSideCarController {
 //
 //		return "redirect:/home/myplan/";
 //	}
+
+	@PostMapping("/home/myplan/paypal-charge/")
+	public String paypalCharge(HttpServletRequest request) {
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users user = userServices.findUserByEmail(email);
+		user.setBalance(BigDecimal.valueOf(10000));
+		userServices.saveUserReset(user);
+		return "redirect:/home/myplan/";
+	}
 
 	@GetMapping("/home/availablecars/img/{filename}")
 	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename) throws IOException {
