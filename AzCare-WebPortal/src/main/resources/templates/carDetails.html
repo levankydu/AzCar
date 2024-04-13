@@ -1991,12 +1991,12 @@
 				cancelButtonText: "Got it, I will think about it",
 			}).then((result) => {
 				if (result.isConfirmed) {
-					if (user.balance >= 200) {
+					if (user.balance >= 400) {
 						window.location.href = "/home/myplan/ownerCarPayFine/" + carDetails.id;
 					} else {
 						Swal.fire({
 							title: "Balance is not enough",
-							text: "Your balance is less than $200, deposit and try again",
+							text: "Your balance is less than $400, deposit and try again",
 							icon: "warning",
 							confirmButtonColor: "#3754ec",
 						});

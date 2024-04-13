@@ -214,12 +214,14 @@ public class AdminController {
 	@GetMapping("/dashboard/carverify/{carId}")
 	public String getVerifyDetailsPage(@PathVariable("carId") String carId, Model ModelView) {
 		var listAcceptedCar = carServices.findAll();
-
+		listAcceptedCar.removeIf(item -> item.getId() == Integer.parseInt(carId));
 		var model = carServices.findById(Integer.parseInt(carId));
 		for (var item : listAcceptedCar) {
 			if (model.getLicensePlates().equals(item.getLicensePlates())) {
 				ModelView.addAttribute("checkPlate", "Duplicate License Plate");
+				break;
 			}
+			ModelView.addAttribute("checkPlate", "");
 		}
 		var modelDto = carServices.mapToDto(model.getId());
 		modelDto.setCarmodel(brandServices.getModel(model.getModelId()));

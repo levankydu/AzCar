@@ -72,6 +72,7 @@ import com.project.AzCar.Services.Locations.ProvinceServices;
 import com.project.AzCar.Services.Locations.WardServices;
 import com.project.AzCar.Services.Orders.OrderDetailsService;
 import com.project.AzCar.Services.Payments.PaymentService;
+import com.project.AzCar.Services.Payments.ProfitCallBack;
 import com.project.AzCar.Services.Reviews.IReviewsService;
 import com.project.AzCar.Services.Reviews.ReviewService;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
@@ -152,6 +153,7 @@ public class UserSideCarController {
 		return "registerCar";
 	}
 
+	// Chủ xe check khi khách trả
 	@PostMapping("home/myplan/rentalReview")
 	public String retalReview(
 			@RequestParam(name = "clean-check", required = false, defaultValue = "false") boolean cleanCheck,
@@ -353,7 +355,15 @@ public class UserSideCarController {
 		orderdetails.setStatus(Constants.orderStatus.WAITING);
 		orderdetails.setReview(false);
 		orderServices.save(orderdetails);
-		paymentServices.createNewLock(user.getId(), orderdetails.getId(), orderdetails.getTotalAndFees());
+		paymentServices.createNewLock(user.getId(), orderdetails.getId(),
+				orderdetails.getTotalAndFeesWithoutInsurance());
+		paymentServices.createNewProfit(user.getId(), BigDecimal.valueOf(orderdetails.getExtraFee().getInsurance()),
+				new ProfitCallBack() {
+					@Override
+					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+						user.setBalance(userBalance.subtract(amount));
+					}
+				});
 		CarInforDto carDetailsDto = carServices.mapToDto(carDetails.getId());
 		BigDecimal discountAmount = orderdetails.getOriginPrice()
 				.multiply(BigDecimal.valueOf(orderdetails.getDiscount()).divide(BigDecimal.valueOf(100)));
@@ -829,7 +839,12 @@ public class UserSideCarController {
 			vio.setEnabled(false);
 			violationRepo.save(vio);
 		}
-		paymentServices.createNewLock(owner.getId(), 0, BigDecimal.valueOf(200));
+		paymentServices.createNewProfit(owner.getId(), BigDecimal.valueOf(200), new ProfitCallBack() {
+			@Override
+			public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+				user.setBalance(userBalance.subtract(amount));
+			}
+		});
 
 		return "redirect:/home/myplan/";
 	}
@@ -852,11 +867,17 @@ public class UserSideCarController {
 			vio.setEnabled(false);
 			violationRepo.save(vio);
 		}
-		paymentServices.createNewLock(owner.getId(), 0, BigDecimal.valueOf(200));
+		paymentServices.createNewProfit(owner.getId(), BigDecimal.valueOf(400), new ProfitCallBack() {
+			@Override
+			public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+				user.setBalance(userBalance.subtract(amount));
+			}
+		});
 
 		return "redirect:/home/myplan/";
 	}
 
+	// car owner declines booking
 	@GetMapping("/home/myplan/declined/{orderId}")
 	public String declinedRequestBooking(@PathVariable(name = "orderId") String orderId) {
 		var order = orderServices.getById(Integer.parseInt(orderId));
@@ -869,7 +890,14 @@ public class UserSideCarController {
 		vio.setCarId(car.getId());
 		vio.setReason(Constants.violations.OWNER_DECLINED);
 		violationRepo.save(vio);
-		paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFees());
+		paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
+		paymentServices.createNewExpense(order.getUserId(), BigDecimal.valueOf(order.getExtraFee().getInsurance()),
+				new ProfitCallBack() {
+					@Override
+					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+						user.setBalance(userBalance.add(amount));
+					}
+				});
 		return "redirect:/home/myplan/";
 	}
 
@@ -879,8 +907,13 @@ public class UserSideCarController {
 		order.setStatus(Constants.orderStatus.RENTOR_TRIP_DONE);
 		orderServices.save(order);
 		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
-		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(2)));
-		paymentServices.createNewLock(ownerId, order.getId(), order.getTotalRent().multiply(BigDecimal.valueOf(0.1)));
+		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().multiply(BigDecimal.valueOf(0.4)));
+		paymentServices.createNewProfit(ownerId, order.getTotalRent().multiply(BigDecimal.valueOf(0.1)),
+				new ProfitCallBack() {
+					@Override
+					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+					}
+				});
 
 		return "redirect:/home/myplan/";
 	}
@@ -891,8 +924,14 @@ public class UserSideCarController {
 		String status = order.getStatus();
 		if (status.equals("accepted")) {
 			// return only 90% of totalRent and fees with insurance
-			paymentServices.createNewRefund(order.getUserId(), order.getId(),
-					order.getTotalAndFeesWithoutInsurance().multiply(BigDecimal.valueOf(0.9)));
+			paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
+			paymentServices.createNewProfit(order.getUserId(),
+					order.getTotalAndFeesWithoutInsurance().multiply(BigDecimal.valueOf(0.1)), new ProfitCallBack() {
+						@Override
+						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+							user.setBalance(userBalance.subtract(amount));
+						}
+					});
 		}
 		if (status.equals("waiting_for_verify")) {
 
