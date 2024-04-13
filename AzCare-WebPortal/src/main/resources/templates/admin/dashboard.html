@@ -80,7 +80,6 @@
 
 							<ul class="submenu ">
 
-
 								<li class="submenu-item  "><a href="/dashboard/ListAccount" class="submenu-link">List
 										All User</a>
 
@@ -89,10 +88,22 @@
 								<li class="submenu-item  "><a href="component-alert.html" class="submenu-link">Alert</a>
 								</li>
 
-
 							</ul>
 						</li>
 
+						<li class="sidebar-item  has-sub"><a href="#" class='sidebar-link'><i
+									class="bi bi-car-front-fill"></i> <span>Payment
+									Management</span> </a>
+							<ul class="submenu ">
+
+								<li class="submenu-item  "><a th:href="@{/dashboard/depositmanager}"
+										class="submenu-link">List Payment </a>
+								</li>
+								<li class="submenu-item  "><a th:href="@{/dashboard/depositmanager/cardbank}"
+									class="submenu-link">List Payment Card </a>
+							</li>
+							</ul>
+						</li>
 						<li class="sidebar-item  has-sub"><a href="#" class='sidebar-link'><i
 									class="bi bi-car-front-fill"></i> <span>Car
 									Management</span> </a>
@@ -116,11 +127,8 @@
 								<li class="submenu-item"><a th:href="@{/dashboard/reviews}"
 										class="submenu-link">Review</a>
 								</li>
-								<li class="submenu-item"><a th:href="@{/dashboard/comments}"
-										class="submenu-link">Comment</a>
-								</li>
 
-								<li class="submenu-item  "><a th:href="@{/dashboard/ListIgnoreKey/}"
+								<li class="submenu-item  "><a th:href="@{/dashboard/ListIgnoreKey}"
 										class="submenu-link">Lisst Ignore Key</a>
 								</li>
 							</ul>
@@ -132,8 +140,8 @@
 							</a>
 							<ul class="submenu ">
 
-								<li class="submenu-item"><a th:href="@{/dashboard/ClientService}"
-										class="submenu-link">Client Service</a></li>
+								<li class="submenu-item"><a href="layout-default.html" class="submenu-link">Default
+										Layout</a></li>
 
 								<li class="submenu-item  "><a href="layout-vertical-1-column.html"
 										class="submenu-link">1
