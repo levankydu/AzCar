@@ -175,7 +175,9 @@ if (document.getElementById("accept-tuReview")) {
 		}).then((result) => {
 
 			if (result.value && result.value.toLowerCase() === 'verify') {
-				verify.submit();
+				
+				
+				$('#verify').submit();
 				console.log("User entered 'verify'");
 			} else {
 
@@ -204,7 +206,7 @@ if (document.getElementById("decline-tuReview")) {
 		}).then((result) => {
 			if (result.value && result.value.toLowerCase() === 'decline') {
 
-				declined.submit();
+				$('#declined').submit();
 				console.log("User entered 'verify'");
 			} else {
 

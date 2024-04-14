@@ -929,8 +929,8 @@ public class UserSideCarController {
 		if (status.equals("accepted")) {
 			// return only 90% of totalRent and fees with insurance
 			paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
-			paymentServices.createNewProfit(order.getUserId(),
-					order.getTotalAndFeesWithoutInsurance().multiply(BigDecimal.valueOf(0.1)), new ProfitCallBack() {
+			paymentServices.createNewProfit(order.getUserId(), order.getTotalRent().multiply(BigDecimal.valueOf(0.1)),
+					new ProfitCallBack() {
 						@Override
 						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 							user.setBalance(userBalance.subtract(amount));
@@ -938,7 +938,14 @@ public class UserSideCarController {
 					});
 		}
 		if (status.equals("waiting_for_verify")) {
-
+			paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
+			paymentServices.createNewExpense(order.getUserId(), BigDecimal.valueOf(order.getExtraFee().getInsurance()),
+					new ProfitCallBack() {
+						@Override
+						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+							user.setBalance(userBalance.add(amount));
+						}
+					});
 		}
 		order.setStatus(Constants.orderStatus.RENTOR_DECLINED);
 		orderServices.save(order);
@@ -1001,11 +1008,10 @@ public class UserSideCarController {
 		listImg.removeIf(t -> t.getStatus().equals(Constants.plateStatus.DECLINED));
 
 		OrderDetailsDTO rentorDone = orderServices.getDTORentorTripDoneOrder();
-		
+
 		Cardbank c = cardService.findCardbankbyId(1);
 		ModelView.addAttribute("cardbank", c);
-		
-		
+
 		ModelView.addAttribute("rentorDone", rentorDone);
 		ModelView.addAttribute("orderList", latestOrders);
 		ModelView.addAttribute("ImgLicense", listImg);

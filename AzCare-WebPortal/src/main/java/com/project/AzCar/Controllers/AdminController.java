@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -39,6 +40,7 @@ import com.project.AzCar.Dto.Brands.BrandsDto;
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
 import com.project.AzCar.Dto.Categories.CategoriesDto;
 import com.project.AzCar.Dto.Payments.PaymentDTO;
+import com.project.AzCar.Dto.Payments.ProfitDTO;
 import com.project.AzCar.Dto.PlateVerify.PlateVerifyDto;
 import com.project.AzCar.Entities.Cars.BrandImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
@@ -60,6 +62,7 @@ import com.project.AzCar.Services.Cars.PlusServiceServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
 import com.project.AzCar.Services.Orders.OrderDetailsService;
 import com.project.AzCar.Services.Payments.PaymentService;
+import com.project.AzCar.Services.Payments.ProfitCallBack;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
@@ -110,50 +113,50 @@ public class AdminController {
 
 		loginedUser.setFirstName(authentication.getName());
 		ModelView.addAttribute("user", loginedUser);
+		var result = getDataChart(dateRange);
 
+		ModelView.addAttribute("profit", result.getProfit());
+		ModelView.addAttribute("dayList", result.getDayList());
+		ModelView.addAttribute("totalIn", result.getTotalIn());
+		ModelView.addAttribute("totalOut", result.getTotalOut());
+		return "admin/dashboard";
+
+	}
+
+	private ProfitDTO getDataChart(String dateRange) {
 		List<String> dayList = paymentService.getDayStringFomart();
 		List<String> dayListFinal = new ArrayList<>();
 		List<BigDecimal> totalIn = new ArrayList<>();
 		List<BigDecimal> totalOut = new ArrayList<>();
-
+		BigDecimal sumIncome = BigDecimal.ZERO;
+		BigDecimal sumExpense = BigDecimal.ZERO;
+		BigDecimal totalOutByDate = BigDecimal.ZERO;
+		BigDecimal totalInByDate = BigDecimal.ZERO;
 		if (dateRange.isBlank() || dateRange.isEmpty()) {
 			for (var item : dayList) {
-				List<PaymentDTO> out = paymentService
-						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
-				out.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.PROFIT));
-				BigDecimal totalOutByDate = BigDecimal.ZERO;
-				for (var i : out) {
-					totalOutByDate = totalOutByDate.add(i.getAmount());
-				}
-				totalIn.add(totalOutByDate);
 				List<PaymentDTO> in = paymentService
 						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
-				in.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.EXPENSE));
-				BigDecimal totalInByDate = BigDecimal.ZERO;
-
+				in.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.PROFIT));
 				for (var i : in) {
 					totalInByDate = totalInByDate.add(i.getAmount());
 				}
-				totalOut.add(totalInByDate);
+				if (totalInByDate != BigDecimal.ZERO) {
+					totalIn.add(totalInByDate);
+				}
+				List<PaymentDTO> out = paymentService
+						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
+				out.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.EXPENSE));
+				for (var i : out) {
+					totalOutByDate = totalOutByDate.add(i.getAmount());
+				}
 
+				if (totalOutByDate != BigDecimal.ZERO) {
+					totalOut.add(totalOutByDate);
+				}
 				if (totalInByDate.subtract(totalOutByDate) != BigDecimal.valueOf(0)) {
 					dayListFinal.add(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")).toString());
 				}
 			}
-			BigDecimal sumIncome = BigDecimal.ZERO;
-			BigDecimal sumExpense = BigDecimal.ZERO;
-			for (var item : totalIn) {
-				sumIncome = sumIncome.add(item);
-			}
-			for (var item : totalOut) {
-				sumExpense = sumExpense.add(item);
-			}
-//			ModelView.addAttribute("profit", 100);
-			ModelView.addAttribute("profit", sumIncome.subtract(sumExpense));
-			ModelView.addAttribute("dayList", dayListFinal);
-			ModelView.addAttribute("totalIn", totalIn);
-			ModelView.addAttribute("totalOut", totalOut);
-			return "admin/dashboard";
 
 		} else if (dateRange.contains("to")) {
 			String[] dates = dateRange.split(" to ");
@@ -164,45 +167,39 @@ public class AdminController {
 			LocalDateTime localDateTimeEnd = endDate.atTime(23, 59, 59);
 			for (var item : dayList) {
 
-				List<PaymentDTO> out = paymentService
-						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
-				out.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.PROFIT));
-				out.removeIf(i -> i.getCreatedAt().isBefore(localDateTimeStart));
-				out.removeIf(i -> i.getCreatedAt().isAfter(localDateTimeEnd));
-				BigDecimal totalOutByDate = BigDecimal.ZERO;
-				for (var i : out) {
-					totalOutByDate = totalOutByDate.add(i.getAmount());
-				}
-				totalIn.add(totalOutByDate);
 				List<PaymentDTO> in = paymentService
 						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
-				in.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.EXPENSE));
+				in.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.PROFIT));
 				in.removeIf(i -> i.getCreatedAt().isBefore(localDateTimeStart));
 				in.removeIf(i -> i.getCreatedAt().isAfter(localDateTimeEnd));
-				BigDecimal totalInByDate = BigDecimal.ZERO;
-
 				for (var i : in) {
 					totalInByDate = totalInByDate.add(i.getAmount());
 				}
-				totalOut.add(totalInByDate);
+				if (totalInByDate != BigDecimal.ZERO) {
+					totalIn.add(totalInByDate);
+				}
+
+				List<PaymentDTO> out = paymentService
+						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
+				out.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.EXPENSE));
+				out.removeIf(i -> i.getCreatedAt().isBefore(localDateTimeStart));
+				out.removeIf(i -> i.getCreatedAt().isAfter(localDateTimeEnd));
+
+				for (var i : out) {
+					if (totalOutByDate != BigDecimal.ZERO) {
+						totalOutByDate = totalOutByDate.add(i.getAmount());
+					}
+
+				}
+
+				if (totalOutByDate != BigDecimal.ZERO) {
+					totalOut.add(totalOutByDate);
+				}
+
 				if (totalInByDate.subtract(totalOutByDate) != BigDecimal.valueOf(0)) {
 					dayListFinal.add(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")).toString());
 				}
 			}
-			BigDecimal sumIncome = BigDecimal.ZERO;
-			BigDecimal sumExpense = BigDecimal.ZERO;
-			for (var item : totalIn) {
-				sumIncome = sumIncome.add(item);
-			}
-			for (var item : totalOut) {
-				sumExpense = sumExpense.add(item);
-			}
-//		ModelView.addAttribute("profit", 100);
-			ModelView.addAttribute("profit", sumIncome.subtract(sumExpense));
-			ModelView.addAttribute("dayList", dayListFinal);
-			ModelView.addAttribute("totalIn", totalIn);
-			ModelView.addAttribute("totalOut", totalOut);
-			return "admin/dashboard";
 
 		} else {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
@@ -210,48 +207,52 @@ public class AdminController {
 			LocalDateTime localDateTimeStart = startDate.atStartOfDay();
 			for (var item : dayList) {
 
-				List<PaymentDTO> out = paymentService
-						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
-				out.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.PROFIT));
-				out.removeIf(i -> !i.getCreatedAt().toLocalDate().isEqual(localDateTimeStart.toLocalDate()));
-
-				BigDecimal totalOutByDate = BigDecimal.ZERO;
-				for (var i : out) {
-					totalOutByDate = totalOutByDate.add(i.getAmount());
-				}
-				totalIn.add(totalOutByDate);
 				List<PaymentDTO> in = paymentService
 						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
-				in.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.EXPENSE));
+				in.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.PROFIT));
 				in.removeIf(i -> !i.getCreatedAt().toLocalDate().isEqual(localDateTimeStart.toLocalDate()));
-
-				BigDecimal totalInByDate = BigDecimal.ZERO;
-
 				for (var i : in) {
 					totalInByDate = totalInByDate.add(i.getAmount());
 				}
-				totalOut.add(totalInByDate);
+
+				if (totalInByDate != BigDecimal.ZERO) {
+					totalIn.add(totalInByDate);
+				}
+				List<PaymentDTO> out = paymentService
+						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
+				out.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.EXPENSE));
+				out.removeIf(i -> !i.getCreatedAt().toLocalDate().isEqual(localDateTimeStart.toLocalDate()));
+
+				for (var i : out) {
+					totalOutByDate = totalOutByDate.add(i.getAmount());
+				}
+				if (totalOutByDate != BigDecimal.ZERO) {
+					totalOut.add(totalOutByDate);
+				}
 				if (totalInByDate.subtract(totalOutByDate) != BigDecimal.valueOf(0)) {
 					dayListFinal.add(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")).toString());
 				}
 			}
-			BigDecimal sumIncome = BigDecimal.ZERO;
-			BigDecimal sumExpense = BigDecimal.ZERO;
-			for (var item : totalIn) {
-				sumIncome = sumIncome.add(item);
-			}
-			for (var item : totalOut) {
-				sumExpense = sumExpense.add(item);
-			}
-//		ModelView.addAttribute("profit", 100);
-			ModelView.addAttribute("profit", sumIncome.subtract(sumExpense));
-			ModelView.addAttribute("dayList", dayListFinal);
-			ModelView.addAttribute("totalIn", totalIn);
-			ModelView.addAttribute("totalOut", totalOut);
-			return "admin/dashboard";
 
 		}
+		for (var item : totalIn) {
+			sumIncome = sumIncome.add(item);
+		}
+		for (var item : totalOut) {
+			sumExpense = sumExpense.add(item);
+		}
+		var result = new ProfitDTO();
+		result.setDayList(dayListFinal);
+		result.setProfit(sumIncome.subtract(sumExpense));
+		result.setTotalIn(totalIn);
+		result.setTotalOut(totalOut);
+		return result;
 
+	}
+
+	@GetMapping("/dashboard/chartDrawing")
+	public ResponseEntity<?> chartDrawing() {
+		return ResponseEntity.ok().body(Map.of("result", getDataChart("")));
 	}
 
 	@GetMapping("/dashboard/platesVerify/")
@@ -628,15 +629,13 @@ public class AdminController {
 	}
 
 	@GetMapping("/dashboard/brands/updateBrandLogo/{brandName}")
-	public String getUpdateBrandLogoPage(@PathVariable("brandName") String brandName, Model model, Model brand,
-			Model sessionUpdateBrandLogo, HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
-		model.addAttribute("brandImages", new BrandImages());
-		brand.addAttribute("brandName", brandName);
+	public String getUpdateBrandLogoPage(@PathVariable("brandName") String brandName, Model ModelView,
+			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		ModelView.addAttribute("brandImages", new BrandImages());
+		ModelView.addAttribute("brandName", brandName);
 
 		if (request.getSession().getAttribute("update_brandLogo") != null) {
-			sessionUpdateBrandLogo.addAttribute("update_brandLogo",
-					request.getSession().getAttribute("update_brandLogo"));
+			ModelView.addAttribute("update_brandLogo", request.getSession().getAttribute("update_brandLogo"));
 			request.getSession().removeAttribute("update_brandLogo");
 
 		}
@@ -656,10 +655,18 @@ public class AdminController {
 			message = "Uploaded the image successfully: " + image.getOriginalFilename();
 			model.addAttribute("message", message);
 			newBrandImages.setBrandName(brandName);
-			newBrandImages.setImageUrl(image.getOriginalFilename());
-			brandImageServices.saveImage(newBrandImages);
-			request.getSession().setAttribute("update_brandLogo", "done");
-			return "redirect:/dashboard/brands/";
+			var oldUrl = brandImageServices.getBrandImgByBrandName(brandName);
+			if (oldUrl == null) {
+				newBrandImages.setImageUrl(image.getOriginalFilename());
+				brandImageServices.saveImage(newBrandImages);
+				request.getSession().setAttribute("update_brandLogo", "done");
+				return "redirect:/dashboard/brands/";
+			} else {
+				oldUrl.setImageUrl(image.getOriginalFilename());
+				brandImageServices.saveImage(oldUrl);
+				request.getSession().setAttribute("update_brandLogo", "done");
+				return "redirect:/dashboard/brands/";
+			}
 
 		} catch (Exception e) {
 			message = "Could not upload the image: " + image.getOriginalFilename() + ". Error: " + e.getMessage();
@@ -769,21 +776,29 @@ public class AdminController {
 	}
 
 	@PostMapping("/dashboard/ClientService/")
-	public String postTuReview(@ModelAttribute("status") String status, @ModelAttribute("orderId") String orderId) {
+	public String postTuReview(@ModelAttribute("status") String status,
+			@ModelAttribute("orderId") String afterBookingId) {
 
-		System.out.println(orderId);
-		System.out.println(status);
+		ServiceAfterBooking model = afterBookingRepositories.findById(Integer.parseInt(afterBookingId)).get();
+		var order = orderServices.getById(model.getOrderId());
+		var car = carServices.findById(Integer.parseInt(order.getCarId()));
 		if (status.equals("accepted")) {
-			ServiceAfterBooking model = afterBookingRepositories.findById(Integer.parseInt(orderId)).get();
+
 			model.setStatus("Accepted");
-			afterBookingRepositories.save(model);
+			paymentService.createNewExpense(car.getCarOwnerId(), BigDecimal.valueOf(order.getExtraFee().getInsurance()),
+					new ProfitCallBack() {
+						@Override
+						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+							user.setBalance(userBalance.add(amount));
+						}
+					});
 		}
 		if (status.equals("declined")) {
-			ServiceAfterBooking model = afterBookingRepositories.findById(Integer.parseInt(orderId)).get();
 			model.setStatus("Declined");
-			afterBookingRepositories.save(model);
+
 		}
 
+		afterBookingRepositories.save(model);
 		return "redirect:/dashboard/ClientService";
 	}
 
