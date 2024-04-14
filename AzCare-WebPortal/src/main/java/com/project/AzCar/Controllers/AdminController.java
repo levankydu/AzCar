@@ -104,12 +104,154 @@ public class AdminController {
 	private PaymentService paymentService;
 
 	@GetMapping("/dashboard/")
-	public String getDashboard(Model model, Authentication authentication) {
+	public String getDashboard(Model ModelView, Authentication authentication,
+			@RequestParam(name = "dateRange", required = false, defaultValue = "") String dateRange) {
 		Users loginedUser = new Users();
 
 		loginedUser.setFirstName(authentication.getName());
-		model.addAttribute("user", loginedUser);
-		return "admin/dashboard";
+		ModelView.addAttribute("user", loginedUser);
+
+		List<String> dayList = paymentService.getDayStringFomart();
+		List<String> dayListFinal = new ArrayList<>();
+		List<BigDecimal> totalIn = new ArrayList<>();
+		List<BigDecimal> totalOut = new ArrayList<>();
+
+		if (dateRange.isBlank() || dateRange.isEmpty()) {
+			for (var item : dayList) {
+				List<PaymentDTO> out = paymentService
+						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
+				out.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.PROFIT));
+				BigDecimal totalOutByDate = BigDecimal.ZERO;
+				for (var i : out) {
+					totalOutByDate = totalOutByDate.add(i.getAmount());
+				}
+				totalIn.add(totalOutByDate);
+				List<PaymentDTO> in = paymentService
+						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
+				in.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.EXPENSE));
+				BigDecimal totalInByDate = BigDecimal.ZERO;
+
+				for (var i : in) {
+					totalInByDate = totalInByDate.add(i.getAmount());
+				}
+				totalOut.add(totalInByDate);
+
+				if (totalInByDate.subtract(totalOutByDate) != BigDecimal.valueOf(0)) {
+					dayListFinal.add(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")).toString());
+				}
+			}
+			BigDecimal sumIncome = BigDecimal.ZERO;
+			BigDecimal sumExpense = BigDecimal.ZERO;
+			for (var item : totalIn) {
+				sumIncome = sumIncome.add(item);
+			}
+			for (var item : totalOut) {
+				sumExpense = sumExpense.add(item);
+			}
+//			ModelView.addAttribute("profit", 100);
+			ModelView.addAttribute("profit", sumIncome.subtract(sumExpense));
+			ModelView.addAttribute("dayList", dayListFinal);
+			ModelView.addAttribute("totalIn", totalIn);
+			ModelView.addAttribute("totalOut", totalOut);
+			return "admin/dashboard";
+
+		} else if (dateRange.contains("to")) {
+			String[] dates = dateRange.split(" to ");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+			LocalDate startDate = LocalDate.parse(dates[0], formatter);
+			LocalDate endDate = LocalDate.parse(dates[1], formatter);
+			LocalDateTime localDateTimeStart = startDate.atStartOfDay();
+			LocalDateTime localDateTimeEnd = endDate.atTime(23, 59, 59);
+			for (var item : dayList) {
+
+				List<PaymentDTO> out = paymentService
+						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
+				out.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.PROFIT));
+				out.removeIf(i -> i.getCreatedAt().isBefore(localDateTimeStart));
+				out.removeIf(i -> i.getCreatedAt().isAfter(localDateTimeEnd));
+				BigDecimal totalOutByDate = BigDecimal.ZERO;
+				for (var i : out) {
+					totalOutByDate = totalOutByDate.add(i.getAmount());
+				}
+				totalIn.add(totalOutByDate);
+				List<PaymentDTO> in = paymentService
+						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
+				in.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.EXPENSE));
+				in.removeIf(i -> i.getCreatedAt().isBefore(localDateTimeStart));
+				in.removeIf(i -> i.getCreatedAt().isAfter(localDateTimeEnd));
+				BigDecimal totalInByDate = BigDecimal.ZERO;
+
+				for (var i : in) {
+					totalInByDate = totalInByDate.add(i.getAmount());
+				}
+				totalOut.add(totalInByDate);
+				if (totalInByDate.subtract(totalOutByDate) != BigDecimal.valueOf(0)) {
+					dayListFinal.add(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")).toString());
+				}
+			}
+			BigDecimal sumIncome = BigDecimal.ZERO;
+			BigDecimal sumExpense = BigDecimal.ZERO;
+			for (var item : totalIn) {
+				sumIncome = sumIncome.add(item);
+			}
+			for (var item : totalOut) {
+				sumExpense = sumExpense.add(item);
+			}
+//		ModelView.addAttribute("profit", 100);
+			ModelView.addAttribute("profit", sumIncome.subtract(sumExpense));
+			ModelView.addAttribute("dayList", dayListFinal);
+			ModelView.addAttribute("totalIn", totalIn);
+			ModelView.addAttribute("totalOut", totalOut);
+			return "admin/dashboard";
+
+		} else {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+			LocalDate startDate = LocalDate.parse(dateRange, formatter);
+			LocalDateTime localDateTimeStart = startDate.atStartOfDay();
+			for (var item : dayList) {
+
+				List<PaymentDTO> out = paymentService
+						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
+				out.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.PROFIT));
+				out.removeIf(i -> !i.getCreatedAt().toLocalDate().isEqual(localDateTimeStart.toLocalDate()));
+
+				BigDecimal totalOutByDate = BigDecimal.ZERO;
+				for (var i : out) {
+					totalOutByDate = totalOutByDate.add(i.getAmount());
+				}
+				totalIn.add(totalOutByDate);
+				List<PaymentDTO> in = paymentService
+						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
+				in.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.EXPENSE));
+				in.removeIf(i -> !i.getCreatedAt().toLocalDate().isEqual(localDateTimeStart.toLocalDate()));
+
+				BigDecimal totalInByDate = BigDecimal.ZERO;
+
+				for (var i : in) {
+					totalInByDate = totalInByDate.add(i.getAmount());
+				}
+				totalOut.add(totalInByDate);
+				if (totalInByDate.subtract(totalOutByDate) != BigDecimal.valueOf(0)) {
+					dayListFinal.add(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")).toString());
+				}
+			}
+			BigDecimal sumIncome = BigDecimal.ZERO;
+			BigDecimal sumExpense = BigDecimal.ZERO;
+			for (var item : totalIn) {
+				sumIncome = sumIncome.add(item);
+			}
+			for (var item : totalOut) {
+				sumExpense = sumExpense.add(item);
+			}
+//		ModelView.addAttribute("profit", 100);
+			ModelView.addAttribute("profit", sumIncome.subtract(sumExpense));
+			ModelView.addAttribute("dayList", dayListFinal);
+			ModelView.addAttribute("totalIn", totalIn);
+			ModelView.addAttribute("totalOut", totalOut);
+			return "admin/dashboard";
+
+		}
+
 	}
 
 	@GetMapping("/dashboard/platesVerify/")
@@ -296,34 +438,6 @@ public class AdminController {
 				listTo.add(item);
 			}
 		}
-		List<String> dayList = paymentService.getDayStringFomart();
-		List<BigDecimal> totalIn = new ArrayList<>();
-		List<BigDecimal> totalOut = new ArrayList<>();
-		for (var item : dayList) {
-			List<PaymentDTO> out = paymentService
-					.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
-			out.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.PROFIT));
-			BigDecimal totalOutByDate = BigDecimal.ZERO;
-			for (var i : out) {
-				totalOutByDate = totalOutByDate.add(i.getAmount());
-			}
-			totalIn.add(totalOutByDate);
-			List<PaymentDTO> in = paymentService
-					.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
-			in.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.EXPENSE));
-			BigDecimal totalInByDate = BigDecimal.ZERO;
-
-			for (var i : in) {
-				totalInByDate = totalInByDate.add(i.getAmount());
-			}
-			totalOut.add(totalInByDate);
-		}
-		System.out.println(dayList);
-		System.out.println(totalIn);
-		System.out.println(totalOut);
-		ModelView.addAttribute("dayList", dayList);
-		ModelView.addAttribute("totalIn", totalIn);
-		ModelView.addAttribute("totalOut", totalOut);
 		ModelView.addAttribute("listPaymentFrom", listFrom);
 		ModelView.addAttribute("listPaymentTo", listTo);
 
