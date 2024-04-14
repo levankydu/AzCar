@@ -38,8 +38,15 @@
 
 
 	<script type="text/javascript" src="/assets/js/notiJs.js"></script>
-
-
+	
+	<style>
+		.car-thumbnail img {
+			width: 100%;
+			height: 100%;
+			min-height: 300px;
+			max-height: 300px;
+		}
+	</style>
 </head>
 
 <body id="top">
@@ -194,28 +201,29 @@
 						<div class="car-box-4">
 							<!-- car img -->
 							<div class="car-thumbnail">
-								<a th:href="${'home/availablecars/details/'+carRegisterList.get(1).id}" class="car-img"
-									onclick="return checkLogin()"> <span class="featured listing-time opening"
-										th:text="${carRegisterList.get(1).discount}+'% For discount' "></span>
-									<img th:src="${'get/'+carRegisterList.get(1).images.get(1).urlImage}" alt="car-list"
+								<a th:href="${'home/availablecars/details/'+carRegisterList.get(4).id}" class="car-img"
+									onclick="return checkLogin()"> <div class="listing-badges" th:if="${carRegisterList.get(4).discount} > 0">
+									<span class="featured" th:text="'SALES ' + ${carRegisterList.get(4).discount}+'%' "></span>
+								</div>
+									<img th:src="${'get/'+carRegisterList.get(4).images.get(4).urlImage}" alt="car-list"
 										class="img-fluid">
 								</a>
 
 								<div class="text">
 									<h3>
-										<a th:href="${'home/availablecars/details/'+carRegisterList.get(1).id}"
+										<a th:href="${'home/availablecars/details/'+carRegisterList.get(4).id}"
 											onclick="return checkLogin()"
-											th:text="${carRegisterList.get(1).carmodel.model}"></a>
+											th:text="${carRegisterList.get(4).carmodel.model}"></a>
 									</h3>
 									<ul class="facilities-list clearfix">
 										<li class="bordered-right"><i class="fa fa-map-marker" aria-hidden="true"></i>
-											<span th:text="${carRegisterList.get(1).address}"></span>
+											<span th:text="${carRegisterList.get(4).address}"></span>
 										</li>
 										<li class="bordered-right"><i class="fa fa-car" aria-hidden="true"></i> <span
-												th:text="${carRegisterList.get(1).engineInformationTranmission}? 'Automatic' :'Manual'"></span>
+												th:text="${carRegisterList.get(4).engineInformationTranmission}? 'Automatic' :'Manual'"></span>
 										</li>
 										<li><i class="flaticon-petrol"></i> <span
-												th:text="${carRegisterList.get(1).fuelType}"></span></li>
+												th:text="${carRegisterList.get(4).fuelType}"></span></li>
 									</ul>
 								</div>
 							</div>
@@ -227,8 +235,9 @@
 							<div class="car-thumbnail">
 								<a onclick="return checkLogin()"
 									th:href="${'home/availablecars/details/'+carRegisterList.get(1).id}"
-									class="car-img"> <span class="featured listing-time opening"
-										th:text="${carRegisterList.get(1).discount}+'% For discount' "></span>
+									class="car-img"> <div class="listing-badges" th:if="${carRegisterList.get(1).discount} > 0">
+									<span class="featured" th:text="'SALES ' + ${carRegisterList.get(1).discount}+'%' "></span>
+								</div>
 									<img th:src="${'get/'+carRegisterList.get(1).images.get(1).urlImage}" alt="car-list"
 										class="img-fluid">
 								</a>
@@ -258,8 +267,9 @@
 							<div class="car-thumbnail">
 								<a onclick="return checkLogin()"
 									th:href="${'home/availablecars/details/'+carRegisterList.get(2).id}"
-									class="car-img"> <span class="featured listing-time opening"
-										th:text="${carRegisterList.get(2).discount}+'% For discount' "></span>
+									class="car-img"> <div class="listing-badges" th:if="${carRegisterList.get(2).discount} > 0">
+									<span class="featured" th:text="'SALES ' + ${carRegisterList.get(2).discount}+'%' "></span>
+								</div>
 									<img th:src="${'get/'+carRegisterList.get(2).images.get(1).urlImage}" alt="car-list"
 										class="img-fluid">
 								</a>
@@ -289,8 +299,9 @@
 							<div class="car-thumbnail">
 								<a onclick="return checkLogin()"
 									th:href="${'home/availablecars/details/'+carRegisterList.get(0).id}"
-									class="car-img"> <span class="featured listing-time opening"
-										th:text="${carRegisterList.get(0).discount}+'% For discount' "></span>
+									class="car-img"> <div class="listing-badges" th:if="${carRegisterList.get(0).discount} > 0">
+									<span class="featured" th:text="'SALES ' + ${carRegisterList.get(0).discount}+'%' "></span>
+								</div>
 									<img th:src="${'get/'+carRegisterList.get(0).images.get(1).urlImage}" alt="car-list"
 										class="img-fluid">
 								</a>

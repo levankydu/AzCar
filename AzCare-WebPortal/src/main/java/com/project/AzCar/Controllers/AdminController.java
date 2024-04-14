@@ -302,7 +302,7 @@ public class AdminController {
 		for (var item : dayList) {
 			List<PaymentDTO> out = paymentService
 					.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
-			out.removeIf(i -> !i.getToUser().getEmail().equals("admin@admin"));
+			out.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.PROFIT));
 			BigDecimal totalOutByDate = BigDecimal.ZERO;
 			for (var i : out) {
 				totalOutByDate = totalOutByDate.add(i.getAmount());
@@ -310,7 +310,7 @@ public class AdminController {
 			totalIn.add(totalOutByDate);
 			List<PaymentDTO> in = paymentService
 					.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
-			in.removeIf(i -> !i.getFromUser().getEmail().equals("admin@admin"));
+			in.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.EXPENSE));
 			BigDecimal totalInByDate = BigDecimal.ZERO;
 
 			for (var i : in) {
