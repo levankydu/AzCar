@@ -309,7 +309,7 @@
 											Car Plates: <span th:text="${carDetails.licensePlates}"></span>
 											<span class="badge"
 												th:classappend="${checkPlate == '' ? 'bg-success' : 'bg-danger'}"
-												th:text="${checkPlate==''?'This License Is Not Register Yet':checkPlate}"></span>
+												th:text="${checkPlate==''?'This License Is Valid':checkPlate}"></span>
 										</p>
 										<p class="card-text">
 											Category: <span th:text="${carDetails.carmodel.category}"></span>
