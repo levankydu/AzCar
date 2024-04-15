@@ -12,6 +12,8 @@ import com.project.AzCar.Entities.Cars.CarModelList;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -67,7 +69,8 @@ public class Users implements Serializable {
 	private int score;
 
 	private String image;
-
+	@Enumerated(EnumType.STRING)
+	private Provider provider;
 	private String address;
 	
 	

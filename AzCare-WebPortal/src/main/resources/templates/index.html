@@ -73,10 +73,12 @@
 						<div class="navbar-collapse collapse w-100" id="navbar">
 							<ul class="navbar-nav ml-auto">
 
+
 								<li class="nav-item"><a class="nav-link" onclick="return checkLogin();"
 										th:href="@{/home/availablecars}">Available Cars</a></li>
 								<li class="nav-item" th:if="${session.emailLogin}"><a class="nav-link"
 										th:href="@{/home/myplan/}">My Plan</a></li>
+
 								<li class="nav-item"><a class="nav-link" href="#">
 										About Us </a></li>
 
@@ -118,9 +120,11 @@
 									</div>
 								</div>
 								<li class="nav-item dropdown" th:if="${session.user}"><a
+
 										class="btn btn-sm btn-white-sm-outline btn-round signup-link"
 										th:href="@{/user/profile/} + ${session.user}"
 										th:text="Hello+', ' +${session.user}"></a>
+
 									<button id="logout"
 										class="btn btn-sm btn-theme btn-round signup-link">Logout</button>
 								</li>
@@ -211,9 +215,11 @@
 
 								<div class="text">
 									<h3>
+
 										<a th:href="${'home/availablecars/details/'+carRegisterList.get(4).id}"
 											onclick="return checkLogin()"
 											th:text="${carRegisterList.get(4).carmodel.model}"></a>
+
 									</h3>
 									<ul class="facilities-list clearfix">
 										<li class="bordered-right"><i class="fa fa-map-marker" aria-hidden="true"></i>
@@ -356,8 +362,9 @@
 							<div class="mask">
 								<h2>TP.Hồ Chí Minh</h2>
 								<p th:text="${carsInHcm.size()+' car(s)'}"></p>
-								<a th:href="@{/home/availablecars(city='ho_chi_minh')}" class="btn btn-border"
-									onclick="return checkLogin()">Read more</a>
+								<a th:href="@{/home/availablecars(city='ho_chi_minh')}"
+									class="btn btn-border" onclick="return checkLogin()">Read
+									more</a>
 							</div>
 						</div>
 					</div>
@@ -369,8 +376,9 @@
 									<div class="mask">
 										<h2>Hà Nội</h2>
 										<p th:text="${carsInHn.size()+' car(s)'}"></p>
-										<a th:href="@{/home/availablecars(city='ha_noi')}" class="btn btn-border"
-											onclick="return checkLogin()">Read more</a>
+										<a th:href="@{/home/availablecars(city='ha_noi')}"
+											class="btn btn-border" onclick="return checkLogin()">Read
+											more</a>
 									</div>
 								</div>
 							</div>
@@ -380,8 +388,9 @@
 									<div class="mask">
 										<h2>Đà Nẵng</h2>
 										<p th:text="${carsInDn.size()+' car(s)'}"></p>
-										<a th:href="@{/home/availablecars(city='da_nang')}" class="btn btn-border"
-											onclick="return checkLogin()">Read more</a>
+										<a th:href="@{/home/availablecars(city='da_nang')}"
+											class="btn btn-border" onclick="return checkLogin()">Read
+											more</a>
 									</div>
 								</div>
 							</div>
@@ -391,8 +400,9 @@
 									<div class="mask">
 										<h2>Bình Dương</h2>
 										<p th:text="${carsInBd.size()+' car(s)'}"></p>
-										<a th:href="@{/home/availablecars(city='binh_duong')}" class="btn btn-border"
-											onclick="return checkLogin()">Read more</a>
+										<a th:href="@{/home/availablecars(city='binh_duong')}"
+											class="btn btn-border" onclick="return checkLogin()">Read
+											more</a>
 									</div>
 								</div>
 							</div>
@@ -901,8 +911,8 @@
 			};
 			xhr.send();
 		}
-		document.addEventListener("DOMContentLoaded", function () {
 
+		document.addEventListener("DOMContentLoaded", function () {
 			const logoutSuccess = localStorage.getItem('logoutSuccess');
 
 			if (logoutSuccess === 'true') {

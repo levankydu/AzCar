@@ -47,6 +47,11 @@
 	href="/assets/css/skins/default.css">
 <link rel="stylesheet"
 	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
+<style type="text/css">
+.invalid-input {
+	border: 1px solid red;
+}
+</style>
 </head>
 <body id="top">
 	<!-- Google Tag Manager (noscript) -->
@@ -219,14 +224,14 @@
 										<label class="small mb-1" for="inputFirstName">First
 											name</label> <input class="form-control" id="firstName"
 											name="firstName" type="text" th:value="*{firstName}"
-											onkeyup="validateFirstName();"> <span
+											onkeyup="toggleSaveButtonVisibility();"> <span
 											id="validation-firstName" class="text-danger"></span>
 									</div>
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputLastName">Last
 											name</label> <input class="form-control" id="lastName"
 											name="lastName" type="text" th:value="*{lastName}"
-											onkeyup="validateLastName();"> <span
+											onkeyup="toggleSaveButtonVisibility();"> <span
 											id="validation-lastName" class="text-danger"></span>
 									</div>
 								</div>
@@ -235,13 +240,15 @@
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputPhone">Phone
 											number</label> <input class="form-control" id="phone" name="phone"
-											type="text" th:value="*{phone}" onkeyup="validatePhone();">
-										<span id="validation-phone" class="text-danger"></span>
+											type="text" th:value="*{phone}"
+											onkeyup="toggleSaveButtonVisibility();"> <span
+											id="validation-phone" class="text-danger"></span>
 									</div>
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputBirthday">Birthday</label>
 										<input class="form-control" id="dob" type="text" name="dob"
-											th:value="${#dates.format(user.dob, 'dd-MM-yyyy')}"  onchange="validateDob();"> <span
+											th:value="${#dates.format(user.dob, 'dd-MM-yyyy')}"
+											onchange="toggleSaveButtonVisibility();"> <span
 											id="validation-dob" class="text-danger"></span>
 									</div>
 								</div>
@@ -250,20 +257,30 @@
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputGender">Gender</label> <select
 											class="form-control" id="gender" name="gender"
-											th:field="*{gender}">
-											<option value="male">Male</option>
-											<option value="female">Female</option>
-											
+											th:field="*{gender}" onchange="toggleSaveButtonVisibility()">
+											<option value="Male">Male</option>
+											<option value="Female">Female</option>
 										</select>
+									</div>
+									<div class="col-md-6">
+										<label class="small mb-1" for="inputAddress">Address </label>
+										<input class="form-control" id="address" name="address"
+											type="text" th:value="*{address}"
+											onclick="return openModal.click();"
+											onkeyup="toggleSaveButtonVisibility();"><a href="#"
+											data-toggle="modal" data-target="#addressModal"
+											id="openModal" hidden="true">Click me</a> <span
+											id="validation-address" class="text-danger"></span>
 									</div>
 								</div>
 								<!-- Save changes button -->
-								<button onclick="return checkSubmitEditUser()"
-									class="btn btn-primary">Save changes</button>
+								<button id="saveChangesBtn" style="display: none;"
+									class="btn btn-primary" onclick="submitForm();">Save</button>
 							</div>
 						</div>
 					</div>
 				</form>
+
 
 			</div>
 
@@ -585,39 +602,7 @@
 	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 
 	<script type="text/javascript">
-		function validateFirstName() {
-			const firstNameValue = document.getElementById("firstName").value;
-
-			if (firstNameValue === "") {
-				document.getElementById('validation-firstName').textContent = "FirstName is required";
-				return false;
-			} else {
-				document.getElementById('validation-firstName').textContent = "";
-				return true;
-			}
-		}
-		function validateLastName() {
-			const lastNameValue = document.getElementById("lastName").value;
-
-			if (lastNameValue === "") {
-				document.getElementById('validation-lastName').textContent = "LastName is required";
-				return false;
-			} else {
-				document.getElementById('validation-lastName').textContent = "";
-				return true;
-			}
-		}
-		function validatePhone() {
-			const phoneValue = document.getElementById("phone").value;
-
-			if (phoneValue === "") {
-				document.getElementById('validation-phone').textContent = "Phone is required";
-				return false;
-			} else {
-				document.getElementById('validation-phone').textContent = "";
-				return true;
-			}
-		}
+		
 		
 		$(document).ready(function() {
 		    $('#dob').datepicker({
@@ -626,68 +611,96 @@
 		        endDate: '0d'
 		    }).on('changeDate', function(e) {
 		        $('#dob').attr('value', $('#dob').val());
-		        validateDob();
+		        toggleSaveButtonVisibility(); 
 		    });
-
-		  
+		    
 		    var defaultDob = $('#dob').val();
 
 		    if (defaultDob) {
-		        
 		        var parts = defaultDob.split(' ');
-		        var datePart = parts[0]; // Lấy phần ngày tháng năm
+		        var datePart = parts[0]; 
 		        
 		        $('#dob').val(datePart);
 		        $('#dob').attr('value', datePart);
 		    }
 		});
 
-		function validateDob() {
-		    const dobValue = document.getElementById("dob").value;
-		    const dobDate = new Date(dobValue);
-	
+		function toggleSaveButtonVisibility() {
+		    const saveChangesBtn = document.getElementById("saveChangesBtn");
+		    const firstNameInput = document.getElementById("firstName");
+		    const lastNameInput = document.getElementById("lastName");
+		    const phoneInput = document.getElementById("phone");
+		    const dobInput = document.getElementById("dob");
+		    const genderInput = document.getElementById("gender");
 
-		    if (dobValue === "") {
-		        document.getElementById('validation-dob').textContent = "Date of birth is required";
-		        return false;
+		   
+		    const isValidFirstName = firstNameInput.value.trim() !== "";
+		    const isValidLastName = lastNameInput.value.trim() !== "";
+		    const isValidPhone = phoneInput.value.trim() !== "";
+		    const isValidDob = dobInput.value.trim() !== "";
+		    const isValidGender = genderInput.value.trim() !== "";
+
+		   
+		    if (!isValidFirstName) {
+		        firstNameInput.classList.add("invalid-input");
 		    } else {
-		        document.getElementById('validation-dob').textContent = "";
+		        firstNameInput.classList.remove("invalid-input");
+		    }
 
-		        
+		    if (!isValidLastName) {
+		        lastNameInput.classList.add("invalid-input");
+		    } else {
+		        lastNameInput.classList.remove("invalid-input");
+		    }
 
+		    if (!isValidPhone) {
+		        phoneInput.classList.add("invalid-input");
+		    } else {
+		        phoneInput.classList.remove("invalid-input");
+		    }
 
-		        return true;
+		    if (!isValidDob) {
+		        dobInput.classList.add("invalid-input");
+		    } else {
+		        dobInput.classList.remove("invalid-input");
+		    }
+
+		    if (!isValidGender) {
+		        genderInput.classList.add("invalid-input");
+		    } else {
+		        genderInput.classList.remove("invalid-input");
+		    }
+
+		   
+		    if (isValidFirstName || isValidLastName || isValidPhone || isValidDob || isValidGender) {
+		        saveChangesBtn.style.display = "block";
+		    } else {
+		        saveChangesBtn.style.display = "none";
 		    }
 		}
-		function checkSubmitEditUser() {
-			var isValidFirstName = validateFirstName();
-			var isValidLastName = validateLastName();
-			var isValidPhone = validatePhone();
-			var isValidDob = validateDob();
-			var email = document.getElementById("emailInput").value;
 
-			if (isValidFirstName && isValidLastName && isValidPhone
-					&& isValidDob) {
-				$.ajax({
-					type : "POST",
-					url : "/user/profile/edit/" + email,
-					data : $("#editForm").serialize(),
-					success : function(response) {
-						document.getElementById('toast-success-edit-user')
-								.click();
-					},
-					error : function(xhr, status, error) {
-						document.getElementById('toast-failed-edit-user')
-								.click();
-					}
-				});
-			} else {
-				document.getElementById('toast-failed-edit-user').click();
-			}
-			return false;
+		function submitForm() {
+		    const email = document.getElementById("emailInput").value;
+		    const formData = new FormData(document.getElementById("editForm"));
+
+		    fetch("/user/profile/edit/" + email, {
+		        method: "POST",
+		        body: formData
+		    })
+		    .then(response => {
+		        if (response.ok) {
+		            document.getElementById('toast-success-edit-user').click();
+		            document.getElementById("saveChangesBtn").style.display = "none";
+		        } else {
+		            document.getElementById('toast-failed-edit-user').click();
+		        }
+		    })
+		    .catch(error => {
+		        console.error('Có lỗi xảy ra: ', error);
+		        document.getElementById('toast-failed-edit-user').click();
+		    });
 		}
 
-		
 		function onFilesChange() {
 			var value = image.value;
 			if (!value.match(/\.(jpg|jpeg|png|gif)$/i)) {
