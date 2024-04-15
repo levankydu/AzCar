@@ -31,9 +31,24 @@ spring:
           starttls:
             enable: true
     username: dn169240@gmail.com
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 315105914646-at74dd4lot6pgb157gi7htnplna3ppp0.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
+
+    
+
     
 paypal:
   mode: sandbox
   client:
     app: AWaDcggq4KGALzjm9IZzE-7kBccuEVGBgdRnH_UJB19P5mTwzne77Rs-c40xjjFdBo8pNDq5Z_RaQThP 
     secret: EJsJSziQmYd6jJXvY8W6Ca_QUQAbR7nCXReKLl9_u8kZp2aJ-LCOqfZochCtqu_RVTwObwDPIypJ_qE-
+
