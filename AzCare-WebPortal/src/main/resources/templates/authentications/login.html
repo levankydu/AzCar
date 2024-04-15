@@ -43,6 +43,21 @@
 	href="assets/css/skins/default.css">
 <link rel="stylesheet"
 	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
+<style type="text/css">
+	.google-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #FF0000; /* Màu đỏ */
+    color: #FFFFFF; /* Màu chữ trắng */
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.google-btn:hover {
+    background-color: #CC0000; /* Màu đỏ nhạt khi hover */
+}
+</style>
 </head>
 <body id="top">
 	<!-- <!-- Google Tag Manager (noscript) -->
@@ -76,8 +91,7 @@ End Google Tag Manager (noscript)
 
 
 							<div th:if="${session.signin_error}">
-								<p class="text-danger" th:text="${session.signin_error}"
-									></p>
+								<p class="text-danger" th:text="${session.signin_error}"></p>
 							</div>
 							<!-- Form start -->
 							<form method="post" role="form" th:action="@{/dologin}"
@@ -108,6 +122,10 @@ End Google Tag Manager (noscript)
 								</div>
 							</form>
 							<!-- Form end -->
+							<p></p>
+							<a th:href="@{/oauth2/authorization/google}" class="google-btn">
+								<i class="fa fa-google"></i> Đăng ký bằng Google
+							</a>
 						</div>
 						<!-- Footer -->
 						<div class="footer">
@@ -169,8 +187,6 @@ End Google Tag Manager (noscript)
 
 	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 	<script type="text/javascript">
-		
-
 		function validateForm() {
 	        var email = document.getElementById('email').value;
 	        var password = document.getElementById('password').value;
@@ -212,6 +228,14 @@ End Google Tag Manager (noscript)
 	            document.getElementById('loginForm').submit();
 	        }
 	    }
+		
+		document.addEventListener('keypress', function(event) {
+		    // Kiểm tra xem phím được nhấn có phải là phím "Enter" không (mã ASCII là 13)
+		    if (event.key === 'Enter') {
+		      // Gọi hàm validateForm() khi nhấn phím "Enter"
+		    	document.getElementById('loginForm').submit();
+		    }
+		  });
 	</script>
 </body>
 </html>

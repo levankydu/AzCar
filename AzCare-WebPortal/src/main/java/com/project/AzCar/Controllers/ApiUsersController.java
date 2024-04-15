@@ -1,11 +1,18 @@
 package com.project.AzCar.Controllers;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,14 +23,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.project.AzCar.Dto.DriverLicense.DriverLicenseBack;
+import com.project.AzCar.Dto.DriverLicense.DriverLicenseFront;
+import com.project.AzCar.Dto.Users.EditApiDto;
 import com.project.AzCar.Dto.Users.LoginApiDto;
 import com.project.AzCar.Dto.Users.SignUpApiDto;
 import com.project.AzCar.Dto.Users.UserDto;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Services.Users.UserServices;
+import com.project.AzCar.Utilities.OcrService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import net.sourceforge.tess4j.TesseractException;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -31,9 +44,12 @@ public class ApiUsersController {
 
 	@Autowired
 	private UserServices userServices;
-
+	@Autowired
+	private JavaMailSender mailSender;
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	@Autowired
+	private OcrService ocrService;
 
 	@GetMapping("/getUsers")
 	public List<UserDto> getList() {
@@ -48,7 +64,7 @@ public class ApiUsersController {
 	}
 
 	@PostMapping("/signin")
-	public ResponseEntity<String> authenticateUser(@RequestBody LoginApiDto loginDto,HttpServletRequest request) {
+	public ResponseEntity<String> authenticateUser(@RequestBody LoginApiDto loginDto, HttpServletRequest request) {
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
 		request.getSession().setAttribute("emailLogin", loginDto.getUsernameOrEmail());
@@ -58,20 +74,26 @@ public class ApiUsersController {
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@RequestBody SignUpApiDto signUpDto) {
-
+		String email = signUpDto.getEmail();
 		if (userServices.existsByEmail(signUpDto.getEmail())) {
 			return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
 		}
 
+		try {
+
+			sendEmail(email);
+		} catch (Exception e) {
+
+			return new ResponseEntity<>("Error sending email: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
 		UserDto user = new UserDto();
 		user.setFullName(signUpDto.getUsername());
-
 		user.setEmail(signUpDto.getEmail());
 		user.setPassword(signUpDto.getPassword());
 		userServices.saveUser(user);
 
 		return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
-
 	}
 
 	@GetMapping("/getUsersByEmail")
@@ -85,6 +107,99 @@ public class ApiUsersController {
 			return null;
 		}
 	}
-	
+
+	@PostMapping("/editUser")
+	public ResponseEntity<?> editUser(@RequestBody EditApiDto editDto) {
+		Users user = userServices.findById(editDto.getId());
+		UserDto userDto = userServices.mapToDto((int) user.getId());
+		userDto.setFirstName(editDto.getFirstName());
+		userDto.setLastName(editDto.getLastName());
+		userDto.setGender(editDto.getGender());
+		userDto.setPhone(editDto.getPhone());
+		userDto.setDob(editDto.getDob());
+
+		userServices.editProfile(user.getEmail(), userDto);
+		return new ResponseEntity<>("User updated successfully", HttpStatus.OK);
+
+	}
+
+	@PostMapping("/upload")
+	public ResponseEntity<DriverLicenseFront> upload(@RequestParam("file") MultipartFile file)
+			throws IOException, TesseractException {
+
+		DriverLicenseFront driverLicenseFront = new DriverLicenseFront();
+		var ocrResult = ocrService.ocr(file).getResult();
+		// Regular expressions
+		// Regular expressions
+		Pattern licenseNumberPattern = Pattern.compile("No:\\s*(\\d+)");
+		Pattern fullNamePattern = Pattern.compile("Full name:\\s*([^\\n]+)");
+		Pattern dateOfBirthPattern = Pattern.compile("Date of Birth:\\s*(\\d{2}/\\d{2}/\\d{4})");
+		Pattern licenseClassPattern = Pattern.compile("Class:\\s*([\\w\\d]+)");
+		Pattern expiresPattern = Pattern.compile("Expires:\\s*(\\d{2}/\\d{2}/\\d{4})");
+		Pattern isdriverLicense = Pattern.compile("DRIVER'S LICENSE");
+
+		Matcher matcher;
+
+		matcher = licenseNumberPattern.matcher(ocrResult);
+		if (matcher.find()) {
+			driverLicenseFront.setLicenseNumber(matcher.group(1).trim());
+		}
+
+		matcher = fullNamePattern.matcher(ocrResult);
+		if (matcher.find()) {
+			driverLicenseFront.setFullName(matcher.group(1).trim());
+		}
+
+		matcher = dateOfBirthPattern.matcher(ocrResult);
+		if (matcher.find()) {
+			driverLicenseFront.setDateOfBirth(matcher.group(1).trim());
+		}
+
+		matcher = licenseClassPattern.matcher(ocrResult);
+		if (matcher.find()) {
+			driverLicenseFront.setLicenseClass(matcher.group(1).trim());
+		}
+
+		matcher = expiresPattern.matcher(ocrResult);
+		if (matcher.find()) {
+			driverLicenseFront.setExpires(matcher.group(1).trim());
+		}
+
+		matcher = isdriverLicense.matcher(ocrResult);
+		if (matcher.find()) {
+			driverLicenseFront.setDriverLicense(true);
+		}
+		return ResponseEntity.ok(driverLicenseFront);
+	}
+
+	@PostMapping("/upload2")
+	public ResponseEntity<DriverLicenseBack> upload2(@RequestParam("file") MultipartFile file)
+			throws IOException, TesseractException {
+
+		DriverLicenseBack driverLicenseBack = new DriverLicenseBack();
+		var ocrResult = ocrService.ocr(file).getResult();
+		Pattern isdriverLicense = Pattern.compile("CLASSIFICATION OF MOTOR VEHICLES");
+		Matcher matcher;
+		matcher = isdriverLicense.matcher(ocrResult);
+		if (matcher.find()) {
+			driverLicenseBack.setDriverLicense(true);
+		}
+		return ResponseEntity.ok(driverLicenseBack);
+	}
+
+	private void sendEmail(String email) throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+				StandardCharsets.UTF_8.name());
+
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		String subject = "Welcom to AzCar";
+		String content = "CaÌ‰m Æ¡n baÌ£n Ä‘aÌƒ sÆ°Ì‰ duÌ£ng diÌ£ch vuÌ£ cuÌ‰a chuÌ�ng tÃ´i";
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
+	}
 
 }

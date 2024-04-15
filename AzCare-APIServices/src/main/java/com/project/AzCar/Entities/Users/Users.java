@@ -9,10 +9,11 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.project.AzCar.Entities.Cars.CarModelList;
-import com.project.AzCar.Entities.Deposit.Cardbank;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,8 +22,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
@@ -70,11 +69,11 @@ public class Users implements Serializable {
 	private int score;
 
 	private String image;
-
+	@Enumerated(EnumType.STRING)
+	private Provider provider;
 	private String address;
 	
-	  @OneToOne(mappedBy = "user")
-	    private Cardbank cardBank;
+	
 	
 	public Users(String firstName, String email, String password, List<Roles> roles) {
 		this.firstName = firstName;

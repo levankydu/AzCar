@@ -1,6 +1,7 @@
 package com.project.AzCar.Services.Orders;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
 import com.project.AzCar.Services.Cars.CarServices;
 import com.project.AzCar.Services.Payments.PaymentService;
+import com.project.AzCar.Services.Payments.ProfitCallBack;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
 
@@ -115,7 +117,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 		for (OrderDetails order : orderList) {
 			CarInfor car = carServices.findById(Integer.parseInt(order.getCarId()));
 			long ownerId = car.getCarOwnerId();
-			if(order.getStatus().equals(Constants.orderStatus.WAITING)) {
+			if (order.getStatus().equals(Constants.orderStatus.WAITING)) {
 				long seconds = Duration.between(order.getCreatedAt(), LocalDateTime.now()).getSeconds();
 				if (seconds >= 9999999) {
 					Violation vio = new Violation();
@@ -126,17 +128,28 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 					order.setStatus(Constants.orderStatus.DECLINED);
 					orderRepository.save(order);
 
-					paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFees());
+					paymentServices.createNewRefund(order.getUserId(), order.getId(),
+							order.getTotalAndFeesWithoutInsurance());
+					paymentServices.createNewExpense(order.getUserId(),
+							BigDecimal.valueOf(order.getExtraFee().getInsurance()), new ProfitCallBack() {
+								@Override
+								public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+									user.setBalance(userBalance.add(amount));
+								}
+							});
 				}
 			}
-			List<Violation> noRes_violations = violationRepo.getByUserAndCarId(ownerId, car.getId(), true, Constants.violations.NO_RESPONSE);
-			List<Violation> declined_violations = violationRepo.getByUserAndCarId(ownerId, car.getId(), true, Constants.violations.OWNER_DECLINED);
+			List<Violation> noRes_violations = violationRepo.getByUserAndCarId(ownerId, car.getId(), true,
+					Constants.violations.NO_RESPONSE);
+			List<Violation> declined_violations = violationRepo.getByUserAndCarId(ownerId, car.getId(), true,
+					Constants.violations.OWNER_DECLINED);
 			if (noRes_violations.size() + declined_violations.size() >= 3) {
 				car.setStatus(Constants.carStatus.DECLINED);
 				carRepo.save(car);
 			}
 		}
-		List<Violation> userViolations = violationRepo.getByUserAndCarId(currentUser.getId(), 0, true, Constants.violations.USER_DECLINDED);
+		List<Violation> userViolations = violationRepo.getByUserAndCarId(currentUser.getId(), 0, true,
+				Constants.violations.USER_DECLINDED);
 		if (userViolations.size() >= 3) {
 			currentUser.setEnabled(false);
 			userServices.saveUserReset(currentUser);

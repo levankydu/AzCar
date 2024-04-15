@@ -257,21 +257,21 @@
 							$('#saveNewBankBtn').on('click', function () {
 								var bankName = $('#createBankNameInput').val();
 								var bankNumber = $('#createBankNumberInput').val();
-								var addressbank = $('#createBankAddressInput').val();
+								var bankaddress = $('#createBankAddressInput').val();
 								var beneficiaryName = $('#createBankBeneficiaryInput').val();
 								// Kiểm tra các trường không được rỗng
-								if (bankName === '' || bankNumber === '' || addressbank === '' || beneficiaryName === '') {
+								if (bankName === '' || bankNumber === '' || bankaddress === '' || beneficiaryName === '') {
 									alert('Vui lòng điền đầy đủ thông tin');
 									return;
 								}
 
 								// Kiểm tra bankNumber có đúng định dạng
-								var bankNumberPattern = /^\d{6,15}$/;
+								var bankNumberPattern = /^\d{9,15}$/;
 								if (!bankNumberPattern.test(bankNumber)) {
 									alert('Số tài khoản ngân hàng phải từ 9 đến 15 chữ số');
 									return;
 								}
-								console.log(bankName, bankNumber, addressbank, beneficiaryName);
+								console.log(bankName, bankNumber, bankAddress, beneficiaryName);
 								// Gửi AJAX request để lưu thông tin ngân hàng mới
 								$.ajax({
 									type: 'POST',
@@ -280,7 +280,7 @@
 									data: JSON.stringify({
 										bankName: bankName,
 										bankNumber: bankNumber,
-										addressbank: addressbank,
+										bankaddress: bankaddress,
 										beneficiaryName: beneficiaryName
 									}),
 									success: function (response) {
