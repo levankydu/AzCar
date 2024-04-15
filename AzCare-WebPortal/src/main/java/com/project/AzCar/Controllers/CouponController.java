@@ -12,8 +12,6 @@ import com.project.AzCar.Dto.Coupons.CouponDTO;
 import com.project.AzCar.Entities.Coupon.Coupon;
 import com.project.AzCar.Services.Coupon.ICouponService;
 
-
-
 @Controller
 public class CouponController {
 	
@@ -33,6 +31,7 @@ public class CouponController {
 				tempC.setId(c.getId());
 				tempC.setCouponCode(c.getCouponCode());
 				tempC.setContent(c.getContent());
+				tempC.setExpirationDate(c.getExpirationDate());
 				tempC.setDiscountPercentage(c.getDiscountPercentage());
 				tempC.setStatus(c.getStatus().toString());
 				tempC.setQuantity(c.getQuantity());
@@ -41,7 +40,7 @@ public class CouponController {
 		model.addAttribute("ListCoupon", couponDTO);
 		}
 		
-		return "admin/coupon";
+		return "admin/CouponManager";
 	}
 	
 

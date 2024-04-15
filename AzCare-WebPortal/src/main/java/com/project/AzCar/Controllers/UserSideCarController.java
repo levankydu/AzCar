@@ -47,6 +47,8 @@ import com.project.AzCar.Entities.Cars.OrderDetails;
 import com.project.AzCar.Entities.Cars.PlateImages;
 import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Comments.Comments;
+import com.project.AzCar.Entities.Coupon.Coupon;
+import com.project.AzCar.Entities.Coupon.UserCoupon;
 import com.project.AzCar.Entities.Deposit.Cardbank;
 import com.project.AzCar.Entities.HintText.HintText;
 import com.project.AzCar.Entities.Locations.City;
@@ -68,6 +70,8 @@ import com.project.AzCar.Services.Cars.CarServices;
 import com.project.AzCar.Services.Cars.ExtraFeeServices;
 import com.project.AzCar.Services.Cars.PlateImageServices;
 import com.project.AzCar.Services.Cars.PlusServiceServices;
+import com.project.AzCar.Services.Coupon.ICouponService;
+import com.project.AzCar.Services.Coupon.IUserCouponService;
 import com.project.AzCar.Services.HintText.HintTextServices;
 import com.project.AzCar.Services.Locations.DistrictServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
@@ -88,6 +92,11 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class UserSideCarController {
+	
+	@Autowired
+	private IUserCouponService userCouponService;
+	@Autowired
+	private ICouponService couponService;
 	@Autowired
 	private ICarbankService cardService;
 	@Autowired
@@ -466,7 +475,11 @@ public class UserSideCarController {
 		// Sally add
 		// Lấy danh sách các review cho chiếc xe và thêm vào model
 		List<Reviews> reviews = reviewServices.findAllReviewsByCarId(Integer.parseInt(carId));
-
+		
+		UserCoupon uc = userCouponService.getUserCouponByUserId((int )customer.getId());
+		Coupon coupon = couponService.getCouponById(uc.getCoupon().getId());
+		
+		
 		List<ReviewsDTO> listReviewsDTO = new ArrayList<>();
 		if (!reviews.isEmpty()) {
 			for (Reviews re : reviews) {
@@ -1009,9 +1022,15 @@ public class UserSideCarController {
 
 		OrderDetailsDTO rentorDone = orderServices.getDTORentorTripDoneOrder();
 
-		Cardbank c = cardService.findCardbankbyId(1);
-		ModelView.addAttribute("cardbank", c);
-
+		
+		Cardbank c = cardService.findCardbankByUserid(12);
+		Cardbank cuser = cardService.findCardbankByUserid((int)user.getId());
+		ModelView.addAttribute("cardbankuser", cuser);
+		if(c!=null)
+		{
+			ModelView.addAttribute("cardbank", c);
+		}
+	
 		ModelView.addAttribute("rentorDone", rentorDone);
 		ModelView.addAttribute("orderList", latestOrders);
 		ModelView.addAttribute("ImgLicense", listImg);

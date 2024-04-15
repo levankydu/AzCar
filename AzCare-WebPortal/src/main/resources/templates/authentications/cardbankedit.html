@@ -2,56 +2,42 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-<!-- Google Tag Manager -->
+	<!-- Google Tag Manager -->
 
-<!-- End Google Tag Manager -->
-<title>Az Car</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="UTF-8">
-<!-- External CSS libraries -->
-<link type="text/css" rel="stylesheet"
-	th:href="@{/assets/css/bootstrap.min.css}">
-<link type="text/css" rel="stylesheet"
-	href="/assets/css/magnific-popup.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/css/jquery.selectBox.css">
-<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/css/rangeslider.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/css/animate.min.css">
-<link type="text/css" href="/assets/css/slick.css">
-<link type="text/css" rel="stylesheet"
-	th:src="@{/assets/css/jquery.mCustomScrollbar.css}">
-<link type="text/css" rel="stylesheet"
-	href="/assets/fonts/font-awesome/css/font-awesome.min.css">
-<link type="text/css" rel="stylesheet"
-	href="/assets/fonts/flaticon/font/flaticon.css">
+	<!-- End Google Tag Manager -->
+	<title>Az Car</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<!-- External CSS libraries -->
+	<link type="text/css" rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}">
+	<link type="text/css" rel="stylesheet" href="/assets/css/magnific-popup.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/jquery.selectBox.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/rangeslider.css">
+	<link type="text/css" rel="stylesheet" href="/assets/css/animate.min.css">
+	<link type="text/css" href="/assets/css/slick.css">
+	<link type="text/css" rel="stylesheet" th:src="@{/assets/css/jquery.mCustomScrollbar.css}">
+	<link type="text/css" rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+	<link type="text/css" rel="stylesheet" href="/assets/fonts/flaticon/font/flaticon.css">
 
 
-<!-- Bootstrap Datepicker CSS -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-<!-- Favicon icon -->
-<link rel="shortcut icon" href="/assets/img/favicon.ico"
-	type="image/x-icon">
+	<!-- Bootstrap Datepicker CSS -->
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+	<!-- Favicon icon -->
+	<link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon">
 
-<!-- Google fonts -->
-<link rel="stylesheet" type="text/css"
-	href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
+	<!-- Google fonts -->
+	<link rel="stylesheet" type="text/css"
+		href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<!-- Custom Stylesheet -->
-<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
-<link rel="stylesheet" type="text/css" id="style_sheet"
-	href="/assets/css/skins/default.css">
-<link rel="stylesheet"
-	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
-<style type="text/css">
-.invalid-input {
-	border: 1px solid red;
-}
-</style>
-
+	<!-- Custom Stylesheet -->
+	<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
+	<link rel="stylesheet" type="text/css" id="style_sheet" href="/assets/css/skins/default.css">
+	<link rel="stylesheet" href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
 </head>
 
 <body id="top">
@@ -162,10 +148,7 @@
 		<nav class="nav nav-borders">
 			<a class="nav-link active ms-0" th:href="@{/user/profile/{email} (email=${email})}">Profile</a> <a
 				class="nav-link" th:href="@{/user/profile/changePassword/{email} (email=${email})}">Change
-				Password</a> 
-				<a class="nav-link" th:href="@{/user/profile/edit/{email} (email=${email})}">Edit</a>
-				<a class="nav-link" th:href="@{/user/profile/edit/cardbank/{email} (email=${email})}">Add Card Bank</a>
-
+				Password</a> <a class="nav-link" th:href="@{/user/profile/edit/{email} (email=${email})}">Edit</a>
 		</nav>
 		<hr class="mt-0 mb-4">
 
@@ -175,112 +158,153 @@
 			<p id="toast-failed-edit-user" hidden="true" class="btn btn-outline-primary btn-lg btn-block">Failed Example
 			</p>
 
-			<div class="col-xl-4">
-				<!-- Profile picture card-->
-				<div class="card mb-4 mb-xl-0">
-					<div class="card-header">Profile Picture</div>
-					<div class="card-body text-center">
-						<!-- Profile picture image-->
-						<img class="img-account-profile rounded-circle mb-2" style="width: 300px" id="prev"
-							th:src="'avatar/'+${user.image}" alt="">
-						<!-- Profile picture help block-->
-						<form th:action="@{/user/profile/edit/uploadFile}" method="post" enctype="multipart/form-data">
-							<input class="form-control" name="image" id="image" type="file"
-								onchange="return onFilesChange()"><br>
-							<button class="btn btn-primary" type="submit" onclick="return form.submit()">Save</button>
-						</form>
 
-						<!-- Toast messages -->
-						<p id="toast-success-upload-avatar" hidden="true"
-							class="btn btn-outline-primary btn-lg btn-block">Image
-							uploaded successfully</p>
-						<p id="toast-failed-upload-avatar" hidden="true"
-							class="btn btn-outline-primary btn-lg btn-block">Failed to
-							upload image</p>
-					</div>
-				</div>
-			</div>
 			<div class="col-xl-8">
-				<form th:action="@{/user/profile/edit/{email} (email=${email})}" th:method="post"
-					enctype="multipart/form-data" th:object="${user}" id="editForm">
-					<div class="col-xl-12">
-						<!-- Account details card -->
-						<div class="card mb-4">
-							<div class="card-header">Account Details</div>
-							<div class="card-body">
-								<!-- Email -->
-								<div class="mb-3">
-									<label class="small mb-1" for="inputUsername">Email</label> <input
-										class="form-control" id="emailInput" type="text" th:value="*{email}" readonly>
-								</div>
-								<!-- Form Row for first name and last name -->
-								<div class="row gx-3 mb-3">
-									<div class="col-md-6">
-										<label class="small mb-1" for="inputFirstName">First
-											name</label> <input class="form-control" id="firstName"
-											name="firstName" type="text" th:value="*{firstName}"
-											onkeyup="toggleSaveButtonVisibility();"> <span
+				<div class="container mt-5">
+					<form id="bankCardForm">
+						<div class="mb-3">
+							<label for="bankName" class="form-label">Bank Name</label>
+							<input type="text" class="form-control" id="bankName" name="bankName" required>
 
-											id="validation-firstName" class="text-danger"></span>
-									</div>
-									<div class="col-md-6">
-										<label class="small mb-1" for="inputLastName">Last
-											name</label> <input class="form-control" id="lastName"
-											name="lastName" type="text" th:value="*{lastName}"
-											onkeyup="toggleSaveButtonVisibility();"> <span
-
-											id="validation-lastName" class="text-danger"></span>
-									</div>
-								</div>
-								<!-- Form Row for phone number and birthday -->
-								<div class="row gx-3 mb-3">
-									<div class="col-md-6">
-										<label class="small mb-1" for="inputPhone">Phone
-											number</label> <input class="form-control" id="phone" name="phone"
-											type="text" th:value="*{phone}"
-											onkeyup="toggleSaveButtonVisibility();"> <span
-											id="validation-phone" class="text-danger"></span>
-									</div>
-									<div class="col-md-6">
-										<label class="small mb-1" for="inputBirthday">Birthday</label>
-										<input class="form-control" id="dob" type="text" name="dob"
-											th:value="${#dates.format(user.dob, 'dd-MM-yyyy')}"
-											onchange="toggleSaveButtonVisibility();"> <span
-											id="validation-dob" class="text-danger"></span>
-
-									</div>
-								</div>
-								<!-- Gender selection -->
-								<div class="row gx-3 mb-3">
-									<div class="col-md-6">
-										<label class="small mb-1" for="inputGender">Gender</label> <select
-											class="form-control" id="gender" name="gender"
-											th:field="*{gender}" onchange="toggleSaveButtonVisibility()">
-											<option value="Male">Male</option>
-											<option value="Female">Female</option>
-
-										</select>
-									</div>
-									<div class="col-md-6">
-										<label class="small mb-1" for="inputAddress">Address </label>
-										<input class="form-control" id="address" name="address"
-											type="text" th:value="*{address}"
-											onclick="return openModal.click();"
-											onkeyup="toggleSaveButtonVisibility();"><a href="#"
-											data-toggle="modal" data-target="#addressModal"
-											id="openModal" hidden="true">Click me</a> <span
-											id="validation-address" class="text-danger"></span>
-									</div>
-								</div>
-								<!-- Save changes button -->
-								<button id="saveChangesBtn" style="display: none;"
-									class="btn btn-primary" onclick="submitForm();">Save</button>
-
-							</div>
 						</div>
-					</div>
-				</form>
+						<div class="mb-3">
+							<label for="bankNumber" class="form-label">Bank Number</label>
+							<input type="text" class="form-control" id="bankNumber" name="bankNumber" required>
+						</div>
+						<div class="mb-3">
+							<label for="beneficiaryName" class="form-label">Beneficiary Name</label>
+							<input type="text" class="form-control" id="beneficiaryName" name="beneficiaryName"
+								required>
+						</div>
+						<div class="mb-3">
+							<label for="addressbank" class="form-label">Address</label>
+							<input type="text" class="form-control" id="addressbank" name="addressbank" required>
+						</div>
+						<div class="mb-3" hidden>
+							<input type="text" class="form-control" id="userId" name="userId" th:value="${user.id}" >
+						</div>
 
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</form>
+				</div>
+				<script>
+					$(document).ready(function () {
+						document.getElementById('bankNumber').addEventListener('input', function () {
+							var bankName = getBankNameFromAccount(this.value);
+							console.log(bankName);
+							document.getElementById('bankNameDisplay').textContent = 'Tên ngân hàng: ' + bankName;
+						});
+						document.getElementById('bankCardForm').addEventListener('submit', function (event) {
+							event.preventDefault(); // Ngăn không cho form gửi đi ngay
+
+							// Kiểm tra Bank Name
+						
+							var a = getBankNameFromAccount(bankName);
+							
+						
+							// Nếu mọi thứ ổn, có thể gửi form
+							this.submit();
+						});
+					});
+
+
+				</script>
+				<script>
+					$(document).ready(function () {
+						$('#bankCardForm').submit(function (event) {
+							event.preventDefault(); // Ngăn không cho form gửi theo cách thông thường
+							var bankName = document.getElementById('bankName').value;
+							if (!bankName.match(/^[a-zA-Z\s]+$/)) {
+								alert('Bank Name must only contain letters and spaces.');
+								return;
+							}
+
+							// Kiểm tra Bank Number
+							var bankNumber = document.getElementById('bankNumber').value;
+							if (!bankNumber.match(/^\d{9,18}$/)) {
+								alert('Bank Number must be between 9 and 18 digits.');
+								return;
+							}
+
+							// Kiểm tra Beneficiary Name
+							var beneficiaryName = document.getElementById('beneficiaryName').value;
+							if (!beneficiaryName.match(/^[a-zA-Z\s]+$/)) {
+								alert('Beneficiary Name must only contain letters and spaces.');
+								return;
+							}
+
+							// Kiểm tra Address
+							var address = document.getElementById('addressbank').value;
+							if (address.length < 5 || address.length > 100) {
+								alert('Address must be between 5 and 100 characters.');
+								return;
+							}
+							var bankName = document.getElementById('bankName').value;
+							var bankNumber = document.getElementById('bankNumber').value;
+							var beneficiaryName = document.getElementById('beneficiaryName').value;
+							var address = document.getElementById('addressbank').value;
+							var userId = document.getElementById('userId').value;
+							console.log( bankName, bankNumber,beneficiaryName, address,userId );
+							// Lấy dữ liệu từ form
+							var formData = {
+								bankName: bankName,
+								bankNumber: bankNumber,
+								beneficiaryName: beneficiaryName,
+								addressbank: address,
+								userId: userId
+							};
+							console.log(formData);
+
+							// Thực hiện yêu cầu AJAX POST
+							$.ajax({
+								type: "POST",
+								url: "/create/createBank", // Địa chỉ endpoint mà bạn muốn gửi dữ liệu đến
+								data: formData,
+								contentType: 'application/json',
+								data: JSON.stringify(formData),
+							})
+								.done(function (data) {
+									console.log(data); // Xử lý dữ liệu trả về từ server
+									alert('Data submitted successfully!');
+								})
+								.fail(function (xhr, status, error) {
+									console.error("Error occurred: " + error);
+									alert('Failed to submit data.');
+								});
+						});
+					});
+				</script>
+
+				<script>
+
+					function getBankNameFromAccount(accountNumber) {
+						if (accountNumber.length < 6) {
+							console.error("Số tài khoản không hợp lệ.");
+							return null; // Trả về null cho các trường hợp không hợp lệ
+						}
+
+						var bankPrefixes = {
+							'970422': 'Vietcombank',
+							'970436': 'VietinBank',
+							'970415': 'Agribank',
+							'970408': 'BIDV',
+							// Thêm các đầu số khác tại đây
+						};
+
+						var prefix = accountNumber.substring(0, 6);
+						if (bankPrefixes.hasOwnProperty(prefix)) {
+							var a = document.getElementById('bankName').value = bankPrefixes[prefix];
+							console.log(a);
+							return bankPrefixes[prefix];
+						} else {
+							alert("không xác định được ngân hàng");
+							return 'Không xác định';
+						}
+					}
+					// Sử dụng hàm để xác định ngân hàng
+
+
+				</script>
 
 			</div>
 
@@ -585,103 +609,107 @@
 
 	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 
-	<script type="text/javascript">		
-		$(document).ready(function() {
-		    $('#dob').datepicker({
-		        format: 'dd-mm-yyyy',
-		        autoclose: true,
-		        endDate: '0d'
-		    }).on('changeDate', function(e) {
-		        $('#dob').attr('value', $('#dob').val());
-		        toggleSaveButtonVisibility(); 
-		    });
-		    
-		    var defaultDob = $('#dob').val();
+	<script type="text/javascript">
+		function validateFirstName() {
+			const firstNameValue = document.getElementById("firstName").value;
 
-		    if (defaultDob) {
-		        var parts = defaultDob.split(' ');
-		        var datePart = parts[0]; 
-		        
-		        $('#dob').val(datePart);
-		        $('#dob').attr('value', datePart);
-		    }
-		});
+			if (firstNameValue === "") {
+				document.getElementById('validation-firstName').textContent = "FirstName is required";
+				return false;
+			} else {
+				document.getElementById('validation-firstName').textContent = "";
+				return true;
+			}
+		}
+		function validateLastName() {
+			const lastNameValue = document.getElementById("lastName").value;
 
-		function toggleSaveButtonVisibility() {
-		    const saveChangesBtn = document.getElementById("saveChangesBtn");
-		    const firstNameInput = document.getElementById("firstName");
-		    const lastNameInput = document.getElementById("lastName");
-		    const phoneInput = document.getElementById("phone");
-		    const dobInput = document.getElementById("dob");
-		    const genderInput = document.getElementById("gender");
+			if (lastNameValue === "") {
+				document.getElementById('validation-lastName').textContent = "LastName is required";
+				return false;
+			} else {
+				document.getElementById('validation-lastName').textContent = "";
+				return true;
+			}
+		}
+		function validatePhone() {
+			const phoneValue = document.getElementById("phone").value;
 
-		   
-		    const isValidFirstName = firstNameInput.value.trim() !== "";
-		    const isValidLastName = lastNameInput.value.trim() !== "";
-		    const isValidPhone = phoneInput.value.trim() !== "";
-		    const isValidDob = dobInput.value.trim() !== "";
-		    const isValidGender = genderInput.value.trim() !== "";
-
-		   
-		    if (!isValidFirstName) {
-		        firstNameInput.classList.add("invalid-input");
-		    } else {
-		        firstNameInput.classList.remove("invalid-input");
-		    }
-
-		    if (!isValidLastName) {
-		        lastNameInput.classList.add("invalid-input");
-		    } else {
-		        lastNameInput.classList.remove("invalid-input");
-		    }
-
-		    if (!isValidPhone) {
-		        phoneInput.classList.add("invalid-input");
-		    } else {
-		        phoneInput.classList.remove("invalid-input");
-		    }
-
-		
-
-		    if (!isValidDob) {
-		        dobInput.classList.add("invalid-input");
-		    } else {
-		        dobInput.classList.remove("invalid-input");
-		    }
-
-		    if (!isValidGender) {
-		        genderInput.classList.add("invalid-input");
-		    } else {
-		        genderInput.classList.remove("invalid-input");
-		    }
-	   
-		    if (isValidFirstName || isValidLastName || isValidPhone || isValidDob || isValidGender) {
-		        saveChangesBtn.style.display = "block";
-		    } else {
-		        saveChangesBtn.style.display = "none";
-		    }
+			if (phoneValue === "") {
+				document.getElementById('validation-phone').textContent = "Phone is required";
+				return false;
+			} else {
+				document.getElementById('validation-phone').textContent = "";
+				return true;
+			}
 		}
 
-		function submitForm() {
-		    const email = document.getElementById("emailInput").value;
-		    const formData = new FormData(document.getElementById("editForm"));
+		$(document).ready(function () {
+			$('#dob').datepicker({
+				format: 'dd-mm-yyyy',
+				autoclose: true,
+				endDate: '0d'
+			}).on('changeDate', function (e) {
+				$('#dob').attr('value', $('#dob').val());
+				validateDob();
+			});
 
-		    fetch("/user/profile/edit/" + email, {
-		        method: "POST",
-		        body: formData
-		    })
-		    .then(response => {
-		        if (response.ok) {
-		            document.getElementById('toast-success-edit-user').click();
-		            document.getElementById("saveChangesBtn").style.display = "none";
-		        } else {
-		            document.getElementById('toast-failed-edit-user').click();
-		        }
-		    })
-		    .catch(error => {
-		        console.error('Có lỗi xảy ra: ', error);
-		        document.getElementById('toast-failed-edit-user').click();
-		    });
+
+			var defaultDob = $('#dob').val();
+
+			if (defaultDob) {
+
+				var parts = defaultDob.split(' ');
+				var datePart = parts[0]; // Lấy phần ngày tháng năm
+
+				$('#dob').val(datePart);
+				$('#dob').attr('value', datePart);
+			}
+		});
+
+		function validateDob() {
+			const dobValue = document.getElementById("dob").value;
+			const dobDate = new Date(dobValue);
+
+
+			if (dobValue === "") {
+				document.getElementById('validation-dob').textContent = "Date of birth is required";
+				return false;
+			} else {
+				document.getElementById('validation-dob').textContent = "";
+
+
+
+
+				return true;
+			}
+		}
+		function checkSubmitEditUser() {
+			var isValidFirstName = validateFirstName();
+			var isValidLastName = validateLastName();
+			var isValidPhone = validatePhone();
+			var isValidDob = validateDob();
+			var email = document.getElementById("emailInput").value;
+
+			if (isValidFirstName && isValidLastName && isValidPhone
+				&& isValidDob) {
+				$.ajax({
+					type: "POST",
+					url: "/user/profile/edit/" + email,
+					data: $("#editForm").serialize(),
+					success: function (response) {
+						document.getElementById('toast-success-edit-user')
+							.click();
+					},
+					error: function (xhr, status, error) {
+						document.getElementById('toast-failed-edit-user')
+							.click();
+					}
+				});
+			} else {
+				document.getElementById('toast-failed-edit-user').click();
+			}
+			return false;
 		}
 
 

@@ -48,6 +48,8 @@ import com.project.AzCar.Entities.Cars.BrandImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Cars.CarModelList;
 import com.project.AzCar.Entities.Cars.PlateImages;
+import com.project.AzCar.Entities.Coupon.Coupon;
+import com.project.AzCar.Entities.Coupon.UserCoupon;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.ServiceAfterBooking.ServiceAfterBooking;
 import com.project.AzCar.Entities.ServiceAfterBooking.ServiceAfterBookingDTO;
@@ -61,6 +63,8 @@ import com.project.AzCar.Services.Cars.CarServices;
 import com.project.AzCar.Services.Cars.ExtraFeeServices;
 import com.project.AzCar.Services.Cars.PlateImageServices;
 import com.project.AzCar.Services.Cars.PlusServiceServices;
+import com.project.AzCar.Services.Coupon.ICouponService;
+import com.project.AzCar.Services.Coupon.IUserCouponService;
 import com.project.AzCar.Services.Locations.ProvinceServices;
 import com.project.AzCar.Services.Orders.OrderDetailsService;
 import com.project.AzCar.Services.Payments.PaymentService;
@@ -76,6 +80,12 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class AdminController {
+	
+	@Autowired
+	private IUserCouponService usercouponService;
+	
+	@Autowired
+	private ICouponService couponService;
 
 	@Autowired
 	private BrandServices brandServices;
@@ -308,6 +318,7 @@ public class AdminController {
 
 	}
 
+	@SuppressWarnings("null")
 	@PostMapping("/dashboard/platesVerfy/")
 	public String confirmPlateVerify(@ModelAttribute("status") String status, @ModelAttribute("userId") String userId,
 			@ModelAttribute("reason") String reason) {
@@ -316,15 +327,37 @@ public class AdminController {
 		List<PlateImages> list = plateImageServices.getAll();
 		List<PlateImages> userImages = list.stream().filter(img -> img.getUserId() == Long.parseLong(userId))
 				.collect(Collectors.toList());
+		
+		
+		
 
 		if (status.equals("accepted")) {
 			for (var item : userImages) {
 				item.setStatus(Constants.plateStatus.ACCEPTED);
 				plateImageServices.save(item);
 			}
-
+			UserCoupon uc = new UserCoupon();
+			if(usercouponService.getUserCouponByUserId((int)user.getId())== null)
+			{
+				
+				Coupon cp = couponService.findCouponByTypeCoupon(1);
+				System.out.println(" mã :" + cp.getCouponCode());
+				if(cp !=null)
+				{
+					uc.setCoupon(cp);
+					uc.setUser(user);
+					uc.setUsed(false);
+					usercouponService.saveUserCoupon(uc);
+				}
+				
+			}
+			else
+			{
+				 System.out.println("UserCoupon already exists!");
+			}
+		
 			try {
-				sendEmailAcceptPlate(user.getEmail());
+				sendEmailAcceptPlate(user.getEmail(),uc);
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -730,7 +763,10 @@ public class AdminController {
 		var modelDto = carServices.mapToDto(model.getId());
 		modelDto.setOwner(userServices.findById(model.getCarOwnerId()));
 		modelDto.setCarmodel(brandServices.getModel(model.getModelId()));
-
+		
+		
+		
+		
 		if (status.equals("accepted")) {
 			model.setStatus(Constants.carStatus.READY);
 			carServices.saveCarRegister(model);
@@ -881,17 +917,21 @@ public class AdminController {
 		mailSender.send(message);
 	}
 
-	private void sendEmailAcceptPlate(String email)
+	private void sendEmailAcceptPlate(String email, UserCoupon uc)
 			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
 		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
 
 		helper.setFrom("AzCar@gmail.com", "AzCar");
 		helper.setTo(email);
-
+		
+		
+		
+		
 		String subject = "Successfull verify your License Plate";
 		String content = "<p>Hello," + email + "</p>"
 				+ "<p>Thank you for registering your License Plate with AzCar.</p>" +
+				"<p>Azcar would like to send you a discount code:.</p>" + uc.getCoupon().getCouponCode() +
 
 				"<p>This is to confirm that we already verify your information</p>"
 				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
@@ -899,6 +939,7 @@ public class AdminController {
 		helper.setText(content, true);
 		mailSender.send(message);
 	}
+	
 
 	private void sendEmailDeclinePlate(String email, String reason)
 			throws UnsupportedEncodingException, jakarta.mail.MessagingException {

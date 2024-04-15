@@ -1,3 +1,4 @@
+f
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
@@ -241,22 +242,18 @@
 					</h4>
 					<!-- khi click charge sẽ hiển thị dialog -->
 					<!-- Button to open the modal -->
-					<div class="col-4 offset-md-8">
-						<div class="row">
-							<div class="col-6">
-								<button type="button" class="search-button btn-md btn-color"
-									style="border-width: 0; border-radius: 0" id="openModalBtn2">
-									Withdraw
-								</button>
-							</div>
-							<div class="col-6">
-								<button id="openModalBtn" class="search-button btn-md btn-color"
-									style="border-width: 0; border-radius: 0">Deposit</button>
-							</div>
-						</div>
+					<div class="col-4 offset-md-8" style="text-align: center">
+						
+						<button id="openModalBtn" class="search-button btn-md btn-color"
+							style="border-width: 0; border-radius: 0">Deposit</button>
+							
+						<button type="button" class="search-button btn-md btn-color"
+							style="border-width: 0; border-radius: 0" id="openModalBtn2">
+							Withdraw
+						</button>
 					</div>
 					<!-- The Modal -->
-					<div id="myModal" class="modal" style="z-index: 9999999">
+					<div id="myModal" class="modal" style="z-index: 9999999" th:if="${cardbank != null}">
 						<div class="modal-content">
 							<span class="close">&times;</span>
 							<h2>Deposit</h2>
@@ -271,8 +268,9 @@
 											readonly hidden><br> <br>
 										<label for="amount">Amount:</label>
 										<div>
-											<input type="number" id="customAmount" name="customAmount" min="100"
-												step="1" placeholder="Nhập số tiền tùy ý">
+
+											<input type="number" id="amount" name="amount" min="10"
+												step="1" placeholder="Please enter the amount.">
 										</div>
 										<div>
 											<button type="button" class="amount-btn" data-amount="500">500$
@@ -282,7 +280,7 @@
 											<button type="button" class="amount-btn" data-amount="2000">2,000$
 											</button>
 										</div>
-										<input type="hidden" id="amount" name="amount" required>
+										<input type="hidden" id="customAmount" name="customAmount" required>
 										<!-- Field hidden để lưu giá trị số tiền -->
 
 										<label for="referenceNumber">Reference Number:</label> <input type="text"
@@ -328,7 +326,6 @@
 							overflow: hidden;
 							background-color: rgba(0, 0, 0, 0.4);
 						}
-
 						.modal-content {
 							background-color: #fefefe;
 							margin: 15% auto;
@@ -373,6 +370,98 @@
 							width: 80%;
 						}
 					</style>
+					<script>
+
+						// Get the modal
+						var modal = document.getElementById("myModal");
+
+						// Get the button that opens the modal
+						var openModalBtn = document.getElementById("openModalBtn");
+
+						// Get the element that closes the modal
+						var span = document.getElementsByClassName("close")[0];
+
+						// When the user clicks on the button, open the modal
+						openModalBtn.onclick = function () {
+							// Tạo một referenceNumber ngẫu nhiên
+							var referenceNumber = generateReferenceNumber();
+							// Gán giá trị referenceNumber vào input trong form
+							document.getElementById("referenceNumber").value = referenceNumber;
+							modal.style.display = "block";
+						}
+						// Handle amount button clicks
+						var amountButtons = document.querySelectorAll(".amount-btn");
+						amountButtons.forEach(function (button) {
+							button.addEventListener('click', function () {
+								var amount = this.getAttribute('data-amount');
+								document.getElementById("customAmount").value = amount;
+								document.getElementById("amount").value = amount; // Reset giá trị của ô nhập số tiền tùy ý
+							});
+						});
+						// Function để tạo referenceNumber ngẫu nhiên
+						function generateReferenceNumber() {
+							var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+							var length = 8;
+							var result = '';
+							for (var i = 0; i < length; i++) {
+								result += characters.charAt(Math.floor(Math.random() * characters.length));
+							}
+							return result;
+						}
+
+						// When the user clicks on (x), close the modal
+						span.onclick = function () {
+							modal.style.display = "none";
+						}
+
+						// When the user clicks anywhere outside of the modal, close it
+						window.onclick = function (event) {
+							if (event.target == modal) {
+								modal.style.display = "none";
+							}
+						}
+
+						// Submit form data
+						var form = document.getElementById("paymentForm");
+						form.addEventListener('submit', function (event) {
+							event.preventDefault();
+							var referenceNumber = document.getElementById("referenceNumber").value;
+							console.log(referenceNumber);
+							var formData = new FormData(form);
+							var jsonObject = {};
+							formData.forEach(function (value, key) {
+								jsonObject[key] = value;
+							});
+							var jsonData = JSON.stringify(jsonObject);
+
+							console.log(jsonData)
+							fetch('createpayments/deposit/' + referenceNumber, {
+								method: 'POST',
+								body: jsonData,
+								headers: {
+									'Content-Type': 'application/json'
+								},
+
+							})
+								.then(response => {
+									if (!response.ok) {
+										throw new Error('Network response was not ok');
+									}
+									// return response.json();
+									return response.ok;
+								})
+								.then(data => {
+									alert('Nạp tiền thành công!');
+									modal.style.display = "none";
+								})
+								.catch(error => {
+
+									console.error('There was an error!', error);
+									alert('Có lỗi xảy ra. Vui lòng thử lại sau!');
+								});
+						});
+
+					</script>
 					<div class="col-10 offset-md-1">
 						<div class="agent-description">
 							<div class="tabbing tabbing-box mb-30">
@@ -661,11 +750,13 @@
 																							th:text="${#temporals.format(item.fromDate, 'dd/MM/yyyy')}">
 																						</td>
 																						<td style="white-space: nowrap;"
+
 																							th:text="${#temporals.format(item.toDate, 'dd/MM/yyyy')}">
 																						</td>
 																						<td
 																							th:text="${item.differenceDate+' day(s)'}">
 																						</td>
+
 																						<td style="white-space: nowrap;"
 																							th:text="${'$ '+item.totalRent}">
 																						</td>
@@ -707,6 +798,7 @@
 														tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
 														aria-hidden="true">
 														<div class="modal-dialog modal-lg" style="max-width: 1000px;">
+
 															<div class="modal-content">
 																<div class="modal-header">
 																	<h5 class="modal-title" id="exampleModalLabel">
@@ -742,6 +834,7 @@
 																			<td th:text="${item.differenceDate}"></td>
 																			<td style="white-space: nowrap;"
 																				th:text="'$' + ${item.totalRent}"></td>
+
 																			<td><a th:href="@{'/home/myplan/accepted/'+ ${item.id}}"
 																					style="position: relative;"
 																					class="btn badge-success">Accept</a>
@@ -917,6 +1010,7 @@
 														<div class="listing-price">
 															Total: <span class="new"
 																th:text="'$' + ${item.totalRent}"></span>
+
 														</div>
 													</div>
 													<p class="btn text-white"
@@ -1202,16 +1296,17 @@
 							hidden><br><br>
 						<label for="amount">Amount:</label>
 						<div>
-							<input type="number" id="amount123" name="amount123" min="100000" step="1000"
-								placeholder="Nhập số tiền tùy ý">
+
+							<input type="number" id="amount123" name="amount123" min="10" step="1"
+								placeholder="Please enter the amount.">
 						</div>
 						<div>
 							<button type="button" class="amount-btn" data-amount123="500">500$
-							</button>
+								</button>
 							<button type="button" class="amount-btn" data-amount123="1000">1,000$
-							</button>
+								</button>
 							<button type="button" class="amount-btn" data-amount123="2000">2,000$
-							</button>
+								</button>
 						</div>
 						<input type="hidden" id="customAmount123" name="customAmount123" required>
 
@@ -1411,124 +1506,59 @@
 		}
 	</script>
 	<script>
-		var modal = document.getElementById("myModal");
-		var openModalBtn = document.getElementById("openModalBtn");
-		var span = document.getElementsByClassName("close")[0];
-		openModalBtn.onclick = function () {
-			var referenceNumber = generateReferenceNumber();
-			document.getElementById("referenceNumber").value = referenceNumber;
-			modal.style.display = "block";
-		}
-		const submitInp = document.getElementById("customAmount");
-		submitInp.addEventListener('change', function (e) {
-			e.preventDefault();
-			console.log(submitInp.value);
-			document.getElementById("amount").value = submitInp.value;
-		});
-		var amountButtons = document.querySelectorAll(".amount-btn");
-		amountButtons.forEach(function (button) {
-			button.addEventListener('click', function () {
-				var amount = this.getAttribute('data-amount');
-				document.getElementById("amount").value = amount;
-				document.getElementById("customAmount").value = amount;
-			});
-		});
-		function generateReferenceNumber() {
-			var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-			var length = 8;
-			var result = '';
-			for (var i = 0; i < length; i++) {
-				result += characters.charAt(Math.floor(Math.random() * characters.length));
-			}
-			return result;
-		}
-		span.onclick = function () {
-			modal.style.display = "none";
-		}
-		window.onclick = function (event) {
-			if (event.target == modal) {
-				modal.style.display = "none";
-			}
-		}
-		var form = document.getElementById("paymentForm");
-		form.addEventListener('submit', function (event) {
-			event.preventDefault();
-			var referenceNumber = document.getElementById("referenceNumber").value;
-			console.log(referenceNumber);
-			var formData = new FormData(form);
-			var jsonObject = {};
-			formData.forEach(function (value, key) {
-				jsonObject[key] = value;
-			});
-			var jsonData = JSON.stringify(jsonObject);
-
-			console.log(jsonData)
-			fetch('createpayments/deposit/' + referenceNumber, {
-				method: 'POST',
-				body: jsonData,
-				headers: {
-					'Content-Type': 'application/json'
-				},
-
-			})
-				.then(response => {
-					if (!response.ok) {
-						throw new Error('Network response was not ok');
-					}
-					return response.ok;
-				})
-				.then(data => {
-					alert('Nạp tiền thành công!');
-					modal.style.display = "none";
-				})
-				.catch(error => {
-
-					console.error('There was an error!', error);
-					alert('Có lỗi xảy ra. Vui lòng thử lại sau!');
-				});
-		});
-
-	</script>
-	<script>
+		// Get the modal
 		var modal123 = document.getElementById("myModal123");
+
+		// Get the button that opens the modal
 		var openModalBtn2 = document.getElementById("openModalBtn2");
+
+		// Get the <span> element that closes the modal
 		var span = document.getElementById("withdraw-close");
-		const submitInp123 = document.getElementById("customAmount123");
-		submitInp123.addEventListener('change', function (e) {
-			e.preventDefault();
-			console.log(submitInp123.value);
-			document.getElementById("amount123").value = submitInp123.value;
-		});
+
+
+		// Handle amount button clicks
 		var amountButtons = document.querySelectorAll(".amount-btn");
 		amountButtons.forEach(function (button) {
 			button.addEventListener('click', function () {
 				var amount = this.getAttribute('data-amount123');
 				document.getElementById("customAmount123").value = amount;
-				document.getElementById("amount123").value = amount;
+
+				document.getElementById("amount123").value = amount; // Reset giá trị của ô nhập số tiền tùy ý
 			});
 		});
+		// Function để tạo referenceNumber ngẫu nhiên
 		function generateReferenceNumber123() {
 			var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 			var length = 8;
 			var result = '';
 			for (var i = 0; i < length; i++) {
 				result += characters.charAt(Math.floor(Math.random() * characters.length));
+
 			}
 			return result;
 		}
+		// When the user clicks on the button, open the modal
 		openModalBtn2.onclick = () => {
+			// Tạo một referenceNumber ngẫu nhiên
 			var referenceNumber123 = generateReferenceNumber123();
+			// Gán giá trị referenceNumber vào input trong form
 			document.getElementById("referenceNumber123").value = referenceNumber123;
 			modal123.style.display = "block";
 		}
+
+		// When the user clicks on <span> (x), close the modal
 		span.onclick = function () {
 			modal123.style.display = "none";
 		}
+
+		// When the user clicks anywhere outside of the modal, close it
 		window.onclick = function (event) {
 			if (event.target == modal) {
 				modal123.style.display = "none";
 			}
 		}
+
+		// Submit form data
 		var form123 = document.getElementById("paymentForm123");
 		form123.addEventListener('submit', function (event) {
 			event.preventDefault();
@@ -1557,10 +1587,13 @@
 					if (!response.ok) {
 						throw new Error('Network response was not ok');
 					}
+
+
+					// return response.json();
 					return response.ok;
 				})
 				.then(data => {
-					alert('Nạp tiền thành công!');
+					alert('Successful deposit!');
 					modal123.style.display = "none";
 				})
 				.catch(error => {

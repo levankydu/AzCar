@@ -132,11 +132,14 @@ public class HomeController {
 				listcarsInBd.add(item);
 			}
 		}
+		
+		
 		ModelView.addAttribute("carsInHcm", listcarsInHcm);
 		ModelView.addAttribute("carsInHn", listcarsInHn);
 		ModelView.addAttribute("carsInDn", listcarsInDn);
 		ModelView.addAttribute("carsInBd", listcarsInBd);
 		listDto.removeIf(car -> car.getDiscount() == 0);
+		
 
 		ModelView.addAttribute("carRegisterList", listDto);
 

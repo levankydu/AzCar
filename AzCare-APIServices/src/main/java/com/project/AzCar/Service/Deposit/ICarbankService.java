@@ -11,5 +11,6 @@ public interface ICarbankService {
 	List<Cardbank> getListCardBank();
 	Cardbank saveCardbank(Cardbank c);
 	Cardbank findCardbankbyId(int id);
+	Cardbank findCardbankByUserid(int id);
 	
 }
