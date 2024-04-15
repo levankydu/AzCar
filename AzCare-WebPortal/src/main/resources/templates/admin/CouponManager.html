@@ -14,6 +14,7 @@
 		type="image/png">
 
 	<link rel="stylesheet" href="/adminAssets/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 	<link rel="stylesheet" crossorigin href="/adminAssets/assets/compiled/css/table-datatable-jquery.css">
 	<link rel="stylesheet" crossorigin href="/adminAssets/assets/compiled/css/app.css">
@@ -163,7 +164,8 @@
 				<section class="section">
 					<div class="card">
 						<div class="card-header">
-							<h5 class="card-title">Users</h5>
+							<h5 class="card-title">Coupon</h5>
+							<button id="addCouponBtn" class="create-keyword">Create New Coupon</button>
 						</div>
 						<div class="card-body">
 							<div class="table-responsive datatable-minimal">
@@ -171,32 +173,34 @@
 									<thead>
 										<tr>
 											<th>Id</th>
-											<th>Email</th>
-											<th>Price</th>
-											<th>Reference Number</th>
+											<th>Code Number</th>
+											<th>Discount</th>
+											<th>Content </th>
+											<th>Expiration Date</th>
+											<th>Quantity</th>
 											<th>Status</th>
 											<th>Action</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="deposit : ${listDeposit}">
-											<td th:text="${deposit.id}"></td>
-											<td th:text="${deposit.email}"></td>
-											<td th:text="${deposit.amount}"></td>
-											<td th:text="${deposit.referenceNumber}"></td>
-											<td th:id="'status_'+${deposit.id}" th:value="${deposit.Status}"
-												th:text="${deposit.Status}"></td>
+										<tr th:each="coupon : ${ListCoupon}">
+											<td th:text="${coupon.id}"></td>
+											<td th:text="${coupon.couponCode}"></td>
+											<td th:text="${coupon.discountPercentage}"></td>
+											<td th:text="${coupon.Content}"></td>
+											<td th:text="${coupon.expirationDate}"></td>
+											<td th:text="${coupon.quantity}"></td>
+											<td th:id="'status_'+${coupon.id}" th:value="${coupon.Status}"
+												th:text="${coupon.Status}"></td>
 
-											<td><span th:if="${deposit.Status != 'Pending'}" class="badge bg-danger"
-													th:data-reference-number="${deposit.referenceNumber}"
-													th:id="'acceptPayment_'+${deposit.id}"
-													th:onclick="'acceptPayment('+ ${deposit.id}+')'">Active</span>
-												<span th:if="${deposit.Status != 'Done'}" class="badge bg-success"
-													th:data-reference-number="${deposit.referenceNumber}"
-													th:id="'acceptPayment_'+${deposit.id}"
-													th:onclick="'acceptPayment('+ ${deposit.id}+')'">Active</span>
-
-
+											<td><span th:if="${coupon.Status != 'Active'}" class="badge bg-danger"
+													th:data-reference-number="${coupon.couponCode}"
+													th:id="'acceptPayment_'+${coupon.id}"
+													th:onclick="'acceptPayment('+ ${coupon.id}+')'">Active</span>
+												<span th:if="${coupon.Status != 'InActive'}" class="badge bg-success"
+													th:data-reference-number="${coupon.couponCode}"
+													th:id="'acceptPayment_'+${coupon.id}"
+													th:onclick="'acceptPayment('+ ${coupon.id}+')'">Active</span>
 
 											</td>
 
@@ -206,55 +210,114 @@
 							</div>
 						</div>
 					</div>
-					<!-- Modal Loading -->
-<div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-body text-center">
-        <div class="spinner-border text-primary" role="status">
-          <span class="sr-only">Loading...</span>
-        </div>
-        <p class="mt-2">Đang xử lý...</p>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- Modal Success -->
-<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-body text-center">
-        <div class="alert alert-success" role="alert">
-          Successful deposit!
-        </div>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+					<!-- Modal Create Coupon Dialog -->
+					<div class="modal fade" id="addCouponModal" tabindex="-1" role="dialog"
+						aria-labelledby="addCouponModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="addCouponModalLabel">Add New Coupon</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<form id="addCouponForm">
+										<div class="form-group">
+											<label for="couponCodeInput">Coupon Code:</label>
+											<input type="text" class="form-control" id="couponCodeInput" required>
+										</div>
+										<div class="form-group">
+											<label for="discountInput">Discount Percentage:</label>
+											<input type="number" class="form-control" id="discountInput" required>
+										</div>
+										<div class="form-group">
+											<label for="contentInput">Content:</label>
+											<textarea class="form-control" id="contentInput" rows="3"
+												required></textarea>
+										</div>
+										<div class="form-group">
+											<label for="expirationDateInput">Expiration Date:</label>
+											<input type="date" class="form-control" id="expirationDateInput" required>
+										</div>
+										<div class="form-group">
+											<label for="quantityInput">Quantity:</label>
+											<input type="number" class="form-control" id="quantityInput" required>
+										</div>
+										<div class="form-group">
+											<label for="statusInput">Status:</label>
+											<select class="form-control" id="statusInput" required>
+												<option value="Active">Active</option>
+												<option value="Inactive">Inactive</option>
+											</select>
+										</div>
+									</form>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" id="closeCouponBtn" data-dismiss="modal">Close</button>
+									<button type="button" class="btn btn-primary" id="saveCouponBtn">Save
+										Coupon</button>
+								</div>
+							</div>
+						</div>
+					</div>
 
 					<script>
-						function showLoadingModal() {
-  $('#loadingModal').modal('show');
-}
 
-function hideLoadingModal() {
-  $('#loadingModal').modal('hide');
-}
+						$(document).ready(function () {
+							// Bắt sự kiện click vào button "Add Coupon" để mở dialog
+							$('#addCouponBtn').on('click', function () {
+								$('#addCouponModal').modal('show');
+							});
+							$('#closeCouponBtn').on('click', () =>{
+								$('#addCouponModal').modal('hide');
+							})
 
-function showSuccessModal() {
-  $('#successModal').modal('show');
-}
+							// Bắt sự kiện click vào button "Save Coupon"
+							$('#saveCouponBtn').on('click', function () {
+								// Lấy giá trị từ các input trong form
+								var couponCode = $('#couponCodeInput').val();
+								var discountPercentage = $('#discountInput').val();
+								var content = $('#contentInput').val();
+								var expirationDate = $('#expirationDateInput').val();
+								var quantity = $('#quantityInput').val();
+								var status = $('#statusInput').val();
+								console.log(couponCode ," " ,discountPercentage , content, expirationDate , quantity,status );
+								// Tạo đối tượng coupon
+								var newCoupon = {
+									couponCode: couponCode,
+									discountPercentage: discountPercentage,
+									content: content,
+									expirationDate: expirationDate,
+									quantity: quantity,
+									status: status
+								};
 
-function hideSuccessModal() {
-  $('#successModal').modal('hide');
-}
+								// Gửi AJAX request để tạo mới coupon
+								$.ajax({
+									type: 'POST',
+									url: '/createCoupon', // Đường dẫn API của bạn để tạo mới coupon
+									contentType: 'application/json',
+									data: JSON.stringify(newCoupon),
+									success: function (response) {
+										console.log('Coupon added successfully:', response);
+										// Đóng dialog sau khi tạo mới thành công
+										$('#addCouponModal').modal('hide');
+										// Thực hiện cập nhật dữ liệu trên giao diện nếu cần
+									},
+									error: function (xhr, status, error) {
+										console.error('Error adding coupon:', error);
+										// Xử lý lỗi nếu có
+									}
+								});
+							});
+						});
+
 						function acceptPayment(id) {
-							 showLoadingModal();
-							var referenceNumber = document.getElementById('acceptPayment_' + id).getAttribute('data-reference-number');
+							var code = document.getElementById('acceptPayment_' + id).getAttribute('data-reference-number');
 							var depositStatus = document.getElementById('status_' + id);
-							console.log(referenceNumber, "và", depositStatus);
+							console.log(code, "và", depositStatus);
 
 							// Định nghĩa options cho yêu cầu POST
 							const requestOptions = {
@@ -263,11 +326,11 @@ function hideSuccessModal() {
 									'Content-Type': 'application/json'
 								},
 								// Truyền dữ liệu vào body của yêu cầu PUT
-								body: JSON.stringify({ referenceNumber: referenceNumber })
+								body: JSON.stringify({ couponCode: code })
 							};
 
 							// Gửi request AJAX để cập nhật status
-							fetch("acceptPayment/" + id, requestOptions)
+							fetch("/updatedStatusCoupon/" + id, requestOptions)
 								.then(response => {
 									if (!response.ok) {
 										throw new Error('Network response was not ok');
@@ -275,8 +338,6 @@ function hideSuccessModal() {
 									return response.json();
 								})
 								.then(data => {
-									  hideLoadingModal();
-        showSuccessModal();
 									console.log("success: " + data);
 									// Nếu thành công, cập nhật trực tiếp trên giao diện
 									depositStatus.textContent = "Done"
@@ -285,10 +346,7 @@ function hideSuccessModal() {
 									// Xử lý lỗi nếu có
 									console.error('There was an error!', error);
 								});
-  // Đóng modal thành công khi nhấn nút Đóng
-  $('#successModal').on('hidden.bs.modal', function() {
-    window.location.reload();
-  });
+
 						}
 
 					</script>

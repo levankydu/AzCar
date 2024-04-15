@@ -28,95 +28,84 @@ import com.project.AzCar.Services.Reviews.ReviewService;
 
 @RestController
 public class APIReviewManager {
-	
+
 	@Autowired
 	private ReviewService reviewServices;
 	@Autowired
 	private IReviewsService reviewsService;
-		@Autowired
+	@Autowired
 	private IIgnoreKeywordService keywordService;
-		@Autowired
-		private ICommentsService cmtService;
-		
-	   @PostMapping("/reviews/update-status")
+	@Autowired
+	private ICommentsService cmtService;
 
-	    public ResponseEntity<?> updateStatus(@RequestBody ReviewsDTO  dto) {
-		   System.out.println("Review id: " + dto);
-		   
-		
-		   if(dto.getId() != null)
-		   {
-			   Reviews newReview = new Reviews();
-			   newReview = reviewsService.updateStatus(dto.getId(),dto.getStatus());
-			   ReviewsDTO temp = new ReviewsDTO();
-			   temp.setId(newReview.getId());
-			   temp.setStatus(newReview.getStatus());
-			  
-			   System.out.println(temp);
-			
-			   return ResponseEntity.ok("Status updated successfully" + temp);
-		   }
-		   return ResponseEntity.badRequest().body("why");
+	@PostMapping("/reviews/update-status")
 
-	   }
-	   //create keyword Ignore
-	   @PostMapping(value="/createkeyword")
-	   public ResponseEntity<?> createKeyword(@RequestBody KeyWordIgnoreDTO IgnoreDTO)
-	   {
-		   IgnoreKeyword ignore  = new IgnoreKeyword();
-		   ignore.setKeyword(IgnoreDTO.getKeyword());
-		   keywordService.savekeyword(ignore);
-		   return new ResponseEntity<String>("Create Successfully",HttpStatus.OK);
-		   
-	   }
-	   
-	   
-	   //Update keyword Ignore
-	   @PutMapping(value = "/editKeyword/{id}")
-	   public ResponseEntity<?> updateKeyWord(@PathVariable("id") int id,@RequestBody KeyWordIgnoreDTO IgnoreDTO)
-	   {
-		   IgnoreKeyword ignore = keywordService.findByid(id);
-		   
-		   if(ignore !=null)
-		   {
-			   ignore.setKeyword(IgnoreDTO.getKeyword());
-			   keywordService.savekeyword(ignore);
-			   return ResponseEntity.ok().body(IgnoreDTO);
-		   }
-		   else {
-	            return ResponseEntity.notFound().build();
-	        }
-	   }
-	   // DELETE delete a keyword
-	    @DeleteMapping("/deleteKeyword/{id}")
-	    public ResponseEntity<?> deleteKeyword(@PathVariable("id") int id) {
-	    	IgnoreKeyword keyword = keywordService.findByid(id);
-	        if (keyword != null) {
-	            keywordService.deleteByid(id);
-	            return ResponseEntity.ok().build();
-	        } else {
-	            return ResponseEntity.notFound().build();
-	        }
-	    }
-	    
-	    //update Status Comments
-	    @PutMapping(value="comment/update-comment/{id}")
-	    public ResponseEntity<?> updateStatusComment(@PathVariable("id") int id,
-	    		@RequestBody CommentsDTO dto)
-	    {
-	    	Comments cmt = cmtService.getCommentById(id);
-	    	if(cmt !=null)
-	    	{
-	    		cmt.setStatus( ReviewStatus.valueOf(dto.getStatus()));
-	    		cmtService.saveComment(cmt);
-	    		return new ResponseEntity<String>("Đã Change",HttpStatus.OK);
-	    		
-	    	}
-	    	else
-	    	{
-	    		return new ResponseEntity<String>("wrong",HttpStatus.BAD_REQUEST);
-	    	}
-	    	
-	    
-	    }
+	public ResponseEntity<?> updateStatus(@RequestBody ReviewsDTO dto) {
+		System.out.println("Review id: " + dto);
+
+		if (dto.getId() != null) {
+			Reviews newReview = new Reviews();
+			newReview = reviewsService.updateStatus(dto.getId(), dto.getStatus());
+			ReviewsDTO temp = new ReviewsDTO();
+			temp.setId(newReview.getId());
+			temp.setStatus(newReview.getStatus());
+
+			System.out.println(temp);
+
+			return ResponseEntity.ok("Status updated successfully" + temp);
+		}
+		return ResponseEntity.badRequest().body("why");
+
+	}
+
+	// create keyword Ignore
+	@PostMapping(value = "/createkeyword")
+	public ResponseEntity<?> createKeyword(@RequestBody KeyWordIgnoreDTO IgnoreDTO) {
+		IgnoreKeyword ignore = new IgnoreKeyword();
+		ignore.setKeyword(IgnoreDTO.getKeyword());
+		keywordService.savekeyword(ignore);
+		return new ResponseEntity<String>("Create Successfully", HttpStatus.OK);
+
+	}
+
+	// Update keyword Ignore
+	@PutMapping(value = "/editKeyword/{id}")
+	public ResponseEntity<?> updateKeyWord(@PathVariable("id") int id, @RequestBody KeyWordIgnoreDTO IgnoreDTO) {
+		IgnoreKeyword ignore = keywordService.findByid(id);
+
+		if (ignore != null) {
+			ignore.setKeyword(IgnoreDTO.getKeyword());
+			keywordService.savekeyword(ignore);
+			return ResponseEntity.ok().body(IgnoreDTO);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+	// DELETE delete a keyword
+	@DeleteMapping("/deleteKeyword/{id}")
+	public ResponseEntity<?> deleteKeyword(@PathVariable("id") int id) {
+		IgnoreKeyword keyword = keywordService.findByid(id);
+		if (keyword != null) {
+			keywordService.deleteByid(id);
+			return ResponseEntity.ok().build();
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+	// update Status Comments
+	@PutMapping(value = "comment/update-comment/{id}")
+	public ResponseEntity<?> updateStatusComment(@PathVariable("id") int id, @RequestBody CommentsDTO dto) {
+		Comments cmt = cmtService.getCommentById(id);
+		if (cmt != null) {
+			cmt.setStatus(ReviewStatus.valueOf(dto.getStatus()));
+			cmtService.saveComment(cmt);
+			return new ResponseEntity<String>("Đã Change", HttpStatus.OK);
+
+		} else {
+			return new ResponseEntity<String>("wrong", HttpStatus.BAD_REQUEST);
+		}
+
+	}
 }

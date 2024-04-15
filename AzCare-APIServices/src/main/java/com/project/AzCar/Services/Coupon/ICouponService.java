@@ -10,12 +10,15 @@ import com.project.AzCar.Entities.Coupon.Coupon;
 public interface ICouponService {
 	public Coupon getCouponById(int id);
 
-	public Coupon updateCouponByid(int id);
+	public Coupon updateCouponByid(Coupon c);
 
 	public void deleteCouponById(int id);
 
 	public List<Coupon> getListCoupon();
 
 	public Coupon createCoupon(Coupon c);
+	public Coupon findCouponbyCouponCode(String c);
+	
+	public Coupon findCouponByTypeCoupon(int id);
 
 }

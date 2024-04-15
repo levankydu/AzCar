@@ -30,6 +30,9 @@
 	<!-- Google fonts -->
 	<link rel="stylesheet" type="text/css"
 		href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 	<!-- Custom Stylesheet -->
 	<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
@@ -145,10 +148,7 @@
 		<nav class="nav nav-borders">
 			<a class="nav-link active ms-0" th:href="@{/user/profile/{email} (email=${email})}">Profile</a> <a
 				class="nav-link" th:href="@{/user/profile/changePassword/{email} (email=${email})}">Change
-				Password</a> 
-				<a class="nav-link" th:href="@{/user/profile/edit/{email} (email=${email})}">Edit</a>
-				<a class="nav-link" th:href="@{/user/profile/edit/cardbank/{email} (email=${email})}">Add Card Bank</a>
-
+				Password</a> <a class="nav-link" th:href="@{/user/profile/edit/{email} (email=${email})}">Edit</a>
 		</nav>
 		<hr class="mt-0 mb-4">
 
@@ -158,93 +158,153 @@
 			<p id="toast-failed-edit-user" hidden="true" class="btn btn-outline-primary btn-lg btn-block">Failed Example
 			</p>
 
-			<div class="col-xl-4">
-				<!-- Profile picture card-->
-				<div class="card mb-4 mb-xl-0">
-					<div class="card-header">Profile Picture</div>
-					<div class="card-body text-center">
-						<!-- Profile picture image-->
-						<img class="img-account-profile rounded-circle mb-2" style="width: 300px" id="prev"
-							th:src="'avatar/'+${user.image}" alt="">
-						<!-- Profile picture help block-->
-						<form th:action="@{/user/profile/edit/uploadFile}" method="post" enctype="multipart/form-data">
-							<input class="form-control" name="image" id="image" type="file"
-								onchange="return onFilesChange()"><br>
-							<button class="btn btn-primary" type="submit" onclick="return form.submit()">Save</button>
-						</form>
 
-						<!-- Toast messages -->
-						<p id="toast-success-upload-avatar" hidden="true"
-							class="btn btn-outline-primary btn-lg btn-block">Image
-							uploaded successfully</p>
-						<p id="toast-failed-upload-avatar" hidden="true"
-							class="btn btn-outline-primary btn-lg btn-block">Failed to
-							upload image</p>
-					</div>
-				</div>
-			</div>
 			<div class="col-xl-8">
-				<form th:action="@{/user/profile/edit/{email} (email=${email})}" th:method="post"
-					enctype="multipart/form-data" th:object="${user}" id="editForm">
-					<div class="col-xl-12">
-						<!-- Account details card -->
-						<div class="card mb-4">
-							<div class="card-header">Account Details</div>
-							<div class="card-body">
-								<!-- Email -->
-								<div class="mb-3">
-									<label class="small mb-1" for="inputUsername">Email</label> <input
-										class="form-control" id="emailInput" type="text" th:value="*{email}" readonly>
-								</div>
-								<!-- Form Row for first name and last name -->
-								<div class="row gx-3 mb-3">
-									<div class="col-md-6">
-										<label class="small mb-1" for="inputFirstName">First
-											name</label> <input class="form-control" id="firstName" name="firstName"
-											type="text" th:value="*{firstName}" onkeyup="validateFirstName();"> <span
-											id="validation-firstName" class="text-danger"></span>
-									</div>
-									<div class="col-md-6">
-										<label class="small mb-1" for="inputLastName">Last
-											name</label> <input class="form-control" id="lastName" name="lastName"
-											type="text" th:value="*{lastName}" onkeyup="validateLastName();"> <span
-											id="validation-lastName" class="text-danger"></span>
-									</div>
-								</div>
-								<!-- Form Row for phone number and birthday -->
-								<div class="row gx-3 mb-3">
-									<div class="col-md-6">
-										<label class="small mb-1" for="inputPhone">Phone
-											number</label> <input class="form-control" id="phone" name="phone"
-											type="text" th:value="*{phone}" onkeyup="validatePhone();">
-										<span id="validation-phone" class="text-danger"></span>
-									</div>
-									<div class="col-md-6">
-										<label class="small mb-1" for="inputBirthday">Birthday</label>
-										<input class="form-control" id="dob" type="text" name="dob"
-											th:value="${#dates.format(user.dob, 'dd-MM-yyyy')}"
-											onchange="validateDob();"> <span id="validation-dob"
-											class="text-danger"></span>
-									</div>
-								</div>
-								<!-- Gender selection -->
-								<div class="row gx-3 mb-3">
-									<div class="col-md-6">
-										<label class="small mb-1" for="inputGender">Gender</label> <select
-											class="form-control" id="gender" name="gender" th:field="*{gender}">
-											<option value="male">Male</option>
-											<option value="female">Female</option>
+				<div class="container mt-5">
+					<form id="bankCardForm">
+						<div class="mb-3">
+							<label for="bankName" class="form-label">Bank Name</label>
+							<input type="text" class="form-control" id="bankName" name="bankName" required>
 
-										</select>
-									</div>
-								</div>
-								<!-- Save changes button -->
-								<button onclick="return checkSubmitEditUser()" class="btn btn-primary">Save
-									changes</button>
-							</div>
 						</div>
-					</div>
-				</form>
+						<div class="mb-3">
+							<label for="bankNumber" class="form-label">Bank Number</label>
+							<input type="text" class="form-control" id="bankNumber" name="bankNumber" required>
+						</div>
+						<div class="mb-3">
+							<label for="beneficiaryName" class="form-label">Beneficiary Name</label>
+							<input type="text" class="form-control" id="beneficiaryName" name="beneficiaryName"
+								required>
+						</div>
+						<div class="mb-3">
+							<label for="addressbank" class="form-label">Address</label>
+							<input type="text" class="form-control" id="addressbank" name="addressbank" required>
+						</div>
+						<div class="mb-3" hidden>
+							<input type="text" class="form-control" id="userId" name="userId" th:value="${user.id}" >
+						</div>
+
+						<button type="submit" class="btn btn-primary">Submit</button>
+					</form>
+				</div>
+				<script>
+					$(document).ready(function () {
+						document.getElementById('bankNumber').addEventListener('input', function () {
+							var bankName = getBankNameFromAccount(this.value);
+							console.log(bankName);
+							document.getElementById('bankNameDisplay').textContent = 'Tên ngân hàng: ' + bankName;
+						});
+						document.getElementById('bankCardForm').addEventListener('submit', function (event) {
+							event.preventDefault(); // Ngăn không cho form gửi đi ngay
+
+							// Kiểm tra Bank Name
+						
+							var a = getBankNameFromAccount(bankName);
+							
+						
+							// Nếu mọi thứ ổn, có thể gửi form
+							this.submit();
+						});
+					});
+
+
+				</script>
+				<script>
+					$(document).ready(function () {
+						$('#bankCardForm').submit(function (event) {
+							event.preventDefault(); // Ngăn không cho form gửi theo cách thông thường
+							var bankName = document.getElementById('bankName').value;
+							if (!bankName.match(/^[a-zA-Z\s]+$/)) {
+								alert('Bank Name must only contain letters and spaces.');
+								return;
+							}
+
+							// Kiểm tra Bank Number
+							var bankNumber = document.getElementById('bankNumber').value;
+							if (!bankNumber.match(/^\d{9,18}$/)) {
+								alert('Bank Number must be between 9 and 18 digits.');
+								return;
+							}
+
+							// Kiểm tra Beneficiary Name
+							var beneficiaryName = document.getElementById('beneficiaryName').value;
+							if (!beneficiaryName.match(/^[a-zA-Z\s]+$/)) {
+								alert('Beneficiary Name must only contain letters and spaces.');
+								return;
+							}
+
+							// Kiểm tra Address
+							var address = document.getElementById('addressbank').value;
+							if (address.length < 5 || address.length > 100) {
+								alert('Address must be between 5 and 100 characters.');
+								return;
+							}
+							var bankName = document.getElementById('bankName').value;
+							var bankNumber = document.getElementById('bankNumber').value;
+							var beneficiaryName = document.getElementById('beneficiaryName').value;
+							var address = document.getElementById('addressbank').value;
+							var userId = document.getElementById('userId').value;
+							console.log( bankName, bankNumber,beneficiaryName, address,userId );
+							// Lấy dữ liệu từ form
+							var formData = {
+								bankName: bankName,
+								bankNumber: bankNumber,
+								beneficiaryName: beneficiaryName,
+								addressbank: address,
+								userId: userId
+							};
+							console.log(formData);
+
+							// Thực hiện yêu cầu AJAX POST
+							$.ajax({
+								type: "POST",
+								url: "/create/createBank", // Địa chỉ endpoint mà bạn muốn gửi dữ liệu đến
+								data: formData,
+								contentType: 'application/json',
+								data: JSON.stringify(formData),
+							})
+								.done(function (data) {
+									console.log(data); // Xử lý dữ liệu trả về từ server
+									alert('Data submitted successfully!');
+								})
+								.fail(function (xhr, status, error) {
+									console.error("Error occurred: " + error);
+									alert('Failed to submit data.');
+								});
+						});
+					});
+				</script>
+
+				<script>
+
+					function getBankNameFromAccount(accountNumber) {
+						if (accountNumber.length < 6) {
+							console.error("Số tài khoản không hợp lệ.");
+							return null; // Trả về null cho các trường hợp không hợp lệ
+						}
+
+						var bankPrefixes = {
+							'970422': 'Vietcombank',
+							'970436': 'VietinBank',
+							'970415': 'Agribank',
+							'970408': 'BIDV',
+							// Thêm các đầu số khác tại đây
+						};
+
+						var prefix = accountNumber.substring(0, 6);
+						if (bankPrefixes.hasOwnProperty(prefix)) {
+							var a = document.getElementById('bankName').value = bankPrefixes[prefix];
+							console.log(a);
+							return bankPrefixes[prefix];
+						} else {
+							alert("không xác định được ngân hàng");
+							return 'Không xác định';
+						}
+					}
+					// Sử dụng hàm để xác định ngân hàng
+
+
+				</script>
 
 			</div>
 
