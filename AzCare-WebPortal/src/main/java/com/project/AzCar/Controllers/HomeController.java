@@ -21,7 +21,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -83,7 +85,7 @@ public class HomeController {
 	private UserServices userServices;
 
 	@GetMapping("/")
-	public String getHome(Model ModelView, HttpServletRequest request) {
+	public String getHome(Model ModelView, HttpServletRequest request, @AuthenticationPrincipal OAuth2User user) {
 		List<CarInfor> list = carServices.findAll();
 		List<CarInforDto> listDto = new ArrayList<>();
 		List<CarInforDto> listcarsInHcm = new ArrayList<>();
@@ -137,6 +139,7 @@ public class HomeController {
 		listDto.removeIf(car -> car.getDiscount() == 0);
 
 		ModelView.addAttribute("carRegisterList", listDto);
+
 		return "index";
 	}
 
@@ -373,9 +376,11 @@ public class HomeController {
 		String dir = Constants.ImgDir.USER_DIR + "/" + user.getEmail().replace(".", "-");
 
 		Resource file = fileStorageServices.load(filename, dir);
+		
+		
 
 		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file == null ? "na" : file.getFilename() + "\"")
 				.body(file);
 	}
 
@@ -433,13 +438,13 @@ public class HomeController {
 				fileStorageServices.save(image, dir);
 				user.setImage(image.getOriginalFilename());
 				uServices.saveUserReset(user);
-				return "redirect:/user/profile/"+user.getEmail();
+				return "redirect:/user/profile/" + user.getEmail();
 
 			} catch (Exception e) {
 				System.out.println(e);
 			}
 		}
-		return "redirect:/user/profile/edit/"+user.getEmail();
+		return "redirect:/user/profile/edit/" + user.getEmail();
 	}
 
 	private void sendEmail(String email, String resetPasswordLink)

@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.project.AzCar.Dto.Users.UserDto;
+import com.project.AzCar.Entities.Users.Provider;
 import com.project.AzCar.Entities.Users.Roles;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Repositories.Users.RoleRepository;
@@ -30,6 +31,8 @@ public class UserServicesImpl implements UserServices {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	
+	
 	@Override
 	public void saveUser(UserDto userDto) {
 		Roles role = roleRepo.findByName(Constants.Roles.USER);
@@ -39,6 +42,7 @@ public class UserServicesImpl implements UserServices {
 
 		Users user = new Users(userDto.getFullName(), userDto.getEmail(), passwordEncoder.encode(userDto.getPassword()),
 				Arrays.asList(role));
+
 		userRepo.save(user);
 	}
 
@@ -63,7 +67,7 @@ public class UserServicesImpl implements UserServices {
 			existingUser.setPhone(updatedUserDto.getPhone());
 			existingUser.setDob(updatedUserDto.getDob());
 			existingUser.setGender(updatedUserDto.getGender());
-
+			existingUser.setAddress(updatedUserDto.getAddress());
 			userRepo.save(existingUser);
 			return convertToDto(existingUser);
 		} else {
@@ -146,4 +150,6 @@ public class UserServicesImpl implements UserServices {
 		}
 		return false;
 	}
+
+	
 }
