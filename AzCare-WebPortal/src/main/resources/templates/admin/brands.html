@@ -125,8 +125,8 @@
 						</a>
 							<ul class="submenu ">
 
-								<li class="submenu-item  "><a href="layout-default.html"
-									class="submenu-link">Default Layout</a></li>
+								<li class="submenu-item"><a th:href="@{/dashboard/ClientService}"
+									class="submenu-link">Client Service</a></li>
 
 								<li class="submenu-item  "><a
 									href="layout-vertical-1-column.html" class="submenu-link">1
@@ -142,6 +142,15 @@
 								<li class="submenu-item  "><a href="layout-horizontal.html"
 									class="submenu-link">Horizontal Menu</a></li>
 
+							</ul></li>
+							<li class="sidebar-item has-sub"><a href="#"
+							class='sidebar-link'> <i class="bi bi-valentine"></i> <span>Profit
+									Cars</span>
+						</a>
+							<ul class="submenu ">
+
+								<li class="submenu-item"><a th:href="@{/dashboard/profit/}"
+									class="submenu-link">Profit Business</a></li>
 							</ul></li>
 
 					</ul>
@@ -207,10 +216,10 @@
 									class="nav-link" id="profile-tab" data-bs-toggle="tab"
 									href="#profile" role="tab" aria-controls="profile"
 									aria-selected="false">Add New Car Model</a></li>
-								<li class="nav-item" role="presentation"><a
+								<!-- <li class="nav-item" role="presentation"><a
 									class="nav-link" id="contact-tab" data-bs-toggle="tab"
 									href="#contact" role="tab" aria-controls="contact"
-									aria-selected="false">Contact</a></li>
+									aria-selected="false">Contact</a></li> -->
 
 							</ul>
 
@@ -234,12 +243,14 @@
 											<tbody>
 												<tr th:each="brand : ${brandsList}">
 													<td th:text="${brand.brandName}"></td>
-													<td><span th:if="${brand.brandLogo.contains('null')}"
-														class="badge bg-warning"><a
-															th:href="@{/dashboard/brands/updateBrandLogo/}+${brand.brandName}">Need
-																To Update</a></span> <span
+													<td> <span
 														th:unless="${brand.brandLogo.contains('null')}"><img 
-															th:src="@{${brand.brandLogo}}" height="60px"></img></span></td>
+															th:src="@{${brand.brandLogo}}" height="60px"></img></span>
+															<span
+														class="badge bg-warning"><a
+															th:href="@{/dashboard/brands/updateBrandLogo/}+${brand.brandName}">
+																Update</a></span>
+															</td>
 													<td th:text="${brand.numberOfCars}"></td>
 													<td><span class="badge bg-success">Active</span></td>
 												</tr>
@@ -353,7 +364,7 @@
 
 									</form>
 								</div>
-								<div class="tab-pane fade" id="contact" role="tabpanel"
+								<!-- <div class="tab-pane fade" id="contact" role="tabpanel"
 									aria-labelledby="contact-tab">
 									<div class="card-header">
 										<h5 class="card-title">Brands Datatable</h5>
@@ -364,7 +375,7 @@
 										Vivamus eu congue ipsum. Maecenas id sollicitudin ex. Cras in
 										ex vestibulum, posuere orci at, sollicitudin purus. Morbi
 										mollis elementum enim, in cursus sem placerat ut.</p>
-								</div>
+								</div> -->
 							</div>
 
 						</div>

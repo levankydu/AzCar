@@ -194,7 +194,7 @@
 					<ul class="menu">
 						<li class="sidebar-title">Menu</li>
 
-						<li class="sidebar-item active "><a th:href="@{/dashboard/}"
+						<li class="sidebar-item"><a th:href="@{/dashboard/}"
 							class='sidebar-link'> <i class="bi bi-grid-fill"></i> <span>Dashboard</span>
 						</a></li>
 
@@ -213,7 +213,7 @@
 
 							</ul></li>
 
-						<li class="sidebar-item  has-sub"><a href="#"
+						<li class="sidebar-item active has-sub"><a href="#"
 							class='sidebar-link'><i class="bi bi-car-front-fill"></i> <span>Car
 									Management</span> </a>
 							<ul class="submenu ">
@@ -234,8 +234,9 @@
 						</a>
 							<ul class="submenu ">
 
-								<li class="submenu-item"><a href="layout-default.html"
-									class="submenu-link">Default Layout</a></li>
+								<li class="submenu-item"><a
+									th:href="@{/dashboard/ClientService}" class="submenu-link">Client
+										Service</a></li>
 
 								<li class="submenu-item  "><a
 									href="layout-vertical-1-column.html" class="submenu-link">1
@@ -252,6 +253,16 @@
 									class="submenu-link">Horizontal Menu</a></li>
 
 							</ul></li>
+							<li class="sidebar-item has-sub"><a href="#"
+							class='sidebar-link'> <i class="bi bi-valentine"></i> <span>Profit
+									Cars</span>
+						</a>
+							<ul class="submenu ">
+
+								<li class="submenu-item"><a th:href="@{/dashboard/profit/}"
+									class="submenu-link">Profit Business</a></li>
+							</ul></li>
+							
 
 					</ul>
 				</div>
@@ -306,7 +317,8 @@
 												th:src="${'/dashboard/platesVerfy/'+plate.plateImages.get(1).ImageUrl}"
 												style="height: 100px"></td>
 											<td>
-												<p th:text="${plate.plateImages.get(0).status}" class="badge"
+												<p th:text="${plate.plateImages.get(0).status}"
+													class="badge"
 													th:classappend="${plate.plateImages.get(0).status == 'accepted' ? 'bg-success' : 'bg-warning'}"></p>
 											</td>
 
@@ -314,19 +326,19 @@
 												<div class="row"
 													th:if="${plate.plateImages.get(0).status=='waiting_for_verify'}">
 													<form action="/dashboard/platesVerfy/" method="post"
-														class="col-4 offset-md-1" id="verify">
+														class="col-4 offset-md-1" id="verify-pl">
 														<input id="status" type="hidden" name="status"
 															value="accepted"> <input type="hidden"
 															name="userId" th:value="${plate.userModel.id}">
 														<button class="button-54" role="button" value="accepted"
 															name="status" id="accept-plates">Accept</button>
 													</form>
-													<form action="/dashboard/platesVerfy" method="post"
-														class="col-4 offset-md-1" id="declined">
+													<form action="/dashboard/platesVerfy/" method="post"
+														class="col-4 offset-md-1" id="declined-pl">
 														<input id="status" type="hidden" name="status"
 															value="declined"> <input type="hidden"
-															name="userId" th:value="${plate.userModel.id}">
-
+															name="userId" th:value="${plate.userModel.id}"> <input
+															id="reason" name="reason" value="" type="hidden">
 														<button class="button-54" role="button"
 															id="decline-plates" value="declined" name="decline">Decline</button>
 
@@ -354,6 +366,8 @@
 				</section>
 				<!-- Basic Tables end -->
 			</div>
+			<button id="loadding-sendEmail" style="display: none;"
+				class="btn btn-outline-success btn-lg btn-block">Success</button>
 
 			<footer>
 				<div class="footer clearfix mb-0 text-muted">

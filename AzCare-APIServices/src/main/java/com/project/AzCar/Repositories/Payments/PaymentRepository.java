@@ -13,4 +13,8 @@ public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 
 	@Query(value = "SELECT c FROM Payment c WHERE c.userId=?1")
 	List<Payment> getFromCreatedBy(int id);
+
+	@Query(value = "SELECT DISTINCT c.createdAt FROM Payment c")
+	List<Payment> getDayStringFomart();
+
 }

@@ -11,10 +11,13 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -38,21 +41,26 @@ import com.project.AzCar.Dto.Reply.ReplyDTO;
 import com.project.AzCar.Dto.Reviews.ReviewsDTO;
 import com.project.AzCar.Entities.Cars.CarImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
+import com.project.AzCar.Entities.Cars.CarModelList;
 import com.project.AzCar.Entities.Cars.ExtraFee;
 import com.project.AzCar.Entities.Cars.OrderDetails;
 import com.project.AzCar.Entities.Cars.PlateImages;
 import com.project.AzCar.Entities.Cars.PlusServices;
-import com.project.AzCar.Entities.HintText.HintText;
 import com.project.AzCar.Entities.Comments.Comments;
+import com.project.AzCar.Entities.Deposit.Cardbank;
+import com.project.AzCar.Entities.HintText.HintText;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
 import com.project.AzCar.Entities.Locations.Ward;
 import com.project.AzCar.Entities.Reply.Reply;
 import com.project.AzCar.Entities.Reviews.Reviews;
+import com.project.AzCar.Entities.ServiceAfterBooking.ServiceAfterBooking;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Entities.Users.Violation;
 import com.project.AzCar.Repositories.Orders.ViolationRepository;
+import com.project.AzCar.Repositories.ServiceAfterBooking.ServiceBookingRepositories;
 import com.project.AzCar.Service.Comments.ICommentsService;
+import com.project.AzCar.Service.Deposit.ICarbankService;
 import com.project.AzCar.Service.Reply.IReplyService;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
@@ -66,17 +74,22 @@ import com.project.AzCar.Services.Locations.ProvinceServices;
 import com.project.AzCar.Services.Locations.WardServices;
 import com.project.AzCar.Services.Orders.OrderDetailsService;
 import com.project.AzCar.Services.Payments.PaymentService;
+import com.project.AzCar.Services.Payments.ProfitCallBack;
 import com.project.AzCar.Services.Reviews.IReviewsService;
 import com.project.AzCar.Services.Reviews.ReviewService;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
 import com.project.AzCar.Utilities.OrderExtraFee;
+import com.project.AzCar.payments.paypal.PaypalService;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class UserSideCarController {
+	@Autowired
+	private ICarbankService cardService;
 	@Autowired
 	private JavaMailSender mailSender;
 	@Autowired
@@ -107,7 +120,8 @@ public class UserSideCarController {
 	private PlateImageServices plateImageServices;
 	@Autowired
 	private IReviewsService reviewsSv;
-
+	@Autowired
+	private ServiceBookingRepositories afterBookingRepositories;
 	@Autowired
 	private HintTextServices hintTextServices;
 	@Autowired
@@ -119,6 +133,14 @@ public class UserSideCarController {
 	@Autowired
 	private IReplyService repService;
 
+	@Autowired
+	private PaypalService paypalService;
+
+	private Logger log = LoggerFactory.getLogger(getClass());
+
+	public static final String PAYPAL_SUCCESS_URL = "checkout/pay/success";
+	public static final String PAYPAL_CANCEL_URL = "checkout/pay/cancel";
+
 	@GetMapping("/home/carregister/")
 
 	public String getCarRegisterPage(Model ModelView) {
@@ -128,12 +150,70 @@ public class UserSideCarController {
 		List<HintText> hintDescription = hintTextServices.findByType("description");
 		List<HintText> hintRule = hintTextServices.findByType("rule");
 		ModelView.addAttribute("rule", hintRule);
-		ModelView.addAttribute("description",hintDescription);
+		ModelView.addAttribute("description", hintDescription);
 		ModelView.addAttribute("brandList", brands);
 		ModelView.addAttribute("provinceList", provinces);
-		
-		
+
 		return "registerCar";
+	}
+
+	// Chủ xe check khi khách trả
+	@PostMapping("home/myplan/rentalReview")
+	public String retalReview(
+			@RequestParam(name = "clean-check", required = false, defaultValue = "false") boolean cleanCheck,
+			@RequestParam(name = "smell-check", required = false, defaultValue = "false") boolean smellCheck,
+			@RequestParam(name = "decriptions", required = false, defaultValue = "false") String decriptions,
+			@RequestParam(name = "carId", required = false, defaultValue = "false") String carId,
+			@RequestParam(name = "orderId", required = false, defaultValue = "false") String orderId,
+			@RequestParam(name = "imgUrl", required = false) MultipartFile imgUrl) {
+		ServiceAfterBooking tuReview = new ServiceAfterBooking();
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		var car = carServices.findById(Integer.parseInt(carId));
+		if (cleanCheck) {
+			paymentServices.createNewRefund(car.getCarOwnerId(), order.getId(),
+					BigDecimal.valueOf(order.getExtraFee().getCleanFee()));
+			tuReview.setCleanning(true);
+		} else {
+			paymentServices.createNewRefund(order.getUserId(), order.getId(),
+					BigDecimal.valueOf(order.getExtraFee().getCleanFee()));
+		}
+		if (smellCheck) {
+			paymentServices.createNewRefund(car.getCarOwnerId(), order.getId(),
+					BigDecimal.valueOf(order.getExtraFee().getSmellFee()));
+			tuReview.setSmelling(true);
+		} else {
+			paymentServices.createNewRefund(order.getUserId(), order.getId(),
+					BigDecimal.valueOf(order.getExtraFee().getSmellFee()));
+		}
+
+		order.setStatus(Constants.orderStatus.OWNER_TRIP_DONE);
+		orderServices.save(order);
+		tuReview.setOrderId(order.getId());
+		tuReview.setImgUrl(imgUrl.getOriginalFilename());
+		tuReview.setDecriptions(decriptions);
+		tuReview.setCarId(Integer.parseInt(carId));
+		System.out.println(tuReview);
+
+		tuReview = afterBookingRepositories.save(tuReview);
+
+		String dir = "./UploadFiles/tuImages" + "/" + tuReview.getCarId() + "-" + tuReview.getId();
+		Path path = Paths.get(dir);
+
+		try {
+			Files.createDirectories(path);
+		} catch (IOException e) {
+			throw new RuntimeException("Could not initialize folder for upload!");
+		}
+
+		try {
+
+			fileStorageServices.save(imgUrl, dir);
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		return "redirect:/home/myplan/";
 	}
 
 	@PostMapping("home/carregister")
@@ -245,17 +325,29 @@ public class UserSideCarController {
 			@PathVariable("carId") String carId, @ModelAttribute("fromDate-string") String fromDate_string,
 			@ModelAttribute("toDate-string") String toDate_string,
 			@ModelAttribute("isSameProvince") String isSameProvince,
-			@ModelAttribute("isSameDistrict") String isSameDistrict,
-			@ModelAttribute("deliveryFee") String deliveryFee) {
+			@ModelAttribute("isSameDistrict") String isSameDistrict, @ModelAttribute("deliveryFee") String deliveryFee)
+			throws UnsupportedEncodingException, MessagingException {
 		var carExtraFee = extraFeeServices.findByCarId(Integer.parseInt(carId));
+		CarInfor carDetails = carServices.findById(Integer.parseInt(orderdetails.getCarId()));
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users user = userServices.findUserByEmail(email);
 		orderdetails.setUserId((int) user.getId());
+		orderdetails.setDiscount(carDetails.getDiscount());
+		orderdetails.setOriginPrice(carDetails.getPrice());
 		LocalTime currentTime = LocalTime.now();
-		orderdetails.setFromDate(LocalDateTime.parse(fromDate_string + " " + currentTime,
-				DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSSSSS")));
-		orderdetails.setToDate(LocalDateTime.parse(toDate_string + " " + currentTime,
-				DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSSSSS")));
+
+		try {
+			orderdetails.setFromDate(LocalDateTime.parse(fromDate_string + " " + currentTime,
+					DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSSSSS")));
+			orderdetails.setToDate(LocalDateTime.parse(toDate_string + " " + currentTime,
+					DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSSSSS")));
+		} catch (Exception e) {
+			orderdetails.setFromDate(LocalDateTime.parse(fromDate_string + " " + currentTime,
+					DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS")));
+			orderdetails.setToDate(LocalDateTime.parse(toDate_string + " " + currentTime,
+					DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSSSSS")));
+		}
+
 		orderdetails.setSameProvince(isSameProvince.equals("1"));
 		orderdetails.setSameDistrict(isSameDistrict.equals("1"));
 		OrderExtraFee extra = new OrderExtraFee(0, carExtraFee != null ? carExtraFee.getCleanningFee() : 0,
@@ -267,7 +359,52 @@ public class UserSideCarController {
 		orderdetails.setStatus(Constants.orderStatus.WAITING);
 		orderdetails.setReview(false);
 		orderServices.save(orderdetails);
-		paymentServices.createNewLock(user.getId(), orderdetails.getId(), orderdetails.getTotalAndFees());
+		paymentServices.createNewLock(user.getId(), orderdetails.getId(),
+				orderdetails.getTotalAndFeesWithoutInsurance());
+		paymentServices.createNewProfit(user.getId(), BigDecimal.valueOf(orderdetails.getExtraFee().getInsurance()),
+				new ProfitCallBack() {
+					@Override
+					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+						user.setBalance(userBalance.subtract(amount));
+					}
+				});
+		CarInforDto carDetailsDto = carServices.mapToDto(carDetails.getId());
+		BigDecimal discountAmount = orderdetails.getOriginPrice()
+				.multiply(BigDecimal.valueOf(orderdetails.getDiscount()).divide(BigDecimal.valueOf(100)));
+		BigDecimal priceAfterDiscount = orderdetails.getOriginPrice().subtract(discountAmount);
+		BigDecimal subTotal = priceAfterDiscount.multiply(BigDecimal.valueOf(orderdetails.getDifferenceDate()))
+				.add(BigDecimal.valueOf(orderdetails.getExtraFee().getDeliveryFee()));
+		carDetailsDto.setCarmodel(brandServices.getModel(carDetails.getModelId()));
+		String mailContent = "<p>Below are some main details of your car:</p>" + "<table>" + "<tr>" + "<th>Model: </th>"
+				+ "<td>" + "[" + carDetailsDto.getCarmodel().getBrand() + "] " + carDetailsDto.getCarmodel().getModel()
+				+ "</td>" + "</tr>" + "<tr>" + "<th>Year: </th>" + "<td>" + carDetailsDto.getCarmodel().getYear()
+				+ "</td>" + "</tr>" + "<tr>" + "<th>Rental per day: </th>" + "<td>$" + orderdetails.getOriginPrice()
+				+ "</td>" + "</tr>" + "<tr>" + "<th>Discount: </th>" + "<td>" + orderdetails.getDiscount() + "% </td>"
+				+ "</tr>" + "<tr>" + "<th>Price After Discount: </th>" + "<td>$" + priceAfterDiscount + "</td>"
+				+ "</tr>" + "<tr>" + "<th>From: </th>" + "<td>"
+				+ orderdetails.getFromDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "</td>" + "</tr>"
+				+ "<tr>" + "<th>To: </th>" + "<td>"
+				+ orderdetails.getToDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "</td>" + "</tr>"
+				+ "<tr>" + "<th>Total days: </th>" + "<td>" + orderdetails.getDifferenceDate() + "</td>" + "</tr>"
+				+ "<tr>" + "<th>Delivery fee: </th>" + "<td>$" + orderdetails.getExtraFee().getDeliveryFee() + "</td>"
+				+ "</tr>" + "<tr>" + "<th>Sub Total: </th>" + "<td> <h4>$" + subTotal + "</h4></td>" + "</tr>" + "<tr>"
+				+ "<td colspan=2 class=text-center>Extra Fee</td>" + "</tr>" + "<tr>"
+				+ "<td class=text-left>Cleanning Fee: </td>" + "<td class=text-right>$"
+				+ orderdetails.getExtraFee().getCleanFee() + "</td>" + "</tr>" + "<tr>"
+				+ "<td class=text-left>Smell Fee: </td>" + "<td class=text-right>$"
+				+ orderdetails.getExtraFee().getSmellFee() + "</td>" + "</tr>" + "<tr>"
+				+ "<td class=text-left>Insurance Fee: </td>" + "<td class=text-right>$200</td>" + "</tr>" + "<tr>"
+				+ "<th>Total: </th>" + "<td>" + "<h4>$"
+				+ orderdetails.getTotalAndFees()
+						.subtract(BigDecimal.valueOf(orderdetails.getExtraFee().getDeliveryFee()))
+				+ "</h4>" + "</td>" + "</tr>" + "</table>";
+		orderServices.sendOrderEmail(email, "Place Order Successfully", "<p>Hello," + email + "</p>"
+				+ "<p>Thank you for ordering with AzCar.</p>" + mailContent
+				+ "<p>This is to confirm that we already got your order, We will send you an email after car owner accept or declined your order</p>"
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>");
+		Users carOwner = userServices.findById(carDetails.getCarOwnerId());
+		orderServices.sendOrderEmail(carOwner.getEmail(), "An order of" + "[" + carDetailsDto.getCarmodel().getBrand()
+				+ "] " + carDetailsDto.getCarmodel().getModel() + "has been placed", mailContent);
 		return "redirect:/home/myplan/";
 	}
 
@@ -299,17 +436,30 @@ public class UserSideCarController {
 				ModelView.addAttribute("address", c);
 			}
 		}
+		List<OrderDetails> orderDetailsOfThisCar = orderServices.getFromCarId(Integer.parseInt(carId));
+		orderDetailsOfThisCar.removeIf(item -> !item.getStatus().equals(Constants.plateStatus.WAITING)
+				&& !item.getStatus().equals(Constants.plateStatus.ACCEPTED));
+		ModelView.addAttribute("orderDetailsOfThisCar", orderDetailsOfThisCar);
+
 		List<City> provinces = provinceServices.getListCity();
 		ModelView.addAttribute("provinceList", provinces);
 
 		ModelView.addAttribute("fullAddress", model.getAddress());
 		ModelView.addAttribute("carDetails", modelDto);
 		String email = request.getSession().getAttribute("emailLogin").toString();
-		Users owner = userServices.findUserByEmail(email);
+		Users customer = userServices.findUserByEmail(email);
+		if (customer.isEnabled() == false) {
+			ModelView.addAttribute("userViolated", true);
+			ModelView.addAttribute("userBalanceeeeee", customer.getBalance());
+		} else {
+			ModelView.addAttribute("userViolated", false);
+		}
+		Users owner = userServices.findById(modelDto.getCarOwnerId());
+		ModelView.addAttribute("customer", customer);
 		ModelView.addAttribute("user", owner);
 		System.out.println(owner.getPhone());
 		List<PlateImages> plates = plateImageServices.getAll();
-		plates.removeIf(item -> item.getUserId() != owner.getId());
+		plates.removeIf(item -> item.getUserId() != customer.getId());
 		plates.removeIf(item -> !item.getStatus().equals(Constants.plateStatus.ACCEPTED));
 		ModelView.addAttribute("isKhongHaveBangLai", plates.size() == 0);
 
@@ -320,16 +470,18 @@ public class UserSideCarController {
 		List<ReviewsDTO> listReviewsDTO = new ArrayList<>();
 		if (!reviews.isEmpty()) {
 			for (Reviews re : reviews) {
-				ReviewsDTO reDTO = new ReviewsDTO();
-				reDTO.setId(re.getId());
-				reDTO.setCarId(re.getCarInfor().getId());
-				reDTO.setComment(re.getComment());
-				reDTO.setRating(re.getRating());
-				reDTO.setStatus(re.getStatus());
-
-				Users user1 = userServices.findById(re.getUser().getId());
-				reDTO.setUserName(user1.getFirstName());
-				listReviewsDTO.add(reDTO);
+				if (re.getStatus().toString() != "Decline") {
+					ReviewsDTO reDTO = new ReviewsDTO();
+					reDTO.setId(re.getId());
+					reDTO.setCarId(re.getCarInfor().getId());
+					reDTO.setComment(re.getComment());
+					reDTO.setRating(re.getRating());
+					reDTO.setStatus(re.getStatus());
+					reDTO.setReviewDate(re.getReviewDate());
+					Users user1 = userServices.findById(re.getUser().getId());
+					reDTO.setUserName(user1.getFirstName());
+					listReviewsDTO.add(reDTO);
+				}
 
 			}
 
@@ -382,7 +534,7 @@ public class UserSideCarController {
 		ModelView.addAttribute("comments", lcmtDTO);
 
 		System.out.println("id Car Details: " + model.getId() + " ");
-		OrderDetails order = getOrderDetailsByCaridandUserid(model.getId(), owner.getId());
+		OrderDetails order = getOrderDetailsByCaridandUserid(model.getId(), customer.getId());
 		// lấy status
 
 		System.out.println("Order Details: " + order + " & ");
@@ -402,6 +554,7 @@ public class UserSideCarController {
 			repDTO.setComment_id(re.getComment_id().getId());
 			repDTO.setCarId(re.getComment_id().getCar_id().getId());
 			repDTO.setContent(re.getContent());
+			repDTO.setUser_name(re.getComment_id().getUser_id().getLastName());
 			lrepDTO.add(repDTO);
 
 		}
@@ -439,6 +592,7 @@ public class UserSideCarController {
 		List<City> provinces = provinceServices.getListCity();
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users owner = userServices.findUserByEmail(email);
+
 		for (var item : list) {
 			if (item.getStatus().equals(Constants.carStatus.READY) && item.getCarOwnerId() != (int) owner.getId()) {
 				var itemDto = carServices.mapToDto(item.getId());
@@ -476,16 +630,19 @@ public class UserSideCarController {
 
 		if (Lcomments != null) {
 			for (Comments tempC : Lcomments) {
-				CommentsDTO tempDTO = new CommentsDTO();
-				tempDTO.setId(tempC.getId());
-				tempDTO.setContent(tempC.getContent());
-				tempDTO.setUser_id(tempC.getUser_id().getId());
-				tempDTO.setUser_name(tempC.getUser_id().getFirstName());
-				tempDTO.setCar_id(car_id);
-				List<ReplyDTO> reply = getAllReplyByComment_id(tempC.getId());
-				tempDTO.setReply(reply);
+				if (tempC.getStatus().toString().contains("Pending")) {
+					CommentsDTO tempDTO = new CommentsDTO();
+					tempDTO.setId(tempC.getId());
+					tempDTO.setContent(tempC.getContent());
+					tempDTO.setUser_id(tempC.getUser_id().getId());
+					tempDTO.setUser_name(tempC.getUser_id().getFirstName());
+					tempDTO.setCar_id(car_id);
+					List<ReplyDTO> reply = getAllReplyByComment_id(tempC.getId());
+					tempDTO.setReply(reply);
 
-				commentDTO.add(tempDTO);
+					commentDTO.add(tempDTO);
+				}
+
 			}
 
 			return commentDTO;
@@ -625,6 +782,44 @@ public class UserSideCarController {
 		return "availableCars";
 	}
 
+	@GetMapping("/home/carregister/addNewModel/")
+	public String getAddNewModelPage(Model ModelView) {
+		List<String> brands = brandServices.getBrandList();
+		List<String> categories = brandServices.getCategoryList();
+
+		ModelView.addAttribute("categoryList", categories);
+		ModelView.addAttribute("brandsList", brands);
+
+		return "ifCarModelNotFound";
+
+	}
+
+	@PostMapping("/home/carregister/addNewModel")
+	public String postAddNewModelPage(@ModelAttribute("carModel") CarModelList carModel, BindingResult bindingResult,
+			HttpServletRequest request) {
+		Random random = new Random();
+		StringBuilder sb = new StringBuilder(10);
+		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		for (int i = 0; i < 10; i++) {
+
+			int randomIndex = random.nextInt(characters.length());
+
+			sb.append(characters.charAt(randomIndex));
+		}
+		String resultId = sb.toString();
+
+		if (bindingResult.hasErrors()) {
+//			return "";
+			return "redirect:/home/carregister/addNewModel/" + "?error";
+		} else {
+			carModel.setObjectId(resultId);
+			brandServices.saveBrand(carModel);
+		}
+//		return "";
+		return "redirect:/home/carregister/addNewModel/";
+
+	}
+
 	@GetMapping("/home/myplan/accepted/{orderId}")
 	public String acceptRequestBooking(@PathVariable(name = "orderId") String orderId) {
 		var order = orderServices.getById(Integer.parseInt(orderId));
@@ -636,6 +831,57 @@ public class UserSideCarController {
 		return "redirect:/home/myplan/";
 	}
 
+	@GetMapping("/home/myplan/payFine")
+	public String userPayFine(HttpServletRequest request) {
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users owner = userServices.findUserByEmail(email);
+		owner.setEnabled(true);
+		userServices.saveUserReset(owner);
+		List<Violation> violations = violationRepo.getByUserAndCarId(owner.getId(), 0, true,
+				Constants.violations.USER_DECLINDED);
+		for (Violation vio : violations) {
+			vio.setEnabled(false);
+			violationRepo.save(vio);
+		}
+		paymentServices.createNewProfit(owner.getId(), BigDecimal.valueOf(200), new ProfitCallBack() {
+			@Override
+			public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+				user.setBalance(userBalance.subtract(amount));
+			}
+		});
+
+		return "redirect:/home/myplan/";
+	}
+
+	@GetMapping("/home/myplan/ownerCarPayFine/{carId}")
+	public String ownerCarPayFine(HttpServletRequest request, @PathVariable(name = "carId") String carId) {
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users owner = userServices.findUserByEmail(email);
+		CarInfor car = carServices.findById(Integer.parseInt(carId));
+		car.setStatus(Constants.carStatus.READY);
+		List<Violation> violations = violationRepo.getByUserAndCarId(owner.getId(), Integer.parseInt(carId), true,
+				Constants.violations.OWNER_DECLINED);
+		for (Violation vio : violations) {
+			vio.setEnabled(false);
+			violationRepo.save(vio);
+		}
+		List<Violation> no_violations = violationRepo.getByUserAndCarId(owner.getId(), Integer.parseInt(carId), true,
+				Constants.violations.NO_RESPONSE);
+		for (Violation vio : no_violations) {
+			vio.setEnabled(false);
+			violationRepo.save(vio);
+		}
+		paymentServices.createNewProfit(owner.getId(), BigDecimal.valueOf(400), new ProfitCallBack() {
+			@Override
+			public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+				user.setBalance(userBalance.subtract(amount));
+			}
+		});
+
+		return "redirect:/home/myplan/";
+	}
+
+	// car owner declines booking
 	@GetMapping("/home/myplan/declined/{orderId}")
 	public String declinedRequestBooking(@PathVariable(name = "orderId") String orderId) {
 		var order = orderServices.getById(Integer.parseInt(orderId));
@@ -648,17 +894,87 @@ public class UserSideCarController {
 		vio.setCarId(car.getId());
 		vio.setReason(Constants.violations.OWNER_DECLINED);
 		violationRepo.save(vio);
-		paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFees());
+		paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
+		paymentServices.createNewExpense(order.getUserId(), BigDecimal.valueOf(order.getExtraFee().getInsurance()),
+				new ProfitCallBack() {
+					@Override
+					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+						user.setBalance(userBalance.add(amount));
+					}
+				});
+		return "redirect:/home/myplan/";
+	}
+
+	@GetMapping("/home/myplan/rental_done/{orderId}")
+	public String clientDoneRequestBooking(@PathVariable(name = "orderId") String orderId) {
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		order.setStatus(Constants.orderStatus.RENTOR_TRIP_DONE);
+		orderServices.save(order);
+		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
+		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().multiply(BigDecimal.valueOf(0.4)));
+		paymentServices.createNewProfit(ownerId, order.getTotalRent().multiply(BigDecimal.valueOf(0.1)),
+				new ProfitCallBack() {
+					@Override
+					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+					}
+				});
+
+		return "redirect:/home/myplan/";
+	}
+
+	@GetMapping("/home/myplan/cancel_from_user/{orderId}")
+	public String clientCancelBooking(@PathVariable(name = "orderId") String orderId) {
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		String status = order.getStatus();
+		if (status.equals("accepted")) {
+			// return only 90% of totalRent and fees with insurance
+			paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
+			paymentServices.createNewProfit(order.getUserId(), order.getTotalRent().multiply(BigDecimal.valueOf(0.1)),
+					new ProfitCallBack() {
+						@Override
+						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+							user.setBalance(userBalance.subtract(amount));
+						}
+					});
+		}
+		if (status.equals("waiting_for_verify")) {
+			paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
+			paymentServices.createNewExpense(order.getUserId(), BigDecimal.valueOf(order.getExtraFee().getInsurance()),
+					new ProfitCallBack() {
+						@Override
+						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+							user.setBalance(userBalance.add(amount));
+						}
+					});
+		}
+		order.setStatus(Constants.orderStatus.RENTOR_DECLINED);
+		orderServices.save(order);
+
+		Violation vio = new Violation();
+		vio.setUserId(order.getUserId());
+		vio.setCarId(Integer.parseInt(order.getCarId()));
+		vio.setReason(Constants.violations.USER_DECLINDED);
+		violationRepo.save(vio);
+
 		return "redirect:/home/myplan/";
 	}
 
 	@GetMapping("/home/myplan/")
 	public String getMyPlanPage(HttpServletRequest request, Model ModelView) {
-		orderServices.unrespondDetected();
-
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users user = userServices.findUserByEmail(email);
+		if (user.isEnabled() == false) {
+			ModelView.addAttribute("userViolated", true);
+			ModelView.addAttribute("userBalanceeeeee", user.getBalance());
+		} else {
+			ModelView.addAttribute("userViolated", false);
+		}
+
+		orderServices.unrespondDetected(user);
+
 		List<OrderDetailsDTO> orderList = orderServices.getDTOFromCreatedBy((int) user.getId());
+		orderList.sort(Comparator.comparingLong(OrderDetailsDTO::getId).reversed());
+		List<OrderDetailsDTO> latestOrders = new ArrayList<>(orderList.subList(0, Math.min(orderList.size(), 5)));
 		List<CarInfor> list = carServices.getbyOwnerId((int) user.getId());
 		List<CarInforDto> listDto = new ArrayList<>();
 		List<PlateImages> listImg = plateImageServices.getAll();
@@ -674,11 +990,15 @@ public class UserSideCarController {
 			var itemDto = carServices.mapToDto(item.getId());
 			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
+			var historyBooking = "historyBooking" + itemDto.getCarmodel().getObjectId();
+			List<OrderDetailsDTO> historyBookingList = orderServices.getDTOFromCarId(item.getId());
+			ModelView.addAttribute(historyBooking, historyBookingList);
 			List<OrderDetails> llll = orderServices.getFromCarId(item.getId());
 			var name = "OrderListDto" + itemDto.getCarmodel().getObjectId();
 			List<OrderDetailsDTO> mmmm = orderServices.getDTOFromCarId(item.getId());
 			mmmm.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.WAITING));
 			ModelView.addAttribute(name, mmmm);
+
 			llll.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.WAITING));
 
 			itemDto.setOrders(llll);
@@ -686,21 +1006,50 @@ public class UserSideCarController {
 		}
 		listImg.removeIf(t -> t.getUserId() != user.getId());
 		listImg.removeIf(t -> t.getStatus().equals(Constants.plateStatus.DECLINED));
-		ModelView.addAttribute("orderList", orderList);
+
+		OrderDetailsDTO rentorDone = orderServices.getDTORentorTripDoneOrder();
+
+		Cardbank c = cardService.findCardbankbyId(1);
+		ModelView.addAttribute("cardbank", c);
+
+		ModelView.addAttribute("rentorDone", rentorDone);
+		ModelView.addAttribute("orderList", latestOrders);
 		ModelView.addAttribute("ImgLicense", listImg);
 		ModelView.addAttribute("listCar", listDto);
 		ModelView.addAttribute("user", user);
 		return "myPlans";
 	}
 
-	@PostMapping("/home/myplan/charge/")
-	public String charge(HttpServletRequest request) {
+	@PostMapping("/home/myplan/updateCar")
+	public String updateCar(@ModelAttribute("newDiscount") String newDiscount,
+			@ModelAttribute("newPrice") String newPrice, @ModelAttribute("carId") String carId) {
+		CarInfor car = carServices.findById(Integer.parseInt(carId));
+		car.setDiscount(Integer.parseInt(newDiscount));
+		car.setPrice(new BigDecimal(newPrice));
+		carServices.saveCarRegister(car);
+		System.out.println(carId);
+		System.out.println(newPrice);
+		System.out.println(newDiscount);
+		return "redirect:/home/myplan/";
+	}
+// chổ này làm ảnh hưởng phần nạp nên sally xóa
+//	@PostMapping("/home/myplan/charge/")
+//	public String charge(HttpServletRequest request) {
+//
+//		String email = request.getSession().getAttribute("emailLogin").toString();
+//		Users user = userServices.findUserByEmail(email);
+//		user.setBalance(BigDecimal.valueOf(10000));
+//		userServices.saveUserReset(user);
+//
+//		return "redirect:/home/myplan/";
+//	}
 
+	@PostMapping("/home/myplan/paypal-charge/")
+	public String paypalCharge(HttpServletRequest request) {
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users user = userServices.findUserByEmail(email);
 		user.setBalance(BigDecimal.valueOf(10000));
 		userServices.saveUserReset(user);
-
 		return "redirect:/home/myplan/";
 	}
 
@@ -892,5 +1241,4 @@ public class UserSideCarController {
 		helper.setText(content, true);
 		mailSender.send(message);
 	}
-
 }

@@ -16,7 +16,25 @@ const Toast = Swal.mixin({
 	}
 })
 
-
+if (document.getElementById("loadding-sendEmail")) {
+	document.getElementById("loadding-sendEmail").addEventListener("click", (e) => {
+		Swal2.fire({
+			icon: "success",
+			html: `<p> Sending mail... </p>`,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading();
+			},
+			willClose: () => {
+				clearInterval(timerInterval);
+			},
+			showCancelButton: false,
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false
+		})
+	})
+}
 
 
 /*document.getElementById("basic").addEventListener("click", (e) => {
@@ -33,12 +51,7 @@ document.getElementById("footer").addEventListener("click", (e) => {
 document.getElementById("title").addEventListener("click", (e) => {
   Swal2.fire("The Internet?", "That thing is still around?", "question")
 })
-document.getElementById("success").addEventListener("click", (e) => {
-  Swal2.fire({
-	icon: "success",
-	title: "Success",
-  })
-})
+
 document.getElementById("error").addEventListener("click", (e) => {
   Swal2.fire({
 	icon: "error",
@@ -162,124 +175,184 @@ document.getElementById("select").addEventListener("click", async (e) => {
 	title: 'Signed in successfully'
   })
 })*/
-if(document.getElementById("accept-plates")){
+
+if (document.getElementById("accept-tuReview")) {
+	document.getElementById("accept-tuReview").addEventListener("click", (e) => {
+		e.preventDefault();
+		Swal2.fire({
+			title: "Confirm verify",
+			input: "text",
+			inputLabel: "Enter ''verify'' in lowercase",
+			showCancelButton: true,
+
+		}).then((result) => {
+
+			if (result.value && result.value.toLowerCase() === 'verify') {
+
+
+				$('#verify').submit();
+				console.log("User entered 'verify'");
+			} else {
+
+				console.log("User did not enter 'verify' or canceled");
+				Swal2.fire({
+					icon: "error",
+					title: "Oops...",
+					text: "Something went wrong!",
+
+				})
+			}
+		});
+	});
+}
+
+
+if (document.getElementById("decline-tuReview")) {
+	document.getElementById("decline-tuReview").addEventListener("click", (e) => {
+		e.preventDefault();
+		Swal2.fire({
+			title: "Confirm verify",
+			input: "text",
+			inputLabel: "Enter ''decline'' in lowercase",
+			showCancelButton: true,
+
+		}).then((result) => {
+			if (result.value && result.value.toLowerCase() === 'decline') {
+
+				$('#declined').submit();
+				console.log("User entered 'verify'");
+			} else {
+
+				console.log("User did not enter 'decline' or canceled");
+				Swal2.fire({
+					icon: "error",
+					title: "Oops...",
+					text: "Something went wrong!",
+
+				})
+			}
+		});
+	});
+}
+if (document.getElementById("accept-plates")) {
 	document.getElementById("accept-plates").addEventListener("click", (e) => {
-	e.preventDefault();
-	Swal2.fire({
-		title: "Confirm verify",
-		input: "text",
-		inputLabel: "Enter ''verify'' in lowercase",
-		showCancelButton: true,
+		e.preventDefault();
+		Swal2.fire({
+			title: "Confirm verify",
+			input: "text",
+			inputLabel: "Enter ''verify'' in lowercase",
+			showCancelButton: true,
 
-	}).then((result) => {
+		}).then((result) => {
 
-		if (result.value && result.value.toLowerCase() === 'verify') {
-			privateText.value ="''Your License Plate is verified for booking, check your email for full information''";
-			sendPrivateMessage();
-			verify.submit();
-			console.log("User entered 'verify'");
-		} else {
+			if (result.value && result.value.toLowerCase() === 'verify') {
+				$('#privateText').val("''Your License Plate is verified for booking, check your email for full information''");
+				sendPrivateMessage();
+				$('#verify-pl').submit();
+				$('#loadding-sendEmail').click();
+			} else {
 
-			console.log("User did not enter 'verify' or canceled");
-			Swal2.fire({
-				icon: "error",
-				title: "Oops...",
-				text: "Something went wrong!",
+				console.log("User did not enter 'verify' or canceled");
+				Swal2.fire({
+					icon: "error",
+					title: "Oops...",
+					text: "Something went wrong!",
 
-			})
-		}
+				})
+			}
+		});
 	});
-});
 }
 
 
-if(document.getElementById("decline-plates")){
+if (document.getElementById("decline-plates")) {
 	document.getElementById("decline-plates").addEventListener("click", (e) => {
-	e.preventDefault();
-	Swal2.fire({
-		title: "Confirm verify",
-		input: "text",
-		inputLabel: "Enter ''decline'' in lowercase",
-		showCancelButton: true,
+		e.preventDefault();
+		Swal2.fire({
+			title: "Confirm verify",
+			input: "text",
+			inputLabel: "Enter reason in lowercase",
+			showCancelButton: true,
 
-	}).then((result) => {
-		if (result.value && result.value.toLowerCase() === 'decline') {
-			privateText.value ="''Your License Plate is declined for booking now, check your email for full information''";
-			sendPrivateMessage();
-			declined.submit();
-			console.log("User entered 'verify'");
-		} else {
+		}).then((result) => {
+			if (result.value && result.value.toLowerCase() != '') {
+				$('#privateText').val("''Your License Plate is declined for booking now, check your email for full information''");
+				reason.value = result.value.toLowerCase();
+				sendPrivateMessage();
+				$('#declined-pl').submit();
+				$('#loadding-sendEmail').click();
+			} else {
+				console.log("User did not enter 'decline' or canceled");
+				Swal2.fire({
+					icon: "error",
+					title: "Oops...",
+					text: "Something went wrong!",
 
-			console.log("User did not enter 'decline' or canceled");
-			Swal2.fire({
-				icon: "error",
-				title: "Oops...",
-				text: "Something went wrong!",
-
-			})
-		}
+				})
+			}
+		});
 	});
-});
 }
 
-if(document.getElementById("accept")){
+if (document.getElementById("accept")) {
 	document.getElementById("accept").addEventListener("click", (e) => {
-	e.preventDefault();
-	Swal2.fire({
-		title: "Confirm verify",
-		input: "text",
-		inputLabel: "Enter ''verify'' in lowercase",
-		showCancelButton: true,
+		e.preventDefault();
+		Swal2.fire({
+			title: "Confirm verify",
+			input: "text",
+			inputLabel: "Enter ''verify'' in lowercase",
+			showCancelButton: true,
 
-	}).then((result) => {
+		}).then((result) => {
 
-		if (result.value && result.value.toLowerCase() === 'verify') {
-			privateText.value ="''Your car is available for rent now, check your email for full information''";
-			sendPrivateMessage();
-			verify.submit();
-			console.log("User entered 'verify'");
-		} else {
+			if (result.value && result.value.toLowerCase() === 'verify') {
+				privateText.value = "''Your car is available for rent now, check your email for full information''";
+				sendPrivateMessage();
+				verify.submit();
+				$('#loadding-sendEmail').click();
+			} else {
 
-			console.log("User did not enter 'verify' or canceled");
-			Swal2.fire({
-				icon: "error",
-				title: "Oops...",
-				text: "Something went wrong!",
+				console.log("User did not enter 'verify' or canceled");
+				Swal2.fire({
+					icon: "error",
+					title: "Oops...",
+					text: "Something went wrong!",
 
-			})
-		}
+				})
+			}
+		});
 	});
-});
 }
 
 
-if(document.getElementById("decline")){
+if (document.getElementById("decline")) {
 	document.getElementById("decline").addEventListener("click", (e) => {
-	e.preventDefault();
-	Swal2.fire({
-		title: "Confirm verify",
-		input: "text",
-		inputLabel: "Enter ''decline'' in lowercase",
-		showCancelButton: true,
+		e.preventDefault();
+		Swal2.fire({
+			title: "Confirm verify",
+			input: "text",
+			inputLabel: "Enter reason in lowercase",
+			showCancelButton: true,
 
-	}).then((result) => {
-		if (result.value && result.value.toLowerCase() === 'decline') {
-			privateText.value ="''Your car is declined for rent now, check your email for full information''";
-			sendPrivateMessage();
-			declined.submit();
-			console.log("User entered 'verify'");
-		} else {
+		}).then((result) => {
+			if (result.value && result.value.toLowerCase() != '') {
+				privateText.value = "''Your car is declined for rent now, check your email for full information''";
+				reason.value = result.value.toLowerCase();
+				sendPrivateMessage();
+				declined.submit();
+				$('#loadding-sendEmail').click();
+			} else {
 
-			console.log("User did not enter 'decline' or canceled");
-			Swal2.fire({
-				icon: "error",
-				title: "Oops...",
-				text: "Something went wrong!",
+				console.log("User did not enter 'decline' or canceled");
+				Swal2.fire({
+					icon: "error",
+					title: "Oops...",
+					text: "Something went wrong!",
 
-			})
-		}
+				})
+			}
+		});
 	});
-});
 }
 
 
@@ -307,7 +380,14 @@ if (document.getElementById('toast-failed-create_data')) {
 		})
 	})
 }
-
+if (document.getElementById('toast-failed-updated-car')) {
+	document.getElementById('toast-failed-updated-car').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'error',
+			title: 'Input error. Please try again'
+		})
+	})
+}
 if (document.getElementById('toast-success-created-data')) {
 	document.getElementById('toast-success-created-data').addEventListener('click', () => {
 		Toast.fire({

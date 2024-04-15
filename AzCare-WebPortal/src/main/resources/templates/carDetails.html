@@ -3,343 +3,224 @@
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-	<title>Az CAR</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta charset="UTF-8">
-	<!-- External CSS libraries -->
-	<link type="text/css" rel="stylesheet" href="/assets/css/bootstrap.min.css">
-	<link type="text/css" rel="stylesheet" href="/assets/css/magnific-popup.css">
-	<link type="text/css" rel="stylesheet" href="/assets/css/jquery.selectBox.css">
-	<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
-	<link type="text/css" rel="stylesheet" href="/assets/css/rangeslider.css">
-	<link type="text/css" rel="stylesheet" href="/assets/css/animate.min.css">
-	<link type="text/css" rel="stylesheet" href="/assets/css/slick.css">
-	<link type="text/css" rel="stylesheet" href="/assets/css/jquery.mCustomScrollbar.css">
-	<link type="text/css" rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
-	<link type="text/css" rel="stylesheet" href="/assets/fonts/flaticon/font/flaticon.css">
+<title>Az CAR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<!-- External CSS libraries -->
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/bootstrap.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/magnific-popup.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.selectBox.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/rangeslider.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/animate.min.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/slick.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.mCustomScrollbar.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/flaticon/font/flaticon.css">
 
-	<!-- Favicon icon -->
-	<link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon">
+<!-- Favicon icon -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico"
+	type="image/x-icon">
 
-	<!-- Google fonts -->
-	<link rel="stylesheet" type="text/css"
-		href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
-	<!-- Bootstrap CSS -->
-	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<!-- Google fonts -->
+<link rel="stylesheet" type="text/css"
+	href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
+<!-- Bootstrap CSS -->
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
 
-	<!-- Custom Stylesheet -->
-	<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
-	<link rel="stylesheet" type="text/css" id="style_sheet" href="/assets/css/skins/default.css">
+<!-- Custom Stylesheet -->
+<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" type="text/css" id="style_sheet"
+	href="/assets/css/skins/default.css">
 
-	<link rel="stylesheet" href="/assets/css/notiCss.css">
+<link rel="stylesheet" href="/assets/css/notiCss.css">
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
-	<script type="text/javascript" src="/assets/js/notiJs.js"></script>
-	<style type="text/css">
-		.selected {
-			border: 1px solid blue;
-		}
-	</style>
-	<style>
-		.container .rating {
-			background-image: url("https://www.toptal.com/designers/subtlepatterns/patterns/concrete-texture.png");
-			display: flex;
-			flex-wrap: wrap;
-			height: 200px;
-			align-items: center;
-			justify-content: center;
-			padding: 0 20px;
-		}
+<script type="text/javascript" src="/assets/js/notiJs.js"></script>
+<style type="text/css">
+.selected {
+	border: 1px solid blue;
+}
+</style>
+<style>
+.highlighted-date {
+	border-radius: 0.25rem;
+	line-height: 2rem;
+	background-color: #ffcccc !important;
+	font-size: 0.875rem;
+	/* Màu nền cho các ngày bị disable */
+	color: #000000 !important;
+	/* Màu chữ cho các ngày bị disable */
+}
 
-		.rating {
-			display: none;
-			width: 100%;
-			justify-content: center;
-			overflow: hidden;
-			flex-direction: row-reverse;
-			height: 100px;
-			position: relative;
-		}
+.container .rating {
+	background-image:
+		url("https://www.toptal.com/designers/subtlepatterns/patterns/concrete-texture.png");
+	display: flex;
+	flex-wrap: wrap;
+	height: 200px;
+	align-items: center;
+	justify-content: center;
+	padding: 0 20px;
+}
 
-		.rating-0 {
-			filter: grayscale(100%);
-		}
+.rating {
+	display: none;
+	width: 100%;
+	justify-content: center;
+	overflow: hidden;
+	flex-direction: row-reverse;
+	height: 100px;
+	position: relative;
+}
 
-		.rating>input {
-			display: none;
-		}
+.rating-0 {
+	filter: grayscale(100%);
+}
 
-		.rating>label {
-			display: flex;
-			cursor: pointer;
-			width: 40px;
-			height: 40px;
-			margin-top: 90px;
-			background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='126.729' height='126.73'%3e%3cpath fill='%23e3e3e3' d='M121.215 44.212l-34.899-3.3c-2.2-.2-4.101-1.6-5-3.7l-12.5-30.3c-2-5-9.101-5-11.101 0l-12.4 30.3c-.8 2.1-2.8 3.5-5 3.7l-34.9 3.3c-5.2.5-7.3 7-3.4 10.5l26.3 23.1c1.7 1.5 2.4 3.7 1.9 5.9l-7.9 32.399c-1.2 5.101 4.3 9.3 8.9 6.601l29.1-17.101c1.9-1.1 4.2-1.1 6.1 0l29.101 17.101c4.6 2.699 10.1-1.4 8.899-6.601l-7.8-32.399c-.5-2.2.2-4.4 1.9-5.9l26.3-23.1c3.8-3.5 1.6-10-3.6-10.5z'/%3e%3c/svg%3e");
-			background-repeat: no-repeat;
-			background-position: center;
-			background-size: 76%;
-			transition: 0.3s;
-		}
+.rating>input {
+	display: none;
+}
 
-		.rating>input:checked~label,
-		.rating>input:checked~label~label {
-			background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='126.729' height='126.73'%3e%3cpath fill='%23fcd93a' d='M121.215 44.212l-34.899-3.3c-2.2-.2-4.101-1.6-5-3.7l-12.5-30.3c-2-5-9.101-5-11.101 0l-12.4 30.3c-.8 2.1-2.8 3.5-5 3.7l-34.9 3.3c-5.2.5-7.3 7-3.4 10.5l26.3 23.1c1.7 1.5 2.4 3.7 1.9 5.9l-7.9 32.399c-1.2 5.101 4.3 9.3 8.9 6.601l29.1-17.101c1.9-1.1 4.2-1.1 6.1 0l29.101 17.101c4.6 2.699 10.1-1.4 8.899-6.601l-7.8-32.399c-.5-2.2.2-4.4 1.9-5.9l26.3-23.1c3.8-3.5 1.6-10-3.6-10.5z'/%3e%3c/svg%3e");
-		}
+.rating>label {
+	display: flex;
+	cursor: pointer;
+	width: 40px;
+	height: 40px;
+	margin-top: 90px;
+	background-image:
+		url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='126.729' height='126.73'%3e%3cpath fill='%23e3e3e3' d='M121.215 44.212l-34.899-3.3c-2.2-.2-4.101-1.6-5-3.7l-12.5-30.3c-2-5-9.101-5-11.101 0l-12.4 30.3c-.8 2.1-2.8 3.5-5 3.7l-34.9 3.3c-5.2.5-7.3 7-3.4 10.5l26.3 23.1c1.7 1.5 2.4 3.7 1.9 5.9l-7.9 32.399c-1.2 5.101 4.3 9.3 8.9 6.601l29.1-17.101c1.9-1.1 4.2-1.1 6.1 0l29.101 17.101c4.6 2.699 10.1-1.4 8.899-6.601l-7.8-32.399c-.5-2.2.2-4.4 1.9-5.9l26.3-23.1c3.8-3.5 1.6-10-3.6-10.5z'/%3e%3c/svg%3e");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 76%;
+	transition: 0.3s;
+}
 
-		.rating>input:not(:checked)~label:hover,
-		.rating>input:not(:checked)~label:hover~label {
-			background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='126.729' height='126.73'%3e%3cpath fill='%23d8b11e' d='M121.215 44.212l-34.899-3.3c-2.2-.2-4.101-1.6-5-3.7l-12.5-30.3c-2-5-9.101-5-11.101 0l-12.4 30.3c-.8 2.1-2.8 3.5-5 3.7l-34.9 3.3c-5.2.5-7.3 7-3.4 10.5l26.3 23.1c1.7 1.5 2.4 3.7 1.9 5.9l-7.9 32.399c-1.2 5.101 4.3 9.3 8.9 6.601l29.1-17.101c1.9-1.1 4.2-1.1 6.1 0l29.101 17.101c4.6 2.699 10.1-1.4 8.899-6.601l-7.8-32.399c-.5-2.2.2-4.4 1.9-5.9l26.3-23.1c3.8-3.5 1.6-10-3.6-10.5z'/%3e%3c/svg%3e");
-		}
+.rating>input:checked ~label, .rating>input:checked ~label ~label {
+	background-image:
+		url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='126.729' height='126.73'%3e%3cpath fill='%23fcd93a' d='M121.215 44.212l-34.899-3.3c-2.2-.2-4.101-1.6-5-3.7l-12.5-30.3c-2-5-9.101-5-11.101 0l-12.4 30.3c-.8 2.1-2.8 3.5-5 3.7l-34.9 3.3c-5.2.5-7.3 7-3.4 10.5l26.3 23.1c1.7 1.5 2.4 3.7 1.9 5.9l-7.9 32.399c-1.2 5.101 4.3 9.3 8.9 6.601l29.1-17.101c1.9-1.1 4.2-1.1 6.1 0l29.101 17.101c4.6 2.699 10.1-1.4 8.899-6.601l-7.8-32.399c-.5-2.2.2-4.4 1.9-5.9l26.3-23.1c3.8-3.5 1.6-10-3.6-10.5z'/%3e%3c/svg%3e");
+}
 
-		.emoji-wrapper {
-			width: 100%;
-			text-align: center;
-			height: 100px;
-			overflow: hidden;
-			position: absolute;
-			top: 0;
-			left: 0;
-		}
+.rating>input:not(:checked) ~label:hover, .rating>input:not(:checked) ~label:hover
+	 ~label {
+	background-image:
+		url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='126.729' height='126.73'%3e%3cpath fill='%23d8b11e' d='M121.215 44.212l-34.899-3.3c-2.2-.2-4.101-1.6-5-3.7l-12.5-30.3c-2-5-9.101-5-11.101 0l-12.4 30.3c-.8 2.1-2.8 3.5-5 3.7l-34.9 3.3c-5.2.5-7.3 7-3.4 10.5l26.3 23.1c1.7 1.5 2.4 3.7 1.9 5.9l-7.9 32.399c-1.2 5.101 4.3 9.3 8.9 6.601l29.1-17.101c1.9-1.1 4.2-1.1 6.1 0l29.101 17.101c4.6 2.699 10.1-1.4 8.899-6.601l-7.8-32.399c-.5-2.2.2-4.4 1.9-5.9l26.3-23.1c3.8-3.5 1.6-10-3.6-10.5z'/%3e%3c/svg%3e");
+}
 
-		.emoji-wrapper:before,
-		.emoji-wrapper:after {
-			content: "";
-			height: 15px;
-			width: 100%;
-			position: absolute;
-			left: 0;
-			z-index: 1;
-		}
+.emoji-wrapper {
+	width: 100%;
+	text-align: center;
+	height: 100px;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
 
-		.emoji-wrapper:before {
-			top: 0;
-			background: linear-gradient(to bottom, white 0%, white 35%, rgba(255, 255, 255, 0) 100%);
-		}
+.emoji-wrapper:before, .emoji-wrapper:after {
+	content: "";
+	height: 15px;
+	width: 100%;
+	position: absolute;
+	left: 0;
+	z-index: 1;
+}
 
-		.emoji-wrapper:after {
-			bottom: 0;
-			background: linear-gradient(to top, white 0%, white 35%, rgba(255, 255, 255, 0) 100%);
-		}
+.emoji-wrapper:before {
+	top: 0;
+	background: linear-gradient(to bottom, white 0%, white 35%, rgba(255, 255, 255, 0)
+		100%);
+}
 
-		.emoji {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			transition: 0.3s;
-		}
+.emoji-wrapper:after {
+	bottom: 0;
+	background: linear-gradient(to top, white 0%, white 35%, rgba(255, 255, 255, 0)
+		100%);
+}
 
-		.emoji>svg {
-			margin: 15px 0;
-			width: 70px;
-			height: 70px;
-			flex-shrink: 0;
-		}
+.emoji {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	transition: 0.3s;
+}
 
-		#rating-1:checked~.emoji-wrapper>.emoji {
-			transform: translateY(-100px);
-		}
+.emoji>svg {
+	margin: 15px 0;
+	width: 70px;
+	height: 70px;
+	flex-shrink: 0;
+}
 
-		#rating-2:checked~.emoji-wrapper>.emoji {
-			transform: translateY(-200px);
-		}
+#rating-1:checked ~.emoji-wrapper>.emoji {
+	transform: translateY(-100px);
+}
 
-		#rating-3:checked~.emoji-wrapper>.emoji {
-			transform: translateY(-300px);
-		}
+#rating-2:checked ~.emoji-wrapper>.emoji {
+	transform: translateY(-200px);
+}
 
-		#rating-4:checked~.emoji-wrapper>.emoji {
-			transform: translateY(-400px);
-		}
+#rating-3:checked ~.emoji-wrapper>.emoji {
+	transform: translateY(-300px);
+}
 
-		#rating-5:checked~.emoji-wrapper>.emoji {
-			transform: translateY(-500px);
-		}
+#rating-4:checked ~.emoji-wrapper>.emoji {
+	transform: translateY(-400px);
+}
 
-		.feedback {
-			max-width: 360px;
-			background-color: #fff;
-			width: 100%;
-			padding: 30px;
-			border-radius: 8px;
-			display: flex;
-			flex-direction: column;
-			flex-wrap: wrap;
-			align-items: center;
-			box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
-		}
-	</style>
-	<!-- Custom Stylesheet -->
-	<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
-	<link rel="stylesheet" type="text/css" id="style_sheet" href="/assets/css/skins/default.css">
-	<link rel="stylesheet" href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
-	<style type="text/css">
-		.selected {
-			border: 1px solid blue;
-		}
+#rating-5:checked ~.emoji-wrapper>.emoji {
+	transform: translateY(-500px);
+}
 
-		* {
-			box-sizing: border-box;
-			-moz-box-sizing: border-box;
-			-webkit-box-sizing: border-box;
-		}
-
-		body {
-			font-family: 'Roboto', sans-serif;
-			color: #546E7A;
-		}
-
-		.wrapper {
-			max-width: 18rem;
-			padding: 0 0.5rem;
-			margin-left: auto;
-			margin-right: auto;
-			padding-top: 4rem;
-		}
-
-		label {
-			font-size: 0.75rem;
-			font-weight: 400;
-			display: block;
-			margin-bottom: 0.5rem;
-			color: #B0BEC5;
-			border: 1px solid #ECEFF1;
-			padding: 0.5rem 0.75rem;
-			border-radius: 0.5rem;
-		}
-
-		input {
-			font-family: 'Roboto', sans-serif;
-			display: block;
-			border: none;
-			border-radius: 0.25rem;
-			border: 1px solid transparent;
-			line-height: 1.5rem;
-			padding: 0;
-			font-size: 1rem;
-			color: #607D8B;
-			width: 100%;
-			margin-top: 0.5rem;
-		}
-
-		input:focus {
-			outline: none;
-		}
-
-		#ui-datepicker-div {
-			display: none;
-			background-color: #fff;
-			box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
-			margin-top: 0.25rem;
-			border-radius: 0.5rem;
-			padding: 0.5rem;
-		}
-
-		table {
-			border-collapse: collapse;
-			border-spacing: 0;
-		}
-
-		.ui-datepicker-calendar thead th {
-			padding: 0.25rem 0;
-			text-align: center;
-			font-size: 0.75rem;
-			font-weight: 400;
-			color: #78909C;
-		}
-
-		.ui-datepicker-calendar tbody td {
-			width: 2.5rem;
-			text-align: center;
-			padding: 0;
-		}
-
-		.ui-datepicker-calendar tbody td a {
-			display: block;
-			border-radius: 0.25rem;
-			line-height: 2rem;
-			transition: 0.3s all;
-			color: #546E7A;
-			font-size: 0.875rem;
-			text-decoration: none;
-		}
-
-		.ui-datepicker-calendar tbody td a:hover {
-			background-color: #E0F2F1;
-		}
-
-		.ui-datepicker-calendar tbody td a.ui-state-active {
-			background-color: #009688;
-			color: white;
-		}
-
-		.ui-datepicker-header a.ui-corner-all {
-			cursor: pointer;
-			position: absolute;
-			top: 0;
-			width: 2rem;
-			height: 2rem;
-			margin: 0.5rem;
-			border-radius: 0.25rem;
-			transition: 0.3s all;
-		}
-
-		.ui-datepicker-header a.ui-corner-all:hover {
-			background-color: #ECEFF1;
-		}
-
-		.ui-datepicker-header a.ui-datepicker-prev {
-			left: 0;
-			background: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMyIgaGVpZ2h0PSIxMyIgdmlld0JveD0iMCAwIDEzIDEzIj48cGF0aCBmaWxsPSIjNDI0NzcwIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik03LjI4OCA2LjI5NkwzLjIwMiAyLjIxYS43MS43MSAwIDAgMSAuMDA3LS45OTljLjI4LS4yOC43MjUtLjI4Ljk5OS0uMDA3TDguODAzIDUuOGEuNjk1LjY5NSAwIDAgMSAuMjAyLjQ5Ni42OTUuNjk1IDAgMCAxLS4yMDIuNDk3bC00LjU5NSA0LjU5NWEuNzA0LjcwNCAwIDAgMS0xLS4wMDcuNzEuNzEgMCAwIDEtLjAwNi0uOTk5bDQuMDg2LTQuMDg2eiIvPjwvc3ZnPg==");
-			background-repeat: no-repeat;
-			background-size: 0.5rem;
-			background-position: 50%;
-			transform: rotate(180deg);
-		}
-
-		.ui-datepicker-header a.ui-datepicker-next {
-			right: 0;
-			background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMyIgaGVpZ2h0PSIxMyIgdmlld0JveD0iMCAwIDEzIDEzIj48cGF0aCBmaWxsPSIjNDI0NzcwIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik03LjI4OCA2LjI5NkwzLjIwMiAyLjIxYS43MS43MSAwIDAgMSAuMDA3LS45OTljLjI4LS4yOC43MjUtLjI4Ljk5OS0uMDA3TDguODAzIDUuOGEuNjk1LjY5NSAwIDAgMSAuMjAyLjQ5Ni42OTUuNjk1IDAgMCAxLS4yMDIuNDk3bC00LjU5NSA0LjU5NWEuNzA0LjcwNCAwIDAgMS0xLS4wMDcuNzEuNzEgMCAwIDEtLjAwNi0uOTk5bDQuMDg2LTQuMDg2eiIvPjwvc3ZnPg==');
-			background-repeat: no-repeat;
-			background-size: 10px;
-			background-position: 50%;
-		}
-
-		.ui-datepicker-header a>span {
-			display: none;
-		}
-
-		.ui-datepicker-title {
-			text-align: center;
-			line-height: 2rem;
-			margin-bottom: 0.25rem;
-			font-size: 0.875rem;
-			font-weight: 500;
-			padding-bottom: 0.25rem;
-		}
-
-		.ui-datepicker-week-col {
-			color: #78909C;
-			font-weight: 400;
-			font-size: 0.75rem;
-		}
-
-		table td,
-		table th {
-			padding-top: 0.2rem !important;
-			padding-bottom: 0.2rem !important;
-		}
-	</style>
+.feedback {
+	max-width: 360px;
+	background-color: #fff;
+	width: 100%;
+	padding: 30px;
+	border-radius: 8px;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	align-items: center;
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+</style>
+<!-- Custom Stylesheet -->
+<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" type="text/css" id="style_sheet"
+	href="/assets/css/skins/default.css">
+<link rel="stylesheet"
+	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
+<link rel="stylesheet"
+	href="/assets/css/carDetails.css">
 
 </head>
 
 <body id="top">
 
 	<div class="page_loader"></div>
+	<div style="display: none">
 
+		<input type="text" id="privateText" placeholder="Private Message" />
+		<input type="text" id="to" value="admin@admin" placeholder="To" />
+	</div>
 	<!-- main header start -->
 	<header class="main-header sticky-header header-with-top"
 		id="main-header-2">
@@ -348,7 +229,7 @@
 				<div class="col-12">
 					<nav class="navbar navbar-expand-lg navbar-light rounded">
 						<a class="navbar-brand logo navbar-brand d-flex mr-auto" href="/">
-							<img src="assets/img/logos/black-logo.png" alt="logo">
+							<img src="/assets/img/logos/black-logo.png" alt="logo">
 						</a>
 						<button class="navbar-toggler" type="button"
 							data-toggle="collapse" data-target="#navbar"
@@ -477,26 +358,6 @@
 				<div class="col-lg-8 col-md-12">
 					<div id="carDetailsSlider"
 						class="carousel car-details-sliders slide mb-60">
-						<div class="heading-car">
-							<div class="row">
-								<div class="col-md-12">
-									<div class="pull-left">
-										<h3 th:text="${carDetails.carmodel.model}"></h3>
-										<p th:text="${carDetails.address}">
-											<i class="fa fa-map-marker"></i>
-										</p>
-									</div>
-									<div class="p-r">
-										<h3>$420,00</h3>
-										<p>
-											<i class="fa fa-star"></i><i class="fa fa-star"></i><i
-												class="fa fa-star"></i><i class="fa fa-star"></i><i
-												class="fa fa-star"></i>
-										</p>
-									</div>
-								</div>
-							</div>
-						</div>
 						<!-- main slider carousel items -->
 						<div class="carousel-inner">
 							<div class="active item carousel-item" data-slide-number="0">
@@ -556,26 +417,14 @@
 							</a></li>
 						</ul>
 					</div>
-					<div class="heading-car-2 mb-60">
+					<div
+						th:if="${carDetails.discount != null && carDetails.discount != 0}"
+						class="heading-car-2 mb-60 rounded">
 						<div class="row">
-							<div class="col-md-12">
-								<div class="pull-left">
-									<h3 th:text="${carDetails.carmodel.model}"></h3>
-									<p th:text="${carDetails.address}">
-										<i class="fa fa-map-marker"></i>
-									</p>
-								</div>
-								<div class="pull-right">
-									<h3>
-										<span class="text-right"
-											th:text="'$'+${carDetails.price}+'/day'"></span>
-									</h3>
-									<p>
-										<i class="fa fa-star-half-o"></i> <i class="fa fa-star"></i> <i
-											class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-											class="fa fa-star"></i>
-									</p>
-								</div>
+							<div class="col-md-12 text-center">
+								<h1 class="text-uppercase text-white tremble">
+									HOT SALES <span th:text="${carDetails.discount} + '%'"></span>
+								</h1>
 							</div>
 						</div>
 					</div>
@@ -655,8 +504,7 @@
 									360</span> <input class="d-none" id="car-features-temp1"
 									name="features[camera360]" type="checkbox">
 							</div>
-						</div>
-						<div class="row">
+
 							<div class="col-3 mx-4 my-2 car-services"
 								id="parkingCamera-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
@@ -683,8 +531,7 @@
 									Camera</span> <input class="d-none" id="car-features-temp1"
 									name="features[camera360]" type="checkbox">
 							</div>
-						</div>
-						<div class="row">
+
 							<div class="col-3 mx-4 my-2 car-services" id="tireSensor-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
@@ -710,8 +557,7 @@
 									class="d-none" id="car-features-temp1"
 									name="features[camera360]" type="checkbox">
 							</div>
-						</div>
-						<div class="row">
+
 							<div class="col-3 mx-4 my-2 car-services" id="sunRoof-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
@@ -736,8 +582,7 @@
 									seat</span> <input class="d-none" id="car-features-temp1"
 									name="features[camera360]" type="checkbox">
 							</div>
-						</div>
-						<div class="row">
+
 							<div class="col-3 mx-4 my-2 car-services" id="usb-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
@@ -761,8 +606,7 @@
 									id="car-features-temp1" name="features[camera360]"
 									type="checkbox">
 							</div>
-						</div>
-						<div class="row">
+
 							<div class="col-3 mx-4 my-2 car-services" id="bonnet-service"
 								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
 								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
@@ -802,36 +646,37 @@
 					<h3 class="heading">Reviews Section</h3>
 					<div class="star-ratings">
 						<style>
-							.star {
-								color: gold;
-								/* Màu sao */
-								font-size: 20px;
-								/* Kích thước sao */
-							}
+.star {
+	color: gold;
+	/* Màu sao */
+	font-size: 20px;
+	/* Kích thước sao */
+}
 
-							.star-statistics {
-								display: flex;
-								flex-direction: column;
-							}
+.star-statistics {
+	display: flex;
+	flex-direction: column;
+}
 
-							.star-rating {
-								display: flex;
-								align-items: center;
-								margin-bottom: 10px;
-							}
+.star-rating {
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+}
 
-							.rating-bar {
-								height: 20px;
-								background-color: #ddd;
-								margin-right: 5px;
-							}
+.rating-bar {
+	height: 20px;
+	background-color: #ddd;
+	margin-right: 5px;
+}
 
-							.rating-count {
-								margin-left: 5px;
-							}
-						</style>
+.rating-count {
+	margin-left: 5px;
+}
+</style>
 						<!-- đây sẽ hiển thị tổng số đánh giá theo phần trăm-->
-						<div class="star-statistics" th:if="${not #lists.isEmpty(reviews)}">
+						<div class="star-statistics"
+							th:if="${not #lists.isEmpty(reviews)}">
 							<div class="star-rating">
 								<span class="star">★★★★★</span>
 								<div class="rating-bar"
@@ -886,29 +731,28 @@
 
 									<div class="comment-content">
 										<div class="comment-meta">
-											<div class="comment-meta-author" th:text="${review.userName}">Jane Doe</div>
+											<div class="comment-meta-author" th:text="${review.userName}">Jane
+												Doe</div>
 
-											<div class="comment-meta-reply">
-
-											</div>
+											<div class="comment-meta-reply"></div>
 
 											<div class="comment-meta-date">
-												<span>8:42 PM 10/3/2022</span>
+												<span th:text="${review.reviewDate}">8:42 PM
+													10/3/2022</span>
 											</div>
 										</div>
 										<div class="clearfix"></div>
 										<div class="comment-body">
 											<div class="comment-rating">
 												<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
-													class="fa fa-star"></i> <i class="fa fa-star-half-o"></i>
-												<i class="fa fa-star-o"></i>
+													class="fa fa-star"></i> <i class="fa fa-star-half-o"></i> <i
+													class="fa fa-star-o"></i>
 											</div>
-											<p th:text="${review.comment}">Lorem ipsum dolor sit amet, consectetur
-												adipiscing
-												elit. Donec luctus tincidunt aliquam. Aliquam gravida
-												massa at sem vulputate interdum et vel eros. Maecenas eros
-												enim, tincidunt vel turpis vel, dapibus tempus nulla.
-												Donec vel nulla dui.</p>
+											<p th:text="${review.comment}">Lorem ipsum dolor sit
+												amet, consectetur adipiscing elit. Donec luctus tincidunt
+												aliquam. Aliquam gravida massa at sem vulputate interdum et
+												vel eros. Maecenas eros enim, tincidunt vel turpis vel,
+												dapibus tempus nulla. Donec vel nulla dui.</p>
 										</div>
 									</div>
 								</div>
@@ -925,22 +769,18 @@
 									<div class="comment">
 										<div class="comment-author">
 											<a href="#"> <img src="/assets/img/avatar/avatar-13.jpg"
-													class="rounded-circle" alt="avatar-13">
+												class="rounded-circle" alt="avatar-13">
 											</a>
 										</div>
 										<div class="comment-content">
 											<div class="comment-meta">
-												<div class="comment-meta-author">
-
-												</div>
+												<div class="comment-meta-author"></div>
 												<div th:id="'comment-reply_' + ${comment.id}"
 													class="comment-meta-reply">
 													<a th:onclick="'toggleReply('+${comment.id}+')'">Reply</a>
 
 												</div>
-												<div class="comment-meta-date">
-
-												</div>
+												<div class="comment-meta-date"></div>
 
 												<div class="comment-meta-author">
 													<p th:text="${comment.user_name}"></p>
@@ -949,14 +789,13 @@
 											<div class="clearfix"></div>
 											<div class="comment-body">
 
-												<div class="comment-rating">
-
-												</div>
+												<div class="comment-rating"></div>
 
 												<p th:text="${comment.content}">Nội dung đánh giá</p>
 											</div>
 											<!-- Container để chứa ô nhập nội dung reply -->
-											<div class="reply-container" th:id="'replyContainer_' + ${comment.id}"
+											<div class="reply-container"
+												th:id="'replyContainer_' + ${comment.id}"
 												style="display: none;">
 												<form id="replyForm">
 													<textarea th:id="'replyText_' + ${comment.id}"
@@ -978,12 +817,8 @@
 												<script th:inline="javascript">
 													function submitReply(cmtId, car_id) {
 														console.log(cmtId + " và " + car_id);
-
-
-
 														//var carId = /*[[${comment.car_id}]]*/
 														var replyText = document.getElementById("replyText_" + cmtId).value;
-
 														var data = {
 															carId: car_id,
 															comment_id: cmtId,
@@ -997,12 +832,24 @@
 																data: JSON.stringify(data),
 																dataType: 'json',
 																success: function (response) {
-																	// Xử lý kết quả trả về nếu cần
-																	console.log("Reply submitted successfully");
+																	// Xử lý khi tạo comment thành công
+																	location.reload(); // Refresh trang sau khi tạo comment thành công
 																},
 																error: function (xhr, status, error) {
-																	console.error("Error submitting reply");
+																	// Xử lý khi có lỗi
+																	console.log("lỗi ở đây error", xhr.status);
+																	if (xhr.status === 200) {
+																		location.reload();
+																	}
+																	if (xhr.status === 400 || xhr.status === 500) {
+																		console.log(xhr.responseText);
+
+																		$('#errorModalBody').text(xhr.responseText); // Hiển thị thông báo lỗi từ server
+																		$('#errorDialog').modal('show'); // Hiển thị dialog
+																	}
+
 																}
+
 
 															});
 														}
@@ -1029,33 +876,26 @@
 											</div>
 											<div class="comment-content">
 												<div class="comment-meta">
-													<div class="comment-meta-author">
-
-													</div>
+													<div class="comment-meta-author"></div>
 													<div th:id="'comment-reply_' + ${comment.id}"
 														class="comment-meta-reply">
 														<a th:onclick="'toggleReply('+${comment.id}+')'">Reply</a>
 
 													</div>
-													<div class="comment-meta-date">
-
-													</div>
+													<div class="comment-meta-date"></div>
 
 													<div class="comment-meta-author">
-														<p th:text="${reply.comment_id}"></p>
+														<p th:text="${reply.User_name}"></p>
 													</div>
 												</div>
 												<div class="clearfix"></div>
 												<div class="comment-body">
 
-													<div class="comment-rating">
-
-													</div>
+													<div class="comment-rating"></div>
 
 													<p th:text="${reply.content}">Nội dung đánh giá</p>
 												</div>
 											</div>
-
 									</ul>
 
 								</li>
@@ -1066,26 +906,98 @@
 							<p>Chưa có bình luận</p>
 						</div>
 					</div>
-					<form id="commentForm" th:action="@{/comment/create}" method="POST">
-						<div class="border row">
-							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-								<div class="input-group mb-3 ">
-									<input class="input-group-text" type="text" id="userId" name="userId"
-										th:value="${session.user}" />
+
+					<!-- bootstrap submit review -->
+
+					<div class="col-md-6">
+						<div class="border p-4">
+							<form id="commentForm" method="POST"
+								th:action="@{/comment/create}">
+								<div class="mb-3">
+									<label for="userId" class="form-label">User Email: </label> <input
+										class="form-control" type="text" id="userId" name="userId"
+										th:value="${session.user}" readonly />
 								</div>
-								
-							</div>
-							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-								<div class="input-group mb-3 ">
-									<input class="input-group-text" type="text" id="content" name="content" />
+
+								<div class="mb-3">
+									<label for="content" class="form-label">Comment:</label>
+									<textarea class="form-control" id="content" name="content"
+										placeholder="Write to Comment..." rows="5" required></textarea>
 								</div>
-								<input class="input-group-text" type="text" id="carId" name="carId"
-								th:value="${carDetails.id}"  />
-							
+
+								<input type="hidden" id="carId" name="carId"
+									th:value="${carDetails.id}" />
+
+								<div class="d-grid gap-2">
+									<button class="btn btn-primary" type="submit">Submit
+										Comment</button>
+								</div>
+							</form>
+						</div>
+					</div>
+					<!-- chổ này là dialog dựa theo id errorDialog -->
+					<div class="modal" id="errorDialog" tabindex="-1" role="dialog">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Error</h5>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<p>
+										The input <span id="errorModalBody"></span> contains a keyword
+										that violates the standards
+									</p>
+
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary"
+										data-dismiss="modal">Close</button>
+								</div>
 							</div>
 						</div>
-						<button type="submit" onclick="return commentForm.submit()">gửi đánh giá</button>
-					</form>
+					</div>
+					<script>
+						//Create Comment 
+						$(document).ready(function () {
+							$('#commentForm').submit(function (e) {
+								e.preventDefault();
+								var userId = document.getElementById('userId').value ;
+								var carId = document.getElementById('carId').value ;
+								var content = document.getElementById('content').value ;
+
+								$.ajax({
+									type: 'POST',
+									url: '/comment/create',
+									data: {
+										userId: userId,
+										carId: carId,
+										content: content
+									},
+									success: function (response) {
+										// Xử lý khi tạo comment thành công
+										location.reload(); // reload lại trang
+									},
+									error: function (xhr, status, error) {
+										// Xử lý khi có lỗi
+										console.log(xhr.responseText);
+										$('#errorModalBody').text(xhr.responseText); // Hiển thị thông báo lỗi từ server
+										$('#errorDialog').modal('show'); // Hiển thị dialog
+										
+									}
+								});
+							});
+							//create review
+
+
+						});
+
+					</script>
+
+
 					<!-- Contact 1 start -->
 					<div class="contact-3 mb-30">
 						<h3 class="heading">Leave a Comment</h3>
@@ -1096,11 +1008,11 @@
 
 										<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 											<div class="input-group mb-3 ">
-												<input class="input-group-text" type="text" id="userId" name="userId"
-													th:value="${session.user}" />
+												<input class="input-group-text" type="text" id="userId"
+													name="userId" th:value="${session.user}" />
 											</div>
 										</div>
-									
+
 										<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 											<div class="row g-3 align-items-center">
 												<div class="col-auto">
@@ -1108,8 +1020,9 @@
 
 												</div>
 												<div class="col-auto">
-													<input class="form-control border" style="color: black;" type="text"
-														id="carId" name="carId" th:value="${carDetails.id}" readonly />
+													<input class="form-control border" style="color: black;"
+														type="text" id="carId" name="carId"
+														th:value="${carDetails.id}" readonly />
 												</div>
 											</div>
 										</div>
@@ -1119,16 +1032,16 @@
 											<div class="container rating">
 												<div class="feedback">
 													<div class="rating">
-														<input th:value="5" type="radio" name="rating" id="rating-5">
-														<label for="rating-5"></label>
-														<input th:value="4" type="radio" name="rating" id="rating-4">
-														<label for="rating-4"></label>
-														<input th:value="3" type="radio" name="rating" id="rating-3">
-														<label for="rating-3"></label>
-														<input th:value="2" type="radio" name="rating" id="rating-2">
-														<label for="rating-2"></label>
-														<input th:value="1" type="radio" name="rating" id="rating-1">
-														<label for="rating-1"></label>
+														<input th:value="5" type="radio" name="rating"
+															id="rating-5"> <label for="rating-5"></label> <input
+															th:value="4" type="radio" name="rating" id="rating-4">
+														<label for="rating-4"></label> <input th:value="3"
+															type="radio" name="rating" id="rating-3"> <label
+															for="rating-3"></label> <input th:value="2" type="radio"
+															name="rating" id="rating-2"> <label
+															for="rating-2"></label> <input th:value="1" type="radio"
+															name="rating" id="rating-1"> <label
+															for="rating-1"></label>
 														<div class="emoji-wrapper">
 															<div class="emoji">
 																<svg class="rating-0" xmlns="http://www.w3.org/2000/svg"
@@ -1144,8 +1057,7 @@
 																	<ellipse transform="rotate(-148.804 180.87 175.82)"
 																		cx="180.871" cy="175.822" rx="28.048" ry="28.08"
 																		fill="#3e4347" />
-																	<ellipse
-																		transform="rotate(-113.778 194.434 165.995)"
+																	<ellipse transform="rotate(-113.778 194.434 165.995)"
 																		cx="194.433" cy="165.993" rx="8.016" ry="5.296"
 																		fill="#5a5f63" />
 																	<ellipse
@@ -1209,19 +1121,16 @@
 																	<path
 																		d="M276.6 244.3a79.3 79.3 0 1 1 158.8 0 79.5 79.5 0 1 1-158.8 0z"
 																		fill="#fff" />
-																	<circle cx="340" cy="260.4" r="36.2"
-																		fill="#3e4347" />
+																	<circle cx="340" cy="260.4" r="36.2" fill="#3e4347" />
 																	<g fill="#fff">
 																		<ellipse transform="rotate(-135 326.4 246.6)"
-																			cx="326.4" cy="246.6" rx="6.5" ry="10" />
+																		cx="326.4" cy="246.6" rx="6.5" ry="10" />
 																		<path
-																			d="M231.9 244.3a79.3 79.3 0 1 0-158.8 0 79.5 79.5 0 1 0 158.8 0z" />
+																		d="M231.9 244.3a79.3 79.3 0 1 0-158.8 0 79.5 79.5 0 1 0 158.8 0z" />
 																	</g>
-																	<circle cx="168.5" cy="260.4" r="36.2"
-																		fill="#3e4347" />
+																	<circle cx="168.5" cy="260.4" r="36.2" fill="#3e4347" />
 																	<ellipse transform="rotate(-135 182.1 246.7)"
-																		cx="182.1" cy="246.7" rx="10" ry="6.5"
-																		fill="#fff" />
+																		cx="182.1" cy="246.7" rx="10" ry="6.5" fill="#fff" />
 																</svg>
 																<svg class="rating-3" xmlns="http://www.w3.org/2000/svg"
 																	viewBox="0 0 512 512">
@@ -1234,24 +1143,20 @@
 																		fill="#f4c534" />
 																	<g fill="#fff">
 																		<path
-																			d="M115.3 339c18.2 29.6 75.1 32.8 143.1 32.8 67.1 0 124.2-3.2 143.2-31.6l-1.5-.6a780.6 780.6 0 0 0-284.8-.6z" />
-																		<ellipse cx="356.4" cy="205.3" rx="81.1"
-																			ry="81" />
+																		d="M115.3 339c18.2 29.6 75.1 32.8 143.1 32.8 67.1 0 124.2-3.2 143.2-31.6l-1.5-.6a780.6 780.6 0 0 0-284.8-.6z" />
+																		<ellipse cx="356.4" cy="205.3" rx="81.1" ry="81" />
 																	</g>
 																	<ellipse cx="356.4" cy="205.3" rx="44.2" ry="44.2"
 																		fill="#3e4347" />
 																	<g fill="#fff">
-																		<ellipse
-																			transform="scale(-1) rotate(45 454 -906)"
-																			cx="375.3" cy="188.1" rx="12" ry="8.1" />
-																		<ellipse cx="155.6" cy="205.3" rx="81.1"
-																			ry="81" />
+																		<ellipse transform="scale(-1) rotate(45 454 -906)"
+																		cx="375.3" cy="188.1" rx="12" ry="8.1" />
+																		<ellipse cx="155.6" cy="205.3" rx="81.1" ry="81" />
 																	</g>
 																	<ellipse cx="155.6" cy="205.3" rx="44.2" ry="44.2"
 																		fill="#3e4347" />
 																	<ellipse transform="scale(-1) rotate(45 454 -421.3)"
-																		cx="174.5" cy="188" rx="12" ry="8.1"
-																		fill="#fff" />
+																		cx="174.5" cy="188" rx="12" ry="8.1" fill="#fff" />
 																</svg>
 																<svg class="rating-4" xmlns="http://www.w3.org/2000/svg"
 																	viewBox="0 0 512 512">
@@ -1289,7 +1194,7 @@
 																	<g fill="#ffd93b">
 																		<circle cx="256" cy="256" r="256" />
 																		<path
-																			d="M512 256A256 256 0 0 1 56.8 416.7a256 256 0 0 0 360-360c58 47 95.2 118.8 95.2 199.3z" />
+																		d="M512 256A256 256 0 0 1 56.8 416.7a256 256 0 0 0 360-360c58 47 95.2 118.8 95.2 199.3z" />
 																	</g>
 																	<path
 																		d="M512 99.4v165.1c0 11-8.9 19.9-19.7 19.9h-187c-13 0-23.5-10.5-23.5-23.5v-21.3c0-12.9-8.9-24.8-21.6-26.7-16.2-2.5-30 10-30 25.5V261c0 13-10.5 23.5-23.5 23.5h-187A19.7 19.7 0 0 1 0 264.7V99.4c0-10.9 8.8-19.7 19.7-19.7h472.6c10.8 0 19.7 8.7 19.7 19.7z"
@@ -1302,11 +1207,11 @@
 																		fill="#e84d88" />
 																	<g fill="#38c0dc">
 																		<path
-																			d="M95.2 114.9l-60 60v15.2l75.2-75.2zM123.3 114.9L35.1 203v23.2c0 1.8.3 3.7.7 5.4l116.8-116.7h-29.3z" />
+																		d="M95.2 114.9l-60 60v15.2l75.2-75.2zM123.3 114.9L35.1 203v23.2c0 1.8.3 3.7.7 5.4l116.8-116.7h-29.3z" />
 																	</g>
 																	<g fill="#d23f77">
 																		<path
-																			d="M373.3 114.9l-66 66V196l81.3-81.2zM401.5 114.9l-94.1 94v17.3c0 3.5.8 6.8 2.2 9.8l121.1-121.1h-29.2z" />
+																		d="M373.3 114.9l-66 66V196l81.3-81.2zM401.5 114.9l-94.1 94v17.3c0 3.5.8 6.8 2.2 9.8l121.1-121.1h-29.2z" />
 																	</g>
 																	<path
 																		d="M329.5 395.2c0 44.7-33 81-73.4 81-40.7 0-73.5-36.3-73.5-81s32.8-81 73.5-81c40.5 0 73.4 36.3 73.4 81z"
@@ -1334,13 +1239,12 @@
 										</div>
 										<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
 											<div class="send-btn">
-												<button type="submit" class="btn btn-color btn-md btn-message"
-													onclick="return review.submit()">Send
-
-
-													Message</button>
-												<button type="submit" value="Submit"> Gửi của thảo</button>
+												<button type="submit"
+													class="btn btn-color btn-md btn-message"
+													onclick="return review.submit()">Send Message</button>
+												<button type="submit" value="Submit">Gửi của thảo</button>
 											</div>
+
 										</div>
 									</div>
 								</form>
@@ -1401,7 +1305,9 @@
 									type="hidden" name="isSameProvince" value="0"> <input
 									type="hidden" name="isSameDistrict" value="0"> <input
 									type="hidden" name="deliveryFee">
-								<h2 class="" th:text="'$'+${carDetails.price}+'/day'"></h2>
+								<h2 class=""
+									th:text="'$'+${carDetails.price - (carDetails.price * carDetails.discount / 100)}+'/day'">
+								</h2>
 								<div class="row">
 									<div class="col-12">
 										<div class="row">
@@ -1420,6 +1326,30 @@
 														autocomplete="off" onChange="return updateTotalRent();">
 													</label>
 												</div>
+											</div>
+											<div class="col-12">
+												<p class="text-danger" id="alert-notice-datepicker"></p>
+											</div>
+											<div class="col-12">
+												<p>
+													<span class="text-danger">*</span> The owner will <span
+														style="font-weight: 700;">deliver</span> this car to you
+													between <span style="font-weight: 700;">22:30 -
+														23:30</span> on the start date, you must <span
+														style="font-weight: 700;">return</span> the car between <span
+														style="font-weight: 700;">20:00 - 21:00</span> on the end
+													date.
+												</p>
+												<p>
+													<span class="text-danger">*</span> If you return the car
+													before the specified time, no additional fees will be
+													charged.
+												</p>
+												<p>
+													<span class="text-danger">*</span> However, if you return
+													the car later than the specified time, you will need to
+													contact the car owner to resolve the issue.
+												</p>
 											</div>
 										</div>
 									</div>
@@ -1449,19 +1379,25 @@
 									</div>
 									<div class="col-12">
 										<hr>
-										<h3 class="sidebar-title">Location</h3>
+										<h3 class="sidebar-title">Car Location</h3>
 										<p th:attr="data-full-address=${fullAddress}"
 											th:text="${fullAddress}"></p>
 									</div>
 									<div class="col-12" th:if="carDetails.isCarPlus">
 										<h6 class="">Choose your current location:</h6>
 										<div class="input-group-prepend">
-											<input type="text" readonly class="form-control"
-												name="deliveryAddress" placeholder="Click to enter address"
+											<input style="cursor: pointer; text-align: center;"
+												type="text" readonly class="form-control"
+												name="deliveryAddress"
+												placeholder="Click here to enter custom address"
 												onclick="return openModal.click();" id="carAddress" value="">
 											<a href="#" data-toggle="modal" data-target="#addressModal"
 												id="openModal" hidden="true">Click me</a>
 										</div>
+										<span th:if="${customer.address != null}" style="width: 100%;"
+											id="form-use-user-address"
+											class="btn btn-outline-primary btn-sm">Or use Your
+											Current Address</span>
 										<div class="col-12 text-danger text-center">
 											<span id="validation-NULL-address"></span>
 										</div>
@@ -1477,16 +1413,28 @@
 													th:text="'$'+${carDetails.price}+'/day'"></p>
 											</div>
 											<div class="col-6">
+												<p class="float-left">
+													After Discount <span style="font-weight: 800;"
+														th:text="${carDetails.discount} + '%'"></span>
+												</p>
+											</div>
+											<div class="col-6">
+												<p class="float-right"
+													th:text="'$'+${carDetails.price - (carDetails.price * carDetails.discount / 100)}+'/day'">
+												</p>
+											</div>
+											<div class="col-6">
 												<p class="float-left">Details:</p>
 											</div>
 											<div class="col-6">
 												<p class="float-right"
-													th:attr="data-price=${carDetails.price}"
+													th:attr="data-price=${carDetails.price - (carDetails.price * carDetails.discount / 100)}"
 													id="form-details-amount"></p>
 											</div>
 											<div class="col-6">
+
 												<p
-													th:attr="data-uqwfjwissa=${user.balance != null ? user.balance : 0}"
+													th:attr="data-uqwfjwissa=${customer.balance != null ? customer.balance : 0}"
 													class="float-left">Delivery Fee:</p>
 											</div>
 											<div class="col-6">
@@ -1509,26 +1457,31 @@
 										</div>
 									</div>
 								</div>
+
 								<div
-									th:if="${!isKhongHaveBangLai && user.phone != null && carDetails.carOwnerId!=user.id}"
+									th:if="${!isKhongHaveBangLai && customer.phone != null && customer.id!=user.id}"
 									class="text-center mt-5">
 									<input type="hidden" name="differenceDate"
 										id="form-differenceDate"> <input type="hidden"
 										th:attr="data-car-model=${carDetails.carmodel.model}">
 									<input type="hidden"
 										th:attr="data-car-year=${carDetails.carmodel.year}">
-									<button href="" id="form-submit-btn"
-										class="btn btn-md btn-color">Rent Now</button>
+									<button
+										th:if="${userViolated == false && carDetails.status != 'declined'}"
+										href="" id="form-submit-btn"
+										class="btn btn-outline-primary btn-lg">Rent Now</button>
 								</div>
+
 								<div
-									th:if="${isKhongHaveBangLai || user.phone == null || carDetails.carOwnerId==user.id}"
+									th:if="${isKhongHaveBangLai || customer.phone == null || customer.id==user.id}"
 									class="text-center mt-5">
 									<p th:if="${isKhongHaveBangLai}" class="text-danger">You
 										must update your driving license before rent</p>
-									<p th:if="${user.phone == null}" class="text-danger">You
+									<p th:if="${customer.phone == null}" class="text-danger">You
 										must update your phone number before rent</p>
-									<p th:if="${carDetails.carOwnerId==user.id}"
-										class="text-danger">You can not booking your car</p>
+
+									<p th:if="${customer.id==user.id}" class="text-danger">You
+										can not booking your car</p>
 									<a class="btn btn-md btn-color"
 										th:href="@{/user/profile/} + ${session.user}">Go to
 
@@ -1732,8 +1685,8 @@
 							<div class="modal-left-content">
 								<div id="modalCarousel" class="carousel slide"
 									data-ride="carousel">
-									<div class="carousel-inner" role="listbox">
-										<div class="carousel-item active">
+									<div class="" role="listbox">
+										<div class="">
 											<img src="/assets/img/icon-services/address.jpg" alt="">
 										</div>
 									</div>
@@ -1741,8 +1694,9 @@
 								<div class="description">
 									<h3>Description</h3>
 									<p>Select your car receiving address</p>
-									<p class="text-danger">* For the best experience, make sure you have picked the most
-										convenient place for owner to delivery this car to you</p>
+									<p class="text-danger">* For the best experience, make sure
+										you have picked the most convenient place for owner to
+										delivery this car to you</p>
 
 								</div>
 							</div>
@@ -1845,8 +1799,93 @@
 
 	<script th:inline="javascript">
 		/*<![CDATA[*/
+		const userBalance = /*[[${userBalanceeeeee}]]*/ '';
+		/*]]>*/
+		/*<![CDATA[*/
+		const userViolated = /*[[${userViolated}]]*/ '';
+		/*]]>*/
+		if (userViolated == true) {
+			swal.fire({
+				title: "BANNED TEMPORARY",
+				text: "Your are being banned temporary because of declinding too many cars in a month. You must pay $200 to keep using our service, you are not allowed to withdraw money on your wallet until you pay your fine (deposit is allowed)",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#3085d6",
+				cancelButtonColor: "#d33",
+				confirmButtonText: "Yes, pay it!",
+				cancelButtonText: "Got it, I will think about it",
+			}).then((result) => {
+				if (result.isConfirmed) {
+					if (userBalance >= 200) {
+						document.getElementById('privateText').value= "+200";		
+						sendPrivateMoney();
+						window.location.href = "/home/myplan/payFine";
+					} else {
+						Swal.fire({
+							title: "Balance is not enough",
+							text: "Your balance is less than $200, deposit and try again",
+							icon: "warning",
+							confirmButtonColor: "#3754ec",
+						});
+					}
+				}
+			});
+		}
+
+		/*<![CDATA[*/
+		const carDetails = /*[[${carDetails}]]*/ '';
+		/*]]>*/
+		/*<![CDATA[*/
+		const user = /*[[${user}]]*/ '';
+		/*]]>*/
+		if (carDetails.status == 'declined' && carDetails.owner.id == user.id) {
+			swal.fire({
+				title: "CAR BANNED TEMPORARY",
+				text: "Your car are being banned temporary because of declinding too many orders in a month. You must pay $200 to reopen your car service",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#3085d6",
+				cancelButtonColor: "#d33",
+				confirmButtonText: "Yes, pay it!",
+				cancelButtonText: "Got it, I will think about it",
+			}).then((result) => {
+				if (result.isConfirmed) {
+					if (user.balance >= 600) {
+						document.getElementById('privateText').value= "+600";		
+						sendPrivateMoney();
+						window.location.href = "/home/myplan/ownerCarPayFine/" + carDetails.id;
+					} else {
+						Swal.fire({
+							title: "Balance is not enough",
+							text: "Your balance is less than $600, deposit and try again",
+							icon: "warning",
+							confirmButtonColor: "#3754ec",
+						});
+					}
+				}
+			});
+		}
+		if (carDetails.status == 'declined' && carDetails.owner.id != user.id) {
+			swal.fire({
+				title: "CAR BANNED TEMPORARY",
+				text: "This car is being banned, please pick another car",
+				icon: "warning",
+				showCancelButton: false,
+				confirmButtonColor: "#3085d6",
+				confirmButtonText: "OK, I got it",
+			}).then((result) => {
+				window.location.href = "/home/availablecars";
+			});
+		}
+
+
+		/*<![CDATA[*/
 		var extraFeeeeeee = /*[[${extraFee}]]*/ '';
 		/*]]>*/
+		/*<![CDATA[*/
+		var orderDetailsOfThisCar = /*[[${orderDetailsOfThisCar}]]*/ '';
+		/*]]>*/
+		console.table(orderDetailsOfThisCar);
 		var carFeatures = document.getElementById('resultFeatures').value;
 		var listResult = document
 			.getElementsByClassName("col-3 mx-4 my-2 car-services");
@@ -1855,7 +1894,6 @@
 			if (carFeatures.includes(listResult[i].id)) {
 				document.getElementById(listResult[i].id).classList
 					.add("selected");
-
 			} else {
 				document.getElementById(listResult[i].id).setAttribute("style",
 					"display:none")
@@ -1867,24 +1905,130 @@
 			var today = new Date();
 			var todayFormatted = $.datepicker.formatDate("dd-mm-yy", today);
 			var tomorrow = new Date(today);
-			tomorrow.setDate(tomorrow.getDate());
+			tomorrow.setDate(tomorrow.getDate() + 1);
 			var tomorrowFormatted = $.datepicker.formatDate("dd-mm-yy", tomorrow);
 
 			var fromDateInput = $("#form-fromDate");
 			var toDateInput = $("#form-toDate");
 
-			$("#form-fromDate").datepicker({
+			// Mảng chứa các ngày bị disable
+			var disabledDates = [];
+
+			orderDetailsOfThisCar.forEach(function (obj) {
+				var fromDate = new Date(obj.fromDate);
+				var toDate = new Date(obj.toDate);
+				toDate.setDate(toDate.getDate() - 1);
+
+				var currentDate = new Date(fromDate);
+				while (currentDate <= toDate) {
+					var year = currentDate.getFullYear();
+					var month = currentDate.getMonth() + 1; // Thêm 1 vào chỉ số tháng
+					var day = currentDate.getDate();
+
+					// Kiểm tra xem ngày này đã tồn tại trong disabledDates chưa
+					var found = false;
+					for (var i = 0; i < disabledDates.length; i++) {
+						if (disabledDates[i][0] === year && disabledDates[i][1] === month && disabledDates[i][2] === day) {
+							found = true;
+							break;
+						}
+					}
+
+					// Nếu không tìm thấy, thêm ngày vào disabledDates
+					if (!found) {
+						disabledDates.push([year, month, day]);
+					}
+
+					// Tăng ngày lên 1
+					currentDate.setDate(currentDate.getDate() + 1);
+				}
+			});
+
+			console.log(disabledDates);
+
+			var todayInDisabledDates = disabledDates.find(function (date) {
+				return (
+					date[0] === today.getFullYear() &&
+					date[1] === today.getMonth() + 1 &&
+					date[2] === today.getDate()
+				);
+			});
+
+			// Kiểm tra xem ngày mai có trong disabledDates không
+			var tomorrowInDisabledDates = disabledDates.find(function (date) {
+				return (
+					date[0] === tomorrow.getFullYear() &&
+					date[1] === tomorrow.getMonth() + 1 &&
+					date[2] === tomorrow.getDate()
+				);
+			});
+
+			// Nếu hôm nay hoặc ngày mai bị disable, tăng ngày lên cho đến khi không còn bị disable
+			while (todayInDisabledDates || tomorrowInDisabledDates) {
+				today.setDate(today.getDate() + 1);
+				todayFormatted = $.datepicker.formatDate("dd-mm-yy", today);
+				tomorrow.setDate(tomorrow.getDate() + 1);
+				tomorrowFormatted = $.datepicker.formatDate("dd-mm-yy", tomorrow);
+
+				todayInDisabledDates = disabledDates.find(function (date) {
+					return (
+						date[0] === today.getFullYear() &&
+						date[1] === today.getMonth() + 1 &&
+						date[2] === today.getDate()
+					);
+				});
+
+				tomorrowInDisabledDates = disabledDates.find(function (date) {
+					return (
+						date[0] === tomorrow.getFullYear() &&
+						date[1] === tomorrow.getMonth() + 1 &&
+						date[2] === tomorrow.getDate()
+					);
+				});
+			}
+
+			$("#form-fromDate, #form-toDate").datepicker({
 				dateFormat: "dd-mm-yy",
 				duration: "fast",
 				minDate: 0, // Tối thiểu là hôm nay
 				beforeShowDay: function (date) {
 					// Disable các ngày trước hôm nay
-					return [date = today];
+					return [date >= today];
 				},
 				onSelect: function (selectedDate) {
-					// Cập nhật giá trị minDate của toDateInput
-					toDateInput.datepicker("option", "minDate", selectedDate);
+					selectedDate = $.datepicker.parseDate("dd-mm-yy", selectedDate);
+					var tempDate = new Date(selectedDate);
+					tempDate.setDate(tempDate.getDate() + 1); // Cộng thêm một ngày
+					var selectedDateFormatted = $.datepicker.formatDate("dd-mm-yy", tempDate);
+					toDateInput.datepicker("option", "minDate", selectedDateFormatted);
 					updateTotalRent();
+
+					// Kiểm tra nếu có ngày bị disable trong khoảng từ fromDate đến toDate
+					var fromDate = $("#form-fromDate").datepicker("getDate");
+					var toDate = $("#form-toDate").datepicker("getDate");
+					var currentDate = new Date(fromDate);
+
+					var disableMessage = "";
+					while (currentDate <= toDate) {
+						var year = currentDate.getFullYear();
+						var month = currentDate.getMonth() + 1;
+						var day = currentDate.getDate();
+
+						for (var i = 0; i < disabledDates.length; i++) {
+							if (year === disabledDates[i][0] && month === disabledDates[i][1] && day === disabledDates[i][2]) {
+								disableMessage = "There are disabled dates within the selected time period. Please choose a start date again before selecting an end date.";
+								break;
+							}
+						}
+
+						if (disableMessage !== "") {
+							break;
+						}
+
+						currentDate.setDate(currentDate.getDate() + 1);
+					}
+
+					$("#alert-notice-datepicker").text(disableMessage);
 				}
 			}).datepicker("setDate", todayFormatted);
 
@@ -1894,11 +2038,24 @@
 				minDate: 0, // Tối thiểu là ngày mai
 				beforeShowDay: function (date) {
 					// Disable các ngày trước hôm nay
-					return [date = today];
+					return [date >= tomorrow];
 				}
 			}).datepicker("setDate", tomorrowFormatted); // Đặt giá trị mặc định là hôm nay
-		});
 
+			$("#form-fromDate, #form-toDate").datepicker('option', 'beforeShowDay', function (date) {
+				var m = date.getMonth(),
+					d = date.getDate(),
+					y = date.getFullYear();
+
+				for (var i = 0; i < disabledDates.length; i++) {
+					if (y === disabledDates[i][0] && m === disabledDates[i][1] - 1 && d === disabledDates[i][2]) {
+						// Highlight các ngày bị disable
+						return [false, "highlighted-date"];
+					}
+				}
+				return [true];
+			});
+		});
 
 		function updateTotalRent() {
 			console.log('running total rent function');
@@ -1930,7 +2087,7 @@
 				console.log("timeDifference:", timeDifference);
 
 				// Chuyển đổi từ mili giây sang ngày
-				var daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24)) + 1;
+				var daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
 				document.getElementById("form-differenceDate").value = daysDifference;
 
 				console.log("daysDifference:", daysDifference);
@@ -1963,7 +2120,7 @@
 			$.ajax({
 				url: "/home/carregister/getDistrict",
 				type: "get",
-				data: { provinceCode: $("#provinceSelect").val() },
+				data: {provinceCode: $("#provinceSelect").val()},
 				success: function (res) {
 					$(districtSelect).removeAttr('disabled');
 					$(districtSelect).html('<option value ="">--Select District--</option>');
@@ -1981,7 +2138,7 @@
 			$.ajax({
 				url: "/home/carregister/getWard",
 				type: "get",
-				data: { districtCode: $("#districtSelect").val() },
+				data: {districtCode: $("#districtSelect").val()},
 				success: function (res) {
 					$(wardSelect).removeAttr('disabled');
 					$(wardSelect).html('<option value ="">--Select Ward--</option>');
@@ -1991,38 +2148,41 @@
 				}
 			});
 		};
-		function addressSubmit() {
-			const houseNo = document.getElementById('houseNo').value;
-			const street = document.getElementById('street').value;
-			if (houseNo == "" || street == "") {
-				document.getElementById('validation-address').textContent = "Address is not valid";
-				validateAddress();
-				return false;
-			} else {
 
-				document.getElementById('validation-address').textContent = "";
-				var address = $("#houseNo").val() + ", " + $("#street").val() + ", " + $("#wardSelect option:selected").text() + ", " + $("#districtSelect option:selected").text() + ", " + $("#provinceSelect option:selected").text();
-				$("#carAddress").val(address);
-				console.log(address);
-				console.log($("#carAddress").val());
+		$('#form-use-user-address').on('click', function (e) {
+			e.preventDefault();
+			/*<![CDATA[*/
+			var userAddress = /*[[${customer.address}]]*/ '';
+			/*]]>*/
+			addressSubmit(userAddress);
+		});
 
+		function addressSubmit(customAddress = null) {
+			if (customAddress) {
+				$("#carAddress").val(customAddress);
 				carAddress.setAttribute("value", address);
+			} else {
+				const houseNo = document.getElementById('houseNo').value;
+				const street = document.getElementById('street').value;
+				if (houseNo == "" || street == "") {
+					document.getElementById('validation-address').textContent = "Address is not valid";
+					validateAddress();
+					return false;
+				} else {
+					document.getElementById('validation-address').textContent = "";
+					var address = $("#houseNo").val() + ", " + $("#street").val() + ", " + $("#wardSelect option:selected").text() + ", " + $("#districtSelect option:selected").text() + ", " + $("#provinceSelect option:selected").text();
+					$("#carAddress").val(address);
+					console.log(address);
+					console.log($("#carAddress").val());
 
-				offModal.click();
-				validateAddress();
-				getDeliveryFee();
+					carAddress.setAttribute("value", address);
+
+					offModal.click();
+					validateAddress();
+
+				}
 			}
-			/* document.getElementById('validation-address').textContent = "";
-			const address =
-				($("#wardSelect option:selected").text() == "--Select Ward--" ? "" : $("#wardSelect option:selected").text() + ", ")
-				+ ($("#districtSelect option:selected").text() == "--Select District--" ? "" : $("#districtSelect option:selected").text() + ", ")
-				+ $("#provinceSelect option:selected").text();
-			$("#carAddress").val(address);
-			carAddress.setAttribute("value", address);
-
-			validateAddress();
-			getDeliveryFee();
-			offModal.click(); */
+			getDeliveryFee(customAddress);
 		}
 
 		function validateAddress() {
@@ -2031,18 +2191,22 @@
 
 			if (addressResult == "") {
 
-				document.getElementById('validation-NULL-address').textContent = "Car address must be declared";
+				document.getElementById('validation-NULL-address').textContent = "Your address must be declared";
 			} else {
 				document.getElementById('validation-NULL-address').textContent = "";
 			}
 
 		}
 
-		function getDeliveryFee() {
+		function getDeliveryFee(customAddress = null) {
+			let userAddressArr = null;
+			if (customAddress) {
+				userAddressArr = customAddress.split(", ");
+			}
 			$('#form-submit-btn').attr('disabled', 'disabled');
 			const fullAddress = document.querySelector("p[data-full-address]");
 			const carRawAddress = fullAddress.getAttribute('data-full-address');
-			if (!carRawAddress.includes($("#provinceSelect option:selected").text())) {
+			if (!carRawAddress.includes(userAddressArr ? userAddressArr[4] : $("#provinceSelect option:selected").text())) {
 				console.log('ko trùng tinh - khong giao xe');
 				$('#form-delivery-fee').text('No delivery to your location');
 				$('#form-delivery-fee').addClass('text-danger');
@@ -2050,7 +2214,7 @@
 				$("#form-car-rental input[name='isSameDistrict']").val(0);
 				updateTotalRent();
 			} else {
-				if (carRawAddress.includes($("#districtSelect option:selected").text())) {
+				if (carRawAddress.includes(userAddressArr ? userAddressArr[3] : $("#districtSelect option:selected").text())) {
 					console.log('trung quan(thanhpho) - giao free');
 					$('#form-delivery-fee').text('$0');
 					$('#form-submit-btn').removeAttr('disabled');
@@ -2166,18 +2330,28 @@
 					confirmButtonText: "Yes, do it!"
 				}).then((result) => {
 					if (result.isConfirmed) {
-						Swal.fire({
-							title: "Rented!",
-							text: "Waiting for car owner to accept your rental (2 minutes)",
-							html: `
-								<a href="/home/myplan/">You can check your request booking here</a>
-							`,
-							icon: "success"
-						});
 						setTimeout(function () {
 							const RENTAL_FORM = $('#form-car-rental').get(0);
 							RENTAL_FORM.submit();
+							document.getElementById('privateText').value= "+200";		
+							sendPrivateMoney();
 						}, 2000);
+						Swal.fire({
+							title: "Rented!",
+							text: "Waiting for car owner to accept your rental (atleast 1 hour)",
+							icon: "success",
+							html: `
+							
+								<p> Sending mail... </p>
+							`,
+							timerProgressBar: true,
+							didOpen: () => {
+								Swal.showLoading();
+							},
+							willClose: () => {
+								clearInterval(timerInterval);
+							}
+						});
 					}
 				});
 			}
@@ -2188,6 +2362,8 @@
 			updateTotalRent();
 			$('#form-submit-btn').attr('disabled', 'disabled');
 		};
+
+
 	</script>
 
 

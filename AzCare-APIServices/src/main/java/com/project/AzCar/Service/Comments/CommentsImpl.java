@@ -12,23 +12,23 @@ import com.project.AzCar.Repositories.Cars.CarRepository;
 import com.project.AzCar.Repositories.Comments.CommentsRepository;
 import com.project.AzCar.Repositories.Reply.ReplyRepository;
 
-
 @Service
-public class CommentsImpl implements ICommentsService{
-	
+public class CommentsImpl implements ICommentsService {
+
 	@Autowired
 	private CommentsRepository commentsRepo;
 	@Autowired
 	private CarRepository carRepo;
-	
+
 	@Autowired
 	private ReplyRepository replyRepo;
+
 	@Override
 	public List<Comments> getAllCommentsByCarId(int id) {
 		CarInfor car = carRepo.findById(id).get();
-		if(car!=null)
-		{
-			return commentsRepo.getAllCommentsByCarId(id);	}
+		if (car != null) {
+			return commentsRepo.getAllCommentsByCarId(id);
+		}
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -42,10 +42,14 @@ public class CommentsImpl implements ICommentsService{
 	@Override
 	public Comments saveComment(Comments comment) {
 		// TODO Auto-generated method stub
-		
+
 		return commentsRepo.save(comment);
 	}
 
-	
+	@Override
+	public List<Comments> getAllComment() {
+		// TODO Auto-generated method stub
+		return commentsRepo.findAll();
+	}
 
 }

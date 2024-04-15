@@ -1,5 +1,8 @@
 package com.project.AzCar.Controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.AzCar.Dto.Reply.ReplyDTO;
 import com.project.AzCar.Entities.Comments.Comments;
+import com.project.AzCar.Entities.IgnoreKeyword.IgnoreKeyword;
 import com.project.AzCar.Entities.Reply.Reply;
 import com.project.AzCar.Service.Comments.ICommentsService;
 import com.project.AzCar.Service.Reply.IReplyService;
+import com.project.AzCar.Services.IgnoreKeyword.IIgnoreKeywordService;
 
 @RestController
 
@@ -26,21 +31,40 @@ public class ReplyController {
 	ICommentsService cmtService;
 	@Autowired
 	IReplyService replySer;
-	
-	@PostMapping("/home/availablecars/details/submitReply")
+	@Autowired
+	private IIgnoreKeywordService ignoreService;
+	@PostMapping(value="/home/availablecars/details/submitReply")
 	 public ResponseEntity<?> submitReply(@RequestBody ReplyDTO repDTO)
 	 {
 		 Reply rep = new Reply();
 		 Comments cmt =cmtService.getCommentById(repDTO.getComment_id());
+		 List<IgnoreKeyword> lIgnore = ignoreService.listkeyword();
+			List<String> lkeyword = new ArrayList<>();
+			for(IgnoreKeyword a: lIgnore)
+			{
+				lkeyword.add(a.getKeyword());
+				
+			}
+		 List<String> ab =ignoreService.isIgnore(repDTO.getContent(), lkeyword);
 		 if(cmt!=null)
-		 {
+		 {	
+			System.out.println("List Ignore: " + lkeyword);
+			if(ab == null)
+			{
 			 rep.setComment_id(cmt);
 			 rep.setContent(repDTO.getContent());
 			 replySer.saveReply(rep);
-			 return new ResponseEntity<String>("ok",HttpStatus.OK);
+			 return ResponseEntity.ok().build();
+			}
+			 else
+			 {
+				 return new ResponseEntity<List<String>>(ab,HttpStatus.BAD_REQUEST); 
+			 }
+			 
 		 }
-		 
-		 
+		
 		 return new ResponseEntity<String>("something will wrong",HttpStatus.BAD_REQUEST); 
+		 
+		
 	 }
 }

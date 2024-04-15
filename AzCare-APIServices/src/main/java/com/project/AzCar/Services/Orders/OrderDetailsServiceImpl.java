@@ -1,5 +1,8 @@
 package com.project.AzCar.Services.Orders;
 
+import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -7,6 +10,8 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
@@ -22,12 +27,14 @@ import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
 import com.project.AzCar.Services.Cars.CarServices;
 import com.project.AzCar.Services.Payments.PaymentService;
+import com.project.AzCar.Services.Payments.ProfitCallBack;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
 
 @Service
 public class OrderDetailsServiceImpl implements OrderDetailsService {
-
+	@Autowired
+	private JavaMailSender mailSender;
 	@Autowired
 	private OrderRepository orderRepository;
 	@Autowired
@@ -105,29 +112,47 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 	}
 
 	@Override
-	public void unrespondDetected() {
+	public void unrespondDetected(Users currentUser) {
 		List<OrderDetails> orderList = orderRepository.getAll();
-		orderList.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING));
 		for (OrderDetails order : orderList) {
-			long seconds = Duration.between(order.getCreatedAt(), LocalDateTime.now()).getSeconds();
 			CarInfor car = carServices.findById(Integer.parseInt(order.getCarId()));
 			long ownerId = car.getCarOwnerId();
-			if (seconds >= 120) {
-				Violation vio = new Violation();
-				vio.setUserId(ownerId);
-				vio.setCarId(car.getId());
-				vio.setReason(Constants.violations.NO_RESPONSE);
-				violationRepo.save(vio);
-				order.setStatus(Constants.orderStatus.DECLINED);
-				orderRepository.save(order);
+			if (order.getStatus().equals(Constants.orderStatus.WAITING)) {
+				long seconds = Duration.between(order.getCreatedAt(), LocalDateTime.now()).getSeconds();
+				if (seconds >= 9999999) {
+					Violation vio = new Violation();
+					vio.setUserId(ownerId);
+					vio.setCarId(car.getId());
+					vio.setReason(Constants.violations.NO_RESPONSE);
+					violationRepo.save(vio);
+					order.setStatus(Constants.orderStatus.DECLINED);
+					orderRepository.save(order);
 
-				paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFees());
+					paymentServices.createNewRefund(order.getUserId(), order.getId(),
+							order.getTotalAndFeesWithoutInsurance());
+					paymentServices.createNewExpense(order.getUserId(),
+							BigDecimal.valueOf(order.getExtraFee().getInsurance()), new ProfitCallBack() {
+								@Override
+								public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+									user.setBalance(userBalance.add(amount));
+								}
+							});
+				}
 			}
-			List<Violation> violations = violationRepo.getByUserAndCarId(ownerId, car.getId());
-			if (violations.size() >= 3) {
+			List<Violation> noRes_violations = violationRepo.getByUserAndCarId(ownerId, car.getId(), true,
+					Constants.violations.NO_RESPONSE);
+			List<Violation> declined_violations = violationRepo.getByUserAndCarId(ownerId, car.getId(), true,
+					Constants.violations.OWNER_DECLINED);
+			if (noRes_violations.size() + declined_violations.size() >= 3) {
 				car.setStatus(Constants.carStatus.DECLINED);
 				carRepo.save(car);
 			}
+		}
+		List<Violation> userViolations = violationRepo.getByUserAndCarId(currentUser.getId(), 0, true,
+				Constants.violations.USER_DECLINDED);
+		if (userViolations.size() >= 3) {
+			currentUser.setEnabled(false);
+			userServices.saveUserReset(currentUser);
 		}
 	}
 
@@ -139,9 +164,49 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 	@Override
 	public OrderDetails getOrderDetailsByCarIdandUserId(long carId, long userId) {
 		// TODO Auto-generated method stub
-		
-		
+
 		return orderRepository.getOrderDetailByCarIdandUserId(carId, userId);
+	}
+
+	@Override
+	public OrderDetails getRentorTripDoneOrder() {
+		return orderRepository.getRentorTripDoneOrder();
+	}
+
+	@Override
+	public OrderDetailsDTO getDTORentorTripDoneOrder() {
+		OrderDetails orderRaw = this.getRentorTripDoneOrder();
+		if (orderRaw != null) {
+			OrderDetailsDTO dto = this.modelMapper.map(orderRaw, OrderDetailsDTO.class);
+			Users user = userServices.findById(dto.getUserId());
+			dto.setUser(user);
+			return dto;
+		}
+		return null;
+	}
+
+	@Override
+	public OrderDetailsDTO mapToDTO(int id) {
+		OrderDetails car = this.orderRepository.findById(id).get();
+		OrderDetailsDTO carDto = this.modelMapper.map(car, OrderDetailsDTO.class);
+		Users user = userServices.findById(car.getUserId());
+		carDto.setUser(user);
+		return carDto;
+	}
+
+	@Override
+	public void sendOrderEmail(String email, String subject, String content)
+			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+				StandardCharsets.UTF_8.name());
+
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
 	}
 
 }

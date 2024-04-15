@@ -197,7 +197,7 @@
 					<ul class="menu">
 						<li class="sidebar-title">Menu</li>
 
-						<li class="sidebar-item active "><a th:href="@{/dashboard/}"
+						<li class="sidebar-item "><a th:href="@{/dashboard/}"
 							class='sidebar-link'> <i class="bi bi-grid-fill"></i> <span>Dashboard</span>
 						</a></li>
 
@@ -216,8 +216,8 @@
 
 							</ul></li>
 
-						<li class="sidebar-item  has-sub"><a href="#"
-							class='sidebar-link'><i class="bi bi-car-front-fill"></i> <span>Car
+						<li class="sidebar-item  active has-sub"><a href="#"
+							class='sidebar-link '><i class="bi bi-car-front-fill"></i> <span>Car
 									Management</span> </a>
 							<ul class="submenu ">
 								<li class="submenu-item"><a th:href="@{/dashboard/brands/}"
@@ -226,8 +226,8 @@
 								<li class="submenu-item active"><a
 									th:href="@{/dashboard/carverify/}" class="submenu-link">Car
 										Verify</a></li>
-										<li class="submenu-item active"><a
-									th:href="@{/dashboard/platesVerify/}" class="submenu-link">Car
+								<li class="submenu-item "><a
+									th:href="@{/dashboard/platesVerify/}" class="submenu-link">Plates
 										Verify</a></li>
 							</ul></li>
 
@@ -237,8 +237,9 @@
 						</a>
 							<ul class="submenu ">
 
-								<li class="submenu-item"><a href="layout-default.html"
-									class="submenu-link">Default Layout</a></li>
+								<li class="submenu-item"><a
+									th:href="@{/dashboard/ClientService}" class="submenu-link">Client
+										Service</a></li>
 
 								<li class="submenu-item  "><a
 									href="layout-vertical-1-column.html" class="submenu-link">1
@@ -254,6 +255,15 @@
 								<li class="submenu-item  "><a href="layout-horizontal.html"
 									class="submenu-link">Horizontal Menu</a></li>
 
+							</ul></li>
+							<li class="sidebar-item has-sub"><a href="#"
+							class='sidebar-link'> <i class="bi bi-valentine"></i> <span>Profit
+									Cars</span>
+						</a>
+							<ul class="submenu ">
+
+								<li class="submenu-item"><a th:href="@{/dashboard/profit/}"
+									class="submenu-link">Profit Business</a></li>
 							</ul></li>
 
 					</ul>
@@ -309,7 +319,7 @@
 											Car Plates: <span th:text="${carDetails.licensePlates}"></span>
 											<span class="badge"
 												th:classappend="${checkPlate == '' ? 'bg-success' : 'bg-danger'}"
-												th:text="${checkPlate==''?'This License Is Not Register Yet':checkPlate}"></span>
+												th:text="${checkPlate==''?'This License Is Valid':checkPlate}"></span>
 										</p>
 										<p class="card-text">
 											Category: <span th:text="${carDetails.carmodel.category}"></span>
@@ -370,7 +380,8 @@
 									</div>
 
 								</div>
-
+								<button id="loadding-sendEmail" style="display: none;"
+									class="btn btn-outline-success btn-lg btn-block">Success</button>
 
 
 								<div style="display: none">
@@ -440,8 +451,8 @@
 											<span class="visually-hidden">Next</span>
 										</a>
 									</div>
-									
-									<br/>
+
+									<br />
 									<div class="row"
 										th:if="${carDetails.status=='waiting_for_verify'}">
 										<form action="/dashboard/confirmCarverify" method="post"
@@ -464,8 +475,8 @@
 
 											<input id="status" type="hidden" name="status"
 												value="declined"> <input type="hidden" name="carId"
-												th:value="${carDetails.id}">
-
+												th:value="${carDetails.id}"> <input id="reason"
+												name="reason" value="" type="hidden">
 											<button class="button-54" role="button" id="decline"
 												value="declined" name="decline">Decline this Car</button>
 

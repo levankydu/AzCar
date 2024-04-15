@@ -28,9 +28,11 @@ public class Violation implements Serializable {
 	private int carId;
 	private String reason;
 	private LocalDateTime createdAt;
+	private boolean isEnabled;
 
 	@PrePersist
 	protected void onCreate() {
+		isEnabled = true;
 		createdAt = LocalDateTime.now();
 	}
 }

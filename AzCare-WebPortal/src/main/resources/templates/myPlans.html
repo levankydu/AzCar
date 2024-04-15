@@ -1,85 +1,120 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
+<title>Az CAR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<!-- External CSS libraries -->
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/bootstrap.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/magnific-popup.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.selectBox.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/rangeslider.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/animate.min.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/slick.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.mCustomScrollbar.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/flaticon/font/flaticon.css">
+
+<!-- Favicon icon -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico"
+	type="image/x-icon">
+
+<!-- Google fonts -->
+<link rel="stylesheet" type="text/css"
+	href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
+
+<!-- Custom Stylesheet -->
+<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" type="text/css" id="style_sheet"
+	href="/assets/css/skins/default.css">
+<link rel="stylesheet"
+	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
+
+<link rel="stylesheet" href="/assets/css/notiCss.css">
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
 
 
-	<title>Az CAR</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta charset="UTF-8">
-	<!-- External CSS libraries -->
-	<link type="text/css" rel="stylesheet" href="/assets/css/bootstrap.min.css">
-	<link type="text/css" rel="stylesheet" href="/assets/css/magnific-popup.css">
-	<link type="text/css" rel="stylesheet" href="/assets/css/jquery.selectBox.css">
-	<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
-	<link type="text/css" rel="stylesheet" href="/assets/css/rangeslider.css">
-	<link type="text/css" rel="stylesheet" href="/assets/css/animate.min.css">
-	<link type="text/css" rel="stylesheet" href="/assets/css/slick.css">
-	<link type="text/css" rel="stylesheet" href="/assets/css/jquery.mCustomScrollbar.css">
-	<link type="text/css" rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
-	<link type="text/css" rel="stylesheet" href="/assets/fonts/flaticon/font/flaticon.css">
+<script type="text/javascript" src="/assets/js/notiJs.js"></script>
+<style>
+/* CSS */
+.button-92 {
+	--c: #fff;
+	/* text color */
+	background: linear-gradient(90deg, #0000 33%, #fff5, #0000 67%)
+		var(--_p, 100%)/300% no-repeat, #3c5bfc;
+	/* background color */
+	color: #0000;
+	border: none;
+	transform: perspective(500px) rotateY(calc(20deg * var(--_i, -1)));
+	text-shadow: calc(var(--_i, -1)* 0.08em) -.01em 0 var(--c),
+		calc(var(--_i, -1)*-0.08em) .01em 2px #0004;
+	outline-offset: .1em;
+	transition: 0.3s;
+}
 
-	<!-- Favicon icon -->
-	<link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon">
+.button-92:hover, .button-92:focus-visible {
+	--_p: 0%;
+	--_i: 1;
+}
 
-	<!-- Google fonts -->
-	<link rel="stylesheet" type="text/css"
-		href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
+.button-92:active {
+	text-shadow: none;
+	color: var(--c);
+	box-shadow: inset 0 0 9e9q #0005;
+	transition: 0s;
+}
 
-	<!-- Custom Stylesheet -->
-	<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
-	<link rel="stylesheet" type="text/css" id="style_sheet" href="/assets/css/skins/default.css">
-	<link rel="stylesheet" href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
+.button-92 {
+	font-weight: bold;
+	font-size: 2rem;
+	margin: 0;
+	cursor: pointer;
+	padding: .1em .3em;
+}
 
-	<link rel="stylesheet" href="/assets/css/notiCss.css">
+.car-img img {
+	min-height: 210px;
+	max-height: 210px;
+}
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+.my-cars-hehe {
+	background-color: #f1f0f0;
+	min-height: 200px;
+	max-height: 230px;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+	border-radius: 7px;
+}
 
-
-	<script type="text/javascript" src="/assets/js/notiJs.js"></script>
-	<style>
-		/* CSS */
-		.button-92 {
-			--c: #fff;
-			/* text color */
-			background: linear-gradient(90deg, #0000 33%, #fff5, #0000 67%) var(--_p, 100%)/300% no-repeat, #3c5bfc;
-			/* background color */
-			color: #0000;
-			border: none;
-			transform: perspective(500px) rotateY(calc(20deg * var(--_i, -1)));
-			text-shadow: calc(var(--_i, -1)* 0.08em) -.01em 0 var(--c),
-				calc(var(--_i, -1)*-0.08em) .01em 2px #0004;
-			outline-offset: .1em;
-			transition: 0.3s;
-		}
-
-		.button-92:hover,
-		.button-92:focus-visible {
-			--_p: 0%;
-			--_i: 1;
-		}
-
-		.button-92:active {
-			text-shadow: none;
-			color: var(--c);
-			box-shadow: inset 0 0 9e9q #0005;
-			transition: 0s;
-		}
-
-		.button-92 {
-			font-weight: bold;
-			font-size: 2rem;
-			margin: 0;
-			cursor: pointer;
-			padding: .1em .3em;
-		}
-	</style>
+.my-booking-hehe {
+	background-color: #f1f0f0;
+	min-height: 240px;
+	max-height: 250px;
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+	border-radius: 7px;
+}
+</style>
 </head>
 
-
+<body>
+<div class="page_loader"></div>
 <!-- main header start -->
-<header class="main-header sticky-header header-with-top" id="main-header-2">
+<header class="main-header sticky-header header-with-top"
+	id="main-header-2">
 	<div class="container">
 		<div class="row">
 			<div class="col-12">
@@ -87,16 +122,17 @@
 					<a class="navbar-brand logo navbar-brand d-flex mr-auto" href="/">
 						<img src="/assets/img/logos/black-logo.png" alt="logo">
 					</a>
-					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
-						aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+					<button class="navbar-toggler" type="button" data-toggle="collapse"
+						data-target="#navbar" aria-controls="navbar" aria-expanded="false"
+						aria-label="Toggle navigation">
 						<span class="fa fa-bars"></span>
 					</button>
 					<div class="navbar-collapse collapse w-100" id="navbar">
 						<ul class="navbar-nav ml-auto">
-							<li class="nav-item"><a class="nav-link" th:href="@{/home/availablecars}">Available Cars</a>
-							</li>
-							<li class="nav-item" th:if="${session.user}"><a class="nav-link"
-									th:href="@{/home/myplan/}">My Plan</a></li>
+							<li class="nav-item"><a class="nav-link"
+								th:href="@{/home/availablecars}">Available Cars</a></li>
+							<li class="nav-item" th:if="${session.user}"><a
+								class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
 							<li class="nav-item "><a class="nav-link" href="#">
 									About Us </a></li>
 
@@ -108,14 +144,14 @@
 										xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 30"
 										enable-background="new 0 0 50 30" xml:space="preserve">
 										<g class="bell-icon__group">
-											<path class="" id="ball" fill-rule="evenodd" stroke-width="1.5"
-												clip-rule="evenodd" fill="none" stroke="#currentColor"
-												stroke-miterlimit="10"
-												d="M28.7,25 c0,1.9-1.7,3.5-3.7,3.5s-3.7-1.6-3.7-3.5s1.7-3.5,3.7-3.5S28.7,23,28.7,25z" />
-											<path class="" id="shell" fill-rule="evenodd" clip-rule="evenodd"
-												fill="#FFFFFF" stroke="#currentColor" stroke-width="2"
-												stroke-miterlimit="10"
-												d="M35.9,21.8c-1.2-0.7-4.1-3-3.4-8.7c0.1-1,0.1-2.1,0-3.1h0c-0.3-4.1-3.9-7.2-8.1-6.9c-3.7,0.3-6.6,3.2-6.9,6.9h0 c-0.1,1-0.1,2.1,0,3.1c0.6,5.7-2.2,8-3.4,8.7c-0.4,0.2-0.6,0.6-0.6,1v1.8c0,0.2,0.2,0.4,0.4,0.4h22.2c0.2,0,0.4-0.2,0.4-0.4v-1.8 C36.5,22.4,36.3,22,35.9,21.8L35.9,21.8z" />
+											<path class="" id="ball" fill-rule="evenodd"
+											stroke-width="1.5" clip-rule="evenodd" fill="none"
+											stroke="#currentColor" stroke-miterlimit="10"
+											d="M28.7,25 c0,1.9-1.7,3.5-3.7,3.5s-3.7-1.6-3.7-3.5s1.7-3.5,3.7-3.5S28.7,23,28.7,25z" />
+											<path class="" id="shell" fill-rule="evenodd"
+											clip-rule="evenodd" fill="#FFFFFF" stroke="#currentColor"
+											stroke-width="2" stroke-miterlimit="10"
+											d="M35.9,21.8c-1.2-0.7-4.1-3-3.4-8.7c0.1-1,0.1-2.1,0-3.1h0c-0.3-4.1-3.9-7.2-8.1-6.9c-3.7,0.3-6.6,3.2-6.9,6.9h0 c-0.1,1-0.1,2.1,0,3.1c0.6,5.7-2.2,8-3.4,8.7c-0.4,0.2-0.6,0.6-0.6,1v1.8c0,0.2,0.2,0.4,0.4,0.4h22.2c0.2,0,0.4-0.2,0.4-0.4v-1.8 C36.5,22.4,36.3,22,35.9,21.8L35.9,21.8z" />
 										</g>
 									</svg>
 									<div class="notification-amount">
@@ -129,9 +165,10 @@
 									<div class="modal">
 										<h2>All Notification</h2>
 										<div id="messages"></div>
-										<svg class="modal-svg" xmlns="http://www.w3.org/2000/svg" width="100%"
-											height="100%" preserveAspectRatio="none">
-											<rect x="0" y="0" fill="none" width="226" height="162" rx="3" ry="3"></rect>
+										<svg class="modal-svg" xmlns="http://www.w3.org/2000/svg"
+											width="100%" height="100%" preserveAspectRatio="none">
+											<rect x="0" y="0" fill="none" width="226" height="162" rx="3"
+												ry="3"></rect>
 										</svg>
 									</div>
 								</div>
@@ -140,23 +177,25 @@
 
 
 							<li class="nav-item dropdown" th:if="${session.user}"><a
-									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-									th:href="@{/user/profile/} + ${session.user}"
-									th:text="Hello+', ' +${session.user}"></a> <a
-									class="btn btn-sm btn-theme btn-round signup-link" href="/logout">LogOut</a></li>
+								class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+								th:href="@{/user/profile/} + ${session.user}"
+								th:text="Hello+', ' +${session.user}"></a> <a
+								class="btn btn-sm btn-theme btn-round signup-link"
+								href="/logout">LogOut</a></li>
 
 
 							<li class="nav-item dropdown" th:if="${session.admin}"><a
-									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-									th:href="@{/user/profile/}+ ${session.admin}"
-									th:text="Hello+', ' +${session.admin}"></a> <a
-									class="btn btn-sm btn-theme btn-round signup-link" href="/dashboard/">Dash board</a>
-								<a class="btn btn-sm btn-theme btn-round signup-link" href="/logout">Logout</a>
-							</li>
+								class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+								th:href="@{/user/profile/}+ ${session.admin}"
+								th:text="Hello+', ' +${session.admin}"></a> <a
+								class="btn btn-sm btn-theme btn-round signup-link"
+								href="/dashboard/">Dash board</a> <a
+								class="btn btn-sm btn-theme btn-round signup-link"
+								href="/logout">Logout</a></li>
 							<li class="nav-item dropdown" th:unless="${session.isAuthen}"><a
-									class="btn btn-sm btn-theme btn-round signup-link" href="/login">Login</a>
-								<a class="btn btn-sm btn-theme btn-round signup-link" href="/register">Register</a>
-							</li>
+								class="btn btn-sm btn-theme btn-round signup-link" href="/login">Login</a>
+								<a class="btn btn-sm btn-theme btn-round signup-link"
+								href="/register">Register</a></li>
 						</ul>
 					</div>
 				</nav>
@@ -205,42 +244,260 @@
 	<div class="agent-detail">
 		<div class="container">
 			<div class="row">
-				<p id="toast-success-uploadDriveLicense" hidden="true" class="btn btn-outline-primary btn-lg btn-block">
-					Success
+				<p id="toast-success-uploadDriveLicense" hidden="true"
+					class="btn btn-outline-primary btn-lg btn-block">Success
 					Example</p>
-				<p id="toast-failed-uploadDriveLicense" hidden="true" class="btn btn-outline-primary btn-lg btn-block">
-					Failed Example</p>
-				<h4 class="col-10 offset-md-1" style="text-align: center; font-weight: bold;">
+				<p id="toast-failed-uploadDriveLicense" hidden="true"
+					class="btn btn-outline-primary btn-lg btn-block">Failed Example</p>
+				<h4 class="col-10 offset-md-1"
+					style="text-align: center; font-weight: bold;">
 					Welcome, <span th:text="${session.emailLogin}"></span>
 				</h4>
-				<h4 class="col-4 offset-md-8" style="text-align: center; font-weight: bold;">
-					Your balance: $ <span th:text="${user.balance!=null?user.balance :'0'}"></span>
+				<h4 class="col-4 offset-md-8"
+					style="text-align: center; font-weight: bold;">
+					Your balance: $ <span
+						th:text="${user.balance!=null?user.balance :'0'}"></span>
 
 				</h4>
-				<form class="col-4 offset-md-8" style="text-align: center" id="charge"
-					th:action="@{/home/myplan/charge/}" method="post">
-					<button class="search-button btn-md btn-color" type="submit"
-						style="border-width: 0; border-radius: 0" onclick="return charge.submit()">Charge</button>
+				<!-- khi click charge sẽ hiển thị dialog -->
+				<!-- Button to open the modal -->
+				<div class="col-4 offset-md-8" style="text-align: center">
 
+					<button id="openModalBtn" class="search-button btn-md btn-color"
+						style="border-width: 0; border-radius: 0">Deposit</button>
+				</div>
+				<!-- The Modal -->
+				<div id="myModal" class="modal" style="z-index: 9999999">
+					<div class="modal-content">
+						<span class="close">&times;</span>
+						<h2>Deposit</h2>
+						<form id="paymentForm">
+							<div class="row g-2">
+								<div class="col-md">
+									<label for="userId">User Name:</label> <input type="email"
+										class="form-control" th:value="${user.firstName}" readonly>
+									<label for="userId">Email:</label> <input type="email"
+										class="form-control" th:value="${user.email}" readonly>
+									<input type="text" th:id="${user.Id}" name="userId"
+										th:value="${user.Id}" readonly hidden><br> <br>
+									<label for="amount">Amount:</label>
+									<div>
+										<input type="number" id="customAmount" name="customAmount"
+											min="100000" step="1000" placeholder="Nhập số tiền tùy ý">
+									</div>
+									<div>
+										<button type="button" class="amount-btn" data-amount="500000">500,000
+											VNĐ</button>
+										<button type="button" class="amount-btn" data-amount="1000000">1,000,000
+											VNĐ</button>
+										<button type="button" class="amount-btn" data-amount="2000000">2,000,000
+											VNĐ</button>
+									</div>
+									<input type="hidden" id="amount" name="amount" required>
+									<!-- Field hidden để lưu giá trị số tiền -->
 
-				</form>
+									<label for="referenceNumber">Reference Number:</label> <input
+										type="text" id="referenceNumber" name="referenceNumber"
+										readonly><br> <br>
+									<button type="submit">Nạp Tiền</button>
+								</div>
+								<div class="col-md">
+									<div class="form-floating">
+										<label for="floatingInputGrid">Bank NAME</label> <input
+											class="form-control" type="text"
+											th:value="${cardbank.bankName}" readonly>
 
+									</div>
+									<div class="form-floating">
+										<label for="floatingInputGrid">Bank ID</label> <input
+											class="form-control" type="text"
+											th:value="${cardbank.bankNumber}" readonly>
+
+									</div>
+									<div class="form-floating">
+										<label for="floatingInputGrid"> BENEFICIARY NAME</label> <input
+											class="form-control" type="text"
+											th:value="${cardbank.beneficiaryName}" readonly>
+
+									</div>
+									<div class="form-floating">
+										<label for="floatingInputGrid">ADDRESS</label> <input
+											class="form-control" type="text"
+											th:value="${cardbank.addressbank}" readonly>
+
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<style>
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 1041;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+	background-color: #fefefe;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid #888;
+}
+
+.close {
+	color: #aaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover, .close:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+button {
+	background-color: #4CAF50;
+	color: white;
+	padding: 10px 20px;
+	margin: 8px 0;
+	border: none;
+	cursor: pointer;
+	border-radius: 4px;
+}
+
+select {
+	padding: 8px;
+	border-radius: 4px;
+}
+
+.amount-btn {
+	margin-right: 10px;
+}
+
+#myModal .modal-content {
+	width: 80%;
+}
+</style>
+				<script>
+
+					// Get the modal
+					var modal = document.getElementById("myModal");
+
+					// Get the button that opens the modal
+					var openModalBtn = document.getElementById("openModalBtn");
+
+					// Get the <span> element that closes the modal
+					var span = document.getElementsByClassName("close")[0];
+
+					// When the user clicks on the button, open the modal
+					openModalBtn.onclick = function () {
+						// Tạo một referenceNumber ngẫu nhiên
+						var referenceNumber = generateReferenceNumber();
+						// Gán giá trị referenceNumber vào input trong form
+						document.getElementById("referenceNumber").value = referenceNumber;
+						modal.style.display = "block";
+					}
+					// Handle amount button clicks
+					var amountButtons = document.querySelectorAll(".amount-btn");
+					amountButtons.forEach(function (button) {
+						button.addEventListener('click', function () {
+							var amount = this.getAttribute('data-amount');
+							document.getElementById("amount").value = amount;
+							document.getElementById("customAmount").value = amount; // Reset giá trị của ô nhập số tiền tùy ý
+						});
+					});
+					// Function để tạo referenceNumber ngẫu nhiên
+					function generateReferenceNumber() {
+						var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+						var length = 8;
+						var result = '';
+						for (var i = 0; i < length; i++) {
+							result += characters.charAt(Math.floor(Math.random() * characters.length));
+						}
+						return result;
+					}
+
+					// When the user clicks on <span> (x), close the modal
+					span.onclick = function () {
+						modal.style.display = "none";
+					}
+
+					// When the user clicks anywhere outside of the modal, close it
+					window.onclick = function (event) {
+						if (event.target == modal) {
+							modal.style.display = "none";
+						}
+					}
+
+					// Submit form data
+					var form = document.getElementById("paymentForm");
+					form.addEventListener('submit', function (event) {
+						event.preventDefault();
+						var referenceNumber = document.getElementById("referenceNumber").value;
+						console.log(referenceNumber);
+						var formData = new FormData(form);
+						var jsonObject = {};
+						formData.forEach(function (value, key) {
+							jsonObject[key] = value;
+						});
+						var jsonData = JSON.stringify(jsonObject);
+
+						console.log(jsonData)
+						fetch('createpayments/deposit/' + referenceNumber, {
+							method: 'POST',
+							body: jsonData,
+							headers: {
+								'Content-Type': 'application/json'
+							},
+
+						})
+							.then(response => {
+								if (!response.ok) {
+									throw new Error('Network response was not ok');
+								}
+								// return response.json();
+								return response.ok;
+							})
+							.then(data => {
+								alert('Nạp tiền thành công!');
+								modal.style.display = "none";
+							})
+							.catch(error => {
+							
+								console.error('There was an error!', error);
+								alert('Có lỗi xảy ra. Vui lòng thử lại sau!');
+							});
+					});
+
+				</script>
 				<div class="col-10 offset-md-1">
 
 
 					<div class="agent-description">
 						<div class="tabbing tabbing-box mb-30">
 							<ul class="nav nav-tabs" id="carTab" role="tablist">
-								<li class="nav-item"><a class="nav-link active show" id="one-tab" data-toggle="tab"
-										href="#one" role="tab" aria-controls="one" aria-selected="false">My Cars</a>
-								</li>
-								<li class="nav-item"><a class="nav-link" id="two-tab" data-toggle="tab" href="#two"
-										role="tab" aria-controls="two" aria-selected="false">My Booking</a></li>
-								<li class="nav-item"><a class="nav-link" id="three-tab" data-toggle="tab" href="#three"
-										role="tab" aria-controls="three" aria-selected="true">My Car Driving
+								<li class="nav-item"><a class="nav-link active show"
+									id="one-tab" data-toggle="tab" href="#one" role="tab"
+									aria-controls="one" aria-selected="false">My Cars</a></li>
+								<li class="nav-item"><a class="nav-link" id="two-tab"
+									data-toggle="tab" href="#two" role="tab" aria-controls="two"
+									aria-selected="false">My Booking</a></li>
+								<li class="nav-item"><a class="nav-link" id="three-tab"
+									data-toggle="tab" href="#three" role="tab"
+									aria-controls="three" aria-selected="true">My Car Driving
 										License</a></li>
-								<li class="nav-item"><a class="nav-link" id="four-tab" data-toggle="tab" href="#four"
-										role="tab" aria-controls="four" aria-selected="true">History Booking</a></li>
+								<!-- <li class="nav-item"><a class="nav-link" id="four-tab"
+									data-toggle="tab" href="#four" role="tab" aria-controls="four"
+									aria-selected="true">History Booking</a></li> -->
 							</ul>
 							<div class="tab-content" id="carTabContent">
 								<div class="tab-pane fade active show" id="one" role="tabpanel"
@@ -252,37 +509,39 @@
 
 
 										</a>
+										<div style="display: none">
+
+											<input type="text" id="privateText"
+												placeholder="Private Message" /> <input type="text" id="to"
+												value="admin@admin" placeholder="To" />
+										</div>
 
 									</div>
-									<div class="car-box-5" th:each="car : ${listCar}">
+									<div class="car-box-5 my-cars-hehe" th:each="car : ${listCar}">
 
 										<div class="row mt-2">
 											<div class="col-lg-3 col-md-5">
 
 												<a th:href="@{'/home/availablecars/details/' + ${car.id}}"
 													class="car-img">
-													<div class="listing-badges" th:if="${car.discount} == '0'">
-														<span class="featured">Featured</span>
-													</div>
-													<div class="listing-time opening" th:if="${car.discount} >0">
+													<div class="listing-badges" th:if="${car.discount} > 0">
+
 														<span class="featured"
-															th:text="${car.discount}+'% For discount' "></span>
+															th:text="'SALES ' + ${car.discount}+'%'"></span>
 													</div>
 													<div id="carouselExampleIndicators1" class="carousel slide"
 														data-ride="carousel">
-														<ol class="carousel-indicators">
-															<li data-target="#carouselExampleIndicators1"
-																data-slide-to="0" class="active"></li>
-															<li data-target="#carouselExampleIndicators1"
-																data-slide-to="1"></li>
-															<li data-target="#carouselExampleIndicators1"
-																data-slide-to="2"></li>
-														</ol>
 														<div class="carousel-inner">
 															<div class="carousel-item active">
 																<div th:each="img: ${car.images}">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='frontImg'}"
+																	<img th:if="${img.name =='frontImg'}"
+																		th:src="${img.urlImage}" alt="car">
+																</div>
+															</div>
+															<div class="carousel-item">
+																<div th:each="img: ${car.images}"
+																	class="d-block w-100 h-100">
+																	<img th:if="${img.name =='behindImg'}"
 																		th:src="${img.urlImage}" alt="car">
 																</div>
 
@@ -290,8 +549,7 @@
 															<div class="carousel-item">
 																<div th:each="img: ${car.images}"
 																	class="d-block w-100 h-100">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='behindImg'}"
+																	<img th:if="${img.name =='leftImg'}"
 																		th:src="${img.urlImage}" alt="car">
 																</div>
 
@@ -299,8 +557,7 @@
 															<div class="carousel-item">
 																<div th:each="img: ${car.images}"
 																	class="d-block w-100 h-100">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='leftImg'}"
+																	<img th:if="${img.name =='rightImg'}"
 																		th:src="${img.urlImage}" alt="car">
 																</div>
 
@@ -308,17 +565,7 @@
 															<div class="carousel-item">
 																<div th:each="img: ${car.images}"
 																	class="d-block w-100 h-100">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='rightImg'}"
-																		th:src="${img.urlImage}" alt="car">
-																</div>
-
-															</div>
-															<div class="carousel-item">
-																<div th:each="img: ${car.images}"
-																	class="d-block w-100 h-100">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='insideImg'}"
+																	<img th:if="${img.name =='insideImg'}"
 																		th:src="${img.urlImage}" alt="car">
 																</div>
 
@@ -328,13 +575,19 @@
 												</a>
 											</div>
 											<div class="col-lg-9 col-md-7">
-												<div class="detail ">
+												<div class="">
 													<h3 class="title">
-														<a href="car-details.html" th:text="${car.carmodel.model}"></a>
+														<a href="car-details.html"
+															th:text="${car.carmodel.model +'-'+car.carmodel.year}"></a>
 													</h3>
 
 													<div class="listing-price">
-														<span class="new" th:text="${car.price}+' $/day'"></span>
+														Origin Price: <span class="new"
+															th:text="'$' + ${car.price}+'/day'"></span>
+													</div>
+													<div class="listing-price">
+														Current Discount: <span class="new"
+															th:text="${car.discount > 0 ? car.discount + '%' : 'No discount'}"></span>
 													</div>
 													<div class="listing-price">
 														<p>
@@ -342,22 +595,201 @@
 																th:text="${car.licensePlates}"></span>
 														</p>
 													</div>
+													<div class="row">
+														<div class="listing-price">
+															<p>
+																<button style="position: static; border-radius: 0"
+																	data-toggle="modal"
+																	th:attr="data-target=${'#' + car.carmodel.objectId}"
+																	class="btn btn-md btn-success">Update Car
+																	Price</button>
+															<p id="toast-failed-updated-car" hidden="true"
+																class="btn btn-outline-primary btn-lg btn-block">Failed
+																Example</p>
+
+
+															<div class="modal fade bd-example-modal-lg"
+																th:id="${car.carmodel.objectId}" tabindex="-1"
+																role="dialog" aria-labelledby="myLargeModalLabel"
+																aria-hidden="true">
+																<div class="modal-dialog modal-lg">
+																	<div class="modal-content">
+																		<div class="modal-header">
+																			<h5 class="modal-title" id="exampleModalLabel">
+
+																				<span id="requestCount" class="text-success"
+																					th:text="${car.carmodel.model +'-'+car.carmodel.year}"></span>
+																				is on updating:
+
+																			</h5>
+																			<button type="button" class="close"
+																				data-dismiss="modal" aria-label="Close">
+																				<span aria-hidden="true">&times;</span>
+																			</button>
+																		</div>
+																		<div class="modal-body">
+																			<form th:action="@{/home/myplan/updateCar}"
+																				method="post"
+																				th:id="'updateCar-' + ${car.carmodel.objectId}">
+																				<input type="hidden" th:value="${car.id}"
+																					name="carId"> <input
+																					th:id="'carCate-'+${car.carmodel.objectId}"
+																					th:value="${car.carmodel.category}" type="hidden">
+																				<table class="table">
+																					<tr>
+																						<th class="text-left">Old Price:</th>
+																						<td class="text-right"
+																							th:text="${'$'+car.price +'/day'}"></td>
+																					</tr>
+																					<tr>
+																						<th class="text-left text-success">New Price
+																							($/day):</th>
+																						<td class="text-right"><input type="number"
+																							name="newPrice"
+																							th:id="'newPrice-'+${car.carmodel.objectId}"
+																							th:attr="onkeyup='return checkNewPrice(\'' + ${#strings.escapeJavaScript(car.carmodel.objectId)} + '\')'">
+																						</td>
+																					</tr>
+																					<tr>
+																						<td class="text-right text-danger" colspan="2"
+																							th:id="'recommendPrice-'+${car.carmodel.objectId}">
+																						</td>
+																					</tr>
+																					<tr>
+																						<td class="text-right text-danger" colspan="2"
+																							th:id="'newPriceValidate-'+${car.carmodel.objectId}">
+																						</td>
+																					</tr>
+
+																					<tr>
+																						<th class="text-left">Old Discount:</th>
+																						<td class="text-right"
+																							th:text="${car.discount+'%'}"></td>
+																					</tr>
+																					<tr>
+																						<th class="text-left text-success">New
+																							Discount (%):</th>
+																						<td class="text-right"><input
+																							name="newDiscount"
+																							th:id="'newDiscount-'+${car.carmodel.objectId}"
+																							th:attr="onkeyup='return checkNewDiscount(\'' + ${#strings.escapeJavaScript(car.carmodel.objectId)} + '\')'"
+																							type="number"></td>
+
+																					</tr>
+																					<tr>
+																						<td class="text-right text-danger" colspan="2"
+																							th:id="'newDiscountValidate-'+${car.carmodel.objectId}">
+																						</td>
+																					</tr>
+																					<tr>
+																						<td colspan="2" class="text-right"><button
+																								class="btn btn-success"
+																								style="position: static; border-radius: 0"
+																								th:attr="onclick='return submitValidation(\'' + ${#strings.escapeJavaScript(car.carmodel.objectId)} + '\')'">
+																								Save</button></td>
+																					</tr>
+																				</table>
+																			</form>
+																		</div>
+
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="listing-price ml-2">
+															<p>
+																<button style="position: static; border-radius: 0"
+																	data-toggle="modal"
+																	th:attr="data-target=${'#historyBooking-' + car.carmodel.objectId}"
+																	class="btn btn-md btn-info">History Booking</button>
+															<div class="modal fade bd-example-modal-lg"
+																th:id="${'historyBooking-'+car.carmodel.objectId}"
+																tabindex="-1" role="dialog"
+																aria-labelledby="myLargeModalLabel" aria-hidden="true">
+																<div class="modal-dialog modal-lg">
+																	<div class="modal-content">
+																		<div class="modal-header">
+																			<h5 class="modal-title" id="exampleModalLabel">
+
+																				You are looking-up <span id="requestCount"
+																					class="text-success"
+																					th:text="${car.carmodel.model +'-'+car.carmodel.year}"></span>
+																				history booking:
+
+																			</h5>
+																			<button type="button" class="close"
+																				data-dismiss="modal" aria-label="Close">
+																				<span aria-hidden="true">&times;</span>
+																			</button>
+																		</div>
+																		<div class="modal-body">
+
+																			<table class="table">
+																				<tr class="text-center">
+																					<th>Email</th>
+																					<th>From Date At</th>
+																					<th>To Date</th>
+																					<th>Duration</th>
+																					<th>Total Price</th>
+																					<th>Status</th>
+																				</tr>
+																				<tr class="text-center"
+																					th:each="item : ${__${'historyBooking' + car.carmodel.objectId}__}">
+																					<td th:text="${item.user.email}"></td>
+																					<td
+																						th:text="${#temporals.format(item.fromDate, 'dd/MM/yyyy')}">
+																					</td>
+																					<td
+																						th:text="${#temporals.format(item.toDate, 'dd/MM/yyyy')}">
+																					</td>
+																					<td th:text="${item.differenceDate+' day(s)'}">
+																					</td>
+																					<td th:text="${'$ '+item.totalRent}"></td>
+																					<td th:text="${item.getStatusOnView()}"
+																						th:class="${item.status == 'declined' || item.status == 'rentor_declined' ? 'badge badge-danger text-wrap mt-2' : 'badge badge-success text-wrap mt-2'}">
+
+
+																					</td>
+
+																				</tr>
+																			</table>
+
+																		</div>
+
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+
+
 												</div>
-												<p class="btn btn-theme" th:text="${car.status}"></p>
-												<div class"mt-3">
-													<button style="position: absolute; top: 100px;" th:if="${car.orders.size() > 0}"
-														th:text="${car.orders.size()+' request(s)'}" data-toggle="modal"
+												<p class="btn"
+													th:classappend="${car.status == 'declined' || car.status == 'blocked' || car.status == 'violation_blocked' ? 'badge-danger' : (car.status == 'ready_for_booking' ? 'badge-success' : (car.status == 'waiting_for_verify' ? 'badge-warning' : 'badge-info'))}"
+													th:text="${car.getStatusOnView()}"></p>
+												<a style="top: 60px; cursor: pointer;"
+													th:attr="data-car='${car}'"
+													onclick="onGetEmergencyService(this)"
+													class="btn btn-warning btn-lg">Emergency contact?</a>
+												<div class="mt-3">
+													<button style="position: absolute; top: 100px;"
+														th:if="${car.orders.size() > 0}"
+														th:text="${car.orders.size()+' request(s)'}"
+														data-toggle="modal"
 														th:attr="data-target=${'#carmodel-asdwdwad-' + car.carmodel.objectId}"
-														 class="btn btn-md btn-warning"></button>
+														class="btn btn-md btn-info"></button>
 												</div>
-												<div class="modal fade bd-example-modal-lg" th:id="${'carmodel-asdwdwad-' + car.carmodel.objectId}"
-													tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-													aria-hidden="true">
+												<div class="modal fade bd-example-modal-lg"
+													th:id="${'carmodel-asdwdwad-' + car.carmodel.objectId}"
+													tabindex="-1" role="dialog"
+													aria-labelledby="myLargeModalLabel" aria-hidden="true">
 													<div class="modal-dialog modal-lg">
 														<div class="modal-content">
 															<div class="modal-header">
-																<h5 class="modal-title" id="exampleModalLabel">You have
-																	<span id="requestCount" th:text="${car.orders.size()}"></span> request(s) booking
+																<h5 class="modal-title" id="exampleModalLabel">
+																	You have <span id="requestCount"
+																		th:text="${car.orders.size()}"></span> request(s)
+																	booking
 																</h5>
 																<button type="button" class="close" data-dismiss="modal"
 																	aria-label="Close">
@@ -368,21 +800,29 @@
 																<table class="table">
 																	<tr class="text-center">
 																		<th>Email</th>
-																		<th>Created At</th>
+																		<th>From</th>
+																		<th>To</th>
 																		<th>Duration</th>
+																		<th>Total Price</th>
 																		<th colspan="2">Action</th>
 																	</tr>
-																	<tr class="text-center" th:each="item : ${__${'OrderListDto' + car.carmodel.objectId}__}">
+																	<tr class="text-center"
+																		th:each="item : ${__${'OrderListDto' + car.carmodel.objectId}__}">
 																		<td th:text="${item.user.email}"></td>
-																		<td th:text="${item.createdAt}"></td>
+																		<td th:text="${item.dateFormat(item.fromDate)}"></td>
+																		<td th:text="${item.dateFormat(item.toDate)}"></td>
 																		<td th:text="${item.differenceDate}"></td>
-																		<td>
-												
-																				<a th:href="@{'/home/myplan/accepted/'+ ${item.id}}" style="position: relative;" class="btn btn-md btn-success">Accept</a>
+																		<td th:text="'$' + ${item.totalRent}"></td>
+																		<td><a
+																			th:href="@{'/home/myplan/accepted/'+ ${item.id}}"
+																			style="position: relative;" class="btn badge-success">Accept</a>
 																		</td>
-																		<td>
-																				<a th:href="@{'/home/myplan/declined/'+ ${item.id}}" style="position: relative;" class="btn btn-md btn-warning">Decline</a>
-													
+																		<td><a
+																			th:attr="data-book-request-url=@{'/home/myplan/declined/'+ ${item.id}}"
+																			style="position: relative; cursor: pointer;"
+																			class="btn btn-warning"
+																			onclick="onGetBookRequestSweetAlert(this)">Decline</a>
+
 																		</td>
 																	</tr>
 																</table>
@@ -391,109 +831,170 @@
 														</div>
 													</div>
 												</div>
+
+												<div
+													th:if="${rentorDone != null && #strings.toString(car.id) == rentorDone.carId}">
+													<!-- Client Rental Review Modal trigger modal -->
+													<button style="top: 130px" type="button"
+														class="btn btn-primary" data-toggle="modal"
+														data-target="#owner_trip_done_modal">Rental
+														Review</button>
+
+													<!-- Client Rental Review Modal -->
+													<div class="modal fade bd-example-modal-lg"
+														id="owner_trip_done_modal" tabindex="-1" role="dialog"
+														aria-labelledby="exampleModalCenterTitle"
+														aria-hidden="true">
+														<div class="modal-dialog modal-dialog-centered modal-lg"
+															role="document">
+															<form th:action="@{/home/myplan/rentalReview}"
+																method="post" id="tuReview"
+																enctype="multipart/form-data">
+																<input type="hidden" th:value="${car.id}" name="carId"></input>
+																<input type="hidden" th:value="${rentorDone.id}"
+																	name="orderId"></input>
+																<div class="modal-content">
+																	<div class="modal-header">
+																		<h5 class="modal-title" id="exampleModalLongTitle">
+																			Client Rental Review</h5>
+																	</div>
+																	<div class="modal-body">
+																		<table class="table">
+																			<tr>
+																				<th class="text-left">Client email:</th>
+																				<td class="text-right"
+																					th:text="${rentorDone.user.email}"></td>
+																			</tr>
+																			<tr>
+																				<th class="text-left">From:</th>
+																				<td class="text-right"
+																					th:text="${rentorDone.fromDate}"></td>
+																			</tr>
+																			<tr>
+																				<th class="text-left">To:</th>
+																				<td class="text-right"
+																					th:text="${rentorDone.toDate}"></td>
+																			</tr>
+																			<tr>
+																				<th class="text-left">Need to Clean:</th>
+																				<td class="text-right"><input
+																					class="form-check-input" type="checkbox"
+																					name="clean-check" id="clean-check"></td>
+																			</tr>
+																			<tr>
+																				<th class="text-left">Need to defuse smell</th>
+																				<td class="text-right"><input
+																					class="form-check-input" type="checkbox"
+																					name="smell-check" id="smell-check"></td>
+																			</tr>
+																			<tr>
+																				<th class="text-left">Unintended Incidents</th>
+																				<td class="text-right"><textarea
+																						placeholder="Leave empty if there is no problem"
+																						id="descriptionAfterBooking" name="decriptions"
+																						onkeyup="return descriptionSubmit()"></textarea></td>
+																			</tr>
+																			<tr id="imgShow" class="d-none">
+																				<td><label for="frontImg">Bill Image: </label>
+																					<input type="file"
+																					class="form-control-file imgCars" id="frontImg"
+																					name="imgUrl" onchange="previewImage()"></td>
+																				<td class="text-right"><br> <img src=""
+																					id="frontImgPre" style="max-width: 50%;" /></td>
+																			</tr>
+																		</table>
+																	</div>
+																	<div class="modal-footer">
+																		<button type="button" class="btn btn-secondary"
+																			data-dismiss="modal">Close</button>
+																		<button type="button" class="btn btn-primary"
+																			th:attr="data-totalFee=${rentorDone.totalRent}"
+																			onclick="return rentorDoneSubmit(this)">Submit</button>
+																	</div>
+																</div>
+															</form>
+														</div>
+
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<div class="tab-pane fade" id="two" role="tabpanel" aria-labelledby="two-tab">
-									<div class="car-box-5" th:each="item : ${orderList}">
-
+								<div class="tab-pane fade" id="two" role="tabpanel"
+									aria-labelledby="two-tab">
+									<div class="car-box-5 my-booking-hehe"
+										th:each="item : ${orderList}">
 										<div class="row mt-2">
 											<div class="col-lg-3 col-md-5">
-
-												<a th:href="@{'/home/availablecars/details/' + ${item.car.id}}"
+												<a
+													th:href="@{'/home/availablecars/details/' + ${item.car.id}}"
 													class="car-img">
-													<div class="listing-badges" th:if="${item.car.discount} == '0'">
-														<span class="featured">Featured</span>
-													</div>
-													<div class="listing-time opening" th:if="${item.car.discount} >0">
-														<span class="featured"
-															th:text="${item.car.discount}+'% For discount' "></span>
-													</div>
+
 													<div id="carouselExampleIndicators1" class="carousel slide"
 														data-ride="carousel">
-														<ol class="carousel-indicators">
-															<li data-target="#carouselExampleIndicators1"
-																data-slide-to="0" class="active"></li>
-															<li data-target="#carouselExampleIndicators1"
-																data-slide-to="1"></li>
-															<li data-target="#carouselExampleIndicators1"
-																data-slide-to="2"></li>
-														</ol>
 														<div class="carousel-inner">
 															<div class="carousel-item active">
 																<div th:each="img: ${item.car.images}">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='frontImg'}"
+																	<img th:if="${img.name =='frontImg'}"
 																		th:src="${img.urlImage}" alt="car">
 																</div>
-
-															</div>
-															<div class="carousel-item">
-																<div th:each="img: ${item.car.images}"
-																	class="d-block w-100 h-100">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='behindImg'}"
-																		th:src="${img.urlImage}" alt="car">
-																</div>
-
-															</div>
-															<div class="carousel-item">
-																<div th:each="img: ${item.car.images}"
-																	class="d-block w-100 h-100">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='leftImg'}"
-																		th:src="${img.urlImage}" alt="car">
-																</div>
-
-															</div>
-															<div class="carousel-item">
-																<div th:each="img: ${item.car.images}"
-																	class="d-block w-100 h-100">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='rightImg'}"
-																		th:src="${img.urlImage}" alt="car">
-																</div>
-
-															</div>
-															<div class="carousel-item">
-																<div th:each="img: ${item.car.images}"
-																	class="d-block w-100 h-100">
-																	<img style="height: 100; width: 100; object-fit: contain;"
-																		th:if="${img.name =='insideImg'}"
-																		th:src="${img.urlImage}" alt="car">
-																</div>
-
 															</div>
 														</div>
 													</div>
 												</a>
 											</div>
 											<div class="col-lg-9 col-md-7">
-												<div class="detail ">
+												<div class="">
 													<h3 class="title">
 														<a href="car-details.html"
-															th:text="${item.car.carmodel.model}"></a>
+															th:text="${item.car.carmodel.model + ' (' + item.car.licensePlates + ')'}"></a>
 													</h3>
 
 													<div class="listing-price">
-														<span class="new" th:text="${item.car.price}+' $/day'"></span>
+														Price: <span class="new"
+															th:text="'$' + ${item.originPrice - (item.discount * item.originPrice / 100)}+'/day' + (${item.discount} > 0 ? ' (Discounted ' + ${item.discount}+ '%)' : '')"></span>
 													</div>
 													<div class="listing-price">
-														<p>
-															License Plates: <span class="new"
-																th:text="${item.car.licensePlates}"></span>
-														</p>
+														From: <span class="new"
+															th:text="${item.dateFormat(item.fromDate)}"></span>
+													</div>
+													<div class="listing-price">
+														To: <span class="new"
+															th:text="${item.dateFormat(item.toDate)}"></span>
+													</div>
+													<div class="listing-price">
+														To: <span class="new"
+															th:text="${item.differenceDate} + ' day(s)'"></span>
+													</div>
+													<div class="listing-price">
+														Total: <span class="new"
+															th:text="'$' + ${item.totalRent - (item.discount * item.totalRent / 100)}"></span>
 													</div>
 												</div>
-												<p class="btn btn-theme" th:text="${item.status}"></p>
+												<p class="btn text-white"
+													th:classappend="${item.status == 'declined' ? 'badge-danger' : (item.status == 'owner_trip_done' ? 'badge-success' : (item.status == 'rentor_trip_done' ? 'badge-warning' : 'badge-info'))}"
+													th:text="${item.getStatusOnView()}"></p>
+												<a
+													th:attr="data-url=@{'/home/myplan/cancel_from_user/' + ${item.id}}"
+													th:attrappend="data-orderStatus=${item.status},data-fee=${item.totalRent}"
+													th:if="${item.status == 'accepted' and item.fromDate &lt; #temporals.createNow() and item.toDate &gt; #temporals.createNow()}"
+													th:href="@{'/home/myplan/rental_done/'+ ${item.id}}"
+													style="position: relative; right: -520px; top: -13px;"
+													class="btn btn-md btn-success">Click to finish rental</a> <a
+													th:if="${(item.status == 'accepted' || item.status == 'waiting_for_verify') and (#temporals.createNow() lt item.fromDate or #temporals.createNow() gt item.toDate)}"
+													style="position: relative; right: -568px; top: -48px;"
+													class="btn btn-md btn-warning text-white"
+													onclick="showOrderCancelConfirm(this)">Cancel Order</a>
 											</div>
 										</div>
 									</div>
 								</div>
-								<div class="tab-pane fade " id="three" role="tabpanel" aria-labelledby="three-tab">
+								<div class="tab-pane fade " id="three" role="tabpanel"
+									aria-labelledby="three-tab">
 									<div class="form-group mb-3 col-12">
-										<div class="row col-10 offset-md-1" th:if="${ImgLicense.size()}>0">
+										<div class="row col-10 offset-md-1"
+											th:if="${ImgLicense.size()}>0">
 											<h5 class="col-12" style="font-weight: bold;">Your Car
 												Driving License</h5>
 											<h6 class="col-12">
@@ -505,8 +1006,8 @@
 											<div class="form-group col-md-8">
 												<label for="frontImg">Front License: </label> <img
 													class="form-control-file imgCars" id="frontImg"
-													th:src="'license/'+${ImgLicense.get(0).ImageUrl}" name="frontImg"
-													style="height: 200px">
+													th:src="'license/'+${ImgLicense.get(0).ImageUrl}"
+													name="frontImg" style="height: 200px">
 
 
 											</div>
@@ -514,20 +1015,22 @@
 											<div class="form-group col-md-8">
 												<label for="behindImg">Behind License: </label> <img
 													class="form-control-file imgCars" id="behindImg"
-													th:src="'license/'+${ImgLicense.get(1).ImageUrl}" name="behindImg"
-													style="height: 200px">
+													th:src="'license/'+${ImgLicense.get(1).ImageUrl}"
+													name="behindImg" style="height: 200px">
 
 											</div>
 
 										</div>
-										<div class="row col-10 offset-md-1" th:unless="${ImgLicense.size()}>0">
+										<div class="row col-10 offset-md-1"
+											th:unless="${ImgLicense.size()}>0">
 											<h5 class="col-12" style="font-weight: bold;">Upload
 												Your Car Driving License</h5>
 											<form th:action="@{/home/myplan/}" method="post"
 												enctype="multipart/form-data" id="uploadDriveLicense">
 												<div class="form-group col-md-8">
-													<label for="frontImg">Front License: </label> <input type="file"
-														class="form-control-file imgCars" id="frontImg" name="frontImg"
+													<label for="frontImg">Front License: </label> <input
+														type="file" class="form-control-file imgCars"
+														id="frontImg" name="frontImg"
 														onchange="previewImage('frontImg','frontImgPre')">
 
 													<div class="col-md-8">
@@ -536,9 +1039,9 @@
 												</div>
 
 												<div class="form-group col-md-8">
-													<label for="behindImg">Behind License: </label> <input type="file"
-														class="form-control-file imgCars" id="behindImg"
-														name="behindImg"
+													<label for="behindImg">Behind License: </label> <input
+														type="file" class="form-control-file imgCars"
+														id="behindImg" name="behindImg"
 														onchange="previewImage('behindImg','behindImgPre')">
 													<div class="col-md-8">
 														<br> <img src="" id="behindImgPre" height="100px" />
@@ -565,9 +1068,10 @@
 										</div>
 									</div>
 								</div>
-								<div class="tab-pane fade " id="four" role="tabpanel" aria-labelledby="four-tab">
+								<!-- <div class="tab-pane fade " id="four" role="tabpanel"
+									aria-labelledby="four-tab">
 									<p>History</p>
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>
@@ -597,12 +1101,16 @@
 					</ul>
 
 					<ul class="social-list clearfix">
-						<li><a href="#" class="facebook-bgh"><i class="fa fa-facebook"></i></a></li>
-						<li><a href="#" class="twitter-bgh"><i class="fa fa-twitter"></i></a></li>
-						<li><a href="#" class="google-bgh"><i class="fa fa-google-plus"></i></a></li>
+						<li><a href="#" class="facebook-bgh"><i
+								class="fa fa-facebook"></i></a></li>
+						<li><a href="#" class="twitter-bgh"><i
+								class="fa fa-twitter"></i></a></li>
+						<li><a href="#" class="google-bgh"><i
+								class="fa fa-google-plus"></i></a></li>
 						<li><a href="#" class="rss-bgh"><i class="fa fa-rss"></i></a>
 						</li>
-						<li><a href="#" class="linkedin-bgh"><i class="fa fa-linkedin"></i></a></li>
+						<li><a href="#" class="linkedin-bgh"><i
+								class="fa fa-linkedin"></i></a></li>
 					</ul>
 				</div>
 			</div>
@@ -629,7 +1137,8 @@
 					<h4>Recent Posts</h4>
 					<div class="f-border"></div>
 					<div class="media mb-4">
-						<a class="pr-3" href="/"> <img src="/assets/img/sub-car/sub-car.jpg" alt="car" />
+						<a class="pr-3" href="/"> <img
+							src="/assets/img/sub-car/sub-car.jpg" alt="car" />
 						</a>
 						<div class="media-body align-self-center">
 							<h5>
@@ -642,7 +1151,8 @@
 						</div>
 					</div>
 					<div class="media mb-4">
-						<a class="pr-3" href="/"> <img src="/assets/img/sub-car/sub-car-2.jpg" alt="car" />
+						<a class="pr-3" href="/"> <img
+							src="/assets/img/sub-car/sub-car-2.jpg" alt="car" />
 						</a>
 						<div class="media-body align-self-center">
 							<h5>
@@ -655,7 +1165,8 @@
 						</div>
 					</div>
 					<div class="media">
-						<a class="pr-3" href="/"> <img src="/assets/img/sub-car/sub-car-3.jpg" alt="car" />
+						<a class="pr-3" href="/"> <img
+							src="/assets/img/sub-car/sub-car-3.jpg" alt="car" />
 						</a>
 						<div class="media-body align-self-center">
 							<h5>
@@ -678,7 +1189,8 @@
 							culpa qui officia deserunt mollit.</p>
 						<form action="#" method="GET">
 							<p>
-								<input type="text" class="form-contact" name="email" placeholder="Enter Address" />
+								<input type="text" class="form-contact" name="email"
+									placeholder="Enter Address" />
 							</p>
 							<p>
 								<button type="submit" name="submitNewsletter"
@@ -716,7 +1228,8 @@
 			</aside>
 			<aside class="canvas-widget">
 				<ul class="menu">
-					<li class="menu-item menu-item-has-children"><a href="index.html">Home</a></li>
+					<li class="menu-item menu-item-has-children"><a
+						href="index.html">Home</a></li>
 					<li class="menu-item"><a href="car-grid-leftside.html">Car
 							List</a></li>
 					<li class="menu-item"><a href="car-details.html">Car
@@ -760,80 +1273,150 @@
 <script src="/assets/js/slick.min.js"></script>
 <script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
 <script src="/assets/js/ie-emulation-modes-warning.js"></script>
-<script src="https://kit.fontawesome.com/56c961acc9.js" crossorigin="anonymous"></script>
-<script th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
+<script src="https://kit.fontawesome.com/56c961acc9.js"
+	crossorigin="anonymous"></script>
+<script
+	th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
 
 <script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 
 <!-- Custom JS Script -->
 <script src="/assets/js/app.js"></script>
+<script type="text/javascript" src="/assets/js/myPlans.js"></script>
 
 <script th:inline="javascript">
-	function validateImg() {
-		var frontImg = document.getElementById('frontImg').value;
-		var behindImg = document.getElementById('behindImg').value;
-
-		if (frontImg == "" || behindImg == "") {
-			document.getElementById('validation-NUll-img').textContent = "All neccessary images must be uploaded";
-		} else {
-			document.getElementById('validation-NUll-img').textContent = "";
-		}
-		if (frontImg == behindImg) {
-
-			document.getElementById('validation-Duplicate-image').textContent = "Images are duplicated name, Please try again";
-		} else {
-			document.getElementById('validation-Duplicate-image').textContent = "";
-		}
-	}
-	function previewImage(inputId, previewId) {
-
-		validateImg();
-		var input = document.getElementById(inputId);
-		var preview = document.getElementById(previewId);
-		var value = input.value;
-
-		if (!value.match(/\.(jpg|jpeg|png|gif)$/i)) {
-
-			input.setAttribute('value', '');
-			preview.setAttribute('src', '');
-			document.getElementById('validation-image').textContent = "Some Images are not valid";
-		} else {
-
-			document.getElementById('validation-image').textContent = "";
-			if (input && input.files && input.files[0]) {
-				var reader = new FileReader();
-
-				reader.onload = function (e) {
-					preview.src = e.target.result;
+	/*<![CDATA[*/
+	const userBalance = /*[[${userBalanceeeeee}]]*/ '';
+	/*]]>*/
+	/*<![CDATA[*/
+	const userViolated = /*[[${userViolated}]]*/ '';
+	/*]]>*/
+	if (userViolated == true) {
+		swal.fire({
+			title: "BANNED TEMPORARY",
+			text: "Your are being banned temporary because of declinding too many cars in a month. You must pay $200 to keep using our service, you are not allowed to withdraw money on your wallet until you pay your fine (deposit is allowed)",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Yes, pay it!",
+			cancelButtonText: "Got it, I will think about it",
+		}).then((result) => {
+			if (result.isConfirmed) {	
+				if (userBalance >= 200) {
+					document.getElementById('privateText').value= "+200";		
+					sendPrivateMoney();
+					window.location.href = "/home/myplan/payFine";
+				} else {
+					Swal.fire({
+						title: "Balance is not enough",
+						text: "Your balance is less than $200, deposit and try again",
+						icon: "warning",
+						confirmButtonColor: "#3754ec",
+					});
 				}
-
-				reader.readAsDataURL(input.files[0]);
 			}
-		}
+		});
 	}
-	validateImg();
-	function checkImg() {
-		validateImg();
-
-		var ImgCheck = document.getElementById('validation-image').textContent
-			.trim().length;
-		var ImgCheckNull = document.getElementById('validation-NUll-img').textContent
-			.trim().length;
-		var ImgChecDuplicate = document
-			.getElementById('validation-Duplicate-image').textContent
-			.trim().length;
-
-		const sum = ImgCheck + ImgCheckNull + ImgChecDuplicate;
-		if (sum > 0) {
-			console.log(sum);
-			document.getElementById('toast-failed-uploadDriveLicense').click();
-			return false;
-		} else {
-			document.getElementById('toast-success-uploadDriveLicense').click();
-			return uploadDriveLicense.submit();
-		}
-
-
+	
+	
+	function showOrderCancelConfirm(element) {
+		const url = element.getAttribute('data-url');
+		const status = element.getAttribute('data-orderStatus');
+		const declinedFee = element.getAttribute('data-fee');
+		swal.fire({
+			title: "Are you sure?",
+			text: "Once canceled, you will not be able to recover this order!",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Yes, cancel it!",
+			cancelButtonText: "No, keep it"
+		}).then((result) => {
+			if (result.isConfirmed) {
+				if(status=="accepted"){
+					var fee = parseFloat(declinedFee)*0.1;
+					document.getElementById('privateText').value= "+"+fee;		
+					sendPrivateMoney();
+				}
+				if(status=="waiting_for_verify"){
+					var fee = parseFloat(declinedFee)*0.1;
+					document.getElementById('privateText').value= "-200";		
+					sendPrivateMoney();
+				}
+				
+				
+				// Redirect to cancel action with the provided URL
+				window.location.href = url;
+			}
+		});
+	}
+	
+	function onGetBookRequestSweetAlert(element){
+		const url = element.getAttribute('data-book-request-url');
+		swal.fire({
+			title: "Are you sure?",
+			text: "Once canceled, you will not be able to recover this order!",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Yes, cancel it!",
+			cancelButtonText: "No, keep it"
+		}).then((result) => {
+			if (result.isConfirmed) {
+				// Redirect to cancel action with the provided URL
+				document.getElementById('privateText').value= "-200";		
+					sendPrivateMoney();
+				window.location.href = url;
+			}
+		});
+	}
+	function onGetEmergencyService(element) {
+		const car = element.getAttribute('data-car');
+		swal.fire({
+			title: "Emergency Service",
+			html: `
+				<form>
+					<input type="hidden" name="carId" value="${car.id}">
+					<div class="form-group">
+					    <label for="">Description</label>
+					    <input type="text" name="description" class="form-control" placeholder="Describe your situation">
+					 </div>
+				</form>
+			`,
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Help me",
+			cancelButtonText: "Cancel"
+		}).then((result) => {
+			if (result.isConfirmed) {
+	
+			}
+		});
+	}
+	function rentorDoneSubmit(element){
+		var imgShow;
+		var description =document.getElementById('descriptionAfterBooking').value;
+		if(document.getElementById('imgShow')){
+		
+			var imgShow = document.getElementById('imgShow');
+			if(	description && !imgShow.value){
+				return false;
+			}
+			else{
+				
+				const fee = parseFloat(element.getAttribute('data-totalFee')) *0.1;
+				document.getElementById('privateText').value= "+"+fee;		
+				sendPrivateMoney();
+				document.getElementById('tuReview').submit();
+			}
+			
+		};
+		
+		
 	}
 </script>
 </body>

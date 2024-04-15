@@ -188,56 +188,54 @@ End Google Tag Manager (noscript)
 	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 	<script type="text/javascript">
 		function validateForm() {
-			var email = document.getElementById('email').value;
-			var password = document.getElementById('password').value;
+	        var email = document.getElementById('email').value;
+	        var password = document.getElementById('password').value;
 
-			var emailValid = email.length > 0;
-			var passwordValid = password.length > 0;
+	        var emailValid = email.length > 0; 
+	        var passwordValid = password.length > 0; 
 
-			if (!emailValid) {
-				document.getElementById('validation-email').innerText = 'Email address is required.';
-			} else {
-				document.getElementById('validation-email').innerText = '';
-			}
+	        if (!emailValid) {
+	            document.getElementById('validation-email').innerText = 'Email address is required.';
+	        } else {
+	            document.getElementById('validation-email').innerText = '';
+	        }
 
-			if (!passwordValid) {
-				document.getElementById('validation-password').innerText = 'Password is required.';
-			} else {
-				document.getElementById('validation-password').innerText = '';
-			}
+	        if (!passwordValid) {
+	            document.getElementById('validation-password').innerText = 'Password is required.';
+	        } else {
+	            document.getElementById('validation-password').innerText = '';
+	        }
 
-			document
-					.getElementById('email')
-					.addEventListener(
-							'input',
-							function() {
-								var email = this.value;
-								if (email.length === 0) {
-									document.getElementById('validation-email').innerText = 'Email address is required.';
-								} else {
-									document.getElementById('validation-email').innerText = '';
-								}
-							});
+	        document.getElementById('email').addEventListener('input', function() {
+	            var email = this.value;
+	            if (email.length === 0) {
+	                document.getElementById('validation-email').innerText = 'Email address is required.';
+	            } else {
+	                document.getElementById('validation-email').innerText = '';
+	            }
+	        });
 
-			document
-					.getElementById('password')
-					.addEventListener(
-							'input',
-							function() {
-								var password = this.value;
-								if (password.length === 0) {
-									document
-											.getElementById('validation-password').innerText = 'Password is required.';
-								} else {
-									document
-											.getElementById('validation-password').innerText = '';
-								}
-							});
-			if (emailValid && passwordValid) {
-
-				document.getElementById('loginForm').submit();
-			}
-		}
+	        document.getElementById('password').addEventListener('input', function() {
+	            var password = this.value;
+	            if (password.length === 0) {
+	                document.getElementById('validation-password').innerText = 'Password is required.';
+	            } else {
+	                document.getElementById('validation-password').innerText = '';
+	            }
+	        });
+	        if (emailValid && passwordValid) {
+	            
+	            document.getElementById('loginForm').submit();
+	        }
+	    }
+		
+		document.addEventListener('keypress', function(event) {
+		    // Kiểm tra xem phím được nhấn có phải là phím "Enter" không (mã ASCII là 13)
+		    if (event.key === 'Enter') {
+		      // Gọi hàm validateForm() khi nhấn phím "Enter"
+		    	document.getElementById('loginForm').submit();
+		    }
+		  });
 	</script>
 </body>
 </html>

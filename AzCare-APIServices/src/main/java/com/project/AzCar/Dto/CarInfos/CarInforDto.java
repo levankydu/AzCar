@@ -57,4 +57,10 @@ public class CarInforDto implements Serializable {
 	private ExtraFee extraFeeModel;
 
 	private List<OrderDetails> orders;
+	
+	public String getStatusOnView() {
+	    String status = this.getStatus();
+	    String statusOnView = status.replaceAll("_", " ").toUpperCase();
+	    return statusOnView;
+	}
 }
