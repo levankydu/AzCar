@@ -3,7 +3,6 @@ package com.project.AzCar.Controllers;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -11,7 +10,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -40,9 +38,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import com.project.AzCar.Dto.Brands.BrandsDto;
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
 import com.project.AzCar.Dto.Categories.CategoriesDto;
-import com.project.AzCar.Dto.Payments.CarCategoryPie;
 import com.project.AzCar.Dto.Payments.PaymentDTO;
-import com.project.AzCar.Dto.Payments.ProfitDTO;
 import com.project.AzCar.Dto.PlateVerify.PlateVerifyDto;
 import com.project.AzCar.Entities.Cars.BrandImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
@@ -68,7 +64,6 @@ import com.project.AzCar.Services.Coupon.IUserCouponService;
 import com.project.AzCar.Services.Locations.ProvinceServices;
 import com.project.AzCar.Services.Orders.OrderDetailsService;
 import com.project.AzCar.Services.Payments.PaymentService;
-import com.project.AzCar.Services.Payments.ProfitCallBack;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
@@ -119,183 +114,12 @@ public class AdminController {
 	private PaymentService paymentService;
 
 	@GetMapping("/dashboard/")
-	public String getDashboard(Model ModelView, Authentication authentication,
-			@RequestParam(name = "dateRange", required = false, defaultValue = "") String dateRange) {
+	public String getDashboard(Model model, Authentication authentication) {
 		Users loginedUser = new Users();
 
 		loginedUser.setFirstName(authentication.getName());
-		ModelView.addAttribute("user", loginedUser);
-		var result = getDataChart(dateRange);
-		var pie = getPie();
-		ModelView.addAttribute("profit", result.getProfit());
-		ModelView.addAttribute("dayList", result.getDayList());
-		ModelView.addAttribute("totalIn", result.getTotalIn());
-		ModelView.addAttribute("totalOut", result.getTotalOut());
-		ModelView.addAttribute("pie", pie);
+		model.addAttribute("user", loginedUser);
 		return "admin/dashboard";
-
-	}
-
-	private List<CarCategoryPie> getPie() {
-		List<String> cateName = new ArrayList<>();
-		List<CarInfor> list = carServices.findAll();
-		List<CarInforDto> listDTO = new ArrayList<>();
-
-		for (var item : list) {
-			var itemDto = carServices.mapToDto(item.getId());
-			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
-			listDTO.add(itemDto);
-		}
-		for (var item : listDTO) {
-			cateName.add(item.getCarmodel().getBrand());
-		}
-		Map<String, Long> countMap = cateName.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));
-
-		int totalItems = cateName.size();
-
-		return countMap.entrySet().stream().map(entry -> {
-			CarCategoryPie pie = new CarCategoryPie();
-			pie.setName(entry.getKey());
-
-			BigDecimal percentage = BigDecimal.valueOf((entry.getValue() * 100.0 / totalItems));
-			percentage = percentage.setScale(2, RoundingMode.HALF_UP);
-
-			pie.setY(percentage);
-			return pie;
-		}).collect(Collectors.toList());
-
-	}
-
-	private ProfitDTO getDataChart(String dateRange) {
-		List<String> dayList = paymentService.getDayStringFomart();
-		List<String> dayListFinal = new ArrayList<>();
-		List<BigDecimal> totalIn = new ArrayList<>();
-		List<BigDecimal> totalOut = new ArrayList<>();
-		BigDecimal sumIncome = BigDecimal.ZERO;
-		BigDecimal sumExpense = BigDecimal.ZERO;
-		BigDecimal totalOutByDate = BigDecimal.ZERO;
-		BigDecimal totalInByDate = BigDecimal.ZERO;
-		if (dateRange.isBlank() || dateRange.isEmpty()) {
-			for (var item : dayList) {
-				List<PaymentDTO> in = paymentService
-						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
-				in.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.PROFIT));
-				for (var i : in) {
-					totalInByDate = totalInByDate.add(i.getAmount());
-				}
-				if (totalInByDate != BigDecimal.ZERO) {
-					totalIn.add(totalInByDate);
-				}
-				List<PaymentDTO> out = paymentService
-						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
-				out.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.EXPENSE));
-				for (var i : out) {
-					totalOutByDate = totalOutByDate.add(i.getAmount());
-				}
-
-				if (totalOutByDate != BigDecimal.ZERO) {
-					totalOut.add(totalOutByDate);
-				}
-				if (totalInByDate.subtract(totalOutByDate) != BigDecimal.valueOf(0)) {
-					dayListFinal.add(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")).toString());
-				}
-			}
-
-		} else if (dateRange.contains("to")) {
-			String[] dates = dateRange.split(" to ");
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
-			LocalDate startDate = LocalDate.parse(dates[0], formatter);
-			LocalDate endDate = LocalDate.parse(dates[1], formatter);
-			LocalDateTime localDateTimeStart = startDate.atStartOfDay();
-			LocalDateTime localDateTimeEnd = endDate.atTime(23, 59, 59);
-			for (var item : dayList) {
-
-				List<PaymentDTO> in = paymentService
-						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
-				in.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.PROFIT));
-				in.removeIf(i -> i.getCreatedAt().isBefore(localDateTimeStart));
-				in.removeIf(i -> i.getCreatedAt().isAfter(localDateTimeEnd));
-				for (var i : in) {
-					totalInByDate = totalInByDate.add(i.getAmount());
-				}
-				if (totalInByDate != BigDecimal.ZERO) {
-					totalIn.add(totalInByDate);
-				}
-
-				List<PaymentDTO> out = paymentService
-						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
-				out.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.EXPENSE));
-				out.removeIf(i -> i.getCreatedAt().isBefore(localDateTimeStart));
-				out.removeIf(i -> i.getCreatedAt().isAfter(localDateTimeEnd));
-
-				for (var i : out) {
-					if (totalOutByDate != BigDecimal.ZERO) {
-						totalOutByDate = totalOutByDate.add(i.getAmount());
-					}
-
-				}
-
-				if (totalOutByDate != BigDecimal.ZERO) {
-					totalOut.add(totalOutByDate);
-				}
-
-				if (totalInByDate.subtract(totalOutByDate) != BigDecimal.valueOf(0)) {
-					dayListFinal.add(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")).toString());
-				}
-			}
-
-		} else {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy");
-			LocalDate startDate = LocalDate.parse(dateRange, formatter);
-			LocalDateTime localDateTimeStart = startDate.atStartOfDay();
-			for (var item : dayList) {
-
-				List<PaymentDTO> in = paymentService
-						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
-				in.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.PROFIT));
-				in.removeIf(i -> !i.getCreatedAt().toLocalDate().isEqual(localDateTimeStart.toLocalDate()));
-				for (var i : in) {
-					totalInByDate = totalInByDate.add(i.getAmount());
-				}
-
-				if (totalInByDate != BigDecimal.ZERO) {
-					totalIn.add(totalInByDate);
-				}
-				List<PaymentDTO> out = paymentService
-						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
-				out.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.EXPENSE));
-				out.removeIf(i -> !i.getCreatedAt().toLocalDate().isEqual(localDateTimeStart.toLocalDate()));
-
-				for (var i : out) {
-					totalOutByDate = totalOutByDate.add(i.getAmount());
-				}
-				if (totalOutByDate != BigDecimal.ZERO) {
-					totalOut.add(totalOutByDate);
-				}
-				if (totalInByDate.subtract(totalOutByDate) != BigDecimal.valueOf(0)) {
-					dayListFinal.add(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")).toString());
-				}
-			}
-
-		}
-		for (var item : totalIn) {
-			sumIncome = sumIncome.add(item);
-		}
-		for (var item : totalOut) {
-			sumExpense = sumExpense.add(item);
-		}
-		var result = new ProfitDTO();
-		result.setDayList(dayListFinal);
-		result.setProfit(sumIncome.subtract(sumExpense));
-		result.setTotalIn(totalIn);
-		result.setTotalOut(totalOut);
-		return result;
-
-	}
-
-	@GetMapping("/dashboard/chartDrawing")
-	public ResponseEntity<?> chartDrawing() {
-		return ResponseEntity.ok().body(Map.of("result", getDataChart("")));
 	}
 
 	@GetMapping("/dashboard/platesVerify/")
@@ -423,14 +247,12 @@ public class AdminController {
 	@GetMapping("/dashboard/carverify/{carId}")
 	public String getVerifyDetailsPage(@PathVariable("carId") String carId, Model ModelView) {
 		var listAcceptedCar = carServices.findAll();
-		listAcceptedCar.removeIf(item -> item.getId() == Integer.parseInt(carId));
+
 		var model = carServices.findById(Integer.parseInt(carId));
 		for (var item : listAcceptedCar) {
 			if (model.getLicensePlates().equals(item.getLicensePlates())) {
 				ModelView.addAttribute("checkPlate", "Duplicate License Plate");
-				break;
 			}
-			ModelView.addAttribute("checkPlate", "");
 		}
 		var modelDto = carServices.mapToDto(model.getId());
 		modelDto.setCarmodel(brandServices.getModel(model.getModelId()));
@@ -505,6 +327,34 @@ public class AdminController {
 				listTo.add(item);
 			}
 		}
+		List<String> dayList = paymentService.getDayStringFomart();
+		List<BigDecimal> totalIn = new ArrayList<>();
+		List<BigDecimal> totalOut = new ArrayList<>();
+		for (var item : dayList) {
+			List<PaymentDTO> out = paymentService
+					.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
+			out.removeIf(i -> !i.getToUser().getEmail().equals("admin@admin"));
+			BigDecimal totalOutByDate = BigDecimal.ZERO;
+			for (var i : out) {
+				totalOutByDate = totalOutByDate.add(i.getAmount());
+			}
+			totalIn.add(totalOutByDate);
+			List<PaymentDTO> in = paymentService
+					.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
+			in.removeIf(i -> !i.getFromUser().getEmail().equals("admin@admin"));
+			BigDecimal totalInByDate = BigDecimal.ZERO;
+
+			for (var i : in) {
+				totalInByDate = totalInByDate.add(i.getAmount());
+			}
+			totalOut.add(totalInByDate);
+		}
+		System.out.println(dayList);
+		System.out.println(totalIn);
+		System.out.println(totalOut);
+		ModelView.addAttribute("dayList", dayList);
+		ModelView.addAttribute("totalIn", totalIn);
+		ModelView.addAttribute("totalOut", totalOut);
 		ModelView.addAttribute("listPaymentFrom", listFrom);
 		ModelView.addAttribute("listPaymentTo", listTo);
 
@@ -695,13 +545,15 @@ public class AdminController {
 	}
 
 	@GetMapping("/dashboard/brands/updateBrandLogo/{brandName}")
-	public String getUpdateBrandLogoPage(@PathVariable("brandName") String brandName, Model ModelView,
-			HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		ModelView.addAttribute("brandImages", new BrandImages());
-		ModelView.addAttribute("brandName", brandName);
+	public String getUpdateBrandLogoPage(@PathVariable("brandName") String brandName, Model model, Model brand,
+			Model sessionUpdateBrandLogo, HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		model.addAttribute("brandImages", new BrandImages());
+		brand.addAttribute("brandName", brandName);
 
 		if (request.getSession().getAttribute("update_brandLogo") != null) {
-			ModelView.addAttribute("update_brandLogo", request.getSession().getAttribute("update_brandLogo"));
+			sessionUpdateBrandLogo.addAttribute("update_brandLogo",
+					request.getSession().getAttribute("update_brandLogo"));
 			request.getSession().removeAttribute("update_brandLogo");
 
 		}
@@ -721,18 +573,10 @@ public class AdminController {
 			message = "Uploaded the image successfully: " + image.getOriginalFilename();
 			model.addAttribute("message", message);
 			newBrandImages.setBrandName(brandName);
-			var oldUrl = brandImageServices.getBrandImgByBrandName(brandName);
-			if (oldUrl == null) {
-				newBrandImages.setImageUrl(image.getOriginalFilename());
-				brandImageServices.saveImage(newBrandImages);
-				request.getSession().setAttribute("update_brandLogo", "done");
-				return "redirect:/dashboard/brands/";
-			} else {
-				oldUrl.setImageUrl(image.getOriginalFilename());
-				brandImageServices.saveImage(oldUrl);
-				request.getSession().setAttribute("update_brandLogo", "done");
-				return "redirect:/dashboard/brands/";
-			}
+			newBrandImages.setImageUrl(image.getOriginalFilename());
+			brandImageServices.saveImage(newBrandImages);
+			request.getSession().setAttribute("update_brandLogo", "done");
+			return "redirect:/dashboard/brands/";
 
 		} catch (Exception e) {
 			message = "Could not upload the image: " + image.getOriginalFilename() + ". Error: " + e.getMessage();
@@ -845,29 +689,21 @@ public class AdminController {
 	}
 
 	@PostMapping("/dashboard/ClientService/")
-	public String postTuReview(@ModelAttribute("status") String status,
-			@ModelAttribute("orderId") String afterBookingId) {
+	public String postTuReview(@ModelAttribute("status") String status, @ModelAttribute("orderId") String orderId) {
 
-		ServiceAfterBooking model = afterBookingRepositories.findById(Integer.parseInt(afterBookingId)).get();
-		var order = orderServices.getById(model.getOrderId());
-		var car = carServices.findById(Integer.parseInt(order.getCarId()));
+		System.out.println(orderId);
+		System.out.println(status);
 		if (status.equals("accepted")) {
-
+			ServiceAfterBooking model = afterBookingRepositories.findById(Integer.parseInt(orderId)).get();
 			model.setStatus("Accepted");
-			paymentService.createNewExpense(car.getCarOwnerId(), BigDecimal.valueOf(order.getExtraFee().getInsurance()),
-					new ProfitCallBack() {
-						@Override
-						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
-							user.setBalance(userBalance.add(amount));
-						}
-					});
+			afterBookingRepositories.save(model);
 		}
 		if (status.equals("declined")) {
+			ServiceAfterBooking model = afterBookingRepositories.findById(Integer.parseInt(orderId)).get();
 			model.setStatus("Declined");
-
+			afterBookingRepositories.save(model);
 		}
 
-		afterBookingRepositories.save(model);
 		return "redirect:/dashboard/ClientService";
 	}
 

@@ -30,8 +30,84 @@
 	href="/adminAssets/assets/extensions/flatpickr/flatpickr.min.css">
 
 <link rel="stylesheet" href="/adminAssets/assets/compiled/css/chart.css">
-
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 </head>
+<style>
+.highcharts-figure, .highcharts-data-table table {
+	min-width: 310px;
+	max-width: 800px;
+	margin: 1em auto;
+}
+
+.highcharts-data-table table {
+	font-family: Verdana, sans-serif;
+	border-collapse: collapse;
+	border: 1px solid #ebebeb;
+	margin: 10px auto;
+	text-align: center;
+	width: 100%;
+	max-width: 500px;
+}
+
+.highcharts-data-table caption {
+	padding: 1em 0;
+	font-size: 1.2em;
+	color: #555;
+}
+
+.highcharts-data-table th {
+	font-weight: 600;
+	padding: 0.5em;
+}
+
+.highcharts-data-table td, .highcharts-data-table th,
+	.highcharts-data-table caption {
+	padding: 0.5em;
+}
+
+.highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even)
+	{
+	background: #f8f8f8;
+}
+
+.highcharts-data-table tr:hover {
+	background: #f1f7ff;
+}
+
+.highcharts-yaxis .highcharts-axis-line {
+	stroke-width: 2px;
+}
+
+/* Link the series colors to axis colors */
+.highcharts-color-0 {
+	fill: #90D26D;
+	stroke: #90D26D;
+}
+
+.highcharts-axis.highcharts-color-0 .highcharts-axis-line {
+	stroke: #90D26D;
+}
+
+.highcharts-axis.highcharts-color-0 text {
+	fill: #90D26D;
+}
+
+.highcharts-color-1 {
+	fill: #B2533E;
+	stroke: #B2533E;
+}
+
+.highcharts-axis.highcharts-color-1 .highcharts-axis-line {
+	stroke: #B2533E;
+}
+
+.highcharts-axis.highcharts-color-1 text {
+	fill: #B2533E;
+}
+</style>
 <body>
 
 	<script th:src="@{/adminAssets/assets/static/js/initTheme.js}"></script>
@@ -104,11 +180,11 @@
 									class="submenu-link">Users</a></li>
 							</ul></li>
 
-						<li class="sidebar-item has-sub"><a href="#"
+						<li class="sidebar-item has-sub active"><a href="#"
 							class='sidebar-link'><i class="bi bi-car-front-fill"></i> <span>Car
 									Management</span> </a>
 							<ul class="submenu ">
-								<li class="submenu-item"><a
+								<li class="submenu-item active"><a
 									th:href="@{/dashboard/brands/}" class="submenu-link">Brands</a>
 								</li>
 
@@ -146,7 +222,7 @@
 
 							</ul></li>
 
-						<li class="sidebar-item has-sub active"><a href="#"
+						<li class="sidebar-item has-sub"><a href="#"
 							class='sidebar-link'> <i class="bi bi-valentine"></i> <span>Profit
 									Cars</span>
 						</a>
@@ -228,7 +304,14 @@
 									class="nav-link" id="contact-tab" data-bs-toggle="tab"
 									href="#categoryList" role="tab" aria-controls="contact"
 									aria-selected="false">Payment out</a></li>
-								
+								<li class="nav-item" role="presentation"><a
+									class="nav-link" id="profile-tab" data-bs-toggle="tab"
+									href="#profile" role="tab" aria-controls="profile"
+									aria-selected="false">Profit</a></li>
+								<!-- <li class="nav-item" role="presentation"><a
+									class="nav-link" id="contact-tab" data-bs-toggle="tab"
+									href="#contact" role="tab" aria-controls="contact"
+									aria-selected="false">Contact</a></li> -->
 
 							</ul>
 
@@ -321,7 +404,17 @@
 										</table>
 									</div>
 								</div>
-								
+								<div class="tab-pane fade" id="profile" role="tabpanel"
+									aria-labelledby="profile-tab">
+									<div class="card-header">
+										<h5 class="card-title">Profit View</h5>
+									</div>
+									<figure class="highcharts-figure" style="margin: auto;" th:if="${dayList.size()>0}">
+										<div id="containerProfit"></div>
+										<p style="margin: auto;">AzCar data chart Profit</p>
+									</figure>
+									<p th:if="${dayList.size()==0}">No data</p>
+								</div>
 
 							</div>
 
@@ -366,6 +459,74 @@
 	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 	<script src="/adminAssets/assets/extensions/flatpickr/flatpickr.min.js"></script>
 	<script src="/adminAssets/assets/static/js/pages/date-picker.js"></script>
+
+
+
+	<script type="text/javascript" th:inline="javascript">
+		var dayList = /*[[${dayList}]]*/'';
+		/*]]>*/
+		var totalIn = /*[[${totalIn}]]*/'';
+		/*]]>*/
+		var totalOut = /*[[${totalOut}]]*/'';
+		/*]]>*/
+	
+		Highcharts.chart('containerProfit', {
+
+			chart : {
+				type : 'column',
+				styledMode : true
+			},
+
+			title : {
+				text : '',
+				align : 'left'
+			},
+
+			subtitle : {
+				text : 'AzCar Profit data ',
+				align : 'left'
+			},
+
+			xAxis : {
+				categories : dayList
+			},
+
+			yAxis : [ { // Primary axis
+				className : 'highcharts-color-0',
+				title : {
+					text : 'Income Value'
+				}
+			}, { // Secondary axis
+				className : 'highcharts-color-1',
+				opposite : true,
+				title : {
+					text : 'Expense Value'
+				}
+			} ],
+
+			plotOptions : {
+				column : {
+					borderRadius : 5
+				}
+			},
+
+			series : [ {
+				name : 'Income Value',
+				data : totalIn,
+				tooltip : {
+					valueSuffix : ' $'
+				}
+			}, {
+				name : 'Expense Value',
+				data : totalOut,
+				yAxis : 1,
+				tooltip : {
+					valueSuffix : ' $'
+				}
+			} ]
+
+		});
+	</script>
 </body>
 
 

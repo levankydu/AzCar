@@ -268,7 +268,6 @@ f
 											readonly hidden><br> <br>
 										<label for="amount">Amount:</label>
 										<div>
-
 											<input type="number" id="amount" name="amount" min="10"
 												step="1" placeholder="Please enter the amount.">
 										</div>
@@ -326,6 +325,7 @@ f
 							overflow: hidden;
 							background-color: rgba(0, 0, 0, 0.4);
 						}
+
 						.modal-content {
 							background-color: #fefefe;
 							margin: 15% auto;
@@ -746,18 +746,16 @@ f
 																						<td
 																							th:text="${item.user.email}">
 																						</td>
-																						<td style="white-space: nowrap;"
+																						<td
 																							th:text="${#temporals.format(item.fromDate, 'dd/MM/yyyy')}">
 																						</td>
-																						<td style="white-space: nowrap;"
-
+																						<td
 																							th:text="${#temporals.format(item.toDate, 'dd/MM/yyyy')}">
 																						</td>
 																						<td
 																							th:text="${item.differenceDate+' day(s)'}">
 																						</td>
-
-																						<td style="white-space: nowrap;"
+																						<td
 																							th:text="${'$ '+item.totalRent}">
 																						</td>
 																						<td th:text="${item.getStatusOnView()}"
@@ -797,8 +795,7 @@ f
 														th:id="${'carmodel-asdwdwad-' + car.carmodel.objectId}"
 														tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
 														aria-hidden="true">
-														<div class="modal-dialog modal-lg" style="max-width: 1000px;">
-
+														<div class="modal-dialog modal-lg">
 															<div class="modal-content">
 																<div class="modal-header">
 																	<h5 class="modal-title" id="exampleModalLabel">
@@ -825,16 +822,14 @@ f
 																		<tr class="text-center"
 																			th:each="item : ${__${'OrderListDto' + car.carmodel.objectId}__}">
 																			<td th:text="${item.user.email}"></td>
-																			<td style="white-space: nowrap;"
+																			<td
 																				th:text="${item.dateFormat(item.fromDate)}">
 																			</td>
-																			<td style="white-space: nowrap;"
+																			<td
 																				th:text="${item.dateFormat(item.toDate)}">
 																			</td>
 																			<td th:text="${item.differenceDate}"></td>
-																			<td style="white-space: nowrap;"
-																				th:text="'$' + ${item.totalRent}"></td>
-
+																			<td th:text="'$' + ${item.totalRent}"></td>
 																			<td><a th:href="@{'/home/myplan/accepted/'+ ${item.id}}"
 																					style="position: relative;"
 																					class="btn badge-success">Accept</a>
@@ -1009,8 +1004,7 @@ f
 														</div>
 														<div class="listing-price">
 															Total: <span class="new"
-																th:text="'$' + ${item.totalRent}"></span>
-
+																th:text="'$' + ${item.totalRent - (item.discount * item.totalRent / 100)}"></span>
 														</div>
 													</div>
 													<p class="btn text-white"
@@ -1296,7 +1290,6 @@ f
 							hidden><br><br>
 						<label for="amount">Amount:</label>
 						<div>
-
 							<input type="number" id="amount123" name="amount123" min="10" step="1"
 								placeholder="Please enter the amount.">
 						</div>
@@ -1468,7 +1461,7 @@ f
 					<input type="hidden" name="carId" value="${car.id}">
 					<div class="form-group">
 					    <label for="">Description</label>
-					    <textarea rows="6"" type="text" name="description" class="form-control text-center" placeholder="Describe your situation"></textarea>
+					    <input type="text" name="description" class="form-control" placeholder="Describe your situation">
 					 </div>
 				</form>
 			`,
@@ -1506,6 +1499,8 @@ f
 		}
 	</script>
 	<script>
+
+
 		// Get the modal
 		var modal123 = document.getElementById("myModal123");
 
@@ -1522,7 +1517,6 @@ f
 			button.addEventListener('click', function () {
 				var amount = this.getAttribute('data-amount123');
 				document.getElementById("customAmount123").value = amount;
-
 				document.getElementById("amount123").value = amount; // Reset giá trị của ô nhập số tiền tùy ý
 			});
 		});
@@ -1533,7 +1527,6 @@ f
 			var result = '';
 			for (var i = 0; i < length; i++) {
 				result += characters.charAt(Math.floor(Math.random() * characters.length));
-
 			}
 			return result;
 		}
@@ -1587,8 +1580,6 @@ f
 					if (!response.ok) {
 						throw new Error('Network response was not ok');
 					}
-
-
 					// return response.json();
 					return response.ok;
 				})

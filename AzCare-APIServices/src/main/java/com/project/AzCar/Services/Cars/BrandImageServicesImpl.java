@@ -40,9 +40,4 @@ public class BrandImageServicesImpl implements BrandImageServices {
 		return brandImgRepository.findAll();
 	}
 
-	@Override
-	public BrandImages getBrandImgByBrandName(String brandName) {
-		return brandImgRepository.getBrandImg(brandName);
-	}
-
 }

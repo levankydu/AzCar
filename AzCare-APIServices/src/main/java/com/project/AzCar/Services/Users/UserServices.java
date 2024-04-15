@@ -30,6 +30,4 @@ public interface UserServices {
 	UserDto mapToDto(int id);
 
 	boolean existsByEmail(String email);
-	
-	
 }
