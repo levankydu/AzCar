@@ -6968,3 +6968,28 @@
     (window.bootstrap = Sr),
     Tr.replace();
 });
+
+
+document.addEventListener("DOMContentLoaded", function () {
+			const urlPath = window.location.pathname;
+			const navElement = document.querySelectorAll("#app #sidebar .sidebar-wrapper .sidebar-menu ul.menu li.sidebar-item");
+
+			navElement.forEach(function (element) {
+				if (element.classList.contains("has-sub")) {
+					const submenuItems = element.querySelectorAll("ul.submenu li.submenu-item");
+					submenuItems.forEach(function (submenuItem) {
+						const subAnchor = submenuItem.querySelector('a.submenu-link');
+						if (subAnchor.getAttribute("href") === urlPath) {
+							element.querySelector("ul.submenu").classList.remove("submenu-closed");
+							element.querySelector("ul.submenu").classList.add("submenu-open");
+							submenuItem.classList.add("active");
+							element.classList.add("active");
+						}
+					});
+				} else {
+					const anchor = element.querySelector("a.sidebar-link");
+					const href = anchor.getAttribute("href");
+					if(href == urlPath) element.classList.add("active");
+				}
+			});
+		});

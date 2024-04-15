@@ -185,3 +185,784 @@ Caused by: java.lang.ClassCastException: class org.eclipse.jdt.internal.core.Imp
 
 !ENTRY org.eclipse.lsp4e 1 0 2024-04-15 10:07:55.021
 !MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.jsx at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.jsx
+
+!ENTRY org.eclipse.lsp4e 2 0 2024-04-15 15:01:42.672
+!MESSAGE Javadoc unavailable. Failed to obtain it.
+!STACK 0
+java.lang.InterruptedException
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
+	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.getHoverInfo2(LSJavaHoverProvider.java:65)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.eclipse.lsp4e 2 0 2024-04-15 15:02:59.271
+!MESSAGE Javadoc unavailable. Failed to obtain it.
+!STACK 0
+java.lang.InterruptedException
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
+	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.getHoverInfo2(LSJavaHoverProvider.java:65)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.eclipse.lsp4e 2 0 2024-04-15 15:03:17.920
+!MESSAGE Javadoc unavailable. Failed to obtain it.
+!STACK 0
+java.lang.InterruptedException
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
+	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.getHoverInfo2(LSJavaHoverProvider.java:65)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 15:19:24.416
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.ts at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.ts
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 15:19:24.417
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.tsx at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.tsx
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 15:19:24.417
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.ts at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.ts
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 15:19:24.417
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.tsx at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.tsx
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 15:19:24.417
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.d.ts at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.d.ts
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 15:19:24.418
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.jsx at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.jsx
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 15:19:24.418
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.js at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.js
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 15:19:24.418
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.jsx at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.jsx
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 15:19:24.418
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 15:19:24.418
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.d.ts at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.d.ts
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 17:57:56.821
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.ts at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.ts
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 17:57:56.821
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 17:57:56.822
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.d.ts at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.d.ts
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 17:57:56.822
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.tsx at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.tsx
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 17:57:56.822
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.ts at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.ts
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 17:57:56.822
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.d.ts at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.d.ts
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 17:57:56.822
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.tsx at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.tsx
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 17:57:56.822
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.jsx at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.jsx
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 17:57:56.822
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.jsx at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.jsx
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 17:57:56.823
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.js at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.js
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:05:13.830
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.ts at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.ts
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:05:13.830
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:05:13.830
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.d.ts at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.d.ts
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:05:13.831
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.tsx at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.tsx
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:05:13.831
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.d.ts at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.d.ts
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:05:13.831
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.ts at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.ts
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:05:13.831
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.tsx at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.tsx
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:05:13.831
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.jsx at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.jsx
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:05:13.831
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.js at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.js.js
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:05:13.832
+!MESSAGE [Log]	Unable to load library file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.jsx at /Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/file:/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/templates/assets/js/countUp.jsx
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:09:50.379
+!MESSAGE [Info]	ESLint server running in node v18.18.2
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:09:50.398
+!MESSAGE [Info]	Using Typescript version (user-setting) 5.2.2 from path "/Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/tsserver.js"
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:09:50.399
+!MESSAGE [Info]	Typescript Server version info: {version=5.2.2, source=user-setting}
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:09:51.386
+!MESSAGE [Info]	No ES Library found for file: file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/static/adminAssets/assets/compiled/js/app.js
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:10:11.639
+!MESSAGE [Info]	No ES Library found for file: file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/static/assets/js/app.js
+
+!ENTRY org.eclipse.lsp4e 2 0 2024-04-15 18:24:17.839
+!MESSAGE Unable to compute end of document
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.TreeLineTracker.fail(TreeLineTracker.java:1054)
+	at org.eclipse.jface.text.TreeLineTracker.lineByOffset(TreeLineTracker.java:268)
+	at org.eclipse.jface.text.TreeLineTracker.getLineNumberOfOffset(TreeLineTracker.java:1122)
+	at org.eclipse.jface.text.AbstractLineTracker.getLineNumberOfOffset(AbstractLineTracker.java:246)
+	at org.eclipse.jface.text.AbstractDocument.getLineOfOffset(AbstractDocument.java:863)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.getLineOfOffset(SynchronizableDocument.java:334)
+	at org.eclipse.lsp4e.LSPEclipseUtils.toPosition(LSPEclipseUtils.java:183)
+	at org.eclipse.lsp4e.operations.inlayhint.InlayHintProvider.provideCodeMinings(InlayHintProvider.java:44)
+	at org.eclipse.lsp4e.operations.inlayhint.InlayHintProvider.provideCodeMinings(InlayHintProvider.java:80)
+	at org.eclipse.jface.internal.text.codemining.CodeMiningManager.lambda$2(CodeMiningManager.java:189)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:1024)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:921)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:682)
+	at org.eclipse.jface.internal.text.codemining.CodeMiningManager.getCodeMinings(CodeMiningManager.java:195)
+	at org.eclipse.jface.internal.text.codemining.CodeMiningManager.updateCodeMinings(CodeMiningManager.java:140)
+	at org.eclipse.jface.internal.text.codemining.CodeMiningManager.run(CodeMiningManager.java:129)
+	at org.eclipse.jface.text.source.SourceViewer.updateCodeMinings(SourceViewer.java:1333)
+	at org.eclipse.jface.text.codemining.CodeMiningStrategy.reconcile(CodeMiningStrategy.java:56)
+	at org.eclipse.jface.text.reconciler.Reconciler.process(Reconciler.java:151)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:207)
+
+!ENTRY org.eclipse.lsp4e 2 0 2024-04-15 18:24:19.839
+!MESSAGE Could not detect hyperlinks due to timeout after 800 milliseconds
+!STACK 0
+java.util.concurrent.TimeoutException
+	at java.base/java.util.concurrent.CompletableFuture.timedGet(CompletableFuture.java:1960)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2095)
+	at org.eclipse.lsp4e.operations.declaration.OpenDeclarationHyperlinkDetector.detectHyperlinks(OpenDeclarationHyperlinkDetector.java:68)
+	at org.eclipse.ui.texteditor.HyperlinkDetectorRegistry$HyperlinkDetectorDelegate.detectHyperlinks(HyperlinkDetectorRegistry.java:81)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.findHyperlinks(HyperlinkManager.java:289)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.findHyperlinks(HyperlinkManager.java:262)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.mouseMove(HyperlinkManager.java:457)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:216)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4645)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1524)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1547)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1532)
+	at org.eclipse.swt.widgets.Widget.notifyListeners(Widget.java:1325)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4412)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3988)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:648)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:555)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:173)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:208)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:651)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:588)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1459)
+
+!ENTRY org.eclipse.lsp4e 2 0 2024-04-15 18:24:20.641
+!MESSAGE Could not detect hyperlinks due to timeout after 800 milliseconds
+!STACK 0
+java.util.concurrent.TimeoutException
+	at java.base/java.util.concurrent.CompletableFuture.timedGet(CompletableFuture.java:1960)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2095)
+	at org.eclipse.lsp4e.operations.declaration.OpenDeclarationHyperlinkDetector.detectHyperlinks(OpenDeclarationHyperlinkDetector.java:68)
+	at org.eclipse.ui.texteditor.HyperlinkDetectorRegistry$HyperlinkDetectorDelegate.detectHyperlinks(HyperlinkDetectorRegistry.java:81)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.findHyperlinks(HyperlinkManager.java:289)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.findHyperlinks(HyperlinkManager.java:262)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.mouseMove(HyperlinkManager.java:457)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:216)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4645)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1524)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1547)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1532)
+	at org.eclipse.swt.widgets.Widget.notifyListeners(Widget.java:1325)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4412)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3988)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:648)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:555)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:173)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:208)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:651)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:588)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1459)
+
+!ENTRY org.eclipse.lsp4e 2 0 2024-04-15 18:24:29.136
+!MESSAGE Could not get hover region due to timeout after 1000 milliseconds
+!STACK 0
+java.util.concurrent.TimeoutException
+	at java.base/java.util.concurrent.CompletableFuture.timedGet(CompletableFuture.java:1960)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2095)
+	at org.eclipse.lsp4e.operations.hover.LSPTextHover.getHoverRegion(LSPTextHover.java:155)
+	at org.eclipse.ui.internal.genericeditor.hover.CompositeTextHover.getHoverRegion(CompositeTextHover.java:101)
+	at org.eclipse.jface.text.TextViewerHoverManager.computeInformation(TextViewerHoverManager.java:128)
+	at org.eclipse.jface.text.AbstractInformationControlManager.doShowInformation(AbstractInformationControlManager.java:1101)
+	at org.eclipse.jface.text.AbstractHoverInformationControlManager$MouseTracker.mouseHover(AbstractHoverInformationControlManager.java:511)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:212)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4645)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1524)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1547)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1532)
+	at org.eclipse.swt.widgets.Widget.notifyListeners(Widget.java:1325)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4412)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3988)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:648)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:555)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:173)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:208)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:651)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:588)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1459)
+
+!ENTRY org.eclipse.lsp4e 4 0 2024-04-15 18:24:29.142
+!MESSAGE InterruptedException
+!STACK 0
+java.lang.InterruptedException
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
+	at org.eclipse.lsp4e.operations.hover.LSPTextHover.getHoverInfo(LSPTextHover.java:76)
+	at org.eclipse.ui.internal.genericeditor.hover.CompositeTextHover.getHoverInfo2(CompositeTextHover.java:60)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.eclipse.lsp4e 2 0 2024-04-15 18:24:31.176
+!MESSAGE Could not get hover region due to timeout after 1000 milliseconds
+!STACK 0
+java.util.concurrent.TimeoutException
+	at java.base/java.util.concurrent.CompletableFuture.timedGet(CompletableFuture.java:1960)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2095)
+	at org.eclipse.lsp4e.operations.hover.LSPTextHover.getHoverRegion(LSPTextHover.java:155)
+	at org.eclipse.ui.internal.genericeditor.hover.CompositeTextHover.getHoverRegion(CompositeTextHover.java:101)
+	at org.eclipse.jface.text.TextViewerHoverManager.computeInformation(TextViewerHoverManager.java:128)
+	at org.eclipse.jface.text.AbstractInformationControlManager.doShowInformation(AbstractInformationControlManager.java:1101)
+	at org.eclipse.jface.text.AbstractHoverInformationControlManager$MouseTracker.mouseHover(AbstractHoverInformationControlManager.java:511)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:212)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:89)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4645)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1524)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1547)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1532)
+	at org.eclipse.swt.widgets.Widget.notifyListeners(Widget.java:1325)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:4412)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3988)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:648)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:555)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:173)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:208)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:651)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:588)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1459)
+
+!ENTRY org.eclipse.lsp4e 4 0 2024-04-15 18:24:31.186
+!MESSAGE InterruptedException
+!STACK 0
+java.lang.InterruptedException
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
+	at org.eclipse.lsp4e.operations.hover.LSPTextHover.getHoverInfo(LSPTextHover.java:76)
+	at org.eclipse.ui.internal.genericeditor.hover.CompositeTextHover.getHoverInfo2(CompositeTextHover.java:60)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:47:02.802
+!MESSAGE [Info]	ESLint server running in node v18.18.2
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:47:02.817
+!MESSAGE [Info]	Using Typescript version (user-setting) 5.2.2 from path "/Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/tsserver.js"
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:47:02.819
+!MESSAGE [Info]	Typescript Server version info: {version=5.2.2, source=user-setting}
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 18:47:03.807
+!MESSAGE [Info]	No ES Library found for file: file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/static/adminAssets/assets/compiled/js/app.js
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 19:30:20.547
+!MESSAGE [Info]	ESLint server running in node v18.18.2
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 19:30:20.561
+!MESSAGE [Info]	Using Typescript version (user-setting) 5.2.2 from path "/Applications/SpringToolSuite4.app/Contents/Eclipse/plugins/org.eclipse.wildwebdeveloper_1.1.4.202311211923/node_modules/typescript/lib/tsserver.js"
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 19:30:20.563
+!MESSAGE [Info]	Typescript Server version info: {version=5.2.2, source=user-setting}
+
+!ENTRY org.eclipse.lsp4e 1 0 2024-04-15 19:30:21.544
+!MESSAGE [Info]	No ES Library found for file: file:///Users/khuta/Desktop/BaiHoc/AzCar/AzCar/AzCare-WebPortal/src/main/resources/static/adminAssets/assets/static/js/pages/sweetalert2.js
+
+!ENTRY org.eclipse.tm4e.ui 4 0 2024-04-15 19:49:08.189
+!MESSAGE BadLocationException
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.TreeLineTracker.fail(TreeLineTracker.java:1054)
+	at org.eclipse.jface.text.TreeLineTracker.offsetByLine(TreeLineTracker.java:335)
+	at org.eclipse.jface.text.TreeLineTracker.getLineOffset(TreeLineTracker.java:1111)
+	at org.eclipse.jface.text.AbstractLineTracker.getLineOffset(AbstractLineTracker.java:252)
+	at org.eclipse.jface.text.AbstractDocument.getLineOffset(AbstractDocument.java:868)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.getLineOffset(SynchronizableDocument.java:323)
+	at org.eclipse.tm4e.ui.text.Colorizer.colorize(Colorizer.java:72)
+	at org.eclipse.tm4e.ui.text.TMPresentationReconciler$1.lambda$0(TMPresentationReconciler.java:121)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:40)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:132)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4367)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3990)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$5.run(PartRenderingEngine.java:1155)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1046)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:155)
+	at org.eclipse.ui.internal.Workbench.lambda$3(Workbench.java:648)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:342)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:555)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:173)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:152)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:208)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:136)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:402)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:255)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:651)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:588)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1459)
+
+!ENTRY org.eclipse.tm4e.ui 4 0 2024-04-15 20:42:39.780
+!MESSAGE BadLocationException
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.AbstractDocument.get(AbstractDocument.java:958)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.get(SynchronizableDocument.java:130)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:133)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:64)
+	at org.eclipse.tm4e.ui.text.TMPresentationReconciler$1.onModelTokensChanged(TMPresentationReconciler.java:124)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:60)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:1)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.lambda$0(AbstractListeners.java:51)
+	at java.base/java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:891)
+	at java.base/java.util.concurrent.CopyOnWriteArraySet.forEach(CopyOnWriteArraySet.java:425)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.dispatchEvent(AbstractListeners.java:51)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:70)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.revalidateTokens(TMModel.java:290)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.run(TMModel.java:170)
+
+!ENTRY org.eclipse.tm4e.ui 4 0 2024-04-15 20:42:39.782
+!MESSAGE BadLocationException
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.AbstractDocument.get(AbstractDocument.java:958)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.get(SynchronizableDocument.java:130)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:133)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:64)
+	at org.eclipse.tm4e.ui.text.TMPresentationReconciler$1.onModelTokensChanged(TMPresentationReconciler.java:124)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:60)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:1)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.lambda$0(AbstractListeners.java:51)
+	at java.base/java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:891)
+	at java.base/java.util.concurrent.CopyOnWriteArraySet.forEach(CopyOnWriteArraySet.java:425)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.dispatchEvent(AbstractListeners.java:51)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:70)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.revalidateTokens(TMModel.java:290)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.run(TMModel.java:170)
+
+!ENTRY org.eclipse.tm4e.ui 4 0 2024-04-15 20:42:39.782
+!MESSAGE BadLocationException
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.AbstractDocument.get(AbstractDocument.java:958)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.get(SynchronizableDocument.java:130)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:133)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:64)
+	at org.eclipse.tm4e.ui.text.TMPresentationReconciler$1.onModelTokensChanged(TMPresentationReconciler.java:124)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:60)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:1)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.lambda$0(AbstractListeners.java:51)
+	at java.base/java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:891)
+	at java.base/java.util.concurrent.CopyOnWriteArraySet.forEach(CopyOnWriteArraySet.java:425)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.dispatchEvent(AbstractListeners.java:51)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:70)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.revalidateTokens(TMModel.java:290)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.run(TMModel.java:170)
+
+!ENTRY org.eclipse.tm4e.ui 4 0 2024-04-15 20:42:39.782
+!MESSAGE BadLocationException
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.AbstractDocument.get(AbstractDocument.java:958)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.get(SynchronizableDocument.java:130)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:133)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:64)
+	at org.eclipse.tm4e.ui.text.TMPresentationReconciler$1.onModelTokensChanged(TMPresentationReconciler.java:124)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:60)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:1)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.lambda$0(AbstractListeners.java:51)
+	at java.base/java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:891)
+	at java.base/java.util.concurrent.CopyOnWriteArraySet.forEach(CopyOnWriteArraySet.java:425)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.dispatchEvent(AbstractListeners.java:51)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:70)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.revalidateTokens(TMModel.java:290)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.run(TMModel.java:170)
+
+!ENTRY org.eclipse.tm4e.ui 4 0 2024-04-15 20:42:39.782
+!MESSAGE BadLocationException
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.AbstractDocument.get(AbstractDocument.java:958)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.get(SynchronizableDocument.java:130)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:133)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:64)
+	at org.eclipse.tm4e.ui.text.TMPresentationReconciler$1.onModelTokensChanged(TMPresentationReconciler.java:124)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:60)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:1)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.lambda$0(AbstractListeners.java:51)
+	at java.base/java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:891)
+	at java.base/java.util.concurrent.CopyOnWriteArraySet.forEach(CopyOnWriteArraySet.java:425)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.dispatchEvent(AbstractListeners.java:51)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:70)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.revalidateTokens(TMModel.java:290)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.run(TMModel.java:170)
+
+!ENTRY org.eclipse.tm4e.ui 4 0 2024-04-15 20:42:39.782
+!MESSAGE BadLocationException
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.AbstractDocument.get(AbstractDocument.java:958)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.get(SynchronizableDocument.java:130)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:133)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:64)
+	at org.eclipse.tm4e.ui.text.TMPresentationReconciler$1.onModelTokensChanged(TMPresentationReconciler.java:124)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:60)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:1)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.lambda$0(AbstractListeners.java:51)
+	at java.base/java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:891)
+	at java.base/java.util.concurrent.CopyOnWriteArraySet.forEach(CopyOnWriteArraySet.java:425)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.dispatchEvent(AbstractListeners.java:51)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:70)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.revalidateTokens(TMModel.java:290)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.run(TMModel.java:170)
+
+!ENTRY org.eclipse.tm4e.ui 4 0 2024-04-15 20:42:39.783
+!MESSAGE BadLocationException
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.AbstractDocument.get(AbstractDocument.java:958)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.get(SynchronizableDocument.java:130)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:133)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:64)
+	at org.eclipse.tm4e.ui.text.TMPresentationReconciler$1.onModelTokensChanged(TMPresentationReconciler.java:124)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:60)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:1)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.lambda$0(AbstractListeners.java:51)
+	at java.base/java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:891)
+	at java.base/java.util.concurrent.CopyOnWriteArraySet.forEach(CopyOnWriteArraySet.java:425)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.dispatchEvent(AbstractListeners.java:51)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:70)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.revalidateTokens(TMModel.java:290)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.run(TMModel.java:170)
+
+!ENTRY org.eclipse.tm4e.ui 4 0 2024-04-15 20:42:39.783
+!MESSAGE BadLocationException
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.AbstractDocument.get(AbstractDocument.java:958)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.get(SynchronizableDocument.java:130)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:133)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:64)
+	at org.eclipse.tm4e.ui.text.TMPresentationReconciler$1.onModelTokensChanged(TMPresentationReconciler.java:124)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:60)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:1)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.lambda$0(AbstractListeners.java:51)
+	at java.base/java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:891)
+	at java.base/java.util.concurrent.CopyOnWriteArraySet.forEach(CopyOnWriteArraySet.java:425)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.dispatchEvent(AbstractListeners.java:51)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:70)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.revalidateTokens(TMModel.java:290)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.run(TMModel.java:170)
+
+!ENTRY org.eclipse.tm4e.ui 4 0 2024-04-15 20:42:39.783
+!MESSAGE BadLocationException
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.AbstractDocument.get(AbstractDocument.java:958)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.get(SynchronizableDocument.java:130)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:133)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:64)
+	at org.eclipse.tm4e.ui.text.TMPresentationReconciler$1.onModelTokensChanged(TMPresentationReconciler.java:124)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:60)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:1)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.lambda$0(AbstractListeners.java:51)
+	at java.base/java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:891)
+	at java.base/java.util.concurrent.CopyOnWriteArraySet.forEach(CopyOnWriteArraySet.java:425)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.dispatchEvent(AbstractListeners.java:51)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:70)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.revalidateTokens(TMModel.java:290)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.run(TMModel.java:170)
+
+!ENTRY org.eclipse.tm4e.ui 4 0 2024-04-15 20:42:39.783
+!MESSAGE BadLocationException
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.AbstractDocument.get(AbstractDocument.java:958)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.get(SynchronizableDocument.java:130)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:133)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:64)
+	at org.eclipse.tm4e.ui.text.TMPresentationReconciler$1.onModelTokensChanged(TMPresentationReconciler.java:124)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:60)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:1)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.lambda$0(AbstractListeners.java:51)
+	at java.base/java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:891)
+	at java.base/java.util.concurrent.CopyOnWriteArraySet.forEach(CopyOnWriteArraySet.java:425)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.dispatchEvent(AbstractListeners.java:51)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:70)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.revalidateTokens(TMModel.java:290)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.run(TMModel.java:170)
+
+!ENTRY org.eclipse.tm4e.ui 4 0 2024-04-15 20:42:39.783
+!MESSAGE BadLocationException
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.AbstractDocument.get(AbstractDocument.java:958)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.get(SynchronizableDocument.java:130)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:133)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:64)
+	at org.eclipse.tm4e.ui.text.TMPresentationReconciler$1.onModelTokensChanged(TMPresentationReconciler.java:124)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:60)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:1)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.lambda$0(AbstractListeners.java:51)
+	at java.base/java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:891)
+	at java.base/java.util.concurrent.CopyOnWriteArraySet.forEach(CopyOnWriteArraySet.java:425)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.dispatchEvent(AbstractListeners.java:51)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:70)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.revalidateTokens(TMModel.java:290)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.run(TMModel.java:170)
+
+!ENTRY org.eclipse.tm4e.ui 4 0 2024-04-15 20:42:39.783
+!MESSAGE BadLocationException
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.AbstractDocument.get(AbstractDocument.java:958)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.get(SynchronizableDocument.java:130)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:133)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:64)
+	at org.eclipse.tm4e.ui.text.TMPresentationReconciler$1.onModelTokensChanged(TMPresentationReconciler.java:124)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:60)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:1)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.lambda$0(AbstractListeners.java:51)
+	at java.base/java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:891)
+	at java.base/java.util.concurrent.CopyOnWriteArraySet.forEach(CopyOnWriteArraySet.java:425)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.dispatchEvent(AbstractListeners.java:51)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:70)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.revalidateTokens(TMModel.java:290)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.run(TMModel.java:170)
+
+!ENTRY org.eclipse.tm4e.ui 4 0 2024-04-15 20:42:39.784
+!MESSAGE BadLocationException
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.AbstractDocument.get(AbstractDocument.java:958)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.get(SynchronizableDocument.java:130)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:133)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:64)
+	at org.eclipse.tm4e.ui.text.TMPresentationReconciler$1.onModelTokensChanged(TMPresentationReconciler.java:124)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:60)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:1)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.lambda$0(AbstractListeners.java:51)
+	at java.base/java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:891)
+	at java.base/java.util.concurrent.CopyOnWriteArraySet.forEach(CopyOnWriteArraySet.java:425)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.dispatchEvent(AbstractListeners.java:51)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:70)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.revalidateTokens(TMModel.java:290)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.run(TMModel.java:170)
+
+!ENTRY org.eclipse.tm4e.ui 4 0 2024-04-15 20:42:39.784
+!MESSAGE BadLocationException
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.AbstractDocument.get(AbstractDocument.java:958)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.get(SynchronizableDocument.java:130)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:133)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:64)
+	at org.eclipse.tm4e.ui.text.TMPresentationReconciler$1.onModelTokensChanged(TMPresentationReconciler.java:124)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:60)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:1)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.lambda$0(AbstractListeners.java:51)
+	at java.base/java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:891)
+	at java.base/java.util.concurrent.CopyOnWriteArraySet.forEach(CopyOnWriteArraySet.java:425)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.dispatchEvent(AbstractListeners.java:51)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:70)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.revalidateTokens(TMModel.java:290)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.run(TMModel.java:170)
+
+!ENTRY org.eclipse.tm4e.ui 4 0 2024-04-15 20:42:39.784
+!MESSAGE BadLocationException
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.AbstractDocument.get(AbstractDocument.java:958)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.get(SynchronizableDocument.java:130)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:133)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:64)
+	at org.eclipse.tm4e.ui.text.TMPresentationReconciler$1.onModelTokensChanged(TMPresentationReconciler.java:124)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:60)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:1)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.lambda$0(AbstractListeners.java:51)
+	at java.base/java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:891)
+	at java.base/java.util.concurrent.CopyOnWriteArraySet.forEach(CopyOnWriteArraySet.java:425)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.dispatchEvent(AbstractListeners.java:51)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:70)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.revalidateTokens(TMModel.java:290)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.run(TMModel.java:170)
+
+!ENTRY org.eclipse.tm4e.ui 4 0 2024-04-15 20:42:39.784
+!MESSAGE BadLocationException
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.AbstractDocument.get(AbstractDocument.java:958)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.get(SynchronizableDocument.java:130)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:133)
+	at org.eclipse.tm4e.ui.internal.utils.MarkerUtils.updateTextMarkers(MarkerUtils.java:64)
+	at org.eclipse.tm4e.ui.text.TMPresentationReconciler$1.onModelTokensChanged(TMPresentationReconciler.java:124)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:60)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:1)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.lambda$0(AbstractListeners.java:51)
+	at java.base/java.util.concurrent.CopyOnWriteArrayList.forEach(CopyOnWriteArrayList.java:891)
+	at java.base/java.util.concurrent.CopyOnWriteArraySet.forEach(CopyOnWriteArraySet.java:425)
+	at org.eclipse.tm4e.core.internal.utils.AbstractListeners.dispatchEvent(AbstractListeners.java:51)
+	at org.eclipse.tm4e.core.model.ModelTokensChangedEvent$Listeners.dispatchEvent(ModelTokensChangedEvent.java:70)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.revalidateTokens(TMModel.java:290)
+	at org.eclipse.tm4e.core.model.TMModel$TokenizerThread.run(TMModel.java:170)
+
+!ENTRY org.eclipse.lsp4e 2 0 2024-04-15 21:08:37.939
+!MESSAGE Unable to compute end of document
+!STACK 0
+org.eclipse.jface.text.BadLocationException
+	at org.eclipse.jface.text.TreeLineTracker.fail(TreeLineTracker.java:1054)
+	at org.eclipse.jface.text.TreeLineTracker.lineByOffset(TreeLineTracker.java:268)
+	at org.eclipse.jface.text.TreeLineTracker.getLineNumberOfOffset(TreeLineTracker.java:1122)
+	at org.eclipse.jface.text.AbstractLineTracker.getLineNumberOfOffset(AbstractLineTracker.java:246)
+	at org.eclipse.jface.text.AbstractDocument.getLineOfOffset(AbstractDocument.java:863)
+	at org.eclipse.core.internal.filebuffers.SynchronizableDocument.getLineOfOffset(SynchronizableDocument.java:334)
+	at org.eclipse.lsp4e.LSPEclipseUtils.toPosition(LSPEclipseUtils.java:183)
+	at org.eclipse.lsp4e.operations.inlayhint.InlayHintProvider.provideCodeMinings(InlayHintProvider.java:44)
+	at org.eclipse.lsp4e.operations.inlayhint.InlayHintProvider.provideCodeMinings(InlayHintProvider.java:80)
+	at org.eclipse.jface.internal.text.codemining.CodeMiningManager.lambda$2(CodeMiningManager.java:189)
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197)
+	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:1024)
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509)
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499)
+	at java.base/java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:921)
+	at java.base/java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.base/java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:682)
+	at org.eclipse.jface.internal.text.codemining.CodeMiningManager.getCodeMinings(CodeMiningManager.java:195)
+	at org.eclipse.jface.internal.text.codemining.CodeMiningManager.updateCodeMinings(CodeMiningManager.java:140)
+	at org.eclipse.jface.internal.text.codemining.CodeMiningManager.run(CodeMiningManager.java:129)
+	at org.eclipse.jface.text.source.SourceViewer.updateCodeMinings(SourceViewer.java:1333)
+	at org.eclipse.jface.text.codemining.CodeMiningStrategy.reconcile(CodeMiningStrategy.java:56)
+	at org.eclipse.jface.text.reconciler.Reconciler.process(Reconciler.java:151)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:207)
+
+!ENTRY org.eclipse.lsp4e 2 0 2024-04-15 21:18:16.269
+!MESSAGE Javadoc unavailable. Failed to obtain it.
+!STACK 0
+java.lang.InterruptedException
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:386)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2096)
+	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.getHoverInfo2(LSJavaHoverProvider.java:65)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:163)
+	at org.eclipse.jdt.internal.ui.text.java.hover.BestMatchHover.getHoverInfo2(BestMatchHover.java:130)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavaEditorTextHoverProxy.getHoverInfo2(JavaEditorTextHoverProxy.java:89)
+	at org.eclipse.jface.text.TextViewerHoverManager$1.run(TextViewerHoverManager.java:155)
+
+!ENTRY org.eclipse.jdt.ui 4 10001 2024-04-15 21:18:16.376
+!MESSAGE Internal Error
+!STACK 1
+Java Model Exception: Error in Java Model (code 969): getImage(String, HttpServletRequest) [in HomeController [in [Working copy] HomeController.java [in com.project.AzCar.Controllers [in src/main/java [in AzCare-WebPortal]]]]] does not exist
+	at org.eclipse.jdt.internal.core.JavaElement.newNotPresentException(JavaElement.java:549)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:592)
+	at org.eclipse.jdt.internal.core.JavaElement.getElementInfo(JavaElement.java:303)
+	at org.eclipse.jdt.internal.core.JavaElement.getElementInfo(JavaElement.java:289)
+	at org.eclipse.jdt.internal.core.SourceRefElement.getSourceRange(SourceRefElement.java:233)
+	at org.eclipse.jdt.internal.core.Member.getJavadocRange(Member.java:303)
+	at org.eclipse.jdt.internal.ui.text.javadoc.JavadocContentAccess2.getHTMLContentFromSource(JavadocContentAccess2.java:645)
+	at org.eclipse.jdt.internal.ui.text.javadoc.JavadocContentAccess2.getHTMLContent(JavadocContentAccess2.java:521)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavadocHover.getHoverInfo(JavadocHover.java:753)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavadocHover.internalGetHoverInfo(JavadocHover.java:671)
+	at org.eclipse.jdt.internal.ui.text.java.hover.JavadocHover.getHoverInfo2(JavadocHover.java:663)
+	at org.eclipse.lsp4e.jdt.LSJavaHoverProvider.lambda$0(LSJavaHoverProvider.java:63)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1804)
+	at java.base/java.util.concurrent.CompletableFuture$AsyncRun.exec(CompletableFuture.java:1796)
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:387)
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1312)
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1843)
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1808)
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:188)
+!SUBENTRY 1 org.eclipse.jdt.core 4 969 2024-04-15 21:18:16.381
+!MESSAGE getImage(String, HttpServletRequest) [in HomeController [in [Working copy] HomeController.java [in com.project.AzCar.Controllers [in src/main/java [in AzCare-WebPortal]]]]] does not exist

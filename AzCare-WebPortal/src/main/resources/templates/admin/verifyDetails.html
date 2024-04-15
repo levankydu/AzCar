@@ -197,75 +197,82 @@
 					<ul class="menu">
 						<li class="sidebar-title">Menu</li>
 
-						<li class="sidebar-item "><a th:href="@{/dashboard/}"
-							class='sidebar-link'> <i class="bi bi-grid-fill"></i> <span>Dashboard</span>
-						</a></li>
+						<li class="sidebar-item"><a th:href="@{/dashboard/}" class='sidebar-link'> <i
+									class="bi bi-grid-fill"></i> <span>Dashboard</span>
+							</a></li>
 
-						<li class="sidebar-item  has-sub"><a href="#"
-							class='sidebar-link'> <i class="bi bi-person-lines-fill"></i><span>User
+						<li class="sidebar-item  has-sub"><a href="#" class='sidebar-link'> <i
+									class="bi bi-person-lines-fill"></i><span>User
 									Management</span>
-						</a>
+							</a>
 
 							<ul class="submenu ">
 
-								<li class="submenu-item  "><a href="/dashboard/ListAccount"
-									class="submenu-link">List All User</a></li>
+								<li class="submenu-item  "><a href="/dashboard/ListAccount" class="submenu-link">List
+										All User</a></li>
+							</ul>
+						</li>
 
-								<li class="submenu-item  "><a href="component-alert.html"
-									class="submenu-link">Alert</a></li>
+						<li class="sidebar-item  has-sub"><a href="#" class='sidebar-link'><i
+									class="bi bi-car-front-fill"></i> <span>Payment
+									Management</span> </a>
+							<ul class="submenu ">
 
-							</ul></li>
-
-						<li class="sidebar-item  active has-sub"><a href="#"
-							class='sidebar-link '><i class="bi bi-car-front-fill"></i> <span>Car
+								<li class="submenu-item  "><a th:href="@{/dashboard/depositmanager}"
+										class="submenu-link">List
+										Payment </a></li>
+								<li class="submenu-item  "><a th:href="@{/dashboard/depositmanager/cardbank}"
+										class="submenu-link">List Payment Card </a></li>
+							</ul>
+						</li>
+						<li class="sidebar-item  has-sub"><a href="#" class='sidebar-link'><i
+									class="bi bi-car-front-fill"></i> <span>Car
 									Management</span> </a>
 							<ul class="submenu ">
 								<li class="submenu-item"><a th:href="@{/dashboard/brands/}"
-									class="submenu-link">Brands</a></li>
+										class="submenu-link">Brands</a></li>
 
-								<li class="submenu-item active"><a
-									th:href="@{/dashboard/carverify/}" class="submenu-link">Car
+								<li class="submenu-item  "><a th:href="@{/dashboard/carverify/}"
+										class="submenu-link">Cars
 										Verify</a></li>
-								<li class="submenu-item "><a
-									th:href="@{/dashboard/platesVerify/}" class="submenu-link">Plates
+								<li class="submenu-item  "><a th:href="@{/dashboard/platesVerify/}"
+										class="submenu-link">Plates
 										Verify</a></li>
-							</ul></li>
-
-						<li class="sidebar-item has-sub"><a href="#"
-							class='sidebar-link'> <i class="bi bi-bell-fill"></i> <span>Booking
-									Cars</span>
-						</a>
+							</ul>
+						</li>
+						<li class="sidebar-item  has-sub"><a href="#" class='sidebar-link'><i
+									class="bi bi-car-front-fill"></i> <span>Review
+									Management</span> </a>
 							<ul class="submenu ">
+								<li class="submenu-item"><a th:href="@{/dashboard/reviews}"
+										class="submenu-link">Review</a></li>
 
-								<li class="submenu-item"><a
-									th:href="@{/dashboard/ClientService}" class="submenu-link">Client
+								<li class="submenu-item  "><a th:href="@{/dashboard/ListIgnoreKey}"
+										class="submenu-link">List
+										Ignore Key</a></li>
+							</ul>
+						</li>
+
+						<li class="sidebar-item has-sub"><a href="#" class='sidebar-link'> <i
+									class="bi bi-bell-fill"></i> <span>Booking
+									Cars</span>
+							</a>
+							<ul class="submenu ">
+								<li class="submenu-item"><a th:href="@{/dashboard/ClientService}"
+										class="submenu-link">Client
 										Service</a></li>
-
-								<li class="submenu-item  "><a
-									href="layout-vertical-1-column.html" class="submenu-link">1
-										Column</a></li>
-
-								<li class="submenu-item  "><a
-									href="layout-vertical-navbar.html" class="submenu-link">Vertical
-										Navbar</a></li>
-
-								<li class="submenu-item  "><a href="layout-rtl.html"
-									class="submenu-link">RTL Layout</a></li>
-
-								<li class="submenu-item  "><a href="layout-horizontal.html"
-									class="submenu-link">Horizontal Menu</a></li>
-
-							</ul></li>
-							<li class="sidebar-item has-sub"><a href="#"
-							class='sidebar-link'> <i class="bi bi-valentine"></i> <span>Profit
+							</ul>
+						</li>
+						<li class="sidebar-item has-sub"><a href="#" class='sidebar-link'> <i
+									class="bi bi-valentine"></i> <span>Profit
 									Cars</span>
-						</a>
+							</a>
 							<ul class="submenu ">
 
-								<li class="submenu-item"><a th:href="@{/dashboard/profit/}"
-									class="submenu-link">Profit Business</a></li>
-							</ul></li>
-
+								<li class="submenu-item"><a th:href="@{/dashboard/profit/}" class="submenu-link">Profit
+										Business</a></li>
+							</ul>
+						</li>
 					</ul>
 				</div>
 			</div>
