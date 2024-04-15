@@ -42,8 +42,10 @@ public class Constants {
 		String ADMIN_FEE = "admin_fee";
 		String LOCKED = "locked";
 		String REFUND = "unlocked";
-		String PROFIT = "profit";
-		String EXPENSE = "expense";
+		String TRANSFER = "transfer";
+		String DEPOSIT = "deposit";
+		String WITHDRAW = "withdraw";
+
 	}
 
 	public static interface violations {

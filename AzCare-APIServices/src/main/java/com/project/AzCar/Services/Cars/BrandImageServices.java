@@ -15,6 +15,4 @@ public interface BrandImageServices {
 	String getBrandImgUrl(String brandName);
 
 	List<BrandImages> getAll();
-
-	BrandImages getBrandImgByBrandName(String brandName);
 }

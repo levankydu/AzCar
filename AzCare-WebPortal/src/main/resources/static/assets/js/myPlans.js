@@ -77,15 +77,7 @@ function validateImg() {
 	}
 	function descriptionSubmit() {
 		var imgShow = document.getElementById('imgShow');
-		var description = document.getElementById('description');
-		if(description.value !=""){
-			imgShow.classList.remove('d-none');
-		}
-		else{
-			imgShow.classList.add('d-none');
-		}
-		
-		
+		imgShow.classList.remove('d-none');
 
 	}
 	function previewImage() {
