@@ -70,9 +70,9 @@ public class APIDepositController {
 				d.setStatus(EnumDeposit.Done);
 				depositService.updateDeposit(d);
 				Users user = userService.findById(d.getUser().getId());
-				BigDecimal balance = user.getBalance();
+				BigDecimal balance = user.getBalance() != null ? user.getBalance() : BigDecimal.valueOf(0);
 				BigDecimal amount = d.getAmount();
-				System.out.println("số dư hiện tại" + balance + ", Số tiền nạp vào" + amount);
+				System.out.println("sá»‘ dÆ° hiá»‡n táº¡i" + balance + ", Sá»‘ tiá»�n náº¡p vÃ o" + amount);
 				BigDecimal total = balance.add(amount);
 				System.out.print(total);
 				user.setBalance(total);

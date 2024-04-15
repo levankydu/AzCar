@@ -29,6 +29,14 @@
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <link rel="stylesheet"
 	href="/adminAssets/assets/extensions/flatpickr/flatpickr.min.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+
+
+<script type="text/javascript" src="/assets/js/notiJs.js"></script>
+<script type="module" src="/assets/js/countUp.js"></script>
 </head>
 <style>
 .highcharts-figure, .highcharts-data-table table {
@@ -101,6 +109,10 @@
 
 .highcharts-axis.highcharts-color-1 text {
 	fill: #B2533E;
+}
+
+input[type="number"] {
+	min-width: 50px;
 }
 </style>
 </head>
@@ -250,21 +262,6 @@
 
 								<li class="submenu-item"><a th:href="@{/dashboard/profit/}"
 									class="submenu-link">Profit Business</a></li>
-
-								<!-- 		<li class="submenu-item  "><a href="layout-vertical-1-column.html"
-										class="submenu-link">1
-										Column</a></li>
-
-								<li class="submenu-item  "><a href="layout-vertical-navbar.html"
-										class="submenu-link">Vertical
-										Navbar</a></li>
-
-								<li class="submenu-item  "><a href="layout-rtl.html" class="submenu-link">RTL Layout</a>
-								</li>
-
-								<li class="submenu-item  "><a href="layout-horizontal.html"
-										class="submenu-link">Horizontal Menu</a></li> -->
-
 							</ul></li>
 
 
@@ -298,25 +295,35 @@
 									<div class="card-header">
 										<h4>AzCar data chart Profit</h4>
 										<form th:action="@{/dashboard/}" method="get">
-										<div class="col-12">
-											<div class="col-6">
-												<input type="date"
-													class="form-control flatpickr-range-preloaded"
-													th:value="${dataRange!=null?dataRange:''}"
-													placeholder="Select date.." id="dateRange" name="dateRange">
+											<div class="col-12">
+												<div class="col-6">
+													<input type="date"
+														class="form-control flatpickr-range-preloaded"
+														th:value="${dataRange!=null?dataRange:''}"
+														placeholder="Select date.." id="dateRange"
+														name="dateRange">
 
+												</div>
+												<button class="btn btn-success col-3 mt-2">Search</button>
 											</div>
-											<button class="btn btn-success col-3 mt-2">Search</button>
-										</div>
 										</form>
 									</div>
+
 									<div class="card-body">
+
+										<div id="Adminmessages" style="display: none"></div>
 										<figure class="highcharts-figure" style="margin: auto;"
 											th:if="${dayList.size()>0}">
 											<div id="containerProfit"></div>
 											<div class="text-center">
-											<h4>Profit: $ <span th:text="${profit}" class="badge"
-												th:classappend="${profit >0 ? 'bg-success' : 'bg-danger'}"></span></h4>
+
+												<h4>
+													Profit: <span th:text="'$ ' + ${profit} + ''" class="badge"
+														th:classappend="${profit >0 ? 'bg-success' : 'bg-danger'}"
+														id="profitResult"></span>
+
+												</h4>
+
 											</div>
 										</figure>
 										<p th:if="${dayList.size()==0}">No data</p>
@@ -326,16 +333,18 @@
 						</div>
 						<div class="row"></div>
 					</div>
-					<div class="col-12 col-lg-3">
+					<div class="col-9">
 
 
 						<div class="card">
 							<div class="card-header">
 								<h4>Car Model</h4>
 							</div>
-							<div class="card-body">
-								<div id="chart-visitors-profile"></div>
-							</div>
+							<figure class="highcharts-figure">
+								<div id="containerCatePie"></div>
+
+							</figure>
+
 						</div>
 					</div>
 				</section>
@@ -368,9 +377,7 @@
 
 
 
-	<!-- Need: Apexcharts -->
-	<script type="text/javascript"
-		th:src="@{/adminAssets/assets/extensions/apexcharts/apexcharts.min.js}"></script>
+
 	<script type="text/javascript"
 		th:src="@{/adminAssets/assets/static/js/pages/dashboard.js}"></script>
 	<script src="/adminAssets/assets/extensions/flatpickr/flatpickr.min.js"></script>
@@ -382,6 +389,9 @@
 		var totalIn = /*[[${totalIn}]]*/'';
 		/*]]>*/
 		var totalOut = /*[[${totalOut}]]*/'';
+		/*]]>*/
+		/*]]>*/
+		var data = /*[[${pie}]]*/'';
 		/*]]>*/
 
 		Highcharts.chart('containerProfit', {
@@ -440,7 +450,70 @@
 			} ]
 
 		});
+		Highcharts.chart('containerCatePie', {
+			chart : {
+				type : 'pie'
+			},
+			title : {
+				text : 'Car Brand Pie'
+			},
+			tooltip : {
+				valueSuffix : '%',
+				
+			},
+			subtitle : {
+				text : 'From Az Car Source'
+			},
+			plotOptions : {
+				series : {
+					allowPointSelect : true,
+					cursor : 'pointer',
+					dataLabels : [ {
+						enabled : true,
+						distance : 20
+					}, {
+						enabled : true,
+						distance : -40,
+						format : '{point.percentage:.2f}%',
+						style : {
+							fontSize : '1em',
+							textOutline : 'none',
+							opacity : 0.8
+						},
+						filter : {
+							operator : '>',
+							property : 'percentage',
+							value : 7
+						}
+					} ]
+				}
+			},
+			series : [ {
+				name : 'percent',
+				colorByPoint : true,
+				data : data,
+			} ]
+		});
 	</script>
+	<script type="module">
+
+		import { CountUp } from '../assets/js/countUp.js';
+let moneyStr = document.getElementById('profitResult').textContent;
+
+
+let moneyNumber = parseFloat(moneyStr.replace(/\$|,/g, ''));
+
+
+		
+		let demo = new CountUp('profitResult', moneyNumber);
+		
+		console.log(demo);
+		if (!demo.error) {
+		  demo.start();
+		} else {
+		  console.log('error');
+		}
+</script>
 </body>
 
 </html>
