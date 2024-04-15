@@ -437,8 +437,8 @@ public class UserSideCarController {
 			}
 		}
 		List<OrderDetails> orderDetailsOfThisCar = orderServices.getFromCarId(Integer.parseInt(carId));
-		orderDetailsOfThisCar.removeIf(item -> !item.getStatus().equals(Constants.plateStatus.WAITING)
-				&& !item.getStatus().equals(Constants.plateStatus.ACCEPTED));
+		orderDetailsOfThisCar.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
+				&& !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
 		ModelView.addAttribute("orderDetailsOfThisCar", orderDetailsOfThisCar);
 
 		List<City> provinces = provinceServices.getListCity();
@@ -657,7 +657,7 @@ public class UserSideCarController {
 		OrderDetails order = orderServices.getOrderDetailsByCarIdandUserId(carid, userid);
 		if (order != null) {
 			System.out.println("Order Details: đây " + order.getStatus());
-			if (order.getStatus().contains("accepted")) {
+			if (order.getStatus().contains("rentor_trip_done")) {
 				if (order.isReview()) {
 					System.out.println("nếu nó đã review thì ko review nữa" + order.isReview());
 					return null;

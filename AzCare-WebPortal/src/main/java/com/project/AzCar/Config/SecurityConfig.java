@@ -17,9 +17,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
-import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -111,9 +108,8 @@ public class SecurityConfig {
 
 				.logout((logout) -> logout.permitAll().logoutUrl("/logout").logoutSuccessUrl("/")
 						.invalidateHttpSession(true).deleteCookies("JSESSIONID"))
-				//.exceptionHandling(handling -> handling.accessDeniedPage("/access-denied"));
-				.exceptionHandling(t -> System.out.print(t.toString())
-				);
+				// .exceptionHandling(handling -> handling.accessDeniedPage("/access-denied"));
+				.exceptionHandling(t -> System.out.print(t.toString()));
 		http.authenticationProvider(daoAuthen());
 
 		return http.build();
@@ -153,8 +149,6 @@ public class SecurityConfig {
 	AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
 		return configuration.getAuthenticationManager();
 	}
-	
-	
 
 	@Autowired
 	private CustomOAuth2UserService oauthUserService;
