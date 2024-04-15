@@ -212,6 +212,14 @@ End Google Tag Manager (noscript)
 	            document.getElementById('loginForm').submit();
 	        }
 	    }
+		
+		document.addEventListener('keypress', function(event) {
+		    // Kiểm tra xem phím được nhấn có phải là phím "Enter" không (mã ASCII là 13)
+		    if (event.key === 'Enter') {
+		      // Gọi hàm validateForm() khi nhấn phím "Enter"
+		    	document.getElementById('loginForm').submit();
+		    }
+		  });
 	</script>
 </body>
 </html>

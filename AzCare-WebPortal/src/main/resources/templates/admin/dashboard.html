@@ -110,6 +110,10 @@
 .highcharts-axis.highcharts-color-1 text {
 	fill: #B2533E;
 }
+
+input[type="number"] {
+	min-width: 50px;
+}
 </style>
 </head>
 
@@ -258,21 +262,6 @@
 
 								<li class="submenu-item"><a th:href="@{/dashboard/profit/}"
 									class="submenu-link">Profit Business</a></li>
-
-								<!-- 		<li class="submenu-item  "><a href="layout-vertical-1-column.html"
-										class="submenu-link">1
-										Column</a></li>
-
-								<li class="submenu-item  "><a href="layout-vertical-navbar.html"
-										class="submenu-link">Vertical
-										Navbar</a></li>
-
-								<li class="submenu-item  "><a href="layout-rtl.html" class="submenu-link">RTL Layout</a>
-								</li>
-
-								<li class="submenu-item  "><a href="layout-horizontal.html"
-										class="submenu-link">Horizontal Menu</a></li> -->
-
 							</ul></li>
 
 
@@ -321,7 +310,7 @@
 									</div>
 
 									<div class="card-body">
-									
+
 										<div id="Adminmessages" style="display: none"></div>
 										<figure class="highcharts-figure" style="margin: auto;"
 											th:if="${dayList.size()>0}">
@@ -344,16 +333,18 @@
 						</div>
 						<div class="row"></div>
 					</div>
-					<div class="col-12 col-lg-3">
+					<div class="col-9">
 
 
 						<div class="card">
 							<div class="card-header">
 								<h4>Car Model</h4>
 							</div>
-							<div class="card-body">
-								<div id="chart-visitors-profile"></div>
-							</div>
+							<figure class="highcharts-figure">
+								<div id="containerCatePie"></div>
+
+							</figure>
+
 						</div>
 					</div>
 				</section>
@@ -386,7 +377,7 @@
 
 
 
-	
+
 	<script type="text/javascript"
 		th:src="@{/adminAssets/assets/static/js/pages/dashboard.js}"></script>
 	<script src="/adminAssets/assets/extensions/flatpickr/flatpickr.min.js"></script>
@@ -398,6 +389,9 @@
 		var totalIn = /*[[${totalIn}]]*/'';
 		/*]]>*/
 		var totalOut = /*[[${totalOut}]]*/'';
+		/*]]>*/
+		/*]]>*/
+		var data = /*[[${pie}]]*/'';
 		/*]]>*/
 
 		Highcharts.chart('containerProfit', {
@@ -455,6 +449,50 @@
 				}
 			} ]
 
+		});
+		Highcharts.chart('containerCatePie', {
+			chart : {
+				type : 'pie'
+			},
+			title : {
+				text : 'Car Brand Pie'
+			},
+			tooltip : {
+				valueSuffix : '%',
+				
+			},
+			subtitle : {
+				text : 'From Az Car Source'
+			},
+			plotOptions : {
+				series : {
+					allowPointSelect : true,
+					cursor : 'pointer',
+					dataLabels : [ {
+						enabled : true,
+						distance : 20
+					}, {
+						enabled : true,
+						distance : -40,
+						format : '{point.percentage:.2f}%',
+						style : {
+							fontSize : '1em',
+							textOutline : 'none',
+							opacity : 0.8
+						},
+						filter : {
+							operator : '>',
+							property : 'percentage',
+							value : 7
+						}
+					} ]
+				}
+			},
+			series : [ {
+				name : 'percent',
+				colorByPoint : true,
+				data : data,
+			} ]
 		});
 	</script>
 	<script type="module">

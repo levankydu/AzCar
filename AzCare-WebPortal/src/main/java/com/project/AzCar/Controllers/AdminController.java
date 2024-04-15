@@ -3,6 +3,7 @@ package com.project.AzCar.Controllers;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.time.LocalDate;
@@ -39,6 +40,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import com.project.AzCar.Dto.Brands.BrandsDto;
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
 import com.project.AzCar.Dto.Categories.CategoriesDto;
+import com.project.AzCar.Dto.Payments.CarCategoryPie;
 import com.project.AzCar.Dto.Payments.PaymentDTO;
 import com.project.AzCar.Dto.Payments.ProfitDTO;
 import com.project.AzCar.Dto.PlateVerify.PlateVerifyDto;
@@ -114,12 +116,43 @@ public class AdminController {
 		loginedUser.setFirstName(authentication.getName());
 		ModelView.addAttribute("user", loginedUser);
 		var result = getDataChart(dateRange);
-
+		var pie = getPie();
 		ModelView.addAttribute("profit", result.getProfit());
 		ModelView.addAttribute("dayList", result.getDayList());
 		ModelView.addAttribute("totalIn", result.getTotalIn());
 		ModelView.addAttribute("totalOut", result.getTotalOut());
+		ModelView.addAttribute("pie", pie);
 		return "admin/dashboard";
+
+	}
+
+	private List<CarCategoryPie> getPie() {
+		List<String> cateName = new ArrayList<>();
+		List<CarInfor> list = carServices.findAll();
+		List<CarInforDto> listDTO = new ArrayList<>();
+
+		for (var item : list) {
+			var itemDto = carServices.mapToDto(item.getId());
+			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
+			listDTO.add(itemDto);
+		}
+		for (var item : listDTO) {
+			cateName.add(item.getCarmodel().getBrand());
+		}
+		Map<String, Long> countMap = cateName.stream().collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+
+		int totalItems = cateName.size();
+
+		return countMap.entrySet().stream().map(entry -> {
+			CarCategoryPie pie = new CarCategoryPie();
+			pie.setName(entry.getKey());
+
+			BigDecimal percentage = BigDecimal.valueOf((entry.getValue() * 100.0 / totalItems));
+			percentage = percentage.setScale(2, RoundingMode.HALF_UP);
+
+			pie.setY(percentage);
+			return pie;
+		}).collect(Collectors.toList());
 
 	}
 
