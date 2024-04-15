@@ -21,13 +21,13 @@ public class CouponServieImpl implements ICouponService {
 	}
 
 	@Override
-	public Coupon updateCouponByid(Coupon c) {
+	public Coupon updateCouponByid(int id) {
 		// TODO Auto-generated method stub
-		
-		
+		Coupon c = CouponRepo.findById(id).get();
+		if (c != null) {
 			return CouponRepo.save(c);
-	
-	
+		}
+		return null;
 	}
 
 	@Override
@@ -51,21 +51,6 @@ public class CouponServieImpl implements ICouponService {
 		// TODO Auto-generated method stub
 
 		return CouponRepo.save(c);
-	}
-
-	@Override
-	public Coupon findCouponbyCouponCode(String c) {
-		// TODO Auto-generated method stub
-		
-		
-		return CouponRepo.findCouponByCouponCode(c);
-	}
-
-	@Override
-	public Coupon findCouponByTypeCoupon(int id) {
-		// TODO Auto-generated method stub
-		return CouponRepo.findCouponByTypeCoupon(id)
-				;
 	}
 
 }

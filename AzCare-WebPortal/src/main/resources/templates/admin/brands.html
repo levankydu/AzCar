@@ -143,6 +143,15 @@
 									class="submenu-link">Horizontal Menu</a></li>
 
 							</ul></li>
+							<li class="sidebar-item has-sub"><a href="#"
+							class='sidebar-link'> <i class="bi bi-valentine"></i> <span>Profit
+									Cars</span>
+						</a>
+							<ul class="submenu ">
+
+								<li class="submenu-item"><a th:href="@{/dashboard/profit/}"
+									class="submenu-link">Profit Business</a></li>
+							</ul></li>
 
 					</ul>
 				</div>
@@ -234,12 +243,14 @@
 											<tbody>
 												<tr th:each="brand : ${brandsList}">
 													<td th:text="${brand.brandName}"></td>
-													<td><span th:if="${brand.brandLogo.contains('null')}"
-														class="badge bg-warning"><a
-															th:href="@{/dashboard/brands/updateBrandLogo/}+${brand.brandName}">Need
-																To Update</a></span> <span
+													<td> <span
 														th:unless="${brand.brandLogo.contains('null')}"><img 
-															th:src="@{${brand.brandLogo}}" height="60px"></img></span></td>
+															th:src="@{${brand.brandLogo}}" height="60px"></img></span>
+															<span
+														class="badge bg-warning"><a
+															th:href="@{/dashboard/brands/updateBrandLogo/}+${brand.brandName}">
+																Update</a></span>
+															</td>
 													<td th:text="${brand.numberOfCars}"></td>
 													<td><span class="badge bg-success">Active</span></td>
 												</tr>

@@ -186,19 +186,11 @@
 											<td th:text="${deposit.referenceNumber}"></td>
 											<td th:id="'status_'+${deposit.id}" th:value="${deposit.Status}"
 												th:text="${deposit.Status}"></td>
-
-											<td><span th:if="${deposit.Status != 'Pending'}" class="badge bg-danger"
-													th:data-reference-number="${deposit.referenceNumber}"
-													th:id="'acceptPayment_'+${deposit.id}"
-													th:onclick="'acceptPayment('+ ${deposit.id}+')'">Active</span>
-												<span th:if="${deposit.Status != 'Done'}" class="badge bg-success"
-													th:data-reference-number="${deposit.referenceNumber}"
-													th:id="'acceptPayment_'+${deposit.id}"
-													th:onclick="'acceptPayment('+ ${deposit.id}+')'">Active</span>
-
-
-
-											</td>
+											<td><span class="badge bg-success"
+											 th:data-reference-number="${deposit.referenceNumber}"
+											 th:id="'acceptPayment_'+${deposit.id}"
+													th:onclick="'acceptPayment('+ ${deposit.id}+')'"
+													>Active</span></td>
 
 										</tr>
 									</tbody>
@@ -206,68 +198,24 @@
 							</div>
 						</div>
 					</div>
-					<!-- Modal Loading -->
-<div class="modal fade" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-body text-center">
-        <div class="spinner-border text-primary" role="status">
-          <span class="sr-only">Loading...</span>
-        </div>
-        <p class="mt-2">Đang xử lý...</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal Success -->
-<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-body text-center">
-        <div class="alert alert-success" role="alert">
-          Successful deposit!
-        </div>
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 					<script>
-						function showLoadingModal() {
-  $('#loadingModal').modal('show');
-}
-
-function hideLoadingModal() {
-  $('#loadingModal').modal('hide');
-}
-
-function showSuccessModal() {
-  $('#successModal').modal('show');
-}
-
-function hideSuccessModal() {
-  $('#successModal').modal('hide');
-}
 						function acceptPayment(id) {
-							 showLoadingModal();
 							var referenceNumber = document.getElementById('acceptPayment_' + id).getAttribute('data-reference-number');
-							var depositStatus = document.getElementById('status_' + id);
-							console.log(referenceNumber, "và", depositStatus);
-
+							var depositStatus = document.getElementById('status_'+id);
+							console.log(referenceNumber, "và" , depositStatus);
+							
 							// Định nghĩa options cho yêu cầu POST
 							const requestOptions = {
 								method: 'PUT',
 								headers: {
 									'Content-Type': 'application/json'
 								},
-								// Truyền dữ liệu vào body của yêu cầu PUT
-								body: JSON.stringify({ referenceNumber: referenceNumber })
+								 // Truyền dữ liệu vào body của yêu cầu PUT
+								 body: JSON.stringify({ referenceNumber: referenceNumber })
 							};
 
 							// Gửi request AJAX để cập nhật status
-							fetch("acceptPayment/" + id, requestOptions)
+							fetch("acceptPayment/"+id, requestOptions)
 								.then(response => {
 									if (!response.ok) {
 										throw new Error('Network response was not ok');
@@ -275,8 +223,6 @@ function hideSuccessModal() {
 									return response.json();
 								})
 								.then(data => {
-									  hideLoadingModal();
-        showSuccessModal();
 									console.log("success: " + data);
 									// Nếu thành công, cập nhật trực tiếp trên giao diện
 									depositStatus.textContent = "Done"
@@ -285,10 +231,7 @@ function hideSuccessModal() {
 									// Xử lý lỗi nếu có
 									console.error('There was an error!', error);
 								});
-  // Đóng modal thành công khi nhấn nút Đóng
-  $('#successModal').on('hidden.bs.modal', function() {
-    window.location.reload();
-  });
+
 						}
 
 					</script>

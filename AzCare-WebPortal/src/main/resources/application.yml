@@ -12,14 +12,10 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/azcarsdb
     username: root
-    password: 1234
-
-
-
-    
+    password: 1410
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   mail:
     host: smtp.gmail.com
     password: pblt rtjz jdps zobm
@@ -31,7 +27,21 @@ spring:
           starttls:
             enable: true
     username: dn169240@gmail.com
-    
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 315105914646-at74dd4lot6pgb157gi7htnplna3ppp0.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
+     
+     
+     
+     
+     
 paypal:
   mode: sandbox
   client:

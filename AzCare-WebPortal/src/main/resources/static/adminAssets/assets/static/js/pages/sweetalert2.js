@@ -16,9 +16,69 @@ const Toast = Swal.mixin({
 	}
 })
 
+if (document.getElementById("loadding-sendEmail")) {
+	document.getElementById("loadding-sendEmail").addEventListener("click", (e) => {
+		Swal2.fire({
+			icon: "success",
+			html: `<p> Sending mail... </p>`,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading();
+			},
+			willClose: () => {
+				clearInterval(timerInterval);
+			},
+			showCancelButton: false,
+			showConfirmButton: false,
+			allowOutsideClick: false,
+			allowEscapeKey: false
+		})
+	})
+}
 
+if (document.getElementById("loadding-addLicense")) {
+	document.getElementById("loadding-addLicense").addEventListener("click", (e) => {
+		Swal2.fire({
+			icon: "question",
+			timer: 8000,
+			html: `<p> Checking ... </p>`,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading();
+			},
+			willClose: () => {
+				clearInterval(timerInterval);
+			},
+			showCancelButton: false,
+			showConfirmButton: false,
+			allowOutsideClick: false,
+			allowEscapeKey: false
+		});
 
+	}
+	);
+}
+if (document.getElementById("addLicense-false")) {
+	document.getElementById("addLicense-false").addEventListener("click", (e) => {
+		Swal.fire({
+			icon: "error",
+			title: "Oops...",
+			text: "Your Driver License in not valid",
+		});
 
+	}
+	);
+}if (document.getElementById("addLicense-success")) {
+	document.getElementById("addLicense-success").addEventListener("click", (e) => {
+		Swal.fire({
+			icon: "success",
+			title: "Vaid Driver License",
+			text: "Your Driver License validated",
+		});
+
+	}
+	);
+}
 /*document.getElementById("basic").addEventListener("click", (e) => {
   Swal2.fire("Any fool can use a computer")
 })
@@ -33,12 +93,7 @@ document.getElementById("footer").addEventListener("click", (e) => {
 document.getElementById("title").addEventListener("click", (e) => {
   Swal2.fire("The Internet?", "That thing is still around?", "question")
 })
-document.getElementById("success").addEventListener("click", (e) => {
-  Swal2.fire({
-	icon: "success",
-	title: "Success",
-  })
-})
+
 document.getElementById("error").addEventListener("click", (e) => {
   Swal2.fire({
 	icon: "error",
@@ -175,7 +230,9 @@ if (document.getElementById("accept-tuReview")) {
 		}).then((result) => {
 
 			if (result.value && result.value.toLowerCase() === 'verify') {
-				verify.submit();
+
+
+				$('#verify').submit();
 				console.log("User entered 'verify'");
 			} else {
 
@@ -204,7 +261,7 @@ if (document.getElementById("decline-tuReview")) {
 		}).then((result) => {
 			if (result.value && result.value.toLowerCase() === 'decline') {
 
-				declined.submit();
+				$('#declined').submit();
 				console.log("User entered 'verify'");
 			} else {
 
@@ -234,7 +291,7 @@ if (document.getElementById("accept-plates")) {
 				$('#privateText').val("''Your License Plate is verified for booking, check your email for full information''");
 				sendPrivateMessage();
 				$('#verify-pl').submit();
-				console.log("User entered 'verify'");
+				$('#loadding-sendEmail').click();
 			} else {
 
 				console.log("User did not enter 'verify' or canceled");
@@ -265,7 +322,7 @@ if (document.getElementById("decline-plates")) {
 				reason.value = result.value.toLowerCase();
 				sendPrivateMessage();
 				$('#declined-pl').submit();
-				console.log("User entered 'verify'");
+				$('#loadding-sendEmail').click();
 			} else {
 				console.log("User did not enter 'decline' or canceled");
 				Swal2.fire({
@@ -294,7 +351,7 @@ if (document.getElementById("accept")) {
 				privateText.value = "''Your car is available for rent now, check your email for full information''";
 				sendPrivateMessage();
 				verify.submit();
-				console.log("User entered 'verify'");
+				$('#loadding-sendEmail').click();
 			} else {
 
 				console.log("User did not enter 'verify' or canceled");
@@ -325,7 +382,7 @@ if (document.getElementById("decline")) {
 				reason.value = result.value.toLowerCase();
 				sendPrivateMessage();
 				declined.submit();
-				console.log("User entered 'verify'");
+				$('#loadding-sendEmail').click();
 			} else {
 
 				console.log("User did not enter 'decline' or canceled");

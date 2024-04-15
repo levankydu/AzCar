@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -15,6 +16,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +39,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
 import com.project.AzCar.Dto.Comments.CommentsDTO;
+import com.project.AzCar.Dto.DriverLicense.DriverLicenseBack;
+import com.project.AzCar.Dto.DriverLicense.DriverLicenseFront;
 import com.project.AzCar.Dto.Orders.OrderDetailsDTO;
 import com.project.AzCar.Dto.Reply.ReplyDTO;
 import com.project.AzCar.Dto.Reviews.ReviewsDTO;
@@ -47,8 +52,6 @@ import com.project.AzCar.Entities.Cars.OrderDetails;
 import com.project.AzCar.Entities.Cars.PlateImages;
 import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Comments.Comments;
-import com.project.AzCar.Entities.Coupon.Coupon;
-import com.project.AzCar.Entities.Coupon.UserCoupon;
 import com.project.AzCar.Entities.Deposit.Cardbank;
 import com.project.AzCar.Entities.HintText.HintText;
 import com.project.AzCar.Entities.Locations.City;
@@ -70,32 +73,30 @@ import com.project.AzCar.Services.Cars.CarServices;
 import com.project.AzCar.Services.Cars.ExtraFeeServices;
 import com.project.AzCar.Services.Cars.PlateImageServices;
 import com.project.AzCar.Services.Cars.PlusServiceServices;
-import com.project.AzCar.Services.Coupon.ICouponService;
-import com.project.AzCar.Services.Coupon.IUserCouponService;
 import com.project.AzCar.Services.HintText.HintTextServices;
 import com.project.AzCar.Services.Locations.DistrictServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
 import com.project.AzCar.Services.Locations.WardServices;
 import com.project.AzCar.Services.Orders.OrderDetailsService;
 import com.project.AzCar.Services.Payments.PaymentService;
+import com.project.AzCar.Services.Payments.ProfitCallBack;
 import com.project.AzCar.Services.Reviews.IReviewsService;
 import com.project.AzCar.Services.Reviews.ReviewService;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
+import com.project.AzCar.Utilities.OcrService;
 import com.project.AzCar.Utilities.OrderExtraFee;
 import com.project.AzCar.payments.paypal.PaypalService;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import net.sourceforge.tess4j.TesseractException;
 
 @Controller
 public class UserSideCarController {
-	
 	@Autowired
-	private IUserCouponService userCouponService;
-	@Autowired
-	private ICouponService couponService;
+	private OcrService ocrService;
 	@Autowired
 	private ICarbankService cardService;
 	@Autowired
@@ -140,7 +141,6 @@ public class UserSideCarController {
 	private ICommentsService commentsService;
 	@Autowired
 	private IReplyService repService;
-
 	@Autowired
 	private PaypalService paypalService;
 
@@ -165,6 +165,7 @@ public class UserSideCarController {
 		return "registerCar";
 	}
 
+	// Chủ xe check khi khách trả
 	@PostMapping("home/myplan/rentalReview")
 	public String retalReview(
 			@RequestParam(name = "clean-check", required = false, defaultValue = "false") boolean cleanCheck,
@@ -366,7 +367,15 @@ public class UserSideCarController {
 		orderdetails.setStatus(Constants.orderStatus.WAITING);
 		orderdetails.setReview(false);
 		orderServices.save(orderdetails);
-		paymentServices.createNewLock(user.getId(), orderdetails.getId(), orderdetails.getTotalAndFees());
+		paymentServices.createNewLock(user.getId(), orderdetails.getId(),
+				orderdetails.getTotalAndFeesWithoutInsurance());
+		paymentServices.createNewProfit(user.getId(), BigDecimal.valueOf(orderdetails.getExtraFee().getInsurance()),
+				new ProfitCallBack() {
+					@Override
+					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+						user.setBalance(userBalance.subtract(amount));
+					}
+				});
 		CarInforDto carDetailsDto = carServices.mapToDto(carDetails.getId());
 		BigDecimal discountAmount = orderdetails.getOriginPrice()
 				.multiply(BigDecimal.valueOf(orderdetails.getDiscount()).divide(BigDecimal.valueOf(100)));
@@ -436,8 +445,8 @@ public class UserSideCarController {
 			}
 		}
 		List<OrderDetails> orderDetailsOfThisCar = orderServices.getFromCarId(Integer.parseInt(carId));
-		orderDetailsOfThisCar.removeIf(item -> !item.getStatus().equals(Constants.plateStatus.WAITING)
-				&& !item.getStatus().equals(Constants.plateStatus.ACCEPTED));
+		orderDetailsOfThisCar.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
+				&& !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
 		ModelView.addAttribute("orderDetailsOfThisCar", orderDetailsOfThisCar);
 
 		List<City> provinces = provinceServices.getListCity();
@@ -465,11 +474,7 @@ public class UserSideCarController {
 		// Sally add
 		// Lấy danh sách các review cho chiếc xe và thêm vào model
 		List<Reviews> reviews = reviewServices.findAllReviewsByCarId(Integer.parseInt(carId));
-		
-		UserCoupon uc = userCouponService.getUserCouponByUserId((int )customer.getId());
-		Coupon coupon = couponService.getCouponById(uc.getCoupon().getId());
-		
-		
+
 		List<ReviewsDTO> listReviewsDTO = new ArrayList<>();
 		if (!reviews.isEmpty()) {
 			for (Reviews re : reviews) {
@@ -846,7 +851,12 @@ public class UserSideCarController {
 			vio.setEnabled(false);
 			violationRepo.save(vio);
 		}
-		paymentServices.createNewLock(owner.getId(), 0, BigDecimal.valueOf(200));
+		paymentServices.createNewProfit(owner.getId(), BigDecimal.valueOf(200), new ProfitCallBack() {
+			@Override
+			public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+				user.setBalance(userBalance.subtract(amount));
+			}
+		});
 
 		return "redirect:/home/myplan/";
 	}
@@ -869,11 +879,17 @@ public class UserSideCarController {
 			vio.setEnabled(false);
 			violationRepo.save(vio);
 		}
-		paymentServices.createNewLock(owner.getId(), 0, BigDecimal.valueOf(200));
+		paymentServices.createNewProfit(owner.getId(), BigDecimal.valueOf(400), new ProfitCallBack() {
+			@Override
+			public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+				user.setBalance(userBalance.subtract(amount));
+			}
+		});
 
 		return "redirect:/home/myplan/";
 	}
 
+	// car owner declines booking
 	@GetMapping("/home/myplan/declined/{orderId}")
 	public String declinedRequestBooking(@PathVariable(name = "orderId") String orderId) {
 		var order = orderServices.getById(Integer.parseInt(orderId));
@@ -886,7 +902,14 @@ public class UserSideCarController {
 		vio.setCarId(car.getId());
 		vio.setReason(Constants.violations.OWNER_DECLINED);
 		violationRepo.save(vio);
-		paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFees());
+		paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
+		paymentServices.createNewExpense(order.getUserId(), BigDecimal.valueOf(order.getExtraFee().getInsurance()),
+				new ProfitCallBack() {
+					@Override
+					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+						user.setBalance(userBalance.add(amount));
+					}
+				});
 		return "redirect:/home/myplan/";
 	}
 
@@ -896,8 +919,13 @@ public class UserSideCarController {
 		order.setStatus(Constants.orderStatus.RENTOR_TRIP_DONE);
 		orderServices.save(order);
 		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
-		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(2)));
-		paymentServices.createNewLock(ownerId, order.getId(), order.getTotalRent().multiply(BigDecimal.valueOf(0.1)));
+		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().multiply(BigDecimal.valueOf(0.4)));
+		paymentServices.createNewProfit(ownerId, order.getTotalRent().multiply(BigDecimal.valueOf(0.1)),
+				new ProfitCallBack() {
+					@Override
+					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+					}
+				});
 
 		return "redirect:/home/myplan/";
 	}
@@ -908,11 +936,24 @@ public class UserSideCarController {
 		String status = order.getStatus();
 		if (status.equals("accepted")) {
 			// return only 90% of totalRent and fees with insurance
-			paymentServices.createNewRefund(order.getUserId(), order.getId(),
-					order.getTotalAndFeesWithoutInsurance().multiply(BigDecimal.valueOf(0.9)));
+			paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
+			paymentServices.createNewProfit(order.getUserId(), order.getTotalRent().multiply(BigDecimal.valueOf(0.1)),
+					new ProfitCallBack() {
+						@Override
+						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+							user.setBalance(userBalance.subtract(amount));
+						}
+					});
 		}
 		if (status.equals("waiting_for_verify")) {
-
+			paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
+			paymentServices.createNewExpense(order.getUserId(), BigDecimal.valueOf(order.getExtraFee().getInsurance()),
+					new ProfitCallBack() {
+						@Override
+						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+							user.setBalance(userBalance.add(amount));
+						}
+					});
 		}
 		order.setStatus(Constants.orderStatus.RENTOR_DECLINED);
 		orderServices.save(order);
@@ -975,22 +1016,22 @@ public class UserSideCarController {
 		listImg.removeIf(t -> t.getStatus().equals(Constants.plateStatus.DECLINED));
 
 		OrderDetailsDTO rentorDone = orderServices.getDTORentorTripDoneOrder();
-		
-		Cardbank c = cardService.findCardbankByUserid(12);
-		Cardbank cuser = cardService.findCardbankByUserid((int)user.getId());
-		ModelView.addAttribute("cardbankuser", cuser);
-		if(c!=null)
-		{
-			ModelView.addAttribute("cardbank", c);
+
+		Cardbank c = cardService.findCardbankbyId(1);
+
+		if (request.getSession().getAttribute("add_driverLicense") != null) {
+			ModelView.addAttribute("driverLicense", request.getSession().getAttribute("add_driverLicense"));
+			request.getSession().removeAttribute("add_driverLicense");
+
 		}
-	
-		
-		
+		ModelView.addAttribute("cardbank", c);
+
 		ModelView.addAttribute("rentorDone", rentorDone);
 		ModelView.addAttribute("orderList", latestOrders);
 		ModelView.addAttribute("ImgLicense", listImg);
 		ModelView.addAttribute("listCar", listDto);
 		ModelView.addAttribute("user", user);
+
 		return "myPlans";
 	}
 
@@ -1071,41 +1112,155 @@ public class UserSideCarController {
 
 	@PostMapping("/home/myplan/")
 	public String uploadDriveLicense(@RequestParam("frontImg") MultipartFile frontImg,
-			@RequestParam("behindImg") MultipartFile behindImg, HttpServletRequest request) {
+			@RequestParam("behindImg") MultipartFile behindImg, HttpServletRequest request, Model ModelView)
+			throws IOException, TesseractException {
 
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users ownerId = userServices.findUserByEmail(email);
+		Integer countError = 0;
+		DriverLicenseFront driverLicenseFront = new DriverLicenseFront();
+		DriverLicenseBack driverLicenseBack = new DriverLicenseBack();
+		var ocrResultFront = ocrService.ocr(frontImg).getResult();
+		var ocrResultBack = ocrService.ocr(behindImg).getResult();
+		// Regular expressions
+		// Regular expressions
+		Pattern licenseNumberPattern = Pattern.compile("No:\\s*(\\d+)");
+		Pattern fullNamePattern = Pattern.compile("Full name:\\s*([^\\n]+)");
+		Pattern dateOfBirthPattern = Pattern.compile("Date of Birth:\\s*(\\d{2}/\\d{2}/\\d{4})");
+		Pattern licenseClassPattern = Pattern.compile("Class:\\s*([\\w\\d]+)");
+		Pattern expiresPattern = Pattern.compile("Expires:\\s*(\\d{2}/\\d{2}/\\d{4})");
+		Pattern isdriverLicense = Pattern.compile("DRIVER'S LICENSE");
+		Pattern isdriverLicenseBack = Pattern.compile("CLASSIFICATION OF MOTOR VEHICLES");
 
-		String dir = "./UploadFiles/userImages" + "/" + ownerId.getId() + "-"
-				+ ownerId.getEmail().replace(".", "-").replace("@", "-");
-		Path path = Paths.get(dir);
-		PlateImages frontImgModel = new PlateImages();
-		PlateImages behindImgModel = new PlateImages();
-		try {
-			Files.createDirectories(path);
-		} catch (IOException e) {
-			throw new RuntimeException("Could not initialize folder for upload!");
+		Matcher matcher;
+
+		matcher = isdriverLicenseBack.matcher(ocrResultBack);
+		if (matcher.find()) {
+			driverLicenseBack.setDriverLicense(true);
+		} else {
+			driverLicenseBack.setDriverLicense(false);
+			countError++;
 		}
-		try {
-
-			fileStorageServices.save(frontImg, dir);
-			frontImgModel.setUserId(ownerId.getId());
-			frontImgModel.setStatus(Constants.plateStatus.WAITING);
-			frontImgModel.setImageUrl(frontImg.getOriginalFilename());
-			plateImageServices.save(frontImgModel);
-
-			fileStorageServices.save(behindImg, dir);
-			behindImgModel.setUserId(ownerId.getId());
-			behindImgModel.setStatus(Constants.plateStatus.WAITING);
-			behindImgModel.setImageUrl(behindImg.getOriginalFilename());
-
-			plateImageServices.save(behindImgModel);
-
-		} catch (Exception e) {
-			System.out.println(e);
+		matcher = licenseNumberPattern.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setLicenseNumber(matcher.group(1).trim());
 		}
 
-		return "redirect:/home/myplan/";
+		matcher = fullNamePattern.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setFullName(matcher.group(1).trim());
+		}
+
+		matcher = dateOfBirthPattern.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setDateOfBirth(matcher.group(1).trim());
+		}
+
+		matcher = licenseClassPattern.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setLicenseClass(matcher.group(1).trim());
+		}
+
+		matcher = expiresPattern.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setExpires(matcher.group(1).trim());
+		}
+
+		matcher = isdriverLicense.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setDriverLicense(true);
+		} else {
+			countError++;
+			driverLicenseFront.setDriverLicense(false);
+		}
+
+		String driverNo = driverLicenseFront.getLicenseNumber();
+		Pattern licenseNumPattern = Pattern.compile("\\d{12}");
+		if (driverNo == null) {
+			countError++;
+		} else {
+			Matcher matcherNo = licenseNumPattern.matcher(driverNo);
+			if (!matcherNo.find()) {
+				countError++;
+			}
+		}
+
+		if (driverLicenseFront.getFullName() == null) {
+			countError++;
+		}
+		String dob = driverLicenseFront.getDateOfBirth();
+		if (dob == null) {
+			countError++;
+		} else {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			try {
+				LocalDate date = LocalDate.parse(dob, formatter);
+				System.out.println("Parsed LocalDate: " + date);
+
+			} catch (Exception e) {
+				System.out.println("Invalid date format");
+				countError++;
+			}
+		}
+
+		if (driverLicenseFront.getLicenseClass() == null) {
+			countError++;
+		}
+		String expires = driverLicenseFront.getExpires();
+		if (expires == null) {
+			countError++;
+		} else {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			try {
+				LocalDate expiresDay = LocalDate.parse(expires, formatter);
+				System.out.println("Parsed LocalDate: " + expiresDay);
+
+			} catch (Exception e) {
+				System.out.println("Invalid date format");
+				countError++;
+			}
+		}
+		if (countError > 0) {
+
+			request.getSession().setAttribute("add_driverLicense", "false");
+			return "redirect:/home/myplan/";
+		} else {
+			String dir = "./UploadFiles/userImages" + "/" + ownerId.getId() + "-"
+					+ ownerId.getEmail().replace(".", "-").replace("@", "-");
+			Path path = Paths.get(dir);
+			PlateImages frontImgModel = new PlateImages();
+			PlateImages behindImgModel = new PlateImages();
+			try {
+				Files.createDirectories(path);
+			} catch (IOException e) {
+				throw new RuntimeException("Could not initialize folder for upload!");
+			}
+			try {
+
+				fileStorageServices.save(frontImg, dir);
+				frontImgModel.setUserId(ownerId.getId());
+				frontImgModel.setStatus(Constants.plateStatus.WAITING);
+				frontImgModel.setImageUrl(frontImg.getOriginalFilename());
+				frontImgModel.setLicenseNo(driverLicenseFront.getLicenseNumber());
+				frontImgModel.setLicenseClass(driverLicenseFront.getLicenseClass());
+				frontImgModel.setExpriedDay(driverLicenseFront.getExpires());
+				frontImgModel.setRealName(driverLicenseFront.getFullName());
+				plateImageServices.save(frontImgModel);
+
+				fileStorageServices.save(behindImg, dir);
+				behindImgModel.setUserId(ownerId.getId());
+				behindImgModel.setStatus(Constants.plateStatus.WAITING);
+				behindImgModel.setImageUrl(behindImg.getOriginalFilename());
+				plateImageServices.save(behindImgModel);
+
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+			request.getSession().setAttribute("add_driverLicense", "success");
+
+			return "redirect:/home/myplan/";
+		}
+
 	}
 
 	@GetMapping("/home/myplan/license/{filename}")

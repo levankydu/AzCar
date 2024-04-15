@@ -31,10 +31,4 @@ public class CardbankServiceImpl implements ICarbankService{
 		return cardRepo.findById(id).get();
 	}
 
-	@Override
-	public Cardbank findCardbankByUserid(int id) {
-		// TODO Auto-generated method stub
-		return cardRepo.getCardbankbyuserid(id);
-	}
-
 }
