@@ -16,7 +16,25 @@ const Toast = Swal.mixin({
 	}
 })
 
-
+if (document.getElementById("loadding-sendEmail")) {
+	document.getElementById("loadding-sendEmail").addEventListener("click", (e) => {
+		Swal2.fire({
+			icon: "success",
+			html: `<p> Sending mail... </p>`,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading();
+			},
+			willClose: () => {
+				clearInterval(timerInterval);
+			},
+			showCancelButton: false,
+            showConfirmButton: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false
+		})
+	})
+}
 
 
 /*document.getElementById("basic").addEventListener("click", (e) => {
@@ -33,12 +51,7 @@ document.getElementById("footer").addEventListener("click", (e) => {
 document.getElementById("title").addEventListener("click", (e) => {
   Swal2.fire("The Internet?", "That thing is still around?", "question")
 })
-document.getElementById("success").addEventListener("click", (e) => {
-  Swal2.fire({
-	icon: "success",
-	title: "Success",
-  })
-})
+
 document.getElementById("error").addEventListener("click", (e) => {
   Swal2.fire({
 	icon: "error",
@@ -175,7 +188,9 @@ if (document.getElementById("accept-tuReview")) {
 		}).then((result) => {
 
 			if (result.value && result.value.toLowerCase() === 'verify') {
-				verify.submit();
+
+
+				$('#verify').submit();
 				console.log("User entered 'verify'");
 			} else {
 
@@ -204,7 +219,7 @@ if (document.getElementById("decline-tuReview")) {
 		}).then((result) => {
 			if (result.value && result.value.toLowerCase() === 'decline') {
 
-				declined.submit();
+				$('#declined').submit();
 				console.log("User entered 'verify'");
 			} else {
 
@@ -234,7 +249,7 @@ if (document.getElementById("accept-plates")) {
 				$('#privateText').val("''Your License Plate is verified for booking, check your email for full information''");
 				sendPrivateMessage();
 				$('#verify-pl').submit();
-				console.log("User entered 'verify'");
+				$('#loadding-sendEmail').click();
 			} else {
 
 				console.log("User did not enter 'verify' or canceled");
@@ -265,7 +280,7 @@ if (document.getElementById("decline-plates")) {
 				reason.value = result.value.toLowerCase();
 				sendPrivateMessage();
 				$('#declined-pl').submit();
-				console.log("User entered 'verify'");
+				$('#loadding-sendEmail').click();
 			} else {
 				console.log("User did not enter 'decline' or canceled");
 				Swal2.fire({
@@ -294,7 +309,7 @@ if (document.getElementById("accept")) {
 				privateText.value = "''Your car is available for rent now, check your email for full information''";
 				sendPrivateMessage();
 				verify.submit();
-				console.log("User entered 'verify'");
+				$('#loadding-sendEmail').click();
 			} else {
 
 				console.log("User did not enter 'verify' or canceled");
@@ -325,7 +340,7 @@ if (document.getElementById("decline")) {
 				reason.value = result.value.toLowerCase();
 				sendPrivateMessage();
 				declined.submit();
-				console.log("User entered 'verify'");
+				$('#loadding-sendEmail').click();
 			} else {
 
 				console.log("User did not enter 'decline' or canceled");

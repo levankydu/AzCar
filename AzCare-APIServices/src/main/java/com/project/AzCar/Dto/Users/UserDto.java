@@ -33,7 +33,7 @@ public class UserDto {
 	private String gender;
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date dob;
-
+	private String address;
 	private boolean isEnabled;
 	private String token;
 	private boolean changePassword;
