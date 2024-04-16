@@ -111,7 +111,7 @@ public class UserServicesImpl implements UserServices {
 			payment.setToUserId(0);
 			payment.setAmount(amount);
 			payment.setDescription("Tien von cua Admin");
-			payment.setStatus(Constants.paymentStatus.EXPENSE);
+			payment.setStatus(Constants.paymentStatus.DEPOSIT);
 			paymentRepository.save(payment);
 			
 			user.setBalance(userBalance.add(amount));

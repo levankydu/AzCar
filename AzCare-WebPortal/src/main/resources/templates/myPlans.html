@@ -81,7 +81,7 @@
 		.my-cars-hehe {
 			background-color: #f1f0f0;
 			min-height: 200px;
-			max-height: 230px;
+			max-height: 250px;
 			box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 			border-radius: 7px;
 		}
@@ -481,6 +481,10 @@
 														<div class="listing-price">
 															Current Discount: <span class="new"
 																th:text="${car.discount > 0 ? car.discount + '%' : 'No discount'}"></span>
+														</div>
+														<div class="listing-price">
+															Finished Orders: <span class="new"
+																th:text="${car.finishedOrders > 0 ? car.finishedOrders : 0}"></span>
 														</div>
 														<div class="listing-price">
 															<p>

@@ -21,9 +21,9 @@ public interface PaymentService {
 
 	void createNewLock(long fromUserId, int orderId, BigDecimal amount);
 
-	void createNewProfit(long fromUserId, BigDecimal amount, ProfitCallBack callback);
+	void createNewProfit(long fromUserId, BigDecimal amount, ProfitCallBack callback, boolean isDeposit);
 
-	void createNewExpense(long toUserId, BigDecimal amount, ProfitCallBack callback);
+	void createNewExpense(long toUserId, BigDecimal amount, ProfitCallBack callback, boolean isWithdraw);
 
 	List<Payment> findAll();
 

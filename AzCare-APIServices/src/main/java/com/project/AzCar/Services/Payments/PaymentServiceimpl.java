@@ -95,15 +95,20 @@ public class PaymentServiceimpl implements PaymentService {
 	}
 
 	@Override
-	public void createNewProfit(long fromUserId, BigDecimal amount, ProfitCallBack callback) {
+	public void createNewProfit(long fromUserId, BigDecimal amount, ProfitCallBack callback, boolean isDeposit) {
 		Users user = userServices.findById(fromUserId);
 		BigDecimal userBalance = user.getBalance() != null ? user.getBalance() : BigDecimal.valueOf(0);
 		var payment = new Payment();
 		payment.setUserId((int) fromUserId);
 		payment.setToUserId((int) admin.getId());
 		payment.setAmount(amount);
-		payment.setDescription("Profit (Tien loi)");
-		payment.setStatus(Constants.paymentStatus.PROFIT);
+		if(isDeposit) {
+			payment.setDescription("Deposit (nap tien)");
+			payment.setStatus(Constants.paymentStatus.DEPOSIT);
+		}else {
+			payment.setDescription("Profit (Tien loi)");
+			payment.setStatus(Constants.paymentStatus.PROFIT);
+		}
 		paymentRepository.save(payment);
 		
 		callback.onProcess(user, userBalance, amount);
@@ -115,15 +120,20 @@ public class PaymentServiceimpl implements PaymentService {
 	}
 
 	@Override
-	public void createNewExpense(long toUserId, BigDecimal amount, ProfitCallBack callback) {
+	public void createNewExpense(long toUserId, BigDecimal amount, ProfitCallBack callback, boolean isWithdraw) {
 		Users user = userServices.findById(toUserId);
 		BigDecimal userBalance = user.getBalance() != null ? user.getBalance() : BigDecimal.valueOf(0);
 		var payment = new Payment();
 		payment.setUserId((int) admin.getId());
 		payment.setToUserId((int) toUserId);
 		payment.setAmount(amount);
-		payment.setDescription("Expense (Tien lo)");
-		payment.setStatus(Constants.paymentStatus.EXPENSE);
+		if(isWithdraw) {
+			payment.setDescription("Withdraw (rut tien)");
+			payment.setStatus(Constants.paymentStatus.WITHDRAW);
+		}else {
+			payment.setDescription("Expense (Tien lo)");
+			payment.setStatus(Constants.paymentStatus.EXPENSE);
+		}
 		paymentRepository.save(payment);
 		
 		callback.onProcess(user, userBalance, amount);

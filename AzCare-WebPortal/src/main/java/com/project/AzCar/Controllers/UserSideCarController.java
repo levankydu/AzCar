@@ -367,7 +367,7 @@ public class UserSideCarController {
 					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 						user.setBalance(userBalance.subtract(amount));
 					}
-				});
+				}, false);
 		CarInforDto carDetailsDto = carServices.mapToDto(carDetails.getId());
 		BigDecimal discountAmount = orderdetails.getOriginPrice()
 				.multiply(BigDecimal.valueOf(orderdetails.getDiscount()).divide(BigDecimal.valueOf(100)));
@@ -854,7 +854,7 @@ public class UserSideCarController {
 			public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 				user.setBalance(userBalance.subtract(amount));
 			}
-		});
+		}, false);
 
 		return "redirect:/home/myplan/";
 	}
@@ -882,7 +882,7 @@ public class UserSideCarController {
 			public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 				user.setBalance(userBalance.subtract(amount));
 			}
-		});
+		}, false);
 
 		return "redirect:/home/myplan/";
 	}
@@ -908,7 +908,7 @@ public class UserSideCarController {
 					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 						user.setBalance(userBalance.add(amount));
 					}
-				});
+				}, false);
 		Users user = userServices.findById(order.getUserId());
 		CarInforDto carDTO = carServices.mapToDto(Integer.parseInt(order.getCarId()));
 		String subject = "[" + carDTO.getCarmodel().getBrand() + "] " + carDTO.getCarmodel().getModel()
@@ -937,7 +937,7 @@ public class UserSideCarController {
 					@Override
 					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 					}
-				});
+				}, false);
 		Users user = userServices.findById(ownerId);
 		CarInforDto carDTO = carServices.mapToDto(Integer.parseInt(order.getCarId()));
 		String subject = "[" + carDTO.getCarmodel().getBrand() + "] " + carDTO.getCarmodel().getModel() + "Rentor Done";
@@ -962,7 +962,7 @@ public class UserSideCarController {
 						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 							user.setBalance(userBalance.subtract(amount));
 						}
-					});
+					}, false);
 		}
 		if (status.equals("waiting_for_verify")) {
 			paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
@@ -972,7 +972,7 @@ public class UserSideCarController {
 						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 							user.setBalance(userBalance.add(amount));
 						}
-					});
+					}, false);
 		}
 		order.setStatus(Constants.orderStatus.RENTOR_DECLINED);
 		orderServices.save(order);
@@ -1035,6 +1035,10 @@ public class UserSideCarController {
 			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
 			List<Violation> vioSize = violationRepo.getEnabledByCarId(itemDto.getId());
 			itemDto.setActiveViolationAmount(vioSize.size());
+			List<OrderDetailsDTO> finishedList = orderServices.getDTOFromCarId(item.getId());
+			finishedList.removeIf(i -> !i.getStatus().equals("owner_trip_done"));
+			itemDto.setFinishedOrders(finishedList.size());
+
 			var historyBooking = "historyBooking" + itemDto.getCarmodel().getObjectId();
 			List<OrderDetailsDTO> historyBookingList = orderServices.getDTOFromCarId(item.getId());
 			ModelView.addAttribute(historyBooking, historyBookingList);

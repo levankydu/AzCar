@@ -1377,7 +1377,7 @@
 										<p th:attr="data-full-address=${fullAddress}" th:text="${fullAddress}"></p>
 									</div>
 									<div class="col-12"
-										th:if="${carDetails.isCarPlus == true && customer.id != user.id}">
+										th:if="${customer.id != user.id}">
 										<h6 class="">Choose your current location:</h6>
 										<div class="input-group-prepend">
 											<input style="cursor: pointer; text-align: center;" type="text" readonly
@@ -2215,8 +2215,8 @@
 								</tr>
 								<tr>
 									<td colspan="2">
-										<p class="text-danger">* If you have agreed, you will be locked $${totalFinalRent.toLocaleString()} as a mortgage (fees included as notified), the fees incurred will be returned to you if no problems occur after car rental completed.</p>
-										<p class="text-danger">* If the car owner does not respond within 15 minutes, the locked money will be fully refunded to you immediately.</p>
+										<p class="text-danger">* If you have agreed, you will be locked <span style="font-weight: 800;">$${totalFinalRent.toLocaleString()}</span> as a mortgage (fees included as notified), the fees incurred will be returned to you if no problems occur after car rental completed.</p>
+										<p class="text-danger">* If the car owner does not respond within 1 hour, the locked money will be fully refunded to you immediately.</p>
 									</td>
 								</tr>
 							</table>`,
