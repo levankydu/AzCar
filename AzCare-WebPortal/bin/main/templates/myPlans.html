@@ -913,7 +913,7 @@ select {
 														</div>
 													</div>
 													<p class="btn text-white"
-														th:classappend="${item.status == 'declined' ? 'badge-danger' : (item.status == 'owner_trip_done' ? 'badge-success' : (item.status == 'rentor_trip_done' ? 'badge-warning' : 'badge-info'))}"
+														th:classappend="${item.status == 'declined' || item.status == 'rentor_declined' ? 'badge-danger' : (item.status == 'owner_trip_done' ? 'badge-success' : (item.status == 'rentor_trip_done' ? 'badge-warning' : 'badge-info'))}"
 														th:text="${item.getStatusOnView()}"></p>
 													<a
 														th:attr="data-url=@{'/home/myplan/cancel_from_user/' + ${item.id}}"

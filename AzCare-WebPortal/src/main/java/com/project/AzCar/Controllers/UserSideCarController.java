@@ -425,6 +425,8 @@ public class UserSideCarController {
 	public String getDetailsPage(HttpServletRequest request, @PathVariable("carId") String carId, Model ModelView) {
 		var model = carServices.findById(Integer.parseInt(carId));
 		var modelDto = carServices.mapToDto(model.getId());
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users user = userServices.findUserByEmail(email);
 		List<String> listProvince = provinceServices.getListCityString();
 
 		var carExtraFee = extraFeeServices.findByCarId(model.getId());
@@ -446,7 +448,19 @@ public class UserSideCarController {
 		}
 		List<OrderDetails> orderDetailsOfThisCar = orderServices.getFromCarId(Integer.parseInt(carId));
 		orderDetailsOfThisCar.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
-				&& !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
+		        && !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
+		List<OrderDetails> userOrders = orderServices.getFromCreatedBy((int) user.getId());
+		userOrders.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
+		        && !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
+		if (userOrders.size() > 0) {
+		    for (OrderDetails userOrder : userOrders) {
+		        boolean exists = orderDetailsOfThisCar.stream()
+		                .anyMatch(item -> item.getId() == userOrder.getId());
+		        if (!exists) {
+		            orderDetailsOfThisCar.add(userOrder);
+		        }
+		    }
+		}
 		ModelView.addAttribute("orderDetailsOfThisCar", orderDetailsOfThisCar);
 
 		List<City> provinces = provinceServices.getListCity();
@@ -454,7 +468,6 @@ public class UserSideCarController {
 
 		ModelView.addAttribute("fullAddress", model.getAddress());
 		ModelView.addAttribute("carDetails", modelDto);
-		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users customer = userServices.findUserByEmail(email);
 		if (customer.isEnabled() == false) {
 			ModelView.addAttribute("userViolated", true);

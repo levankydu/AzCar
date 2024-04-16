@@ -615,7 +615,7 @@
 							<tr class="text-center">
 								<td>No repsonse</td>
 								<td> <i style="color: green;" class="fa-solid fa-circle-check"></i> 100% cashback</td>
-								<td>  <i style="color: green;" class="fa-solid fa-circle-check"></i> No cost</td>
+								<td> <i style="color: green;" class="fa-solid fa-circle-check"></i> No cost</td>
 							</tr>
 							<tr class="text-center">
 								<td>Before Accepting</td>
@@ -634,8 +634,11 @@
 								<td><i style="color: red;" class="fa-solid fa-circle-xmark"></i> No permission</td>
 							</tr>
 						</table>
-						<p><span style="font-weight: 800;">*</span> If owner has no reponse after this car is booked for 1 hour, the order will be canceled automatically</p>
-						<p><span style="font-weight: 800;">*</span> For who that declined or let the order to be declined will get a violation ticket, if you have 3 tickets you will be disabled temporary</p>
+						<p><span style="font-weight: 800;">*</span> If owner has no reponse after this car is booked for
+							1 hour, the order will be canceled automatically</p>
+						<p><span style="font-weight: 800;">*</span> For who that declined or let the order to be
+							declined will get a violation ticket, if you have 3 tickets you will be disabled temporary
+						</p>
 					</div>
 					<!-- Section Location start -->
 
@@ -1376,8 +1379,7 @@
 										<h3 class="sidebar-title">Car Location</h3>
 										<p th:attr="data-full-address=${fullAddress}" th:text="${fullAddress}"></p>
 									</div>
-									<div class="col-12"
-										th:if="${customer.id != user.id}">
+									<div class="col-12" th:if="${customer.id != user.id}">
 										<h6 class="">Choose your current location:</h6>
 										<div class="input-group-prepend">
 											<input style="cursor: pointer; text-align: center;" type="text" readonly
@@ -1894,8 +1896,18 @@
 				onSelect: function (selectedDate) {
 					selectedDate = $.datepicker.parseDate("dd-mm-yy", selectedDate);
 					var tempDate = new Date(selectedDate);
-					tempDate.setDate(tempDate.getDate() + 1); // Cộng thêm một ngày
-					var selectedDateFormatted = $.datepicker.formatDate("dd-mm-yy", tempDate);
+					var selectedDateFormatted;
+					if (this.id === 'form-fromDate') {
+						tempDate.setDate(tempDate.getDate() + 1);  // Cộng thêm một ngày
+						selectedDateFormatted = $.datepicker.formatDate("dd-mm-yy", tempDate);
+					}
+					if (this.id === 'form-toDate') {
+						var fromDateValue = $("#form-fromDate").val();
+						var fromDate = $.datepicker.parseDate("dd-mm-yy", fromDateValue);
+						fromDate.setDate(fromDate.getDate() + 1);
+						var formattedDate = $.datepicker.formatDate("dd-mm-yy", fromDate);
+						selectedDateFormatted = $.datepicker.parseDate("dd-mm-yy", formattedDate);
+					}
 					toDateInput.datepicker("option", "minDate", selectedDateFormatted);
 					updateTotalRent();
 
@@ -1990,17 +2002,6 @@
 
 				// Tính tổng giá thuê xe
 				var totalRent = dailyPrice * daysDifference;
-
-				var deliveryFeeElement = $('#form-delivery-fee');
-				var deliveryFeeText = deliveryFeeElement.text().trim();
-
-				var deliveryFee = 0;
-
-				if (deliveryFeeText.includes('$')) {
-					deliveryFee = parseInt(deliveryFeeText.replace('$', '').trim());
-				}
-
-				totalRent += deliveryFee;
 
 				// Cập nhật nội dung của phần tử total-rent
 				document.getElementById("form-details-amount").textContent = '$' + dailyPrice.toLocaleString() + ' x ' + daysDifference + (daysDifference > 1 ? ' days' : ' day');
@@ -2132,7 +2133,7 @@
 
 		$('#form-submit-btn').on('click', function (e) {
 			e.preventDefault();
-			const totalFinalRent = parseFloat($("#form-car-rental input[name='totalRent']").val()) + parseFloat(extraFeeeeeee ? extraFeeeeeee.decorationFee ?? 0 : 0) + parseFloat(extraFeeeeeee ? extraFeeeeeee.cleanningFee ?? 0 : 0) + 200;
+			let totalFinalRent = parseFloat($("#form-car-rental input[name='totalRent']").val()) + parseFloat(extraFeeeeeee ? extraFeeeeeee.decorationFee ?? 0 : 0) + parseFloat(extraFeeeeeee ? extraFeeeeeee.cleanningFee ?? 0 : 0) + 200;
 			const uissa = $('p[data-uqwfjwissa]').data('uqwfjwissa');
 			if (parseFloat(uissa) < parseFloat(totalFinalRent)) {
 				Swal.fire({
@@ -2150,24 +2151,29 @@
 				if (deliveryFeeText11.includes('$')) {
 					deliveryFee11 = parseInt(deliveryFeeText11.replace('$', '').trim());
 				}
+				totalFinalRent += deliveryFee11;
 				$("input[name='deliveryFee']").val(deliveryFee11);
-				const extraFeeField = extraFeeeeeee
-					? `<tr>
-										<td colspan=2 class="text-center">Extra Fee</td>
+				const extraFeeField =
+					`<tr>
+										<td colspan=2 style="font-weight: 700" class="text-center">Extra Fee</td>
+									</tr>
+									<tr>
+										<th class="text-left">Delivery fee: </th>
+										<td class="text-right">$${deliveryFee11.toLocaleString()}</td>
 									</tr>
 									<tr>
 										<td class="text-left">Cleanning Fee: </td>
-										<td class="text-right">$${extraFeeeeeee.cleanningFee.toLocaleString() ?? 0}</td>
+										<td class="text-right">$${extraFeeeeeee && extraFeeeeeee.cleanningFee.toLocaleString() ? extraFeeeeeee.cleanningFee.toLocaleString() : 0}</td>
 									</tr>
 									<tr>
 										<td class="text-left">Smell Fee: </td>
-										<td class="text-right">$${extraFeeeeeee.decorationFee.toLocaleString() ?? 0}</td>
+										<td class="text-right">$${extraFeeeeeee && extraFeeeeeee.decorationFee.toLocaleString() ? extraFeeeeeee.decorationFee.toLocaleString() : 0}</td>
 									</tr>
 									<tr>
 										<td class="text-left">Insurance Fee: </td>
 										<td class="text-right">$200</td>
 									</tr>`
-					: '';
+					;
 				Swal.fire({
 					title: "Confirmation!",
 					html: `<table class="table">
@@ -2194,10 +2200,6 @@
 								<tr>
 									<th class="text-left">Total days: </th>
 									<td class="text-right">${$("input[name='differenceDate']").val().toLocaleString()}</td>
-								</tr>
-								<tr>
-									<th class="text-left">Delivery fee: </th>
-									<td class="text-right">$${deliveryFee11.toLocaleString()}</td>
 								</tr>
 								<tr>
 									<th class="text-left">Sub Total: </th>
