@@ -1,0 +1,49 @@
+server:
+  port: 8081
+#app:
+#  jwtSecret: asdfghjklpoiuytrewqzxcvbnmqazwsxedcrfvtgbyh
+#  jwtExpirationMs: 86400000
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    check-template: true
+    check-template-location: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/azcarsdb
+    username: root
+    password: 1410
+  jpa:
+    hibernate:
+      ddl-auto: update
+  mail:
+    host: smtp.gmail.com
+    password: pblt rtjz jdps zobm
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    username: dn169240@gmail.com
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 315105914646-at74dd4lot6pgb157gi7htnplna3ppp0.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
+     
+     
+     
+     
+     
+paypal:
+  mode: sandbox
+  client:
+    app: AWaDcggq4KGALzjm9IZzE-7kBccuEVGBgdRnH_UJB19P5mTwzne77Rs-c40xjjFdBo8pNDq5Z_RaQThP 
+    secret: EJsJSziQmYd6jJXvY8W6Ca_QUQAbR7nCXReKLl9_u8kZp2aJ-LCOqfZochCtqu_RVTwObwDPIypJ_qE-

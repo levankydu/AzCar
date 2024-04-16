@@ -1,0 +1,2 @@
+rootProject.name = 'AzCare-WebPortal'
+include 'AzCare-APIServices'
