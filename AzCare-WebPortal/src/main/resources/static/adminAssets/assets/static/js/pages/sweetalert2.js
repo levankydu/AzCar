@@ -29,14 +29,56 @@ if (document.getElementById("loadding-sendEmail")) {
 				clearInterval(timerInterval);
 			},
 			showCancelButton: false,
-            showConfirmButton: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false
+			showConfirmButton: false,
+			allowOutsideClick: false,
+			allowEscapeKey: false
 		})
 	})
 }
 
+if (document.getElementById("loadding-addLicense")) {
+	document.getElementById("loadding-addLicense").addEventListener("click", (e) => {
+		Swal2.fire({
+			icon: "question",
+			timer: 8000,
+			html: `<p> Checking ... </p>`,
+			timerProgressBar: true,
+			didOpen: () => {
+				Swal.showLoading();
+			},
+			willClose: () => {
+				clearInterval(timerInterval);
+			},
+			showCancelButton: false,
+			showConfirmButton: false,
+			allowOutsideClick: false,
+			allowEscapeKey: false
+		});
 
+	}
+	);
+}
+if (document.getElementById("addLicense-false")) {
+	document.getElementById("addLicense-false").addEventListener("click", (e) => {
+		Swal.fire({
+			icon: "error",
+			title: "Oops...",
+			text: "Your Driver License in not valid",
+		});
+
+	}
+	);
+}if (document.getElementById("addLicense-success")) {
+	document.getElementById("addLicense-success").addEventListener("click", (e) => {
+		Swal.fire({
+			icon: "success",
+			title: "Vaid Driver License",
+			text: "Your Driver License validated",
+		});
+
+	}
+	);
+}
 /*document.getElementById("basic").addEventListener("click", (e) => {
   Swal2.fire("Any fool can use a computer")
 })

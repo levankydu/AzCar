@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -15,6 +16,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +39,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
 import com.project.AzCar.Dto.Comments.CommentsDTO;
+import com.project.AzCar.Dto.DriverLicense.DriverLicenseBack;
+import com.project.AzCar.Dto.DriverLicense.DriverLicenseFront;
 import com.project.AzCar.Dto.Orders.OrderDetailsDTO;
 import com.project.AzCar.Dto.Reply.ReplyDTO;
 import com.project.AzCar.Dto.Reviews.ReviewsDTO;
@@ -80,14 +85,18 @@ import com.project.AzCar.Services.Reviews.ReviewService;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
+import com.project.AzCar.Utilities.OcrService;
 import com.project.AzCar.Utilities.OrderExtraFee;
 import com.project.AzCar.payments.paypal.PaypalService;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import net.sourceforge.tess4j.TesseractException;
 
 @Controller
 public class UserSideCarController {
+	@Autowired
+	private OcrService ocrService;
 	@Autowired
 	private ICarbankService cardService;
 	@Autowired
@@ -132,7 +141,6 @@ public class UserSideCarController {
 	private ICommentsService commentsService;
 	@Autowired
 	private IReplyService repService;
-
 	@Autowired
 	private PaypalService paypalService;
 
@@ -1059,6 +1067,12 @@ public class UserSideCarController {
 		OrderDetailsDTO rentorDone = orderServices.getDTORentorTripDoneOrder();
 
 		Cardbank c = cardService.findCardbankbyId(1);
+
+		if (request.getSession().getAttribute("add_driverLicense") != null) {
+			ModelView.addAttribute("driverLicense", request.getSession().getAttribute("add_driverLicense"));
+			request.getSession().removeAttribute("add_driverLicense");
+
+		}
 		ModelView.addAttribute("cardbank", c);
 
 		ModelView.addAttribute("rentorDone", rentorDone);
@@ -1066,6 +1080,7 @@ public class UserSideCarController {
 		ModelView.addAttribute("ImgLicense", listImg);
 		ModelView.addAttribute("listCar", listDto);
 		ModelView.addAttribute("user", user);
+
 		return "myPlans";
 	}
 
@@ -1135,41 +1150,155 @@ public class UserSideCarController {
 
 	@PostMapping("/home/myplan/")
 	public String uploadDriveLicense(@RequestParam("frontImg") MultipartFile frontImg,
-			@RequestParam("behindImg") MultipartFile behindImg, HttpServletRequest request) {
+			@RequestParam("behindImg") MultipartFile behindImg, HttpServletRequest request, Model ModelView)
+			throws IOException, TesseractException {
 
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users ownerId = userServices.findUserByEmail(email);
+		Integer countError = 0;
+		DriverLicenseFront driverLicenseFront = new DriverLicenseFront();
+		DriverLicenseBack driverLicenseBack = new DriverLicenseBack();
+		var ocrResultFront = ocrService.ocr(frontImg).getResult();
+		var ocrResultBack = ocrService.ocr(behindImg).getResult();
+		// Regular expressions
+		// Regular expressions
+		Pattern licenseNumberPattern = Pattern.compile("No:\\s*(\\d+)");
+		Pattern fullNamePattern = Pattern.compile("Full name:\\s*([^\\n]+)");
+		Pattern dateOfBirthPattern = Pattern.compile("Date of Birth:\\s*(\\d{2}/\\d{2}/\\d{4})");
+		Pattern licenseClassPattern = Pattern.compile("Class:\\s*([\\w\\d]+)");
+		Pattern expiresPattern = Pattern.compile("Expires:\\s*(\\d{2}/\\d{2}/\\d{4})");
+		Pattern isdriverLicense = Pattern.compile("DRIVER'S LICENSE");
+		Pattern isdriverLicenseBack = Pattern.compile("CLASSIFICATION OF MOTOR VEHICLES");
 
-		String dir = "./UploadFiles/userImages" + "/" + ownerId.getId() + "-"
-				+ ownerId.getEmail().replace(".", "-").replace("@", "-");
-		Path path = Paths.get(dir);
-		PlateImages frontImgModel = new PlateImages();
-		PlateImages behindImgModel = new PlateImages();
-		try {
-			Files.createDirectories(path);
-		} catch (IOException e) {
-			throw new RuntimeException("Could not initialize folder for upload!");
+		Matcher matcher;
+
+		matcher = isdriverLicenseBack.matcher(ocrResultBack);
+		if (matcher.find()) {
+			driverLicenseBack.setDriverLicense(true);
+		} else {
+			driverLicenseBack.setDriverLicense(false);
+			countError++;
 		}
-		try {
-
-			fileStorageServices.save(frontImg, dir);
-			frontImgModel.setUserId(ownerId.getId());
-			frontImgModel.setStatus(Constants.plateStatus.WAITING);
-			frontImgModel.setImageUrl(frontImg.getOriginalFilename());
-			plateImageServices.save(frontImgModel);
-
-			fileStorageServices.save(behindImg, dir);
-			behindImgModel.setUserId(ownerId.getId());
-			behindImgModel.setStatus(Constants.plateStatus.WAITING);
-			behindImgModel.setImageUrl(behindImg.getOriginalFilename());
-
-			plateImageServices.save(behindImgModel);
-
-		} catch (Exception e) {
-			System.out.println(e);
+		matcher = licenseNumberPattern.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setLicenseNumber(matcher.group(1).trim());
 		}
 
-		return "redirect:/home/myplan/";
+		matcher = fullNamePattern.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setFullName(matcher.group(1).trim());
+		}
+
+		matcher = dateOfBirthPattern.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setDateOfBirth(matcher.group(1).trim());
+		}
+
+		matcher = licenseClassPattern.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setLicenseClass(matcher.group(1).trim());
+		}
+
+		matcher = expiresPattern.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setExpires(matcher.group(1).trim());
+		}
+
+		matcher = isdriverLicense.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setDriverLicense(true);
+		} else {
+			countError++;
+			driverLicenseFront.setDriverLicense(false);
+		}
+
+		String driverNo = driverLicenseFront.getLicenseNumber();
+		Pattern licenseNumPattern = Pattern.compile("\\d{12}");
+		if (driverNo == null) {
+			countError++;
+		} else {
+			Matcher matcherNo = licenseNumPattern.matcher(driverNo);
+			if (!matcherNo.find()) {
+				countError++;
+			}
+		}
+
+		if (driverLicenseFront.getFullName() == null) {
+			countError++;
+		}
+		String dob = driverLicenseFront.getDateOfBirth();
+		if (dob == null) {
+			countError++;
+		} else {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			try {
+				LocalDate date = LocalDate.parse(dob, formatter);
+				System.out.println("Parsed LocalDate: " + date);
+
+			} catch (Exception e) {
+				System.out.println("Invalid date format");
+				countError++;
+			}
+		}
+
+		if (driverLicenseFront.getLicenseClass() == null) {
+			countError++;
+		}
+		String expires = driverLicenseFront.getExpires();
+		if (expires == null) {
+			countError++;
+		} else {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			try {
+				LocalDate expiresDay = LocalDate.parse(expires, formatter);
+				System.out.println("Parsed LocalDate: " + expiresDay);
+
+			} catch (Exception e) {
+				System.out.println("Invalid date format");
+				countError++;
+			}
+		}
+		if (countError > 0) {
+
+			request.getSession().setAttribute("add_driverLicense", "false");
+			return "redirect:/home/myplan/";
+		} else {
+			String dir = "./UploadFiles/userImages" + "/" + ownerId.getId() + "-"
+					+ ownerId.getEmail().replace(".", "-").replace("@", "-");
+			Path path = Paths.get(dir);
+			PlateImages frontImgModel = new PlateImages();
+			PlateImages behindImgModel = new PlateImages();
+			try {
+				Files.createDirectories(path);
+			} catch (IOException e) {
+				throw new RuntimeException("Could not initialize folder for upload!");
+			}
+			try {
+
+				fileStorageServices.save(frontImg, dir);
+				frontImgModel.setUserId(ownerId.getId());
+				frontImgModel.setStatus(Constants.plateStatus.WAITING);
+				frontImgModel.setImageUrl(frontImg.getOriginalFilename());
+				frontImgModel.setLicenseNo(driverLicenseFront.getLicenseNumber());
+				frontImgModel.setLicenseClass(driverLicenseFront.getLicenseClass());
+				frontImgModel.setExpriedDay(driverLicenseFront.getExpires());
+				frontImgModel.setRealName(driverLicenseFront.getFullName());
+				plateImageServices.save(frontImgModel);
+
+				fileStorageServices.save(behindImg, dir);
+				behindImgModel.setUserId(ownerId.getId());
+				behindImgModel.setStatus(Constants.plateStatus.WAITING);
+				behindImgModel.setImageUrl(behindImg.getOriginalFilename());
+				plateImageServices.save(behindImgModel);
+
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+			request.getSession().setAttribute("add_driverLicense", "success");
+
+			return "redirect:/home/myplan/";
+		}
+
 	}
 
 	@GetMapping("/home/myplan/license/{filename}")

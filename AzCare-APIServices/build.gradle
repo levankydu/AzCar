@@ -50,6 +50,9 @@ dependencies {
 	
 	// https://mvnrepository.com/artifact/com.google.firebase/firebase-admin
 	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.2.0'
+	// https://mvnrepository.com/artifact/net.sourceforge.tess4j/tess4j
+	implementation group: 'net.sourceforge.tess4j', name: 'tess4j', version: '4.5.1'
+	
 	
 	
 	

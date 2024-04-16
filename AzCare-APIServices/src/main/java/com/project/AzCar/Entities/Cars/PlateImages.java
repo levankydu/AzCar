@@ -29,4 +29,9 @@ public class PlateImages implements Serializable {
 	private String ImageUrl = null;
 	private long userId;
 	private String status;
+	private String realName;
+	private String licenseNo;
+	private String expriedDay;
+	private String licenseClass;
+
 }
