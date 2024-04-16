@@ -94,7 +94,7 @@ public class APIDepositController {
 					@Override
 					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 					}
-				});
+				}, true);
 				return new ResponseEntity<Deposit>(d, HttpStatus.OK);
 			}
 

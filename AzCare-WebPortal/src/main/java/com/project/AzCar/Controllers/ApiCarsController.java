@@ -13,13 +13,17 @@ import com.project.AzCar.Dto.CarInfos.CarInforDto;
 import com.project.AzCar.Dto.Orders.OrderDetailsDTO;
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Locations.City;
+import com.project.AzCar.Entities.Locations.District;
+import com.project.AzCar.Entities.Locations.Ward;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
 import com.project.AzCar.Services.Cars.CarServices;
 import com.project.AzCar.Services.Cars.ExtraFeeServices;
 import com.project.AzCar.Services.Cars.PlusServiceServices;
+import com.project.AzCar.Services.Locations.DistrictServices;
 import com.project.AzCar.Services.Locations.ProvinceServices;
+import com.project.AzCar.Services.Locations.WardServices;
 import com.project.AzCar.Services.Orders.OrderDetailsService;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
@@ -48,6 +52,10 @@ public class ApiCarsController {
 	private OrderDetailsService orderServices;
 	@Autowired
 	private ProvinceServices provinceServices;
+	@Autowired
+	private DistrictServices districtServices;
+	@Autowired
+	private WardServices wardServices;
 
 	@GetMapping("/getAllCars")
 	public List<CarInforDto> getMethodName() {
@@ -116,8 +124,17 @@ public class ApiCarsController {
 	}
 
 	@GetMapping("/getProvinces")
-	public List<City> getProvince() {
+	public List<City> getProvinces() {
 		return provinceServices.getListCity();
 	}
 
+	@GetMapping("/getDistricts")
+	public List<District> getDistricts(@RequestParam("provinceCode") String provinceCode) {
+		return districtServices.getDistricByProvinceCode(provinceCode);
+	}
+
+	@GetMapping("/getDistricts/{districtCode}")
+	public List<Ward> getWards(@RequestParam("districtCode") String districtCode) {
+		return wardServices.getWardByDistrictCode(districtCode);
+	}
 }

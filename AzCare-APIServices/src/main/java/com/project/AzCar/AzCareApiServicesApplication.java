@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 
+import net.sourceforge.tess4j.Tesseract;
+
 @SpringBootApplication
 @ComponentScan(basePackages = "com.project.AzCar.*")
 @Configuration
@@ -34,5 +36,15 @@ public class AzCareApiServicesApplication implements CommandLineRunner {
 	@Bean
 	ModelMapper getModelMapper() {
 		return new ModelMapper();
+	}
+
+	@Bean
+	Tesseract getTesseract() {
+		Tesseract tesseract = new Tesseract();
+		String tessDataPath = "D:\\kyusadiasbdiha\\abcvjasduhas\\AzCar\\AzCare-APIServices\\src\\main\\resources\\static\\tessdata";
+		tesseract.setDatapath(tessDataPath);
+		tesseract.setLanguage("eng");
+
+		return tesseract;
 	}
 }

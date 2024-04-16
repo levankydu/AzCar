@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -15,6 +16,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +39,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
 import com.project.AzCar.Dto.Comments.CommentsDTO;
+import com.project.AzCar.Dto.DriverLicense.DriverLicenseBack;
+import com.project.AzCar.Dto.DriverLicense.DriverLicenseFront;
 import com.project.AzCar.Dto.Orders.OrderDetailsDTO;
 import com.project.AzCar.Dto.Reply.ReplyDTO;
 import com.project.AzCar.Dto.Reviews.ReviewsDTO;
@@ -80,14 +85,18 @@ import com.project.AzCar.Services.Reviews.ReviewService;
 import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
+import com.project.AzCar.Utilities.OcrService;
 import com.project.AzCar.Utilities.OrderExtraFee;
 import com.project.AzCar.payments.paypal.PaypalService;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import net.sourceforge.tess4j.TesseractException;
 
 @Controller
 public class UserSideCarController {
+	@Autowired
+	private OcrService ocrService;
 	@Autowired
 	private ICarbankService cardService;
 	@Autowired
@@ -132,7 +141,6 @@ public class UserSideCarController {
 	private ICommentsService commentsService;
 	@Autowired
 	private IReplyService repService;
-
 	@Autowired
 	private PaypalService paypalService;
 
@@ -367,7 +375,7 @@ public class UserSideCarController {
 					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 						user.setBalance(userBalance.subtract(amount));
 					}
-				});
+				}, false);
 		CarInforDto carDetailsDto = carServices.mapToDto(carDetails.getId());
 		BigDecimal discountAmount = orderdetails.getOriginPrice()
 				.multiply(BigDecimal.valueOf(orderdetails.getDiscount()).divide(BigDecimal.valueOf(100)));
@@ -417,6 +425,8 @@ public class UserSideCarController {
 	public String getDetailsPage(HttpServletRequest request, @PathVariable("carId") String carId, Model ModelView) {
 		var model = carServices.findById(Integer.parseInt(carId));
 		var modelDto = carServices.mapToDto(model.getId());
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users user = userServices.findUserByEmail(email);
 		List<String> listProvince = provinceServices.getListCityString();
 
 		var carExtraFee = extraFeeServices.findByCarId(model.getId());
@@ -437,8 +447,20 @@ public class UserSideCarController {
 			}
 		}
 		List<OrderDetails> orderDetailsOfThisCar = orderServices.getFromCarId(Integer.parseInt(carId));
-		orderDetailsOfThisCar.removeIf(item -> !item.getStatus().equals(Constants.plateStatus.WAITING)
-				&& !item.getStatus().equals(Constants.plateStatus.ACCEPTED));
+		orderDetailsOfThisCar.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
+		        && !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
+		List<OrderDetails> userOrders = orderServices.getFromCreatedBy((int) user.getId());
+		userOrders.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
+		        && !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
+		if (userOrders.size() > 0) {
+		    for (OrderDetails userOrder : userOrders) {
+		        boolean exists = orderDetailsOfThisCar.stream()
+		                .anyMatch(item -> item.getId() == userOrder.getId());
+		        if (!exists) {
+		            orderDetailsOfThisCar.add(userOrder);
+		        }
+		    }
+		}
 		ModelView.addAttribute("orderDetailsOfThisCar", orderDetailsOfThisCar);
 
 		List<City> provinces = provinceServices.getListCity();
@@ -446,7 +468,6 @@ public class UserSideCarController {
 
 		ModelView.addAttribute("fullAddress", model.getAddress());
 		ModelView.addAttribute("carDetails", modelDto);
-		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users customer = userServices.findUserByEmail(email);
 		if (customer.isEnabled() == false) {
 			ModelView.addAttribute("userViolated", true);
@@ -657,7 +678,7 @@ public class UserSideCarController {
 		OrderDetails order = orderServices.getOrderDetailsByCarIdandUserId(carid, userid);
 		if (order != null) {
 			System.out.println("Order Details: đây " + order.getStatus());
-			if (order.getStatus().contains("accepted")) {
+			if (order.getStatus().contains("rentor_trip_done")) {
 				if (order.isReview()) {
 					System.out.println("nếu nó đã review thì ko review nữa" + order.isReview());
 					return null;
@@ -821,13 +842,19 @@ public class UserSideCarController {
 	}
 
 	@GetMapping("/home/myplan/accepted/{orderId}")
-	public String acceptRequestBooking(@PathVariable(name = "orderId") String orderId) {
+	public String acceptRequestBooking(@PathVariable(name = "orderId") String orderId)
+			throws UnsupportedEncodingException, MessagingException {
 		var order = orderServices.getById(Integer.parseInt(orderId));
 		order.setStatus(Constants.orderStatus.ACCEPTED);
+
 		orderServices.save(order);
 		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
 		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(2)));
-
+		Users user = userServices.findById(order.getUserId());
+		CarInforDto car = carServices.mapToDto(Integer.parseInt(order.getCarId()));
+		String subject = "[" + car.getCarmodel().getBrand() + "] " + car.getCarmodel().getModel() + "Order Accepted";
+		String mailcontent = "Your order is ACCEPTED by owner";
+		orderServices.sendOrderEmail(user.getEmail(), subject, mailcontent);
 		return "redirect:/home/myplan/";
 	}
 
@@ -848,7 +875,7 @@ public class UserSideCarController {
 			public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 				user.setBalance(userBalance.subtract(amount));
 			}
-		});
+		}, false);
 
 		return "redirect:/home/myplan/";
 	}
@@ -876,14 +903,15 @@ public class UserSideCarController {
 			public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 				user.setBalance(userBalance.subtract(amount));
 			}
-		});
+		}, false);
 
 		return "redirect:/home/myplan/";
 	}
 
 	// car owner declines booking
 	@GetMapping("/home/myplan/declined/{orderId}")
-	public String declinedRequestBooking(@PathVariable(name = "orderId") String orderId) {
+	public String declinedRequestBooking(@PathVariable(name = "orderId") String orderId)
+			throws UnsupportedEncodingException, MessagingException {
 		var order = orderServices.getById(Integer.parseInt(orderId));
 		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
 		var car = carServices.findById(Integer.parseInt(order.getCarId()));
@@ -901,12 +929,25 @@ public class UserSideCarController {
 					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 						user.setBalance(userBalance.add(amount));
 					}
-				});
+				}, false);
+		Users user = userServices.findById(order.getUserId());
+		CarInforDto carDTO = carServices.mapToDto(Integer.parseInt(order.getCarId()));
+		String subject = "[" + carDTO.getCarmodel().getBrand() + "] " + carDTO.getCarmodel().getModel()
+				+ "Order Declined";
+		String reason = "";
+		String mailcontent = "Your order is DECLINED by owner" + "<p>Reason: " + reason + "</p>";
+		orderServices.sendOrderEmail(user.getEmail(), subject, mailcontent);
+
+		Users owner = userServices.findById(ownerId);
+		String mailcontentOnwer = "Decline successfully, you will get a violation ticket, if you have 3 tickets in a month your car will be disabled temporary!";
+		orderServices.sendOrderEmail(owner.getEmail(), subject, mailcontentOnwer);
+
 		return "redirect:/home/myplan/";
 	}
 
 	@GetMapping("/home/myplan/rental_done/{orderId}")
-	public String clientDoneRequestBooking(@PathVariable(name = "orderId") String orderId) {
+	public String clientDoneRequestBooking(@PathVariable(name = "orderId") String orderId)
+			throws UnsupportedEncodingException, MessagingException {
 		var order = orderServices.getById(Integer.parseInt(orderId));
 		order.setStatus(Constants.orderStatus.RENTOR_TRIP_DONE);
 		orderServices.save(order);
@@ -917,16 +958,23 @@ public class UserSideCarController {
 					@Override
 					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 					}
-				});
-
+				}, false);
+		Users user = userServices.findById(ownerId);
+		CarInforDto carDTO = carServices.mapToDto(Integer.parseInt(order.getCarId()));
+		String subject = "[" + carDTO.getCarmodel().getBrand() + "] " + carDTO.getCarmodel().getModel() + "Rentor Done";
+		String mailcontent = "Your order is finished by customer";
+		orderServices.sendOrderEmail(user.getEmail(), subject, mailcontent);
 		return "redirect:/home/myplan/";
 	}
 
 	@GetMapping("/home/myplan/cancel_from_user/{orderId}")
-	public String clientCancelBooking(@PathVariable(name = "orderId") String orderId) {
+	public String clientCancelBooking(@PathVariable(name = "orderId") String orderId)
+			throws UnsupportedEncodingException, MessagingException {
 		var order = orderServices.getById(Integer.parseInt(orderId));
 		String status = order.getStatus();
+		boolean isAccepted = false;
 		if (status.equals("accepted")) {
+			isAccepted = true;
 			// return only 90% of totalRent and fees with insurance
 			paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
 			paymentServices.createNewProfit(order.getUserId(), order.getTotalRent().multiply(BigDecimal.valueOf(0.1)),
@@ -935,7 +983,7 @@ public class UserSideCarController {
 						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 							user.setBalance(userBalance.subtract(amount));
 						}
-					});
+					}, false);
 		}
 		if (status.equals("waiting_for_verify")) {
 			paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
@@ -945,7 +993,7 @@ public class UserSideCarController {
 						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 							user.setBalance(userBalance.add(amount));
 						}
-					});
+					}, false);
 		}
 		order.setStatus(Constants.orderStatus.RENTOR_DECLINED);
 		orderServices.save(order);
@@ -955,6 +1003,22 @@ public class UserSideCarController {
 		vio.setCarId(Integer.parseInt(order.getCarId()));
 		vio.setReason(Constants.violations.USER_DECLINDED);
 		violationRepo.save(vio);
+
+		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
+		Users owner = userServices.findById(ownerId);
+		String reason = "";
+		CarInforDto carDTO = carServices.mapToDto(Integer.parseInt(order.getCarId()));
+		String subject = "[" + carDTO.getCarmodel().getBrand() + "] " + carDTO.getCarmodel().getModel()
+				+ "Customer Declined";
+		String mailcontent = "Your order is DECLINED by customer" + "<p>Reason: " + reason + "</p>";
+		orderServices.sendOrderEmail(owner.getEmail(), subject, mailcontent);
+
+		Users user = userServices.findById(order.getUserId());
+		String mailcontentUser = "You have just canceled this order, you will get a violation ticket, if you have 3 tickets in a month you can not use our service temporary!";
+		if (isAccepted) {
+			mailcontentUser += "<p>Because this order was accepted, you will be charge 10% by total amount of this order as a pusnishment</p>";
+		}
+		orderServices.sendOrderEmail(user.getEmail(), subject, mailcontentUser);
 
 		return "redirect:/home/myplan/";
 	}
@@ -990,6 +1054,12 @@ public class UserSideCarController {
 			var itemDto = carServices.mapToDto(item.getId());
 			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
+			List<Violation> vioSize = violationRepo.getEnabledByCarId(itemDto.getId());
+			itemDto.setActiveViolationAmount(vioSize.size());
+			List<OrderDetailsDTO> finishedList = orderServices.getDTOFromCarId(item.getId());
+			finishedList.removeIf(i -> !i.getStatus().equals("owner_trip_done"));
+			itemDto.setFinishedOrders(finishedList.size());
+
 			var historyBooking = "historyBooking" + itemDto.getCarmodel().getObjectId();
 			List<OrderDetailsDTO> historyBookingList = orderServices.getDTOFromCarId(item.getId());
 			ModelView.addAttribute(historyBooking, historyBookingList);
@@ -1010,6 +1080,12 @@ public class UserSideCarController {
 		OrderDetailsDTO rentorDone = orderServices.getDTORentorTripDoneOrder();
 
 		Cardbank c = cardService.findCardbankbyId(1);
+
+		if (request.getSession().getAttribute("add_driverLicense") != null) {
+			ModelView.addAttribute("driverLicense", request.getSession().getAttribute("add_driverLicense"));
+			request.getSession().removeAttribute("add_driverLicense");
+
+		}
 		ModelView.addAttribute("cardbank", c);
 
 		ModelView.addAttribute("rentorDone", rentorDone);
@@ -1017,6 +1093,7 @@ public class UserSideCarController {
 		ModelView.addAttribute("ImgLicense", listImg);
 		ModelView.addAttribute("listCar", listDto);
 		ModelView.addAttribute("user", user);
+
 		return "myPlans";
 	}
 
@@ -1032,17 +1109,6 @@ public class UserSideCarController {
 		System.out.println(newDiscount);
 		return "redirect:/home/myplan/";
 	}
-// chổ này làm ảnh hưởng phần nạp nên sally xóa
-//	@PostMapping("/home/myplan/charge/")
-//	public String charge(HttpServletRequest request) {
-//
-//		String email = request.getSession().getAttribute("emailLogin").toString();
-//		Users user = userServices.findUserByEmail(email);
-//		user.setBalance(BigDecimal.valueOf(10000));
-//		userServices.saveUserReset(user);
-//
-//		return "redirect:/home/myplan/";
-//	}
 
 	@PostMapping("/home/myplan/paypal-charge/")
 	public String paypalCharge(HttpServletRequest request) {
@@ -1097,41 +1163,155 @@ public class UserSideCarController {
 
 	@PostMapping("/home/myplan/")
 	public String uploadDriveLicense(@RequestParam("frontImg") MultipartFile frontImg,
-			@RequestParam("behindImg") MultipartFile behindImg, HttpServletRequest request) {
+			@RequestParam("behindImg") MultipartFile behindImg, HttpServletRequest request, Model ModelView)
+			throws IOException, TesseractException {
 
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users ownerId = userServices.findUserByEmail(email);
+		Integer countError = 0;
+		DriverLicenseFront driverLicenseFront = new DriverLicenseFront();
+		DriverLicenseBack driverLicenseBack = new DriverLicenseBack();
+		var ocrResultFront = ocrService.ocr(frontImg).getResult();
+		var ocrResultBack = ocrService.ocr(behindImg).getResult();
+		// Regular expressions
+		// Regular expressions
+		Pattern licenseNumberPattern = Pattern.compile("No:\\s*(\\d+)");
+		Pattern fullNamePattern = Pattern.compile("Full name:\\s*([^\\n]+)");
+		Pattern dateOfBirthPattern = Pattern.compile("Date of Birth:\\s*(\\d{2}/\\d{2}/\\d{4})");
+		Pattern licenseClassPattern = Pattern.compile("Class:\\s*([\\w\\d]+)");
+		Pattern expiresPattern = Pattern.compile("Expires:\\s*(\\d{2}/\\d{2}/\\d{4})");
+		Pattern isdriverLicense = Pattern.compile("DRIVER'S LICENSE");
+		Pattern isdriverLicenseBack = Pattern.compile("CLASSIFICATION OF MOTOR VEHICLES");
 
-		String dir = "./UploadFiles/userImages" + "/" + ownerId.getId() + "-"
-				+ ownerId.getEmail().replace(".", "-").replace("@", "-");
-		Path path = Paths.get(dir);
-		PlateImages frontImgModel = new PlateImages();
-		PlateImages behindImgModel = new PlateImages();
-		try {
-			Files.createDirectories(path);
-		} catch (IOException e) {
-			throw new RuntimeException("Could not initialize folder for upload!");
+		Matcher matcher;
+
+		matcher = isdriverLicenseBack.matcher(ocrResultBack);
+		if (matcher.find()) {
+			driverLicenseBack.setDriverLicense(true);
+		} else {
+			driverLicenseBack.setDriverLicense(false);
+			countError++;
 		}
-		try {
-
-			fileStorageServices.save(frontImg, dir);
-			frontImgModel.setUserId(ownerId.getId());
-			frontImgModel.setStatus(Constants.plateStatus.WAITING);
-			frontImgModel.setImageUrl(frontImg.getOriginalFilename());
-			plateImageServices.save(frontImgModel);
-
-			fileStorageServices.save(behindImg, dir);
-			behindImgModel.setUserId(ownerId.getId());
-			behindImgModel.setStatus(Constants.plateStatus.WAITING);
-			behindImgModel.setImageUrl(behindImg.getOriginalFilename());
-
-			plateImageServices.save(behindImgModel);
-
-		} catch (Exception e) {
-			System.out.println(e);
+		matcher = licenseNumberPattern.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setLicenseNumber(matcher.group(1).trim());
 		}
 
-		return "redirect:/home/myplan/";
+		matcher = fullNamePattern.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setFullName(matcher.group(1).trim());
+		}
+
+		matcher = dateOfBirthPattern.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setDateOfBirth(matcher.group(1).trim());
+		}
+
+		matcher = licenseClassPattern.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setLicenseClass(matcher.group(1).trim());
+		}
+
+		matcher = expiresPattern.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setExpires(matcher.group(1).trim());
+		}
+
+		matcher = isdriverLicense.matcher(ocrResultFront);
+		if (matcher.find()) {
+			driverLicenseFront.setDriverLicense(true);
+		} else {
+			countError++;
+			driverLicenseFront.setDriverLicense(false);
+		}
+
+		String driverNo = driverLicenseFront.getLicenseNumber();
+		Pattern licenseNumPattern = Pattern.compile("\\d{12}");
+		if (driverNo == null) {
+			countError++;
+		} else {
+			Matcher matcherNo = licenseNumPattern.matcher(driverNo);
+			if (!matcherNo.find()) {
+				countError++;
+			}
+		}
+
+		if (driverLicenseFront.getFullName() == null) {
+			countError++;
+		}
+		String dob = driverLicenseFront.getDateOfBirth();
+		if (dob == null) {
+			countError++;
+		} else {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			try {
+				LocalDate date = LocalDate.parse(dob, formatter);
+				System.out.println("Parsed LocalDate: " + date);
+
+			} catch (Exception e) {
+				System.out.println("Invalid date format");
+				countError++;
+			}
+		}
+
+		if (driverLicenseFront.getLicenseClass() == null) {
+			countError++;
+		}
+		String expires = driverLicenseFront.getExpires();
+		if (expires == null) {
+			countError++;
+		} else {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			try {
+				LocalDate expiresDay = LocalDate.parse(expires, formatter);
+				System.out.println("Parsed LocalDate: " + expiresDay);
+
+			} catch (Exception e) {
+				System.out.println("Invalid date format");
+				countError++;
+			}
+		}
+		if (countError > 0) {
+
+			request.getSession().setAttribute("add_driverLicense", "false");
+			return "redirect:/home/myplan/";
+		} else {
+			String dir = "./UploadFiles/userImages" + "/" + ownerId.getId() + "-"
+					+ ownerId.getEmail().replace(".", "-").replace("@", "-");
+			Path path = Paths.get(dir);
+			PlateImages frontImgModel = new PlateImages();
+			PlateImages behindImgModel = new PlateImages();
+			try {
+				Files.createDirectories(path);
+			} catch (IOException e) {
+				throw new RuntimeException("Could not initialize folder for upload!");
+			}
+			try {
+
+				fileStorageServices.save(frontImg, dir);
+				frontImgModel.setUserId(ownerId.getId());
+				frontImgModel.setStatus(Constants.plateStatus.WAITING);
+				frontImgModel.setImageUrl(frontImg.getOriginalFilename());
+				frontImgModel.setLicenseNo(driverLicenseFront.getLicenseNumber());
+				frontImgModel.setLicenseClass(driverLicenseFront.getLicenseClass());
+				frontImgModel.setExpriedDay(driverLicenseFront.getExpires());
+				frontImgModel.setRealName(driverLicenseFront.getFullName());
+				plateImageServices.save(frontImgModel);
+
+				fileStorageServices.save(behindImg, dir);
+				behindImgModel.setUserId(ownerId.getId());
+				behindImgModel.setStatus(Constants.plateStatus.WAITING);
+				behindImgModel.setImageUrl(behindImg.getOriginalFilename());
+				plateImageServices.save(behindImgModel);
+
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+			request.getSession().setAttribute("add_driverLicense", "success");
+
+			return "redirect:/home/myplan/";
+		}
+
 	}
 
 	@GetMapping("/home/myplan/license/{filename}")

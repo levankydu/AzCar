@@ -1,64 +1,61 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<!-- Google Tag Manager -->
-<!--    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	<!-- Google Tag Manager -->
+	<!--    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-TAGID');</script> -->
-<!-- End Google Tag Manager -->
-<title>Az Car</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="UTF-8">
-<!-- External CSS libraries -->
-<link type="text/css" rel="stylesheet"
-	th:href="@{assets/css/bootstrap.min.css}">
-<link type="text/css" rel="stylesheet"
-	href="assets/css/magnific-popup.css">
-<link type="text/css" rel="stylesheet"
-	href="assets/css/jquery.selectBox.css">
-<link type="text/css" rel="stylesheet" href="assets/css/dropzone.css">
-<link type="text/css" rel="stylesheet" href="assets/css/rangeslider.css">
-<link type="text/css" rel="stylesheet" href="assets/css/animate.min.css">
-<link type="text/css" rel="stylesheet" href="assets/css/slick.css">
-<link type="text/css" rel="stylesheet"
-	href="assets/css/jquery.mCustomScrollbar.css">
-<link type="text/css" rel="stylesheet"
-	href="assets/fonts/font-awesome/css/font-awesome.min.css">
-<link type="text/css" rel="stylesheet"
-	href="assets/fonts/flaticon/font/flaticon.css">
+	<!-- End Google Tag Manager -->
+	<title>Az Car</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<!-- External CSS libraries -->
+	<link type="text/css" rel="stylesheet" th:href="@{assets/css/bootstrap.min.css}">
+	<link type="text/css" rel="stylesheet" href="assets/css/magnific-popup.css">
+	<link type="text/css" rel="stylesheet" href="assets/css/jquery.selectBox.css">
+	<link type="text/css" rel="stylesheet" href="assets/css/dropzone.css">
+	<link type="text/css" rel="stylesheet" href="assets/css/rangeslider.css">
+	<link type="text/css" rel="stylesheet" href="assets/css/animate.min.css">
+	<link type="text/css" rel="stylesheet" href="assets/css/slick.css">
+	<link type="text/css" rel="stylesheet" href="assets/css/jquery.mCustomScrollbar.css">
+	<link type="text/css" rel="stylesheet" href="assets/fonts/font-awesome/css/font-awesome.min.css">
+	<link type="text/css" rel="stylesheet" href="assets/fonts/flaticon/font/flaticon.css">
 
-<!-- Favicon icon -->
-<link rel="shortcut icon" th:href="@{/assets/img/favicon.ico}"
-	type="image/x-icon">
+	<!-- Favicon icon -->
+	<link rel="shortcut icon" th:href="@{/assets/img/favicon.ico}" type="image/x-icon">
 
-<!-- Google fonts -->
-<link rel="stylesheet" type="text/css"
-	href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
+	<!-- Google fonts -->
+	<link rel="stylesheet" type="text/css"
+		href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
 
-<!-- Custom Stylesheet -->
-<link type="text/css" rel="stylesheet" href="assets/css/style.css">
-<link rel="stylesheet" type="text/css" id="style_sheet"
-	href="assets/css/skins/default.css">
-<link rel="stylesheet"
-	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
-<style type="text/css">
-.google-btn {
-	display: inline-block;
-	padding: 10px 20px;
-	background-color: #FF0000; /* Màu đỏ */
-	color: #FFFFFF; /* Màu chữ trắng */
-	text-decoration: none;
-	border-radius: 5px;
-	font-size: 16px;
-}
+	<!-- Custom Stylesheet -->
+	<link type="text/css" rel="stylesheet" href="assets/css/style.css">
+	<link rel="stylesheet" type="text/css" id="style_sheet" href="assets/css/skins/default.css">
+	<link rel="stylesheet" href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
+	<style type="text/css">
+		.google-btn {
+			display: inline-block;
+			padding: 10px 20px;
+			background-color: #FF0000;
+			/* Màu đỏ */
+			color: #FFFFFF;
+			/* Màu chữ trắng */
+			text-decoration: none;
+			border-radius: 5px;
+			font-size: 16px;
+		}
 
-.google-btn:hover {
-	background-color: #CC0000; /* Màu đỏ nhạt khi hover */
-}
-</style>
+		.google-btn:hover {
+			background-color: #CC0000;
+			/* Màu đỏ nhạt khi hover */
+		}
+	</style>
+
 </head>
+
 <body id="top">
 	<!-- <!-- Google Tag Manager (noscript) -->
 	<!-- <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TAGID"
@@ -81,34 +78,29 @@ End Google Tag Manager (noscript)
 					<!-- Form content box start -->
 					<div class="form-content-box">
 						<!-- Logo -->
-						<a href="/"> <img src="assets/img/logos/logo.png"
-							class="cm-logo" alt="logo">
+						<a href="/"> <img src="assets/img/logos/logo.png" class="cm-logo" alt="logo">
 						</a>
 						<!-- details -->
 						<div class="details">
 							<!-- Name -->
 							<h3>Sign into your account</h3>
-							<p id="toast-failed-login" hidden="true"
-								class="btn btn-outline-primary btn-lg btn-block">Failed
+							<p id="toast-failed-login" hidden="true" class="btn btn-outline-primary btn-lg btn-block">
+								Failed
 								Example</p>
-
-
-
 							<div th:if="${session.signin_error}">
 								<p class="text-danger" th:text="${session.signin_error}"></p>
 							</div>
 							<!-- Form start -->
-							<form method="post" role="form" th:action="@{/dologin}"
-								id="loginForm">
+							<form method="post" role="form" th:action="@{/dologin}" id="loginForm">
 								<div class="form-group">
 									<input type="email" id="email" name="email" class="input-text"
-										placeholder="Email Address" required> <span
-										id="validation-email" class="text-danger"></span>
+										placeholder="Email Address" required> <span id="validation-email"
+										class="text-danger"></span>
 								</div>
 								<div class="form-group">
-									<input type="password" id="password" name="password"
-										class="input-text" placeholder="Password" required> <span
-										id="validation-password" class="text-danger"></span>
+									<input type="password" id="password" name="password" class="input-text"
+										placeholder="Password" required> <span id="validation-password"
+										class="text-danger"></span>
 								</div>
 								<div class="checkbox">
 									<div class="ez-checkbox pull-left">
@@ -116,8 +108,7 @@ End Google Tag Manager (noscript)
 											Remember me
 										</label>
 									</div>
-									<a href="/forgot_password"
-										class="link-not-important pull-right">Forgot Password</a>
+									<a href="/forgot_password" class="link-not-important pull-right">Forgot Password</a>
 									<div class="clearfix"></div>
 								</div>
 								<div class="form-group mb-0">
@@ -157,38 +148,28 @@ End Google Tag Manager (noscript)
 	</div>
 
 	<!-- External JS libraries -->
-	<script type="text/javascript"
-		th:src="@{/assets/js/jquery-2.2.0.min.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/jquery-2.2.0.min.js}"></script>
 	<script type="text/javascript" th:src="@{/assets/js/popper.min.js}"></script>
 	<script type="text/javascript" th:src="@{assets/js/bootstrap.min.js}"></script>
-	<script type="text/javascript"
-		th:src="@{assets/js/jquery.selectBox.js}"></script>
+	<script type="text/javascript" th:src="@{assets/js/jquery.selectBox.js}"></script>
 	<script type="text/javascript" th:src="@{assets/js/rangeslider.js}"></script>
-	<script type="text/javascript"
-		th:src="@{assets/js/jquery.magnific-popup.min.js}"></script>
-	<script type="text/javascript"
-		th:src="@{assets/js/jquery.filterizr.js}"></script>
+	<script type="text/javascript" th:src="@{assets/js/jquery.magnific-popup.min.js}"></script>
+	<script type="text/javascript" th:src="@{assets/js/jquery.filterizr.js}"></script>
 	<script type="text/javascript" th:src="@{assets/js/wow.min.js}"></script>
 	<script type="text/javascript" th:src="@{assets/js/backstretch.js}"></script>
-	<script type="text/javascript"
-		th:src="@{assets/js/jquery.countdown.js}"></script>
+	<script type="text/javascript" th:src="@{assets/js/jquery.countdown.js}"></script>
 	<script type="text/javascript" th:src="@{assets/js/jquery.scrollUp.js}"></script>
 	<script type="text/javascript" th:src="@{assets/js/particles.min.js}"></script>
 	<script type="text/javascript" th:src="@{assets/js/typed.min.js}"></script>
 	<script type="text/javascript" th:src="@{assets/js/dropzone.js}"></script>
-	<script type="text/javascript"
-		th:src="@{assets/js/jquery.mb.YTPlayer.js}"></script>
+	<script type="text/javascript" th:src="@{assets/js/jquery.mb.YTPlayer.js}"></script>
 	<script type="text/javascript" th:src="@{assets/js/slick.min.js}"></script>
-	<script type="text/javascript"
-		th:src="@{assets/js/jquery.mCustomScrollbar.concat.min.js}"></script>
-	<script
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0N5pbJN10Y1oYFRd0MJ_v2g8W2QT74JE"></script>
-	<script type="text/javascript"
-		th:src="@{assets/js/ie-emulation-modes-warning.js}"></script>
+	<script type="text/javascript" th:src="@{assets/js/jquery.mCustomScrollbar.concat.min.js}"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0N5pbJN10Y1oYFRd0MJ_v2g8W2QT74JE"></script>
+	<script type="text/javascript" th:src="@{assets/js/ie-emulation-modes-warning.js}"></script>
 	<!-- Custom JS Script -->
 	<script type="text/javascript" th:src="@{/assets/js/app.js}"></script>
-	<script
-		th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
+	<script th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
 
 	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 	<script type="text/javascript">
@@ -211,40 +192,31 @@ End Google Tag Manager (noscript)
 				document.getElementById('validation-password').innerText = '';
 			}
 
-			document
-					.getElementById('email')
-					.addEventListener(
-							'input',
-							function() {
-								var email = this.value;
-								if (email.length === 0) {
-									document.getElementById('validation-email').innerText = 'Email address is required.';
-								} else {
-									document.getElementById('validation-email').innerText = '';
-								}
-							});
+			document.getElementById('email').addEventListener('input', function () {
+				var email = this.value;
+				if (email.length === 0) {
+					document.getElementById('validation-email').innerText = 'Email address is required.';
+				} else {
+					document.getElementById('validation-email').innerText = '';
+				}
+			});
 
-			document
-					.getElementById('password')
-					.addEventListener(
-							'input',
-							function() {
-								var password = this.value;
-								if (password.length === 0) {
-									document
-											.getElementById('validation-password').innerText = 'Password is required.';
-								} else {
-									document
-											.getElementById('validation-password').innerText = '';
-								}
-							});
+			document.getElementById('password').addEventListener('input', function () {
+				var password = this.value;
+				if (password.length === 0) {
+					document.getElementById('validation-password').innerText = 'Password is required.';
+				} else {
+					document.getElementById('validation-password').innerText = '';
+				}
+			});
+
 			if (emailValid && passwordValid) {
 
 				document.getElementById('loginForm').submit();
 			}
 		}
 
-		document.addEventListener('keypress', function(event) {
+		document.addEventListener('keypress', function (event) {
 			// Kiểm tra xem phím được nhấn có phải là phím "Enter" không (mã ASCII là 13)
 			if (event.key === 'Enter') {
 				// Gọi hàm validateForm() khi nhấn phím "Enter"
@@ -253,4 +225,5 @@ End Google Tag Manager (noscript)
 		});
 	</script>
 </body>
+
 </html>
