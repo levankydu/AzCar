@@ -1,0 +1,4 @@
+/.metadata/
+.metadata/.log
+/.metadata
+AzCare-APIServices/src/main/resources/application.properties
