@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -315,7 +316,12 @@ public class HomeController {
 
 		Users user = uServices.findUserByEmail(email);
 		if (user != null) {
-			String token = RandomString.make(10);
+			Random random = new Random();
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < 5; i++) {
+			    sb.append(random.nextInt(10));
+			}
+			String token = sb.toString();
 			System.out.println("Email: " + email);
 			System.out.println("Token: " + token);
 			try {
