@@ -1,0 +1,2372 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+<title>Az CAR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<!-- External CSS libraries -->
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/bootstrap.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/magnific-popup.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.selectBox.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/rangeslider.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/animate.min.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/slick.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.mCustomScrollbar.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/flaticon/font/flaticon.css">
+
+<!-- Favicon icon -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico"
+	type="image/x-icon">
+
+<!-- Google fonts -->
+<link rel="stylesheet" type="text/css"
+	href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
+<!-- Bootstrap CSS -->
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+
+<!-- Custom Stylesheet -->
+<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" type="text/css" id="style_sheet"
+	href="/assets/css/skins/default.css">
+
+<link rel="stylesheet" href="/assets/css/notiCss.css">
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script type="text/javascript" src="/assets/js/notiJs.js"></script>
+<style type="text/css">
+.selected {
+	border: 1px solid blue;
+}
+</style>
+<style>
+.highlighted-date {
+	border-radius: 0.25rem;
+	line-height: 2rem;
+	background-color: #ffcccc !important;
+	font-size: 0.875rem;
+	/* Màu nền cho các ngày bị disable */
+	color: #000000 !important;
+	/* Màu chữ cho các ngày bị disable */
+}
+
+.container .rating {
+	background-image:
+		url("https://www.toptal.com/designers/subtlepatterns/patterns/concrete-texture.png");
+	display: flex;
+	flex-wrap: wrap;
+	height: 200px;
+	align-items: center;
+	justify-content: center;
+	padding: 0 20px;
+}
+
+.rating {
+	display: none;
+	width: 100%;
+	justify-content: center;
+	overflow: hidden;
+	flex-direction: row-reverse;
+	height: 100px;
+	position: relative;
+}
+
+.rating-0 {
+	filter: grayscale(100%);
+}
+
+.rating>input {
+	display: none;
+}
+
+.rating>label {
+	display: flex;
+	cursor: pointer;
+	width: 40px;
+	height: 40px;
+	margin-top: 90px;
+	background-image:
+		url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='126.729' height='126.73'%3e%3cpath fill='%23e3e3e3' d='M121.215 44.212l-34.899-3.3c-2.2-.2-4.101-1.6-5-3.7l-12.5-30.3c-2-5-9.101-5-11.101 0l-12.4 30.3c-.8 2.1-2.8 3.5-5 3.7l-34.9 3.3c-5.2.5-7.3 7-3.4 10.5l26.3 23.1c1.7 1.5 2.4 3.7 1.9 5.9l-7.9 32.399c-1.2 5.101 4.3 9.3 8.9 6.601l29.1-17.101c1.9-1.1 4.2-1.1 6.1 0l29.101 17.101c4.6 2.699 10.1-1.4 8.899-6.601l-7.8-32.399c-.5-2.2.2-4.4 1.9-5.9l26.3-23.1c3.8-3.5 1.6-10-3.6-10.5z'/%3e%3c/svg%3e");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 76%;
+	transition: 0.3s;
+}
+
+.rating>input:checked ~label, .rating>input:checked ~label ~label {
+	background-image:
+		url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='126.729' height='126.73'%3e%3cpath fill='%23fcd93a' d='M121.215 44.212l-34.899-3.3c-2.2-.2-4.101-1.6-5-3.7l-12.5-30.3c-2-5-9.101-5-11.101 0l-12.4 30.3c-.8 2.1-2.8 3.5-5 3.7l-34.9 3.3c-5.2.5-7.3 7-3.4 10.5l26.3 23.1c1.7 1.5 2.4 3.7 1.9 5.9l-7.9 32.399c-1.2 5.101 4.3 9.3 8.9 6.601l29.1-17.101c1.9-1.1 4.2-1.1 6.1 0l29.101 17.101c4.6 2.699 10.1-1.4 8.899-6.601l-7.8-32.399c-.5-2.2.2-4.4 1.9-5.9l26.3-23.1c3.8-3.5 1.6-10-3.6-10.5z'/%3e%3c/svg%3e");
+}
+
+.rating>input:not(:checked) ~label:hover, .rating>input:not(:checked) ~label:hover
+	 ~label {
+	background-image:
+		url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='126.729' height='126.73'%3e%3cpath fill='%23d8b11e' d='M121.215 44.212l-34.899-3.3c-2.2-.2-4.101-1.6-5-3.7l-12.5-30.3c-2-5-9.101-5-11.101 0l-12.4 30.3c-.8 2.1-2.8 3.5-5 3.7l-34.9 3.3c-5.2.5-7.3 7-3.4 10.5l26.3 23.1c1.7 1.5 2.4 3.7 1.9 5.9l-7.9 32.399c-1.2 5.101 4.3 9.3 8.9 6.601l29.1-17.101c1.9-1.1 4.2-1.1 6.1 0l29.101 17.101c4.6 2.699 10.1-1.4 8.899-6.601l-7.8-32.399c-.5-2.2.2-4.4 1.9-5.9l26.3-23.1c3.8-3.5 1.6-10-3.6-10.5z'/%3e%3c/svg%3e");
+}
+
+.emoji-wrapper {
+	width: 100%;
+	text-align: center;
+	height: 100px;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.emoji-wrapper:before, .emoji-wrapper:after {
+	content: "";
+	height: 15px;
+	width: 100%;
+	position: absolute;
+	left: 0;
+	z-index: 1;
+}
+
+.emoji-wrapper:before {
+	top: 0;
+	background: linear-gradient(to bottom, white 0%, white 35%, rgba(255, 255, 255, 0)
+		100%);
+}
+
+.emoji-wrapper:after {
+	bottom: 0;
+	background: linear-gradient(to top, white 0%, white 35%, rgba(255, 255, 255, 0)
+		100%);
+}
+
+.emoji {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	transition: 0.3s;
+}
+
+.emoji>svg {
+	margin: 15px 0;
+	width: 70px;
+	height: 70px;
+	flex-shrink: 0;
+}
+
+#rating-1:checked ~.emoji-wrapper>.emoji {
+	transform: translateY(-100px);
+}
+
+#rating-2:checked ~.emoji-wrapper>.emoji {
+	transform: translateY(-200px);
+}
+
+#rating-3:checked ~.emoji-wrapper>.emoji {
+	transform: translateY(-300px);
+}
+
+#rating-4:checked ~.emoji-wrapper>.emoji {
+	transform: translateY(-400px);
+}
+
+#rating-5:checked ~.emoji-wrapper>.emoji {
+	transform: translateY(-500px);
+}
+
+.feedback {
+	max-width: 360px;
+	background-color: #fff;
+	width: 100%;
+	padding: 30px;
+	border-radius: 8px;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	align-items: center;
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+}
+</style>
+<!-- Custom Stylesheet -->
+<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" type="text/css" id="style_sheet"
+	href="/assets/css/skins/default.css">
+<link rel="stylesheet"
+	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
+<link rel="stylesheet"
+	href="/assets/css/carDetails.css">
+
+</head>
+
+<body id="top">
+
+	<div class="page_loader"></div>
+	<div style="display: none">
+
+		<input type="text" id="privateText" placeholder="Private Message" />
+		<input type="text" id="to" value="admin@admin" placeholder="To" />
+	</div>
+	<!-- main header start -->
+	<header class="main-header sticky-header header-with-top"
+		id="main-header-2">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<nav class="navbar navbar-expand-lg navbar-light rounded">
+						<a class="navbar-brand logo navbar-brand d-flex mr-auto" href="/">
+							<img src="/assets/img/logos/black-logo.png" alt="logo">
+						</a>
+						<button class="navbar-toggler" type="button"
+							data-toggle="collapse" data-target="#navbar"
+							aria-controls="navbar" aria-expanded="false"
+							aria-label="Toggle navigation">
+							<span class="fa fa-bars"></span>
+						</button>
+						<div class="navbar-collapse collapse w-100" id="navbar">
+							<ul class="navbar-nav ml-auto">
+								<li class="nav-item"><a class="nav-link"
+									th:href="@{/home/availablecars}">Available Cars</a></li>
+								<li class="nav-item" th:if="${session.user}"><a
+									class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
+								<li class="nav-item "><a class="nav-link" href="#">
+										About Us </a></li>
+
+								<li class="nav-item"><a class="nav-link" href="#">
+										Contact Us </a></li>
+								<div id="openNoti">
+									<div class="" tabindex="0" id="noti">
+										<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+											xmlns:xlink="http://www.w3.org/1999/xlink"
+											viewBox="0 0 50 30" enable-background="new 0 0 50 30"
+											xml:space="preserve">
+											<g class="bell-icon__group">
+												<path class="" id="ball" fill-rule="evenodd"
+												stroke-width="1.5" clip-rule="evenodd" fill="none"
+												stroke="#currentColor" stroke-miterlimit="10"
+												d="M28.7,25 c0,1.9-1.7,3.5-3.7,3.5s-3.7-1.6-3.7-3.5s1.7-3.5,3.7-3.5S28.7,23,28.7,25z" />
+												<path class="" id="shell" fill-rule="evenodd"
+												clip-rule="evenodd" fill="#FFFFFF" stroke="#currentColor"
+												stroke-width="2" stroke-miterlimit="10"
+												d="M35.9,21.8c-1.2-0.7-4.1-3-3.4-8.7c0.1-1,0.1-2.1,0-3.1h0c-0.3-4.1-3.9-7.2-8.1-6.9c-3.7,0.3-6.6,3.2-6.9,6.9h0 c-0.1,1-0.1,2.1,0,3.1c0.6,5.7-2.2,8-3.4,8.7c-0.4,0.2-0.6,0.6-0.6,1v1.8c0,0.2,0.2,0.4,0.4,0.4h22.2c0.2,0,0.4-0.2,0.4-0.4v-1.8 C36.5,22.4,36.3,22,35.9,21.8L35.9,21.8z" />
+											</g>
+										</svg>
+										<div class="notification-amount">
+											<span id="notiCounter"></span>
+										</div>
+									</div>
+
+								</div>
+								<div id="modal-container">
+									<div class="modal-background">
+										<div class="modal">
+											<h2>All Notification</h2>
+											<div id="messages"></div>
+											<svg class="modal-svg" xmlns="http://www.w3.org/2000/svg"
+												width="100%" height="100%" preserveAspectRatio="none">
+												<rect x="0" y="0" fill="none" width="226" height="162"
+													rx="3" ry="3">
+												</rect>
+											</svg>
+										</div>
+									</div>
+								</div>
+
+
+
+								<li class="nav-item dropdown" th:if="${session.user}"><a
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									th:href="@{/user/profile/} + ${session.user}"
+									th:text="Hello+', ' +${session.user}"></a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/logout">LogOut</a></li>
+
+
+								<li class="nav-item dropdown" th:if="${session.admin}"><a
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									th:href="@{/user/profile/}+ ${session.admin}"
+									th:text="Hello+', ' +${session.admin}"></a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/dashboard/">Dash board</a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/logout">Logout</a></li>
+								<li class="nav-item dropdown" th:unless="${session.isAuthen}"><a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/login">Login</a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/register">Register</a></li>
+							</ul>
+						</div>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- main header end -->
+
+	<!-- Sub banner start -->
+	<div class="sub-banner overview-bgi">
+		<div class="container">
+			<div class="page-name">
+				<h1>Car Detail</h1>
+			</div>
+		</div>
+		<div class="page-info">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-5">
+						<div class="breadcrumb-area">
+							<ul>
+								<li><a href="/">Index</a></li>
+								<li><span>/</span>Car Detail</li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-7">
+						<div class="contact-info">
+							<ul>
+								<li><i class="fa fa-phone"></i> +84-3939-7979</li>
+								<li><a href="tel:+84-3939-7979"
+									class="btn btn-md btn-theme">Contact us</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Sub banner end -->
+
+	<!-- Car details page start -->
+	<div class="car-details-page content-area-2">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-md-12">
+					<div id="carDetailsSlider"
+						class="carousel car-details-sliders slide mb-60">
+						<!-- main slider carousel items -->
+						<div class="carousel-inner">
+							<div class="active item carousel-item" data-slide-number="0">
+								<img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(0).urlImage}"
+									class="img-fluid" alt="car-Slider">
+							</div>
+							<div class="item carousel-item" data-slide-number="1">
+								<img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(1).urlImage}"
+									class="img-fluid" alt="car-Slider">
+							</div>
+							<div class="item carousel-item" data-slide-number="2">
+								<img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(2).urlImage}"
+									class="img-fluid" alt="car-Slider">
+							</div>
+							<div class="item carousel-item" data-slide-number="4">
+								<img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(3).urlImage}"
+									class="img-fluid" alt="car-Slider">
+							</div>
+							<div class="item carousel-item" data-slide-number="5">
+								<img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(4).urlImage}"
+									class="img-fluid" alt="car-Slider">
+							</div>
+						</div>
+						<!-- main slider carousel nav controls -->
+						<ul
+							class="carousel-indicators smail-car list-inline nav nav-justified">
+							<li class="list-inline-item active"><a
+								id="carousel-selector-0" class="selected" data-slide-to="0"
+								data-target="#carDetailsSlider"> <img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(0).urlImage}"
+									class="img-fluid" alt="sub-car">
+							</a></li>
+							<li class="list-inline-item"><a id="carousel-selector-1"
+								data-slide-to="1" data-target="#carDetailsSlider"> <img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(1).urlImage}"
+									class="img-fluid" alt="sub-car">
+							</a></li>
+							<li class="list-inline-item"><a id="carousel-selector-2"
+								data-slide-to="2" data-target="#carDetailsSlider"> <img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(2).urlImage}"
+									class="img-fluid" alt="sub-car">
+							</a></li>
+							<li class="list-inline-item"><a id="carousel-selector-3"
+								data-slide-to="3" data-target="#carDetailsSlider"> <img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(3).urlImage}"
+									class="img-fluid" alt="sub-car">
+							</a></li>
+							<li class="list-inline-item"><a id="carousel-selector-4"
+								data-slide-to="4" data-target="#carDetailsSlider"> <img
+									th:src="'${carDetails.id}'+'/'+${carDetails.images.get(4).urlImage}"
+									class="img-fluid" alt="sub-car">
+							</a></li>
+						</ul>
+					</div>
+					<div
+						th:if="${carDetails.discount != null && carDetails.discount != 0}"
+						class="heading-car-2 mb-60 rounded">
+						<div class="row">
+							<div class="col-md-12 text-center">
+								<h1 class="text-uppercase text-white tremble">
+									HOT SALES <span th:text="${carDetails.discount} + '%'"></span>
+								</h1>
+							</div>
+						</div>
+					</div>
+					<!-- Specifications start -->
+					<div class="specifications widget-2 d-lg-none d-xl-none mb-60">
+						<h5 class="sidebar-title">Specifications</h5>
+						<ul>
+							<li><span>Brand: </span>
+								<p class="mb-0" th:text="${carDetails.carmodel.brand}"></p></li>
+
+							<li><span>Model:</span>
+								<p class="mb-0" th:text="${carDetails.carmodel.model}"></p></li>
+							<li><span>Body Style:</span>
+								<p class="mb-0" th:text="${carDetails.carmodel.category}"></p></li>
+
+							<li><span>Year:</span>
+								<p class="mb-0" th:text="${carDetails.carmodel.year}"></p></li>
+
+							<li><span>Transmission:</span>
+								<p class="mb-0"
+									th:text="${carDetails.engineInformationTranmission}? 'Automatic' :'Manual'"></p>
+							</li>
+
+
+							<li><span>Fuel Type: </span>
+								<p class="mb-0" th:text="${carDetails.fuelType}"></p></li>
+
+							<li><span>Location</span>
+								<p class="mb-0" th:text="${address}"></p></li>
+
+
+							<li th:if="${plusService}!= null"><span>Delivery Car
+									Fee: </span>
+								<p class="mb-0" th:text="${plusService.fee}+' $'"></p></li>
+
+
+							<li th:if="${extraFee}!= null"><span>Cleanning Fee :
+							</span>
+								<p class="mb-0" th:text="${extraFee.cleanningFee}+' $'"></p></li>
+							<li th:if="${extraFee}!= null"><span>Decoration Fee:
+							</span>
+								<p class="mb-0" th:text="${extraFee.decorationFee}+' $'"></p></li>
+						</ul>
+					</div>
+					<!-- Car vedio start -->
+					<div class="car-video mb-60">
+						<h3 class="heading">Car Description</h3>
+						<p th:text="${carDetails.description}"></p>
+					</div>
+					<!-- Features opions start -->
+					<div class="features-opions mb-60">
+						<h3 class="heading">Features in Car</h3>
+
+						<input type="hidden" id="resultFeatures"
+							th:value="${carDetails.services}" name="services">
+						<div class="row">
+							<div class="col-3 mx-4 my-2 car-services" id="map-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/map-icon.png" alt="Map"> <span
+									style="display: block;">Map</span> <input class="d-none"
+									id="car-features-temp1" name="features[map]" type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="bluetooth-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/bluetooth-icon.png"
+									alt="Bluetooth"> <span style="display: block;">Bluetooth</span>
+								<input class="d-none" id="car-features-temp1"
+									name="features[bluetooth]" type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="camera360-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/360_camera-icon.png"
+									alt="Camera 360"> <span style="display: block;">Camera
+									360</span> <input class="d-none" id="car-features-temp1"
+									name="features[camera360]" type="checkbox">
+							</div>
+
+							<div class="col-3 mx-4 my-2 car-services"
+								id="parkingCamera-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/parking_camera-icon.png"
+									alt="Parking camera"> <span style="display: block;">Parking
+									camera</span> <input class="d-none" id="car-features-temp1"
+									name="features[map]" type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="dashCamera-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/dash_camera-icon.png"
+									alt="Dash camera"> <span style="display: block;">Dash
+									camera</span> <input class="d-none" id="car-features-temp1"
+									name="features[bluetooth]" type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services"
+								id="reverseCamera-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/reverse_camera-icon.png"
+									alt="Reverse camera"> <span style="display: block;">Reverse
+									Camera</span> <input class="d-none" id="car-features-temp1"
+									name="features[camera360]" type="checkbox">
+							</div>
+
+							<div class="col-3 mx-4 my-2 car-services" id="tireSensor-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/tpms-v2-icon.png"
+									alt="Tire Sensor"> <span style="display: block;">Tire
+									Sensor</span> <input class="d-none" id="car-features-temp1"
+									name="features[map]" type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services"
+								id="impactSensor-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/impact_sensor-icon.png"
+									alt="Impact Sensor"> <span style="display: block;">Impact
+									Sensor</span> <input class="d-none" id="car-features-temp1"
+									name="features[bluetooth]" type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="headUp-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/head_up-icon.png" alt="Head Up">
+								<span style="display: block;">Head Up</span> <input
+									class="d-none" id="car-features-temp1"
+									name="features[camera360]" type="checkbox">
+							</div>
+
+							<div class="col-3 mx-4 my-2 car-services" id="sunRoof-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/sunroof-icon.png" alt="Sunroof">
+								<span style="display: block;">Sun roof</span> <input
+									class="d-none" id="car-features-temp1" name="features[map]"
+									type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="gps-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/gps-icon.png" alt="Gps"> <span
+									style="display: block;">Gps</span> <input class="d-none"
+									id="car-features-temp1" name="features[bluetooth]"
+									type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="babySeat-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/babyseat-icon.png"
+									alt="Baby seat"> <span style="display: block;">Baby
+									seat</span> <input class="d-none" id="car-features-temp1"
+									name="features[camera360]" type="checkbox">
+							</div>
+
+							<div class="col-3 mx-4 my-2 car-services" id="usb-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/usb-icon.png" alt="Usb"> <span
+									style="display: block;">USB</span> <input class="d-none"
+									id="car-features-temp1" name="features[map]" type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="spareTire-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/spare_tire-icon.png"
+									alt="Spare Tire"> <span style="display: block;">Spare
+									Tire-</span> <input class="d-none" id="car-features-temp1"
+									name="features[bluetooth]" type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="dvd-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/dvd-icon.png" alt="dvd"> <span
+									style="display: block;">DVD </span> <input class="d-none"
+									id="car-features-temp1" name="features[camera360]"
+									type="checkbox">
+							</div>
+
+							<div class="col-3 mx-4 my-2 car-services" id="bonnet-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/bonnet-icon.png" alt="Bonnet">
+								<span style="display: block;">Bonnet</span> <input
+									class="d-none" id="car-features-temp1" name="features[map]"
+									type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="etc-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/etc-icon.png" alt="etc"> <span
+									style="display: block;">ETC </span> <input class="d-none"
+									id="car-features-temp1" name="features[camera360]"
+									type="checkbox">
+							</div>
+							<div class="col-3 mx-4 my-2 car-services" id="airBags-service"
+								style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+								<img class="img-fluid" style="max-width: 50%; max-height: 50%"
+									src="/assets/img/icon-services/airbags-icon.png" alt="Airbags">
+								<span style="display: block;">Airbags</span> <input
+									class="d-none" id="car-features-temp1"
+									name="features[bluetooth]" type="checkbox">
+							</div>
+
+						</div>
+					</div>
+
+					<!-- Car vedio start -->
+					<div class="car-video mb-60">
+						<h3 class="heading">Car Rules</h3>
+						<p th:text="${carDetails.rules}"></p>
+					</div>
+					<!-- Section Location start -->
+
+					<!-- Comments section start -->
+					<h3 class="heading">Reviews Section</h3>
+					<div class="star-ratings">
+						<style>
+.star {
+	color: gold;
+	/* Màu sao */
+	font-size: 20px;
+	/* Kích thước sao */
+}
+
+.star-statistics {
+	display: flex;
+	flex-direction: column;
+}
+
+.star-rating {
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.rating-bar {
+	height: 20px;
+	background-color: #ddd;
+	margin-right: 5px;
+}
+
+.rating-count {
+	margin-left: 5px;
+}
+</style>
+						<!-- đây sẽ hiển thị tổng số đánh giá theo phần trăm-->
+						<div class="star-statistics"
+							th:if="${not #lists.isEmpty(reviews)}">
+							<div class="star-rating">
+								<span class="star">★★★★★</span>
+								<div class="rating-bar"
+									th:style="'width: ' + (${fiveStar} / (${fiveStar} + ${fourStar} + ${threeStar} + ${twoStar} + ${oneStar})) * 100 + '%'">
+								</div>
+								<span class="rating-count" th:text="${fiveStar}"></span>
+							</div>
+							<div class="star-rating">
+								<span class="star">★★★★</span>
+								<div class="rating-bar"
+									th:style="'width: ' + (${fourStar} / (${fiveStar} + ${fourStar} + ${threeStar} + ${twoStar} + ${oneStar})) * 100 + '%'">
+								</div>
+								<span class="rating-count" th:text="${fourStar}"></span>
+							</div>
+							<div class="star-rating">
+								<span class="star">★★★</span>
+								<div class="rating-bar"
+									th:style="'width: ' + (${threeStar} / (${fiveStar} + ${fourStar} + ${threeStar} + ${twoStar} + ${oneStar})) * 100 + '%'">
+								</div>
+								<span class="rating-count" th:text="${threeStar}"></span>
+							</div>
+							<div class="star-rating">
+								<span class="star">★★</span>
+								<div class="rating-bar"
+									th:style="'width: ' + (${twoStar} / (${fiveStar} + ${fourStar} + ${threeStar} + ${twoStar} + ${oneStar})) * 100 + '%'">
+								</div>
+								<span class="rating-count" th:text="${twoStar}"></span>
+							</div>
+							<div class="star-rating">
+								<span class="star">★</span>
+								<div class="rating-bar"
+									th:style="'width: ' + (${oneStar} / (${fiveStar} + ${fourStar} + ${threeStar} + ${twoStar} + ${oneStar})) * 100 + '%'">
+								</div>
+								<span class="rating-count" th:text="${oneStar}"></span>
+							</div>
+						</div>
+						<div class="star-statistics" th:if="${ #lists.isEmpty(reviews)}">
+							<p>Chưa có đánh giá</p>
+						</div>
+					</div>
+					<!-- Reviews-->
+					<div class="comments-section">
+						<ul class="comments" th:each="review : ${reviews}">
+
+							<li>
+								<div class="comment">
+									<div class="comment-author">
+										<a href="#"> <img src="/assets/img/avatar/avatar-13.jpg"
+											class="rounded-circle" alt="avatar-13">
+										</a>
+									</div>
+
+									<div class="comment-content">
+										<div class="comment-meta">
+											<div class="comment-meta-author" th:text="${review.userName}">Jane
+												Doe</div>
+
+											<div class="comment-meta-reply"></div>
+
+											<div class="comment-meta-date">
+												<span th:text="${review.reviewDate}">8:42 PM
+													10/3/2022</span>
+											</div>
+										</div>
+										<div class="clearfix"></div>
+										<div class="comment-body">
+											<div class="comment-rating">
+												<i class="fa fa-star"></i> <i class="fa fa-star"></i> <i
+													class="fa fa-star"></i> <i class="fa fa-star-half-o"></i> <i
+													class="fa fa-star-o"></i>
+											</div>
+											<p th:text="${review.comment}">Lorem ipsum dolor sit
+												amet, consectetur adipiscing elit. Donec luctus tincidunt
+												aliquam. Aliquam gravida massa at sem vulputate interdum et
+												vel eros. Maecenas eros enim, tincidunt vel turpis vel,
+												dapibus tempus nulla. Donec vel nulla dui.</p>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<!--Comments -->
+					<div class="comments-section">
+						<h3 class="heading">Comments Section</h3>
+						<div th:if="${not #lists.isEmpty(comments)}">
+
+							<ul class="comments" th:each="comment : ${comments}">
+								<li>
+									<div class="comment">
+										<div class="comment-author">
+											<a href="#"> <img src="/assets/img/avatar/avatar-13.jpg"
+												class="rounded-circle" alt="avatar-13">
+											</a>
+										</div>
+										<div class="comment-content">
+											<div class="comment-meta">
+												<div class="comment-meta-author"></div>
+												<div th:id="'comment-reply_' + ${comment.id}"
+													class="comment-meta-reply">
+													<a th:onclick="'toggleReply('+${comment.id}+')'">Reply</a>
+
+												</div>
+												<div class="comment-meta-date"></div>
+
+												<div class="comment-meta-author">
+													<p th:text="${comment.user_name}"></p>
+												</div>
+											</div>
+											<div class="clearfix"></div>
+											<div class="comment-body">
+
+												<div class="comment-rating"></div>
+
+												<p th:text="${comment.content}">Nội dung đánh giá</p>
+											</div>
+											<!-- Container để chứa ô nhập nội dung reply -->
+											<div class="reply-container"
+												th:id="'replyContainer_' + ${comment.id}"
+												style="display: none;">
+												<form id="replyForm">
+													<textarea th:id="'replyText_' + ${comment.id}"
+														placeholder="Nhập nội dung reply của bạn..."></textarea>
+													<button type="button"
+														th:onclick="'submitReply('+${comment.id}+ ','+${comment.car_id}+')'">Gửi</button>
+												</form>
+
+												<script>
+													function toggleReply(comment_id) {
+														var replyContainer = document.getElementById("replyContainer_" + comment_id);
+														if (replyContainer.style.display === "none") {
+															replyContainer.style.display = "block";
+														} else {
+															replyContainer.style.display = "none";
+														}
+													}
+												</script>
+												<script th:inline="javascript">
+													function submitReply(cmtId, car_id) {
+														console.log(cmtId + " và " + car_id);
+														//var carId = /*[[${comment.car_id}]]*/
+														var replyText = document.getElementById("replyText_" + cmtId).value;
+														var data = {
+															carId: car_id,
+															comment_id: cmtId,
+															content: replyText
+														};
+														if (replyText != "") {
+															$.ajax({
+																type: "POST",
+																contentType: "application/json",
+																url: "/home/availablecars/details/submitReply",
+																data: JSON.stringify(data),
+																dataType: 'json',
+																success: function (response) {
+																	// Xử lý khi tạo comment thành công
+																	location.reload(); // Refresh trang sau khi tạo comment thành công
+																},
+																error: function (xhr, status, error) {
+																	// Xử lý khi có lỗi
+																	console.log("lỗi ở đây error", xhr.status);
+																	if (xhr.status === 200) {
+																		location.reload();
+																	}
+																	if (xhr.status === 400 || xhr.status === 500) {
+																		console.log(xhr.responseText);
+
+																		$('#errorModalBody').text(xhr.responseText); // Hiển thị thông báo lỗi từ server
+																		$('#errorDialog').modal('show'); // Hiển thị dialog
+																	}
+
+																}
+
+
+															});
+														}
+
+														var replyContainer = document.getElementById("replyContainer_" + cmtId);
+														if (replyContainer.style.display === "none") {
+															replyContainer.style.display = "block";
+														} else {
+															replyContainer.style.display = "none";
+														}
+													}
+												</script>
+											</div>
+
+										</div>
+									</div>
+									<ul th:each="reply : ${comment.reply}"
+										th:if="${ not #lists.isEmpty(comment.reply)}">
+										<div class="comment">
+											<div class="comment-author">
+												<a href="#"> <img src="/assets/img/avatar/avatar-13.jpg"
+													class="rounded-circle" alt="avatar-13">
+												</a>
+											</div>
+											<div class="comment-content">
+												<div class="comment-meta">
+													<div class="comment-meta-author"></div>
+													<div th:id="'comment-reply_' + ${comment.id}"
+														class="comment-meta-reply">
+														<a th:onclick="'toggleReply('+${comment.id}+')'">Reply</a>
+
+													</div>
+													<div class="comment-meta-date"></div>
+
+													<div class="comment-meta-author">
+														<p th:text="${reply.User_name}"></p>
+													</div>
+												</div>
+												<div class="clearfix"></div>
+												<div class="comment-body">
+
+													<div class="comment-rating"></div>
+
+													<p th:text="${reply.content}">Nội dung đánh giá</p>
+												</div>
+											</div>
+									</ul>
+
+								</li>
+
+							</ul>
+						</div>
+						<div th:if="${ #lists.isEmpty(comments)}">
+							<p>Chưa có bình luận</p>
+						</div>
+					</div>
+
+					<!-- bootstrap submit review -->
+
+					<div class="col-md-6">
+						<div class="border p-4">
+							<form id="commentForm" method="POST"
+								th:action="@{/comment/create}">
+								<div class="mb-3">
+									<label for="userId" class="form-label">User Email: </label> <input
+										class="form-control" type="text" id="userId" name="userId"
+										th:value="${session.user}" readonly />
+								</div>
+
+								<div class="mb-3">
+									<label for="content" class="form-label">Comment:</label>
+									<textarea class="form-control" id="content" name="content"
+										placeholder="Write to Comment..." rows="5" required></textarea>
+								</div>
+
+								<input type="hidden" id="carId" name="carId"
+									th:value="${carDetails.id}" />
+
+								<div class="d-grid gap-2">
+									<button class="btn btn-primary" type="submit">Submit
+										Comment</button>
+								</div>
+							</form>
+						</div>
+					</div>
+					<!-- chổ này là dialog dựa theo id errorDialog -->
+					<div class="modal" id="errorDialog" tabindex="-1" role="dialog">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Error</h5>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<p>
+										The input <span id="errorModalBody"></span> contains a keyword
+										that violates the standards
+									</p>
+
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary"
+										data-dismiss="modal">Close</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<script>
+						//Create Comment 
+						$(document).ready(function () {
+							$('#commentForm').submit(function (e) {
+								e.preventDefault();
+								var userId = document.getElementById('userId').value ;
+								var carId = document.getElementById('carId').value ;
+								var content = document.getElementById('content').value ;
+
+								$.ajax({
+									type: 'POST',
+									url: '/comment/create',
+									data: {
+										userId: userId,
+										carId: carId,
+										content: content
+									},
+									success: function (response) {
+										// Xử lý khi tạo comment thành công
+										location.reload(); // reload lại trang
+									},
+									error: function (xhr, status, error) {
+										// Xử lý khi có lỗi
+										console.log(xhr.responseText);
+										$('#errorModalBody').text(xhr.responseText); // Hiển thị thông báo lỗi từ server
+										$('#errorDialog').modal('show'); // Hiển thị dialog
+										
+									}
+								});
+							});
+							//create review
+
+
+						});
+
+					</script>
+
+
+					<!-- Contact 1 start -->
+					<div class="contact-3 mb-30">
+						<h3 class="heading">Leave a Comment</h3>
+						<div class="container" th:if="${Status_detail !=null  }">
+							<div class="row">
+								<form id="review" th:action="@{/reviews/add}" method="POST">
+									<div class="border row">
+
+										<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+											<div class="input-group mb-3 ">
+												<input class="input-group-text" type="text" id="userId"
+													name="userId" th:value="${session.user}" />
+											</div>
+										</div>
+
+										<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+											<div class="row g-3 align-items-center">
+												<div class="col-auto">
+													<span class="col-form-label"> Mã xe: </span>
+
+												</div>
+												<div class="col-auto">
+													<input class="form-control border" style="color: black;"
+														type="text" id="carId" name="carId"
+														th:value="${carDetails.id}" readonly />
+												</div>
+											</div>
+										</div>
+
+
+										<div class="form-group col-12">
+											<div class="container rating">
+												<div class="feedback">
+													<div class="rating">
+														<input th:value="5" type="radio" name="rating"
+															id="rating-5"> <label for="rating-5"></label> <input
+															th:value="4" type="radio" name="rating" id="rating-4">
+														<label for="rating-4"></label> <input th:value="3"
+															type="radio" name="rating" id="rating-3"> <label
+															for="rating-3"></label> <input th:value="2" type="radio"
+															name="rating" id="rating-2"> <label
+															for="rating-2"></label> <input th:value="1" type="radio"
+															name="rating" id="rating-1"> <label
+															for="rating-1"></label>
+														<div class="emoji-wrapper">
+															<div class="emoji">
+																<svg class="rating-0" xmlns="http://www.w3.org/2000/svg"
+																	viewBox="0 0 512 512">
+																	<circle cx="256" cy="256" r="256" fill="#ffd93b" />
+																	<path
+																		d="M512 256c0 141.44-114.64 256-256 256-80.48 0-152.32-37.12-199.28-95.28 43.92 35.52 99.84 56.72 160.72 56.72 141.36 0 256-114.56 256-256 0-60.88-21.2-116.8-56.72-160.72C474.8 103.68 512 175.52 512 256z"
+																		fill="#f4c534" />
+																	<ellipse
+																		transform="scale(-1) rotate(31.21 715.433 -595.455)"
+																		cx="166.318" cy="199.829" rx="56.146" ry="56.13"
+																		fill="#fff" />
+																	<ellipse transform="rotate(-148.804 180.87 175.82)"
+																		cx="180.871" cy="175.822" rx="28.048" ry="28.08"
+																		fill="#3e4347" />
+																	<ellipse transform="rotate(-113.778 194.434 165.995)"
+																		cx="194.433" cy="165.993" rx="8.016" ry="5.296"
+																		fill="#5a5f63" />
+																	<ellipse
+																		transform="scale(-1) rotate(31.21 715.397 -1237.664)"
+																		cx="345.695" cy="199.819" rx="56.146" ry="56.13"
+																		fill="#fff" />
+																	<ellipse transform="rotate(-148.804 360.25 175.837)"
+																		cx="360.252" cy="175.84" rx="28.048" ry="28.08"
+																		fill="#3e4347" />
+																	<ellipse
+																		transform="scale(-1) rotate(66.227 254.508 -573.138)"
+																		cx="373.794" cy="165.987" rx="8.016" ry="5.296"
+																		fill="#5a5f63" />
+																	<path
+																		d="M370.56 344.4c0 7.696-6.224 13.92-13.92 13.92H155.36c-7.616 0-13.92-6.224-13.92-13.92s6.304-13.92 13.92-13.92h201.296c7.696.016 13.904 6.224 13.904 13.92z"
+																		fill="#3e4347" />
+																</svg>
+																<svg class="rating-1" xmlns="http://www.w3.org/2000/svg"
+																	viewBox="0 0 512 512">
+																	<circle cx="256" cy="256" r="256" fill="#ffd93b" />
+																	<path
+																		d="M512 256A256 256 0 0 1 56.7 416.7a256 256 0 0 0 360-360c58.1 47 95.3 118.8 95.3 199.3z"
+																		fill="#f4c534" />
+																	<path
+																		d="M328.4 428a92.8 92.8 0 0 0-145-.1 6.8 6.8 0 0 1-12-5.8 86.6 86.6 0 0 1 84.5-69 86.6 86.6 0 0 1 84.7 69.8c1.3 6.9-7.7 10.6-12.2 5.1z"
+																		fill="#3e4347" />
+																	<path
+																		d="M269.2 222.3c5.3 62.8 52 113.9 104.8 113.9 52.3 0 90.8-51.1 85.6-113.9-2-25-10.8-47.9-23.7-66.7-4.1-6.1-12.2-8-18.5-4.2a111.8 111.8 0 0 1-60.1 16.2c-22.8 0-42.1-5.6-57.8-14.8-6.8-4-15.4-1.5-18.9 5.4-9 18.2-13.2 40.3-11.4 64.1z"
+																		fill="#f4c534" />
+																	<path
+																		d="M357 189.5c25.8 0 47-7.1 63.7-18.7 10 14.6 17 32.1 18.7 51.6 4 49.6-26.1 89.7-67.5 89.7-41.6 0-78.4-40.1-82.5-89.7A95 95 0 0 1 298 174c16 9.7 35.6 15.5 59 15.5z"
+																		fill="#fff" />
+																	<path
+																		d="M396.2 246.1a38.5 38.5 0 0 1-38.7 38.6 38.5 38.5 0 0 1-38.6-38.6 38.6 38.6 0 1 1 77.3 0z"
+																		fill="#3e4347" />
+																	<path
+																		d="M380.4 241.1c-3.2 3.2-9.9 1.7-14.9-3.2-4.8-4.8-6.2-11.5-3-14.7 3.3-3.4 10-2 14.9 2.9 4.9 5 6.4 11.7 3 15z"
+																		fill="#fff" />
+																	<path
+																		d="M242.8 222.3c-5.3 62.8-52 113.9-104.8 113.9-52.3 0-90.8-51.1-85.6-113.9 2-25 10.8-47.9 23.7-66.7 4.1-6.1 12.2-8 18.5-4.2 16.2 10.1 36.2 16.2 60.1 16.2 22.8 0 42.1-5.6 57.8-14.8 6.8-4 15.4-1.5 18.9 5.4 9 18.2 13.2 40.3 11.4 64.1z"
+																		fill="#f4c534" />
+																	<path
+																		d="M155 189.5c-25.8 0-47-7.1-63.7-18.7-10 14.6-17 32.1-18.7 51.6-4 49.6 26.1 89.7 67.5 89.7 41.6 0 78.4-40.1 82.5-89.7A95 95 0 0 0 214 174c-16 9.7-35.6 15.5-59 15.5z"
+																		fill="#fff" />
+																	<path
+																		d="M115.8 246.1a38.5 38.5 0 0 0 38.7 38.6 38.5 38.5 0 0 0 38.6-38.6 38.6 38.6 0 1 0-77.3 0z"
+																		fill="#3e4347" />
+																	<path
+																		d="M131.6 241.1c3.2 3.2 9.9 1.7 14.9-3.2 4.8-4.8 6.2-11.5 3-14.7-3.3-3.4-10-2-14.9 2.9-4.9 5-6.4 11.7-3 15z"
+																		fill="#fff" />
+																</svg>
+																<svg class="rating-2" xmlns="http://www.w3.org/2000/svg"
+																	viewBox="0 0 512 512">
+																	<circle cx="256" cy="256" r="256" fill="#ffd93b" />
+																	<path
+																		d="M512 256A256 256 0 0 1 56.7 416.7a256 256 0 0 0 360-360c58.1 47 95.3 118.8 95.3 199.3z"
+																		fill="#f4c534" />
+																	<path
+																		d="M336.6 403.2c-6.5 8-16 10-25.5 5.2a117.6 117.6 0 0 0-110.2 0c-9.4 4.9-19 3.3-25.6-4.6-6.5-7.7-4.7-21.1 8.4-28 45.1-24 99.5-24 144.6 0 13 7 14.8 19.7 8.3 27.4z"
+																		fill="#3e4347" />
+																	<path
+																		d="M276.6 244.3a79.3 79.3 0 1 1 158.8 0 79.5 79.5 0 1 1-158.8 0z"
+																		fill="#fff" />
+																	<circle cx="340" cy="260.4" r="36.2" fill="#3e4347" />
+																	<g fill="#fff">
+																		<ellipse transform="rotate(-135 326.4 246.6)"
+																		cx="326.4" cy="246.6" rx="6.5" ry="10" />
+																		<path
+																		d="M231.9 244.3a79.3 79.3 0 1 0-158.8 0 79.5 79.5 0 1 0 158.8 0z" />
+																	</g>
+																	<circle cx="168.5" cy="260.4" r="36.2" fill="#3e4347" />
+																	<ellipse transform="rotate(-135 182.1 246.7)"
+																		cx="182.1" cy="246.7" rx="10" ry="6.5" fill="#fff" />
+																</svg>
+																<svg class="rating-3" xmlns="http://www.w3.org/2000/svg"
+																	viewBox="0 0 512 512">
+																	<circle cx="256" cy="256" r="256" fill="#ffd93b" />
+																	<path
+																		d="M407.7 352.8a163.9 163.9 0 0 1-303.5 0c-2.3-5.5 1.5-12 7.5-13.2a780.8 780.8 0 0 1 288.4 0c6 1.2 9.9 7.7 7.6 13.2z"
+																		fill="#3e4347" />
+																	<path
+																		d="M512 256A256 256 0 0 1 56.7 416.7a256 256 0 0 0 360-360c58.1 47 95.3 118.8 95.3 199.3z"
+																		fill="#f4c534" />
+																	<g fill="#fff">
+																		<path
+																		d="M115.3 339c18.2 29.6 75.1 32.8 143.1 32.8 67.1 0 124.2-3.2 143.2-31.6l-1.5-.6a780.6 780.6 0 0 0-284.8-.6z" />
+																		<ellipse cx="356.4" cy="205.3" rx="81.1" ry="81" />
+																	</g>
+																	<ellipse cx="356.4" cy="205.3" rx="44.2" ry="44.2"
+																		fill="#3e4347" />
+																	<g fill="#fff">
+																		<ellipse transform="scale(-1) rotate(45 454 -906)"
+																		cx="375.3" cy="188.1" rx="12" ry="8.1" />
+																		<ellipse cx="155.6" cy="205.3" rx="81.1" ry="81" />
+																	</g>
+																	<ellipse cx="155.6" cy="205.3" rx="44.2" ry="44.2"
+																		fill="#3e4347" />
+																	<ellipse transform="scale(-1) rotate(45 454 -421.3)"
+																		cx="174.5" cy="188" rx="12" ry="8.1" fill="#fff" />
+																</svg>
+																<svg class="rating-4" xmlns="http://www.w3.org/2000/svg"
+																	viewBox="0 0 512 512">
+																	<circle cx="256" cy="256" r="256" fill="#ffd93b" />
+																	<path
+																		d="M512 256A256 256 0 0 1 56.7 416.7a256 256 0 0 0 360-360c58.1 47 95.3 118.8 95.3 199.3z"
+																		fill="#f4c534" />
+																	<path
+																		d="M232.3 201.3c0 49.2-74.3 94.2-74.3 94.2s-74.4-45-74.4-94.2a38 38 0 0 1 74.4-11.1 38 38 0 0 1 74.3 11.1z"
+																		fill="#e24b4b" />
+																	<path
+																		d="M96.1 173.3a37.7 37.7 0 0 0-12.4 28c0 49.2 74.3 94.2 74.3 94.2C80.2 229.8 95.6 175.2 96 173.3z"
+																		fill="#d03f3f" />
+																	<path
+																		d="M215.2 200c-3.6 3-9.8 1-13.8-4.1-4.2-5.2-4.6-11.5-1.2-14.1 3.6-2.8 9.7-.7 13.9 4.4 4 5.2 4.6 11.4 1.1 13.8z"
+																		fill="#fff" />
+																	<path
+																		d="M428.4 201.3c0 49.2-74.4 94.2-74.4 94.2s-74.3-45-74.3-94.2a38 38 0 0 1 74.4-11.1 38 38 0 0 1 74.3 11.1z"
+																		fill="#e24b4b" />
+																	<path
+																		d="M292.2 173.3a37.7 37.7 0 0 0-12.4 28c0 49.2 74.3 94.2 74.3 94.2-77.8-65.7-62.4-120.3-61.9-122.2z"
+																		fill="#d03f3f" />
+																	<path
+																		d="M411.3 200c-3.6 3-9.8 1-13.8-4.1-4.2-5.2-4.6-11.5-1.2-14.1 3.6-2.8 9.7-.7 13.9 4.4 4 5.2 4.6 11.4 1.1 13.8z"
+																		fill="#fff" />
+																	<path
+																		d="M381.7 374.1c-30.2 35.9-75.3 64.4-125.7 64.4s-95.4-28.5-125.8-64.2a17.6 17.6 0 0 1 16.5-28.7 627.7 627.7 0 0 0 218.7-.1c16.2-2.7 27 16.1 16.3 28.6z"
+																		fill="#3e4347" />
+																	<path
+																		d="M256 438.5c25.7 0 50-7.5 71.7-19.5-9-33.7-40.7-43.3-62.6-31.7-29.7 15.8-62.8-4.7-75.6 34.3 20.3 10.4 42.8 17 66.5 17z"
+																		fill="#e24b4b" />
+																</svg>
+																<svg class="rating-5" xmlns="http://www.w3.org/2000/svg"
+																	viewBox="0 0 512 512">
+																	<g fill="#ffd93b">
+																		<circle cx="256" cy="256" r="256" />
+																		<path
+																		d="M512 256A256 256 0 0 1 56.8 416.7a256 256 0 0 0 360-360c58 47 95.2 118.8 95.2 199.3z" />
+																	</g>
+																	<path
+																		d="M512 99.4v165.1c0 11-8.9 19.9-19.7 19.9h-187c-13 0-23.5-10.5-23.5-23.5v-21.3c0-12.9-8.9-24.8-21.6-26.7-16.2-2.5-30 10-30 25.5V261c0 13-10.5 23.5-23.5 23.5h-187A19.7 19.7 0 0 1 0 264.7V99.4c0-10.9 8.8-19.7 19.7-19.7h472.6c10.8 0 19.7 8.7 19.7 19.7z"
+																		fill="#e9eff4" />
+																	<path
+																		d="M204.6 138v88.2a23 23 0 0 1-23 23H58.2a23 23 0 0 1-23-23v-88.3a23 23 0 0 1 23-23h123.4a23 23 0 0 1 23 23z"
+																		fill="#45cbea" />
+																	<path
+																		d="M476.9 138v88.2a23 23 0 0 1-23 23H330.3a23 23 0 0 1-23-23v-88.3a23 23 0 0 1 23-23h123.4a23 23 0 0 1 23 23z"
+																		fill="#e84d88" />
+																	<g fill="#38c0dc">
+																		<path
+																		d="M95.2 114.9l-60 60v15.2l75.2-75.2zM123.3 114.9L35.1 203v23.2c0 1.8.3 3.7.7 5.4l116.8-116.7h-29.3z" />
+																	</g>
+																	<g fill="#d23f77">
+																		<path
+																		d="M373.3 114.9l-66 66V196l81.3-81.2zM401.5 114.9l-94.1 94v17.3c0 3.5.8 6.8 2.2 9.8l121.1-121.1h-29.2z" />
+																	</g>
+																	<path
+																		d="M329.5 395.2c0 44.7-33 81-73.4 81-40.7 0-73.5-36.3-73.5-81s32.8-81 73.5-81c40.5 0 73.4 36.3 73.4 81z"
+																		fill="#3e4347" />
+																	<path
+																		d="M256 476.2a70 70 0 0 0 53.3-25.5 34.6 34.6 0 0 0-58-25 34.4 34.4 0 0 0-47.8 26 69.9 69.9 0 0 0 52.6 24.5z"
+																		fill="#e24b4b" />
+																	<path
+																		d="M290.3 434.8c-1 3.4-5.8 5.2-11 3.9s-8.4-5.1-7.4-8.7c.8-3.3 5.7-5 10.7-3.8 5.1 1.4 8.5 5.3 7.7 8.6z"
+																		fill="#fff" opacity=".2" />
+																</svg>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+
+										<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+											<div class="form-group message">
+												<textarea class="form-control" name="comment" id="comment"
+													placeholder="Write message"></textarea>
+											</div>
+										</div>
+										<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+											<div class="send-btn">
+												<button type="submit"
+													class="btn btn-color btn-md btn-message"
+													onclick="return review.submit()">Send Message</button>
+												<button type="submit" value="Submit">Gửi của thảo</button>
+											</div>
+
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4 col-md-12">
+					<div class="sidebar mbl">
+						<!-- Specifications start -->
+						<div class="specifications widget d-none d-xl-block d-lg-block">
+							<h5 class="sidebar-title">Specifications</h5>
+							<ul>
+								<li><span>Brand: </span>
+									<p class="mb-0" th:text="${carDetails.carmodel.brand}"></p></li>
+
+								<li><span>Model:</span>
+									<p class="mb-0" th:text="${carDetails.carmodel.model}"></p></li>
+								<li><span>Body Style:</span>
+									<p class="mb-0" th:text="${carDetails.carmodel.category}"></p>
+								</li>
+
+								<li><span>Year:</span>
+									<p class="mb-0" th:text="${carDetails.carmodel.year}"></p></li>
+
+								<li><span>Transmission:</span>
+									<p class="mb-0"
+										th:text="${carDetails.engineInformationTranmission}? 'Automatic' :'Manual'"></p>
+								</li>
+
+
+								<li><span>Fuel Type: </span>
+									<p class="mb-0" th:text="${carDetails.fuelType}"></p></li>
+
+								<li><span>Location</span>
+									<p class="mb-0" th:text="${address}"></p></li>
+
+
+								<li th:if="${plusService}!= null"><span>Delivery Fee
+										: </span>
+									<p class="mb-0" th:text="${plusService.fee}+' $'"></p></li>
+
+
+								<li th:if="${extraFee}!= null"><span>Cleanning Fee :
+								</span>
+									<p class="mb-0" th:text="${extraFee.cleanningFee}+' $'"></p></li>
+								<li th:if="${extraFee}!= null"><span>Decoration Fee
+										: </span>
+									<p class="mb-0" th:text="${extraFee.decorationFee}+' $'"></p></li>
+							</ul>
+						</div>
+						<!-- Recent posts start -->
+						<div class="widget recent-posts">
+							<form id="form-car-rental"
+								th:action="${'/home/availablecars/details/' + carDetails.id}"
+								method="post">
+								<input type="hidden" name="totalRent" value="0"> <input
+									type="hidden" name="isSameProvince" value="0"> <input
+									type="hidden" name="isSameDistrict" value="0"> <input
+									type="hidden" name="deliveryFee">
+								<h2 class=""
+									th:text="'$'+${carDetails.price - (carDetails.price * carDetails.discount / 100)}+'/day'">
+								</h2>
+								<div class="row">
+									<div class="col-12">
+										<div class="row">
+											<div class="col-md-6">
+												<div class="wrapper">
+													<label for="form-fromDate">From <input
+														name="fromDate-string" type="text" id="form-fromDate"
+														autocomplete="off">
+													</label>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="wrapper">
+													<label for="form-toDate">To <input
+														name="toDate-string" type="text" id="form-toDate"
+														autocomplete="off" onChange="return updateTotalRent();">
+													</label>
+												</div>
+											</div>
+											<div class="col-12">
+												<p class="text-danger" id="alert-notice-datepicker"></p>
+											</div>
+											<div class="col-12">
+												<p>
+													<span class="text-danger">*</span> The owner will <span
+														style="font-weight: 700;">deliver</span> this car to you
+													between <span style="font-weight: 700;">22:30 -
+														23:30</span> on the start date, you must <span
+														style="font-weight: 700;">return</span> the car between <span
+														style="font-weight: 700;">20:00 - 21:00</span> on the end
+													date.
+												</p>
+												<p>
+													<span class="text-danger">*</span> If you return the car
+													before the specified time, no additional fees will be
+													charged.
+												</p>
+												<p>
+													<span class="text-danger">*</span> However, if you return
+													the car later than the specified time, you will need to
+													contact the car owner to resolve the issue.
+												</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-12">
+										<hr>
+										<h3 class="sidebar-title">Owner Info</h3>
+										<div class="row">
+											<div class="col-6">
+												<p class="float-left">Email:</p>
+											</div>
+											<div class="col-6">
+												<p class="float-right" th:text="${user.email}"></p>
+											</div>
+											<div class="col-6">
+												<p class="float-left">Phone:</p>
+											</div>
+											<div class="col-6">
+												<p class="float-right" th:text="${user.phone}"></p>
+											</div>
+											<div class="col-6">
+												<p class="float-left">Gender:</p>
+											</div>
+											<div class="col-6">
+												<p class="float-right" th:text="${user.gender}"></p>
+											</div>
+										</div>
+									</div>
+									<div class="col-12">
+										<hr>
+										<h3 class="sidebar-title">Car Location</h3>
+										<p th:attr="data-full-address=${fullAddress}"
+											th:text="${fullAddress}"></p>
+									</div>
+									<div class="col-12" th:if="carDetails.isCarPlus">
+										<h6 class="">Choose your current location:</h6>
+										<div class="input-group-prepend">
+											<input style="cursor: pointer; text-align: center;"
+												type="text" readonly class="form-control"
+												name="deliveryAddress"
+												placeholder="Click here to enter custom address"
+												onclick="return openModal.click();" id="carAddress" value="">
+											<a href="#" data-toggle="modal" data-target="#addressModal"
+												id="openModal" hidden="true">Click me</a>
+										</div>
+										<span th:if="${customer.address != null}" style="width: 100%;"
+											id="form-use-user-address"
+											class="btn btn-outline-primary btn-sm">Or use Your
+											Current Address</span>
+										<div class="col-12 text-danger text-center">
+											<span id="validation-NULL-address"></span>
+										</div>
+									</div>
+									<div class="col-12">
+										<hr>
+										<div class="row">
+											<div class="col-6">
+												<p class="float-left">Rental Unit Price:</p>
+											</div>
+											<div class="col-6">
+												<p class="float-right"
+													th:text="'$'+${carDetails.price}+'/day'"></p>
+											</div>
+											<div class="col-6">
+												<p class="float-left">
+													After Discount <span style="font-weight: 800;"
+														th:text="${carDetails.discount} + '%'"></span>
+												</p>
+											</div>
+											<div class="col-6">
+												<p class="float-right"
+													th:text="'$'+${carDetails.price - (carDetails.price * carDetails.discount / 100)}+'/day'">
+												</p>
+											</div>
+											<div class="col-6">
+												<p class="float-left">Details:</p>
+											</div>
+											<div class="col-6">
+												<p class="float-right"
+													th:attr="data-price=${carDetails.price - (carDetails.price * carDetails.discount / 100)}"
+													id="form-details-amount"></p>
+											</div>
+											<div class="col-6">
+
+												<p
+													th:attr="data-uqwfjwissa=${customer.balance != null ? customer.balance : 0}"
+													class="float-left">Delivery Fee:</p>
+											</div>
+											<div class="col-6">
+												<p
+													th:attr="data-delivery-fee=${plusService != null ? plusService.fee : 0}"
+													class="float-right" id="form-delivery-fee">$0</p>
+											</div>
+										</div>
+									</div>
+									<div class="col-12">
+										<hr>
+										<div class="row">
+											<div class="col-6">
+												<p style="font-weight: 500;" class="float-left">Total:</p>
+											</div>
+											<div class="col-6">
+												<p style="font-weight: 500;" class="float-right"
+													id="form-total"></p>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div
+									th:if="${!isKhongHaveBangLai && customer.phone != null && customer.id!=user.id}"
+									class="text-center mt-5">
+									<input type="hidden" name="differenceDate"
+										id="form-differenceDate"> <input type="hidden"
+										th:attr="data-car-model=${carDetails.carmodel.model}">
+									<input type="hidden"
+										th:attr="data-car-year=${carDetails.carmodel.year}">
+									<button
+										th:if="${userViolated == false && carDetails.status != 'declined'}"
+										href="" id="form-submit-btn"
+										class="btn btn-outline-primary btn-lg">Rent Now</button>
+								</div>
+
+								<div
+									th:if="${isKhongHaveBangLai || customer.phone == null || customer.id==user.id}"
+									class="text-center mt-5">
+									<p th:if="${isKhongHaveBangLai}" class="text-danger">You
+										must update your driving license before rent</p>
+									<p th:if="${customer.phone == null}" class="text-danger">You
+										must update your phone number before rent</p>
+
+									<p th:if="${customer.id==user.id}" class="text-danger">You
+										can not booking your car</p>
+									<a class="btn btn-md btn-color"
+										th:href="@{/user/profile/} + ${session.user}">Go to
+
+										profile</a>
+								</div>
+							</form>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Car details page start -->
+
+	<!-- Footer start -->
+	<footer class="footer">
+		<div class="container footer-inner">
+			<div class="row">
+				<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+					<div class="footer-item">
+						<h4>Contact Us</h4>
+						<div class="f-border"></div>
+						<ul class="contact-info">
+							<li>Address: 590 CMT8, P.11, Q.3, Tp.Hồ Chí Minh</li>
+							<li>Email: <a href="mailto:AzCars@AzCars.com">AzCars@AzCars.com</a>
+							</li>
+							<li>Phone: <a href="tel:+84-3939-7979">+84-3939-7979</a></li>
+							<li>Fax: <a href="fax:+84-3939-7979">+84-3939-7979</a></li>
+						</ul>
+
+						<ul class="social-list clearfix">
+							<li><a href="#" class="facebook-bgh"><i
+									class="fa fa-facebook"></i></a></li>
+							<li><a href="#" class="twitter-bgh"><i
+									class="fa fa-twitter"></i></a></li>
+							<li><a href="#" class="google-bgh"><i
+									class="fa fa-google-plus"></i></a></li>
+							<li><a href="#" class="rss-bgh"><i class="fa fa-rss"></i></a>
+							</li>
+							<li><a href="#" class="linkedin-bgh"><i
+									class="fa fa-linkedin"></i></a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+					<div class="footer-item">
+						<h4>Useful Links</h4>
+						<div class="f-border"></div>
+						<ul class="links">
+							<li><a href="#"><i class="flaticon-arrows"></i>About us</a>
+							</li>
+
+							<li><a href="#"><i class="flaticon-arrows"></i>Available
+									Cars Listing</a></li>
+
+
+							<li><a href="#"><i class="flaticon-arrows"></i>Contact
+									Us</a></li>
+
+							<li><a href="#"><i class="flaticon-arrows"></i>Car
+									Details</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+					<div class="recent-posts footer-item">
+						<h4>Recent Posts</h4>
+						<div class="f-border"></div>
+						<div class="media mb-4">
+							<a class="pr-3" href="/"> <img
+								src="/assets/img/sub-car/sub-car.jpg" alt="car" />
+							</a>
+							<div class="media-body align-self-center">
+								<h5>
+									<a href="car-details.html">2016 Audi S5 Coupe</a>
+								</h5>
+								<p>February 27, 2022</p>
+								<p>
+									<strong>$245,000</strong>
+								</p>
+							</div>
+						</div>
+						<div class="media mb-4">
+							<a class="pr-3" href="/"> <img
+								src="/assets/img/sub-car/sub-car-2.jpg" alt="car" />
+							</a>
+							<div class="media-body align-self-center">
+								<h5>
+									<a href="car-details.html">2016 Audi R8</a>
+								</h5>
+								<p>February 27, 2022</p>
+								<p>
+									<strong>$245,000</strong>
+								</p>
+							</div>
+						</div>
+						<div class="media">
+							<a class="pr-3" href="/"> <img
+								src="/assets/img/sub-car/sub-car-3.jpg" alt="car" />
+							</a>
+							<div class="media-body align-self-center">
+								<h5>
+									<a href="car-details.html">Read Audi A7 TDI</a>
+								</h5>
+								<p>February 27, 2022</p>
+								<p>
+									<strong>$245,000</strong>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+					<div class="footer-item clearfix">
+						<h4>Subscribe</h4>
+						<div class="f-border"></div>
+						<div class="Subscribe-box">
+							<p>Excepteur sint occaecat cupidatat non proident, sunt in
+								culpa qui officia deserunt mollit.</p>
+							<form action="#" method="GET">
+								<p>
+									<input type="text" class="form-contact" name="email"
+										placeholder="Enter Address" />
+								</p>
+								<p>
+									<button type="submit" name="submitNewsletter"
+										class="btn btn-block btn-color">Subscribe</button>
+								</p>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xl-12">
+					<p class="copy">
+						&copy; 2024 <a href="/" target="_blank">Az Cars</a>. Group 3 Final
+						Project .
+					</p>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- Footer end -->
+
+	<!-- Off-canvas sidebar -->
+	<div class="off-canvas-sidebar">
+		<div class="off-canvas-sidebar-wrapper">
+			<div class="off-canvas-header">
+				<a class="close-offcanvas" href="#"><span class="fa fa-times"></span></a>
+			</div>
+			<div class="off-canvas-content">
+				<aside class="canvas-widget">
+					<div class="logo text-center">
+						<img src="/assets/img/logos/logo.png" alt="logo">
+					</div>
+				</aside>
+				<aside class="canvas-widget">
+					<ul class="menu">
+						<li class="menu-item menu-item-has-children"><a
+							href="index.html">Home</a></li>
+						<li class="menu-item"><a href="car-grid-leftside.html">Car
+								List</a></li>
+						<li class="menu-item"><a href="car-details.html">Car
+								Detail</a></li>
+						<li class="menu-item"><a
+							href="blog-single-sidebar-right.html">Blog</a></li>
+						<li class="menu-item"><a href="about-1.html">About US</a></li>
+						<li class="menu-item"><a href="contact-1.html">Contact US</a></li>
+					</ul>
+				</aside>
+				<aside class="canvas-widget">
+					<ul class="social-icons">
+						<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+						<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+						<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+						<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+						<li><a href="#"><i class="fa fa-vk"></i></a></li>
+					</ul>
+				</aside>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal car-modal fade" id="addressModal" tabindex="-1"
+		role="dialog" aria-labelledby="addressModal" style="display: none;"
+		aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true" id="offModal">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-6 modal-left">
+							<div class="modal-left-content">
+								<div id="modalCarousel" class="carousel slide"
+									data-ride="carousel">
+									<div class="" role="listbox">
+										<div class="">
+											<img src="/assets/img/icon-services/address.jpg" alt="">
+										</div>
+									</div>
+								</div>
+								<div class="description">
+									<h3>Description</h3>
+									<p>Select your car receiving address</p>
+									<p class="text-danger">* For the best experience, make sure
+										you have picked the most convenient place for owner to
+										delivery this car to you</p>
+
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6 modal-right">
+							<div class="modal-right-content bg-white">
+								<section class="form-group row">
+
+									<label class="col-3 col-form-label" for="provinceSelect">Province:</label>
+									<div class="col-7">
+										<select id="provinceSelect" class="form-control"
+											name="province" onchange="return provinceSubmit();">
+											<option value="">Select Province</option>
+
+											<option th:each="item : ${provinceList}"
+												th:value="${item.code}" th:text="${item.full_name}"></option>
+										</select>
+									</div>
+
+
+
+								</section>
+								<section class="form-group row">
+
+									<label class="col-3 col-form-label" for="districtSelect">District:</label>
+
+									<div class="col-7">
+										<select disabled="disabled" id="districtSelect"
+											class="form-control" onchange="return districtSubmit()"
+											name="districtSelect">
+										</select>
+									</div>
+
+
+
+								</section>
+								<section class="form-group row">
+									<label class="col-3 col-form-label" for="wardSelect">Ward:</label>
+									<div class="col-7">
+										<select disabled="disabled" id="wardSelect"
+											class="form-control" name="wardSelect">
+										</select>
+									</div>
+
+								</section>
+								<section class="form-group row">
+									<label class="col-3 col-form-label" for="street">Street:</label>
+									<div class="col-7">
+										<input class="form-control" id="street" type="text">
+									</div>
+								</section>
+								<section class="form-group row">
+									<label class="col-3 col-form-label" for="houseNo">House
+										No:</label>
+									<div class="col-7">
+										<input class="form-control" id="houseNo" type="text">
+									</div>
+								</section>
+
+								<section class="form-group row">
+									<span id="validation-address" class="text-danger text-center"></span>
+								</section>
+								<button class="btn btn-theme" onclick="return addressSubmit();">Save</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- External JS libraries -->
+	<script src="/assets/js/jquery-2.2.0.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+	<script src="/assets/js/popper.min.js"></script>
+	<script src="/assets/js/bootstrap.min.js"></script>
+	<script src="/assets/js/jquery.selectBox.js"></script>
+	<script src="/assets/js/rangeslider.js"></script>
+	<script src="/assets/js/jquery.magnific-popup.min.js"></script>
+	<script src="/assets/js/jquery.filterizr.js"></script>
+	<script src="/assets/js/wow.min.js"></script>
+	<script src="/assets/js/backstretch.js"></script>
+	<script src="/assets/js/jquery.countdown.js"></script>
+	<script src="/assets/js/jquery.scrollUp.js"></script>
+	<script src="/assets/js/particles.min.js"></script>
+	<script src="/assets/js/typed.min.js"></script>
+	<script src="/assets/js/dropzone.js"></script>
+	<script src="/assets/js/jquery.mb.YTPlayer.js"></script>
+	<script src="/assets/js/slick.min.js"></script>
+	<script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
+	<script src="/assets/js/ie-emulation-modes-warning.js"></script>
+	<script src="https://kit.fontawesome.com/56c961acc9.js"></script>
+	<script
+		th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
+
+	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
+
+	<!-- Custom JS Script -->
+	<script src="/assets/js/app.js"></script>
+
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		const userBalance = /*[[${userBalanceeeeee}]]*/ '';
+		/*]]>*/
+		/*<![CDATA[*/
+		const userViolated = /*[[${userViolated}]]*/ '';
+		/*]]>*/
+		if (userViolated == true) {
+			swal.fire({
+				title: "BANNED TEMPORARY",
+				text: "Your are being banned temporary because of declinding too many cars in a month. You must pay $200 to keep using our service, you are not allowed to withdraw money on your wallet until you pay your fine (deposit is allowed)",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#3085d6",
+				cancelButtonColor: "#d33",
+				confirmButtonText: "Yes, pay it!",
+				cancelButtonText: "Got it, I will think about it",
+			}).then((result) => {
+				if (result.isConfirmed) {
+					if (userBalance >= 200) {
+						document.getElementById('privateText').value= "+200";		
+						sendPrivateMoney();
+						window.location.href = "/home/myplan/payFine";
+					} else {
+						Swal.fire({
+							title: "Balance is not enough",
+							text: "Your balance is less than $200, deposit and try again",
+							icon: "warning",
+							confirmButtonColor: "#3754ec",
+						});
+					}
+				}
+			});
+		}
+
+		/*<![CDATA[*/
+		const carDetails = /*[[${carDetails}]]*/ '';
+		/*]]>*/
+		/*<![CDATA[*/
+		const user = /*[[${user}]]*/ '';
+		/*]]>*/
+		if (carDetails.status == 'declined' && carDetails.owner.id == user.id) {
+			swal.fire({
+				title: "CAR BANNED TEMPORARY",
+				text: "Your car are being banned temporary because of declinding too many orders in a month. You must pay $200 to reopen your car service",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#3085d6",
+				cancelButtonColor: "#d33",
+				confirmButtonText: "Yes, pay it!",
+				cancelButtonText: "Got it, I will think about it",
+			}).then((result) => {
+				if (result.isConfirmed) {
+					if (user.balance >= 600) {
+						document.getElementById('privateText').value= "+600";		
+						sendPrivateMoney();
+						window.location.href = "/home/myplan/ownerCarPayFine/" + carDetails.id;
+					} else {
+						Swal.fire({
+							title: "Balance is not enough",
+							text: "Your balance is less than $600, deposit and try again",
+							icon: "warning",
+							confirmButtonColor: "#3754ec",
+						});
+					}
+				}
+			});
+		}
+		if (carDetails.status == 'declined' && carDetails.owner.id != user.id) {
+			swal.fire({
+				title: "CAR BANNED TEMPORARY",
+				text: "This car is being banned, please pick another car",
+				icon: "warning",
+				showCancelButton: false,
+				confirmButtonColor: "#3085d6",
+				confirmButtonText: "OK, I got it",
+			}).then((result) => {
+				window.location.href = "/home/availablecars";
+			});
+		}
+
+
+		/*<![CDATA[*/
+		var extraFeeeeeee = /*[[${extraFee}]]*/ '';
+		/*]]>*/
+		/*<![CDATA[*/
+		var orderDetailsOfThisCar = /*[[${orderDetailsOfThisCar}]]*/ '';
+		/*]]>*/
+		console.table(orderDetailsOfThisCar);
+		var carFeatures = document.getElementById('resultFeatures').value;
+		var listResult = document
+			.getElementsByClassName("col-3 mx-4 my-2 car-services");
+		for (var i = 0; i < listResult.length; i++) {
+			// Checking if the string contains the ID of the current element
+			if (carFeatures.includes(listResult[i].id)) {
+				document.getElementById(listResult[i].id).classList
+					.add("selected");
+			} else {
+				document.getElementById(listResult[i].id).setAttribute("style",
+					"display:none")
+
+			}
+		}
+
+		$(function () {
+			var today = new Date();
+			var todayFormatted = $.datepicker.formatDate("dd-mm-yy", today);
+			var tomorrow = new Date(today);
+			tomorrow.setDate(tomorrow.getDate() + 1);
+			var tomorrowFormatted = $.datepicker.formatDate("dd-mm-yy", tomorrow);
+
+			var fromDateInput = $("#form-fromDate");
+			var toDateInput = $("#form-toDate");
+
+			// Mảng chứa các ngày bị disable
+			var disabledDates = [];
+
+			orderDetailsOfThisCar.forEach(function (obj) {
+				var fromDate = new Date(obj.fromDate);
+				var toDate = new Date(obj.toDate);
+				toDate.setDate(toDate.getDate() - 1);
+
+				var currentDate = new Date(fromDate);
+				while (currentDate <= toDate) {
+					var year = currentDate.getFullYear();
+					var month = currentDate.getMonth() + 1; // Thêm 1 vào chỉ số tháng
+					var day = currentDate.getDate();
+
+					// Kiểm tra xem ngày này đã tồn tại trong disabledDates chưa
+					var found = false;
+					for (var i = 0; i < disabledDates.length; i++) {
+						if (disabledDates[i][0] === year && disabledDates[i][1] === month && disabledDates[i][2] === day) {
+							found = true;
+							break;
+						}
+					}
+
+					// Nếu không tìm thấy, thêm ngày vào disabledDates
+					if (!found) {
+						disabledDates.push([year, month, day]);
+					}
+
+					// Tăng ngày lên 1
+					currentDate.setDate(currentDate.getDate() + 1);
+				}
+			});
+
+			console.log(disabledDates);
+
+			var todayInDisabledDates = disabledDates.find(function (date) {
+				return (
+					date[0] === today.getFullYear() &&
+					date[1] === today.getMonth() + 1 &&
+					date[2] === today.getDate()
+				);
+			});
+
+			// Kiểm tra xem ngày mai có trong disabledDates không
+			var tomorrowInDisabledDates = disabledDates.find(function (date) {
+				return (
+					date[0] === tomorrow.getFullYear() &&
+					date[1] === tomorrow.getMonth() + 1 &&
+					date[2] === tomorrow.getDate()
+				);
+			});
+
+			// Nếu hôm nay hoặc ngày mai bị disable, tăng ngày lên cho đến khi không còn bị disable
+			while (todayInDisabledDates || tomorrowInDisabledDates) {
+				today.setDate(today.getDate() + 1);
+				todayFormatted = $.datepicker.formatDate("dd-mm-yy", today);
+				tomorrow.setDate(tomorrow.getDate() + 1);
+				tomorrowFormatted = $.datepicker.formatDate("dd-mm-yy", tomorrow);
+
+				todayInDisabledDates = disabledDates.find(function (date) {
+					return (
+						date[0] === today.getFullYear() &&
+						date[1] === today.getMonth() + 1 &&
+						date[2] === today.getDate()
+					);
+				});
+
+				tomorrowInDisabledDates = disabledDates.find(function (date) {
+					return (
+						date[0] === tomorrow.getFullYear() &&
+						date[1] === tomorrow.getMonth() + 1 &&
+						date[2] === tomorrow.getDate()
+					);
+				});
+			}
+
+			$("#form-fromDate, #form-toDate").datepicker({
+				dateFormat: "dd-mm-yy",
+				duration: "fast",
+				minDate: 0, // Tối thiểu là hôm nay
+				beforeShowDay: function (date) {
+					// Disable các ngày trước hôm nay
+					return [date >= today];
+				},
+				onSelect: function (selectedDate) {
+					selectedDate = $.datepicker.parseDate("dd-mm-yy", selectedDate);
+					var tempDate = new Date(selectedDate);
+					tempDate.setDate(tempDate.getDate() + 1); // Cộng thêm một ngày
+					var selectedDateFormatted = $.datepicker.formatDate("dd-mm-yy", tempDate);
+					toDateInput.datepicker("option", "minDate", selectedDateFormatted);
+					updateTotalRent();
+
+					// Kiểm tra nếu có ngày bị disable trong khoảng từ fromDate đến toDate
+					var fromDate = $("#form-fromDate").datepicker("getDate");
+					var toDate = $("#form-toDate").datepicker("getDate");
+					var currentDate = new Date(fromDate);
+
+					var disableMessage = "";
+					while (currentDate <= toDate) {
+						var year = currentDate.getFullYear();
+						var month = currentDate.getMonth() + 1;
+						var day = currentDate.getDate();
+
+						for (var i = 0; i < disabledDates.length; i++) {
+							if (year === disabledDates[i][0] && month === disabledDates[i][1] && day === disabledDates[i][2]) {
+								disableMessage = "There are disabled dates within the selected time period. Please choose a start date again before selecting an end date.";
+								break;
+							}
+						}
+
+						if (disableMessage !== "") {
+							break;
+						}
+
+						currentDate.setDate(currentDate.getDate() + 1);
+					}
+
+					$("#alert-notice-datepicker").text(disableMessage);
+				}
+			}).datepicker("setDate", todayFormatted);
+
+			$("#form-toDate").datepicker({
+				dateFormat: "dd-mm-yy",
+				duration: "fast",
+				minDate: 0, // Tối thiểu là ngày mai
+				beforeShowDay: function (date) {
+					// Disable các ngày trước hôm nay
+					return [date >= tomorrow];
+				}
+			}).datepicker("setDate", tomorrowFormatted); // Đặt giá trị mặc định là hôm nay
+
+			$("#form-fromDate, #form-toDate").datepicker('option', 'beforeShowDay', function (date) {
+				var m = date.getMonth(),
+					d = date.getDate(),
+					y = date.getFullYear();
+
+				for (var i = 0; i < disabledDates.length; i++) {
+					if (y === disabledDates[i][0] && m === disabledDates[i][1] - 1 && d === disabledDates[i][2]) {
+						// Highlight các ngày bị disable
+						return [false, "highlighted-date"];
+					}
+				}
+				return [true];
+			});
+		});
+
+		function updateTotalRent() {
+			console.log('running total rent function');
+			// Lấy giá xe mỗi ngày từ thuộc tính data-price
+			var dailyPrice = parseFloat(document.getElementById("form-details-amount").getAttribute("data-price"));
+			console.log("dailyPrice:", dailyPrice);
+
+			// Kiểm tra và xử lý fromDateValue
+			var fromDateValue = document.getElementById("form-fromDate").value;
+			var fromDate = null;
+			if (fromDateValue && fromDateValue.match(/^\d{2}-\d{2}-\d{4}$/)) {
+				var fromDateParts = fromDateValue.split("-");
+				fromDate = new Date(parseInt(fromDateParts[2]), parseInt(fromDateParts[1]) - 1, parseInt(fromDateParts[0]));
+			}
+			console.log("fromDate:", fromDate);
+
+			// Kiểm tra và xử lý toDateValue
+			var toDateValue = document.getElementById("form-toDate").value;
+			var toDate = null;
+			if (toDateValue && toDateValue.match(/^\d{2}-\d{2}-\d{4}$/)) {
+				var toDateParts = toDateValue.split("-");
+				toDate = new Date(parseInt(toDateParts[2]), parseInt(toDateParts[1]) - 1, parseInt(toDateParts[0]));
+			}
+			console.log("toDate:", toDate);
+
+			if (fromDate && toDate) {
+				// Tính số mili giây chênh lệch giữa hai ngày
+				var timeDifference = toDate.getTime() - fromDate.getTime();
+				console.log("timeDifference:", timeDifference);
+
+				// Chuyển đổi từ mili giây sang ngày
+				var daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+				document.getElementById("form-differenceDate").value = daysDifference;
+
+				console.log("daysDifference:", daysDifference);
+
+				// Tính tổng giá thuê xe
+				var totalRent = dailyPrice * daysDifference;
+
+				var deliveryFeeElement = $('#form-delivery-fee');
+				var deliveryFeeText = deliveryFeeElement.text().trim();
+
+				var deliveryFee = 0;
+
+				if (deliveryFeeText.includes('$')) {
+					deliveryFee = parseInt(deliveryFeeText.replace('$', '').trim());
+				}
+
+				totalRent += deliveryFee;
+
+				// Cập nhật nội dung của phần tử total-rent
+				document.getElementById("form-details-amount").textContent = '$' + dailyPrice.toLocaleString() + ' x ' + daysDifference + (daysDifference > 1 ? ' days' : ' day');
+				document.getElementById("form-total").textContent = '$' + totalRent.toLocaleString();
+				document.querySelector("#form-car-rental input[name='totalRent']").value = totalRent;
+			}
+		}
+
+		function provinceSubmit() {
+			const districtSelect = $("#districtSelect").get(0);
+			const wardSelect = $("#wardSelect").get(0);
+
+			$.ajax({
+				url: "/home/carregister/getDistrict",
+				type: "get",
+				data: {provinceCode: $("#provinceSelect").val()},
+				success: function (res) {
+					$(districtSelect).removeAttr('disabled');
+					$(districtSelect).html('<option value ="">--Select District--</option>');
+					$.each(res.districtList, function (key, value) {
+						$(districtSelect).append('<option value="' + value.code + '">' + value.full_name + '</option>');
+					});
+					$(wardSelect).html('<option value="" >--Select Ward--</option>');
+				}
+			});
+		};
+		function districtSubmit() {
+			const districtSelect = $("#districtSelect").get(0);
+			const wardSelect = $("#wardSelect").get(0);
+
+			$.ajax({
+				url: "/home/carregister/getWard",
+				type: "get",
+				data: {districtCode: $("#districtSelect").val()},
+				success: function (res) {
+					$(wardSelect).removeAttr('disabled');
+					$(wardSelect).html('<option value ="">--Select Ward--</option>');
+					$.each(res.wardList, function (key, value) {
+						$(wardSelect).append('<option value="' + value.code + '">' + value.full_name + '</option>');
+					});
+				}
+			});
+		};
+
+		$('#form-use-user-address').on('click', function (e) {
+			e.preventDefault();
+			/*<![CDATA[*/
+			var userAddress = /*[[${customer.address}]]*/ '';
+			/*]]>*/
+			addressSubmit(userAddress);
+		});
+
+		function addressSubmit(customAddress = null) {
+			if (customAddress) {
+				$("#carAddress").val(customAddress);
+				carAddress.setAttribute("value", address);
+			} else {
+				const houseNo = document.getElementById('houseNo').value;
+				const street = document.getElementById('street').value;
+				if (houseNo == "" || street == "") {
+					document.getElementById('validation-address').textContent = "Address is not valid";
+					validateAddress();
+					return false;
+				} else {
+					document.getElementById('validation-address').textContent = "";
+					var address = $("#houseNo").val() + ", " + $("#street").val() + ", " + $("#wardSelect option:selected").text() + ", " + $("#districtSelect option:selected").text() + ", " + $("#provinceSelect option:selected").text();
+					$("#carAddress").val(address);
+					console.log(address);
+					console.log($("#carAddress").val());
+
+					carAddress.setAttribute("value", address);
+
+					offModal.click();
+					validateAddress();
+
+				}
+			}
+			getDeliveryFee(customAddress);
+		}
+
+		function validateAddress() {
+
+			var addressResult = document.getElementById('carAddress').value;
+
+			if (addressResult == "") {
+
+				document.getElementById('validation-NULL-address').textContent = "Your address must be declared";
+			} else {
+				document.getElementById('validation-NULL-address').textContent = "";
+			}
+
+		}
+
+		function getDeliveryFee(customAddress = null) {
+			let userAddressArr = null;
+			if (customAddress) {
+				userAddressArr = customAddress.split(", ");
+			}
+			$('#form-submit-btn').attr('disabled', 'disabled');
+			const fullAddress = document.querySelector("p[data-full-address]");
+			const carRawAddress = fullAddress.getAttribute('data-full-address');
+			if (!carRawAddress.includes(userAddressArr ? userAddressArr[4] : $("#provinceSelect option:selected").text())) {
+				console.log('ko trùng tinh - khong giao xe');
+				$('#form-delivery-fee').text('No delivery to your location');
+				$('#form-delivery-fee').addClass('text-danger');
+				$("#form-car-rental input[name='isSameProvince']").val(0);
+				$("#form-car-rental input[name='isSameDistrict']").val(0);
+				updateTotalRent();
+			} else {
+				if (carRawAddress.includes(userAddressArr ? userAddressArr[3] : $("#districtSelect option:selected").text())) {
+					console.log('trung quan(thanhpho) - giao free');
+					$('#form-delivery-fee').text('$0');
+					$('#form-submit-btn').removeAttr('disabled');
+					$('#form-delivery-fee').removeClass('text-danger');
+					$("#form-car-rental input[name='isSameProvince']").val(1);
+					$("#form-car-rental input[name='isSameDistrict']").val(1);
+					updateTotalRent();
+				} else {
+					console.log('trung tinh - khong trung thanh pho - charge fee');
+					$('#form-delivery-fee').text('$' + $('#form-delivery-fee').data('delivery-fee'));
+					$('#form-submit-btn').removeAttr('disabled');
+					$('#form-delivery-fee').removeClass('text-danger');
+					$("#form-car-rental input[name='isSameProvince']").val(1);
+					$("#form-car-rental input[name='isSameDistrict']").val(0);
+					updateTotalRent();
+				}
+			}
+		}
+
+		$('#form-submit-btn').on('click', function (e) {
+			e.preventDefault();
+			const totalFinalRent = parseFloat($("#form-car-rental input[name='totalRent']").val()) + parseFloat(extraFeeeeeee ? extraFeeeeeee.decorationFee ?? 0 : 0) + parseFloat(extraFeeeeeee ? extraFeeeeeee.cleanningFee ?? 0 : 0) + 200;
+			const uissa = $('p[data-uqwfjwissa]').data('uqwfjwissa');
+			if (parseFloat(uissa) < parseFloat(totalFinalRent)) {
+				Swal.fire({
+					title: "Balance is not enough",
+					text: "You won't be able to rent this car",
+					icon: "warning",
+					confirmButtonColor: "#3754ec",
+				});
+			} else {
+				let deliveryFeeElement11 = $('#form-delivery-fee');
+				let deliveryFeeText11 = deliveryFeeElement11.text().trim();
+
+				let deliveryFee11 = 0;
+
+				if (deliveryFeeText11.includes('$')) {
+					deliveryFee11 = parseInt(deliveryFeeText11.replace('$', '').trim());
+				}
+				$("input[name='deliveryFee']").val(deliveryFee11);
+				const extraFeeField = extraFeeeeeee
+					? `<tr>
+										<td colspan=2 class="text-center">Extra Fee</td>
+									</tr>
+									<tr>
+										<td class="text-left">Cleanning Fee: </td>
+										<td class="text-right">$${extraFeeeeeee.cleanningFee.toLocaleString() ?? 0}</td>
+									</tr>
+									<tr>
+										<td class="text-left">Smell Fee: </td>
+										<td class="text-right">$${extraFeeeeeee.decorationFee.toLocaleString() ?? 0}</td>
+									</tr>
+									<tr>
+										<td class="text-left">Insurance Fee: </td>
+										<td class="text-right">$200</td>
+									</tr>`
+					: '';
+				Swal.fire({
+					title: "Confirmation!",
+					html: `<table class="table">
+								<tr>
+									<th class="text-left">Model: </th>
+									<td class="text-right">${$('input[data-car-model]').data('car-model')}</td>
+								</tr>
+								<tr>
+									<th class="text-left">Year: </th>
+									<td class="text-right">${$('input[data-car-year]').data('car-year')}</td>
+								</tr>
+								<tr>
+									<th class="text-left">Rental per day: </th>
+									<td class="text-right">$${$('p[data-price]').data('price').toLocaleString()}</td>
+								</tr>
+								<tr>
+									<th class="text-left">From: </th>
+									<td class="text-right">${$("input[name='fromDate-string']").val()}</td>
+								</tr>
+								<tr>
+									<th class="text-left">To: </th>
+									<td class="text-right">${$("input[name='toDate-string']").val()}</td>
+								</tr>
+								<tr>
+									<th class="text-left">Total days: </th>
+									<td class="text-right">${$("input[name='differenceDate']").val().toLocaleString()}</td>
+								</tr>
+								<tr>
+									<th class="text-left">Delivery fee: </th>
+									<td class="text-right">$${deliveryFee11.toLocaleString()}</td>
+								</tr>
+								<tr>
+									<th class="text-left">Sub Total: </th>
+									<td class="text-right">
+										$${$("#form-car-rental input[name='totalRent']").val().toLocaleString()}
+									</td>
+								</tr>
+								${extraFeeField}
+								<tr>
+									<th class="text-left">Total: </th>
+									<td class="text-right">
+										<h4>$${totalFinalRent.toLocaleString()}</h4>
+										<p class="text-success">Current balance: $${uissa.toLocaleString()}</p>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2">
+										<p class="text-danger">* If you have agreed, you will be locked $${totalFinalRent.toLocaleString()} as a mortgage (fees included as notified), the fees incurred will be returned to you if no problems occur after car rental completed.</p>
+										<p class="text-danger">* If the car owner does not respond within 15 minutes, the locked money will be fully refunded to you immediately.</p>
+									</td>
+								</tr>
+							</table>`,
+					showCancelButton: true,
+					confirmButtonColor: "#3085d6",
+					cancelButtonColor: "#ff214f",
+					confirmButtonText: "Yes, do it!"
+				}).then((result) => {
+					if (result.isConfirmed) {
+						setTimeout(function () {
+							const RENTAL_FORM = $('#form-car-rental').get(0);
+							RENTAL_FORM.submit();
+							document.getElementById('privateText').value= "+200";		
+							sendPrivateMoney();
+						}, 2000);
+						Swal.fire({
+							title: "Rented!",
+							text: "Waiting for car owner to accept your rental (atleast 1 hour)",
+							icon: "success",
+							html: `
+							
+								<p> Sending mail... </p>
+							`,
+							timerProgressBar: true,
+							didOpen: () => {
+								Swal.showLoading();
+							},
+							willClose: () => {
+								clearInterval(timerInterval);
+							}
+						});
+					}
+				});
+			}
+		});
+
+		// Gọi hàm cập nhật tổng giá thuê xe khi trang được tải và mỗi khi input thay đổi
+		window.onload = function () {
+			updateTotalRent();
+			$('#form-submit-btn').attr('disabled', 'disabled');
+		};
+
+
+	</script>
+
+
+</body>
+
+</html>
