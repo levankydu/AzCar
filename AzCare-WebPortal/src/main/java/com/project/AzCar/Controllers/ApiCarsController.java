@@ -128,7 +128,7 @@ public class ApiCarsController {
 		return provinceServices.getListCity();
 	}
 
-	@GetMapping("/getDistricts/{provinceCode}")
+	@GetMapping("/getDistricts")
 	public List<District> getDistricts(@RequestParam("provinceCode") String provinceCode) {
 		return districtServices.getDistricByProvinceCode(provinceCode);
 	}
