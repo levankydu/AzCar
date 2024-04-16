@@ -41,7 +41,7 @@ public class AzCareApiServicesApplication implements CommandLineRunner {
 	@Bean
 	Tesseract getTesseract() {
 		Tesseract tesseract = new Tesseract();
-		String tessDataPath = "D:\\project\\AzCar\\AzCare-APIServices\\src\\main\\resources\\static\\tessdata";
+		String tessDataPath = "D:\\kyusadiasbdiha\\abcvjasduhas\\AzCar\\AzCare-APIServices\\src\\main\\resources\\static\\tessdata";
 		tesseract.setDatapath(tessDataPath);
 		tesseract.setLanguage("eng");
 

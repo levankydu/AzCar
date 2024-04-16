@@ -37,7 +37,9 @@ public class PaymentServiceimpl implements PaymentService {
 	@PostConstruct
 	public void init() {
 		this.admin = userServices.findUserByEmail("admin@admin");
-		this.adminBalance = admin.getBalance() != null ? admin.getBalance() : BigDecimal.valueOf(0);
+		if (admin != null) {
+			this.adminBalance = admin.getBalance() != null ? admin.getBalance() : BigDecimal.valueOf(0);
+		}
 	}
 
 	@Override
@@ -102,17 +104,17 @@ public class PaymentServiceimpl implements PaymentService {
 		payment.setUserId((int) fromUserId);
 		payment.setToUserId((int) admin.getId());
 		payment.setAmount(amount);
-		if(isDeposit) {
+		if (isDeposit) {
 			payment.setDescription("Deposit (nap tien)");
 			payment.setStatus(Constants.paymentStatus.DEPOSIT);
-		}else {
+		} else {
 			payment.setDescription("Profit (Tien loi)");
 			payment.setStatus(Constants.paymentStatus.PROFIT);
 		}
 		paymentRepository.save(payment);
-		
+
 		callback.onProcess(user, userBalance, amount);
-		
+
 		admin.setBalance(adminBalance.add(amount));
 		userServices.saveUserReset(admin);
 		userServices.saveUserReset(user);
@@ -127,17 +129,17 @@ public class PaymentServiceimpl implements PaymentService {
 		payment.setUserId((int) admin.getId());
 		payment.setToUserId((int) toUserId);
 		payment.setAmount(amount);
-		if(isWithdraw) {
+		if (isWithdraw) {
 			payment.setDescription("Withdraw (rut tien)");
 			payment.setStatus(Constants.paymentStatus.WITHDRAW);
-		}else {
+		} else {
 			payment.setDescription("Expense (Tien lo)");
 			payment.setStatus(Constants.paymentStatus.EXPENSE);
 		}
 		paymentRepository.save(payment);
-		
+
 		callback.onProcess(user, userBalance, amount);
-		
+
 		admin.setBalance(adminBalance.subtract(amount));
 		userServices.saveUserReset(admin);
 		userServices.saveUserReset(user);
@@ -167,14 +169,14 @@ public class PaymentServiceimpl implements PaymentService {
 
 	@Override
 	public List<String> getDayStringFomart() {
-		 List<String> result = new ArrayList<>();
-		    List<Payment> list = paymentRepository.findAll();
-		    for (var item : list) {
-		        result.add(item.getCreatedAt().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-		    }
-		    Collections.sort(result);
-		    Set<String> setWithoutDuplicates = new LinkedHashSet<String>(result);
-		    return new ArrayList<>(setWithoutDuplicates);
+		List<String> result = new ArrayList<>();
+		List<Payment> list = paymentRepository.findAll();
+		for (var item : list) {
+			result.add(item.getCreatedAt().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+		}
+		Collections.sort(result);
+		Set<String> setWithoutDuplicates = new LinkedHashSet<String>(result);
+		return new ArrayList<>(setWithoutDuplicates);
 	}
 
 	@Override

@@ -108,7 +108,6 @@
 	border-radius: 7px;
 }
 </style>
-
 <body>
 	<div class="page_loader"></div>
 	<!-- main header start -->
@@ -136,10 +135,10 @@
 						<div class="navbar-collapse collapse w-100" id="navbar">
 							<ul class="navbar-nav ml-auto">
 								<li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
-								<li class="nav-item"><a class="nav-link" th:href="@{/home/availablecars}">Available
-										Cars</a></li>
-								<li class="nav-item" th:if="${session.user}"><a class="nav-link"
-										th:href="@{/home/myplan/}">My Plan</a></li>
+								<li class="nav-item"><a class="nav-link"
+									th:href="@{/home/availablecars}">Available Cars</a></li>
+								<li class="nav-item" th:if="${session.user}"><a
+									class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
 								<div id="openNoti">
 									<div class="" tabindex="0" id="noti">
 										<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -498,14 +497,14 @@ select {
 															<a href="car-details.html"
 																th:text="${car.carmodel.model +'-'+car.carmodel.year}"></a>
 															<span th:if="${car.activeViolationAmount >= 1}"><i
-																	style="color: orangered;"
-																	class="fa-solid fa-triangle-exclamation fa-beat-fade"></i></span>
+																style="color: orangered;"
+																class="fa-solid fa-triangle-exclamation fa-beat-fade"></i></span>
 															<span th:if="${car.activeViolationAmount >= 2}"><i
-																	style="color: orangered;"
-																	class="fa-solid fa-triangle-exclamation fa-beat-fade"></i></span>
+																style="color: orangered;"
+																class="fa-solid fa-triangle-exclamation fa-beat-fade"></i></span>
 															<span th:if="${car.activeViolationAmount >= 3}"><i
-																	style="color: orangered;"
-																	class="fa-solid fa-triangle-exclamation fa-beat-fade"></i></span>
+																style="color: orangered;"
+																class="fa-solid fa-triangle-exclamation fa-beat-fade"></i></span>
 														</h3>
 
 														<div class="listing-price">
@@ -742,9 +741,10 @@ select {
 																		</tr>
 																		<tr class="text-center"
 																			th:each="item : ${__${'OrderListDto' + car.carmodel.objectId}__}">
-																			<td>
-																				<a style="font-size: 15px;" class="badge badge-pill badge-info" th:href="@{'/user/profile/' + ${item.user.email}}" th:text="${item.user.email}"></a>
-																			</td>
+																			<td><a style="font-size: 15px;"
+																				class="badge badge-pill badge-info"
+																				th:href="@{'/user/profile/' + ${item.user.email}}"
+																				th:text="${item.user.email}"></a></td>
 																			<td style="white-space: nowrap;"
 																				th:text="${item.dateFormat(item.fromDate)}"></td>
 																			<td style="white-space: nowrap;"
@@ -924,6 +924,7 @@ select {
 														class="btn btn-md btn-success">Click to finish rental</a>
 													<a
 														th:if="${(item.status == 'accepted' || item.status == 'waiting_for_verify') and (#temporals.createNow() lt item.fromDate or #temporals.createNow() gt item.toDate)}"
+														th:attr="data-url=@{'/home/myplan/cancel_from_user/'+ ${item.id}}"
 														style="position: relative; right: -568px; top: -48px;"
 														class="btn btn-md btn-warning text-white"
 														onclick="showOrderCancelConfirm(this)">Cancel Order</a>
@@ -1075,7 +1076,8 @@ select {
 								culpa qui officia deserunt mollit.</p>
 							<p>Excepteur sint occaecat cupidatat non proident, sunt in
 								culpa qui officia deserunt mollit.</p>
-							<img src="/assets/img/logos/bocongthuong.png" class="w-75" alt="loo" />
+							<img src="/assets/img/logos/bocongthuong.png" class="w-75"
+								alt="loo" />
 						</div>
 					</div>
 				</div>
@@ -1291,7 +1293,21 @@ select {
 
 
 					// Redirect to cancel action with the provided URL
-					window.location.href = url;
+				
+					th:href="@{'/home/myplan/cancel_from_user/'+ ${item.id}}"
+						Swal.fire({
+													title: "Processing...",
+													icon: "info",
+													timerProgressBar: true,
+													didOpen: () => {
+														
+														Swal.showLoading();
+														window.location.href = url;
+													},
+													willClose: () => {
+														clearInterval(timerInterval);
+													}
+												});
 				}
 			});
 		}

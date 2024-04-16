@@ -84,6 +84,8 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="D:\kyusadiasbdiha\abcvjasduhas\AzCar\AzCare-WebPortal"/>
+			<item value="D:\kyusadiasbdiha\abcvjasduhas\AzCar\AzCare-APIServices"/>
 			<item value="C:\Users\Le Du\Desktop\Aspose.HTML-for-Java-master\Aspose.HTML-for-Java-master"/>
 			<item value="C:\Users\Le Du\Desktop\spring-boot-websocket-stomp-push-notification-main"/>
 			<item value="C:\Users\Le Du\Desktop\ip-geolocation-api-java-sdk-master"/>

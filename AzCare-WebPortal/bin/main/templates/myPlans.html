@@ -95,7 +95,7 @@
 .my-cars-hehe {
 	background-color: #f1f0f0;
 	min-height: 200px;
-	max-height: 230px;
+	max-height: 250px;
 	box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 	border-radius: 7px;
 }
@@ -108,8 +108,6 @@
 	border-radius: 7px;
 }
 </style>
-</head>
-
 <body>
 	<div class="page_loader"></div>
 	<!-- main header start -->
@@ -136,15 +134,11 @@
 						</button>
 						<div class="navbar-collapse collapse w-100" id="navbar">
 							<ul class="navbar-nav ml-auto">
+								<li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
 								<li class="nav-item"><a class="nav-link"
 									th:href="@{/home/availablecars}">Available Cars</a></li>
 								<li class="nav-item" th:if="${session.user}"><a
 									class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
-								<li class="nav-item "><a class="nav-link" href="#">
-										About Us </a></li>
-
-								<li class="nav-item"><a class="nav-link" href="#">
-										Contact Us </a></li>
 								<div id="openNoti">
 									<div class="" tabindex="0" id="noti">
 										<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -502,6 +496,15 @@ select {
 														<h3 class="title">
 															<a href="car-details.html"
 																th:text="${car.carmodel.model +'-'+car.carmodel.year}"></a>
+															<span th:if="${car.activeViolationAmount >= 1}"><i
+																style="color: orangered;"
+																class="fa-solid fa-triangle-exclamation fa-beat-fade"></i></span>
+															<span th:if="${car.activeViolationAmount >= 2}"><i
+																style="color: orangered;"
+																class="fa-solid fa-triangle-exclamation fa-beat-fade"></i></span>
+															<span th:if="${car.activeViolationAmount >= 3}"><i
+																style="color: orangered;"
+																class="fa-solid fa-triangle-exclamation fa-beat-fade"></i></span>
 														</h3>
 
 														<div class="listing-price">
@@ -511,6 +514,10 @@ select {
 														<div class="listing-price">
 															Current Discount: <span class="new"
 																th:text="${car.discount > 0 ? car.discount + '%' : 'No discount'}"></span>
+														</div>
+														<div class="listing-price">
+															Finished Orders: <span class="new"
+																th:text="${car.finishedOrders > 0 ? car.finishedOrders : 0}"></span>
 														</div>
 														<div class="listing-price">
 															<p>
@@ -734,7 +741,10 @@ select {
 																		</tr>
 																		<tr class="text-center"
 																			th:each="item : ${__${'OrderListDto' + car.carmodel.objectId}__}">
-																			<td th:text="${item.user.email}"></td>
+																			<td><a style="font-size: 15px;"
+																				class="badge badge-pill badge-info"
+																				th:href="@{'/user/profile/' + ${item.user.email}}"
+																				th:text="${item.user.email}"></a></td>
 																			<td style="white-space: nowrap;"
 																				th:text="${item.dateFormat(item.fromDate)}"></td>
 																			<td style="white-space: nowrap;"
@@ -914,6 +924,7 @@ select {
 														class="btn btn-md btn-success">Click to finish rental</a>
 													<a
 														th:if="${(item.status == 'accepted' || item.status == 'waiting_for_verify') and (#temporals.createNow() lt item.fromDate or #temporals.createNow() gt item.toDate)}"
+														th:attr="data-url=@{'/home/myplan/cancel_from_user/'+ ${item.id}}"
 														style="position: relative; right: -568px; top: -48px;"
 														class="btn btn-md btn-warning text-white"
 														onclick="showOrderCancelConfirm(this)">Cancel Order</a>
@@ -1053,72 +1064,8 @@ select {
 						</ul>
 					</div>
 				</div>
-				<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
-					<div class="footer-item">
-						<h4>Useful Links</h4>
-						<div class="f-border"></div>
-						<ul class="links">
-							<li><a href="#"><i class="flaticon-arrows"></i>About us</a></li>
-
-							<li><a href="#"><i class="flaticon-arrows"></i>Available
-									Cars Listing</a></li>
-
-
-							<li><a href="#"><i class="flaticon-arrows"></i>Contact
-									Us</a></li>
-
-							<li><a href="#"><i class="flaticon-arrows"></i>Car
-									Details</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-					<div class="recent-posts footer-item">
-						<h4>Recent Posts</h4>
-						<div class="f-border"></div>
-						<div class="media mb-4">
-							<a class="pr-3" href="/"> <img
-								src="/assets/img/sub-car/sub-car.jpg" alt="car" />
-							</a>
-							<div class="media-body align-self-center">
-								<h5>
-									<a href="car-details.html">2016 Audi S5 Coupe</a>
-								</h5>
-								<p>February 27, 2022</p>
-								<p>
-									<strong>$245,000</strong>
-								</p>
-							</div>
-						</div>
-						<div class="media mb-4">
-							<a class="pr-3" href="/"> <img
-								src="/assets/img/sub-car/sub-car-2.jpg" alt="car" />
-							</a>
-							<div class="media-body align-self-center">
-								<h5>
-									<a href="car-details.html">2016 Audi R8</a>
-								</h5>
-								<p>February 27, 2022</p>
-								<p>
-									<strong>$245,000</strong>
-								</p>
-							</div>
-						</div>
-						<div class="media">
-							<a class="pr-3" href="/"> <img
-								src="/assets/img/sub-car/sub-car-3.jpg" alt="car" />
-							</a>
-							<div class="media-body align-self-center">
-								<h5>
-									<a href="car-details.html">Read Audi A7 TDI</a>
-								</h5>
-								<p>February 27, 2022</p>
-								<p>
-									<strong>$245,000</strong>
-								</p>
-							</div>
-						</div>
-					</div>
+				<div class="col-6 text-center">
+					<img src="/assets/img/logos/logo-white.png" class="w-75" alt="loo" />
 				</div>
 				<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
 					<div class="footer-item clearfix">
@@ -1127,16 +1074,10 @@ select {
 						<div class="Subscribe-box">
 							<p>Excepteur sint occaecat cupidatat non proident, sunt in
 								culpa qui officia deserunt mollit.</p>
-							<form action="#" method="GET">
-								<p>
-									<input type="text" class="form-contact" name="email"
-										placeholder="Enter Address" />
-								</p>
-								<p>
-									<button type="submit" name="submitNewsletter"
-										class="btn btn-block btn-color">Subscribe</button>
-								</p>
-							</form>
+							<p>Excepteur sint occaecat cupidatat non proident, sunt in
+								culpa qui officia deserunt mollit.</p>
+							<img src="/assets/img/logos/bocongthuong.png" class="w-75"
+								alt="loo" />
 						</div>
 					</div>
 				</div>
@@ -1296,6 +1237,10 @@ select {
 				title: "BANNED TEMPORARY",
 				text: "Your are being banned temporary because of declinding too many cars in a month. You must pay $200 to keep using our service, you are not allowed to withdraw money on your wallet until you pay your fine (deposit is allowed)",
 				icon: "warning",
+				//html: `
+				//	<p><img src="/assets/img/logos/200w.gif" alt=""></p>
+				//	<h6 class="">Your are being banned temporary because of declinding too many cars in a month. You must pay $200 to keep using our service, you are not allowed to withdraw money on your wallet until you pay your fine (deposit is allowed)</h6>
+				//`,
 				showCancelButton: true,
 				confirmButtonColor: "#3085d6",
 				cancelButtonColor: "#d33",
@@ -1348,7 +1293,21 @@ select {
 
 
 					// Redirect to cancel action with the provided URL
-					window.location.href = url;
+				
+					th:href="@{'/home/myplan/cancel_from_user/'+ ${item.id}}"
+						Swal.fire({
+													title: "Processing...",
+													icon: "info",
+													timerProgressBar: true,
+													didOpen: () => {
+														
+														Swal.showLoading();
+														window.location.href = url;
+													},
+													willClose: () => {
+														clearInterval(timerInterval);
+													}
+												});
 				}
 			});
 		}

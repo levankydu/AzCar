@@ -11,18 +11,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.project.AzCar.Dto.Users.UserDto;
-
-import com.project.AzCar.Entities.Users.Provider;
-
 import com.project.AzCar.Entities.Cars.Payment;
-
 import com.project.AzCar.Entities.Users.Roles;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Repositories.Payments.PaymentRepository;
 import com.project.AzCar.Repositories.Users.RoleRepository;
 import com.project.AzCar.Repositories.Users.UserRepository;
-import com.project.AzCar.Services.Payments.PaymentService;
-import com.project.AzCar.Services.Payments.ProfitCallBack;
 import com.project.AzCar.Utilities.Constants;
 
 @Service
@@ -40,8 +34,6 @@ public class UserServicesImpl implements UserServices {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	
-	
 	@Override
 	public void saveUser(UserDto userDto) {
 		Roles role = roleRepo.findByName(Constants.Roles.USER);
@@ -51,7 +43,7 @@ public class UserServicesImpl implements UserServices {
 
 		Users user = new Users(userDto.getFullName(), userDto.getEmail(), passwordEncoder.encode(userDto.getPassword()),
 				Arrays.asList(role));
-
+		user.setEnabled(true);
 		userRepo.save(user);
 	}
 
@@ -104,16 +96,16 @@ public class UserServicesImpl implements UserServices {
 		} else {
 			Users user = new Users("Admin", "admin@admin", passwordEncoder.encode("123"), Arrays.asList(role));
 			BigDecimal userBalance = user.getBalance() != null ? user.getBalance() : BigDecimal.valueOf(0);
-			
+
 			BigDecimal amount = BigDecimal.valueOf(100000);
 			var payment = new Payment();
-			payment.setUserId((int)user.getId());
+			payment.setUserId((int) user.getId());
 			payment.setToUserId(0);
 			payment.setAmount(amount);
 			payment.setDescription("Tien von cua Admin");
 			payment.setStatus(Constants.paymentStatus.DEPOSIT);
 			paymentRepository.save(payment);
-			
+
 			user.setBalance(userBalance.add(amount));
 			userRepo.save(user);
 			return true;
@@ -172,5 +164,4 @@ public class UserServicesImpl implements UserServices {
 		return false;
 	}
 
-	
 }

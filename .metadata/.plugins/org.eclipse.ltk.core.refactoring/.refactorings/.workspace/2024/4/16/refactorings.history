@@ -1,4 +1,3 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Delete resource &apos;Aspose.HTML-for-Java-master&apos;" deleteContents="false" description="Delete resource &apos;Aspose.HTML-for-Java-master&apos;" element1="/Aspose.HTML-for-Java-master" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1713170019921"/>
+<session version="1.0">&#x0A;<refactoring comment="Delete resource &apos;Aspose.HTML-for-Java-master&apos;" deleteContents="false" description="Delete resource &apos;Aspose.HTML-for-Java-master&apos;" element1="/Aspose.HTML-for-Java-master" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1713170019921"/>&#x0A;<refactoring comment="Delete 2 resources" deleteContents="false" description="Delete 2 resources" element1="/AzCare-APIServices" element2="/AzCare-WebPortal" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="2" stamp="1713257385498"/>
 </session>

@@ -390,10 +390,13 @@ public class HomeController {
 		String dir = Constants.ImgDir.USER_DIR + "/" + user.getEmail().replace(".", "-");
 
 		Resource file = fileStorageServices.load(filename, dir);
+		if (file != null) {
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+					.body(file);
+		} else
+			return null;
 
-		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
-				.body(file);
 	}
 
 	@GetMapping("/user/profile/flutter/avatar/{filename}")
