@@ -35,7 +35,7 @@ public class UserDto {
 	private Date dob;
 	private String address;
 	private boolean isEnabled;
-	private String token;
+
 	private boolean changePassword;
 
 	@Transient

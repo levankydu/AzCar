@@ -249,15 +249,18 @@ End Google Tag Manager (noscript)
 		}
 
 		function validatePassword() {
-			const passwordValue = document.getElementById("password").value;
+		    const passwordValue = document.getElementById("password").value;
 
-			if (passwordValue === "") {
-				document.getElementById('validation-password').textContent = "Password is required";
-				return false;
-			} else {
-				document.getElementById('validation-password').textContent = "";
-				return true;
-			}
+		    if (passwordValue.length < 8) {
+		        document.getElementById('validation-password').textContent = "Password must be at least 8 characters long";
+		        return false;
+		    } else if (!/[A-Z]/.test(passwordValue)) {
+		        document.getElementById('validation-password').textContent = "Password must contain at least one uppercase letter";
+		        return false;
+		    } else {
+		        document.getElementById('validation-password').textContent = "";
+		        return true;
+		    }
 		}
 
 		function validateConfirmPassword() {
