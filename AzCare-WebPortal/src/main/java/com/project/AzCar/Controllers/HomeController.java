@@ -369,19 +369,17 @@ public class HomeController {
 		}
 	}
 
-	@GetMapping("/user/profile/avatar/{filename}")
-	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename, HttpServletRequest request) {
+	@GetMapping("/user/profile/avatar/{filename}/{email}")
+	public ResponseEntity<Resource> getImage(@PathVariable("filename") String filename,
+			@PathVariable("email") String email, HttpServletRequest request) {
 		Users user = uServices.findUserByEmail(request.getSession().getAttribute("emailLogin").toString());
 
-		String dir = Constants.ImgDir.USER_DIR + "/" + user.getEmail().replace(".", "-");
+		String dir = Constants.ImgDir.USER_DIR + "/" + email.replace(".", "-");
 
 		Resource file = fileStorageServices.load(filename, dir);
-		
-		
 
-		return ResponseEntity.ok()
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file == null ? "na" : file.getFilename() + "\"")
-				.body(file);
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+				"attachment; filename=\"" + file == null ? "na" : file.getFilename() + "\"").body(file);
 	}
 
 	@GetMapping("/user/profile/edit/avatar/{filename}")

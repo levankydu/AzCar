@@ -375,7 +375,7 @@ public class UserSideCarController {
 					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 						user.setBalance(userBalance.subtract(amount));
 					}
-				});
+				}, false);
 		CarInforDto carDetailsDto = carServices.mapToDto(carDetails.getId());
 		BigDecimal discountAmount = orderdetails.getOriginPrice()
 				.multiply(BigDecimal.valueOf(orderdetails.getDiscount()).divide(BigDecimal.valueOf(100)));
@@ -829,13 +829,19 @@ public class UserSideCarController {
 	}
 
 	@GetMapping("/home/myplan/accepted/{orderId}")
-	public String acceptRequestBooking(@PathVariable(name = "orderId") String orderId) {
+	public String acceptRequestBooking(@PathVariable(name = "orderId") String orderId)
+			throws UnsupportedEncodingException, MessagingException {
 		var order = orderServices.getById(Integer.parseInt(orderId));
 		order.setStatus(Constants.orderStatus.ACCEPTED);
+
 		orderServices.save(order);
 		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
 		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(2)));
-
+		Users user = userServices.findById(order.getUserId());
+		CarInforDto car = carServices.mapToDto(Integer.parseInt(order.getCarId()));
+		String subject = "[" + car.getCarmodel().getBrand() + "] " + car.getCarmodel().getModel() + "Order Accepted";
+		String mailcontent = "Your order is ACCEPTED by owner";
+		orderServices.sendOrderEmail(user.getEmail(), subject, mailcontent);
 		return "redirect:/home/myplan/";
 	}
 
@@ -856,7 +862,7 @@ public class UserSideCarController {
 			public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 				user.setBalance(userBalance.subtract(amount));
 			}
-		});
+		}, false);
 
 		return "redirect:/home/myplan/";
 	}
@@ -884,14 +890,15 @@ public class UserSideCarController {
 			public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 				user.setBalance(userBalance.subtract(amount));
 			}
-		});
+		}, false);
 
 		return "redirect:/home/myplan/";
 	}
 
 	// car owner declines booking
 	@GetMapping("/home/myplan/declined/{orderId}")
-	public String declinedRequestBooking(@PathVariable(name = "orderId") String orderId) {
+	public String declinedRequestBooking(@PathVariable(name = "orderId") String orderId)
+			throws UnsupportedEncodingException, MessagingException {
 		var order = orderServices.getById(Integer.parseInt(orderId));
 		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
 		var car = carServices.findById(Integer.parseInt(order.getCarId()));
@@ -909,12 +916,25 @@ public class UserSideCarController {
 					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 						user.setBalance(userBalance.add(amount));
 					}
-				});
+				}, false);
+		Users user = userServices.findById(order.getUserId());
+		CarInforDto carDTO = carServices.mapToDto(Integer.parseInt(order.getCarId()));
+		String subject = "[" + carDTO.getCarmodel().getBrand() + "] " + carDTO.getCarmodel().getModel()
+				+ "Order Declined";
+		String reason = "";
+		String mailcontent = "Your order is DECLINED by owner" + "<p>Reason: " + reason + "</p>";
+		orderServices.sendOrderEmail(user.getEmail(), subject, mailcontent);
+
+		Users owner = userServices.findById(ownerId);
+		String mailcontentOnwer = "Decline successfully, you will get a violation ticket, if you have 3 tickets in a month your car will be disabled temporary!";
+		orderServices.sendOrderEmail(owner.getEmail(), subject, mailcontentOnwer);
+
 		return "redirect:/home/myplan/";
 	}
 
 	@GetMapping("/home/myplan/rental_done/{orderId}")
-	public String clientDoneRequestBooking(@PathVariable(name = "orderId") String orderId) {
+	public String clientDoneRequestBooking(@PathVariable(name = "orderId") String orderId)
+			throws UnsupportedEncodingException, MessagingException {
 		var order = orderServices.getById(Integer.parseInt(orderId));
 		order.setStatus(Constants.orderStatus.RENTOR_TRIP_DONE);
 		orderServices.save(order);
@@ -925,16 +945,23 @@ public class UserSideCarController {
 					@Override
 					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 					}
-				});
-
+				}, false);
+		Users user = userServices.findById(ownerId);
+		CarInforDto carDTO = carServices.mapToDto(Integer.parseInt(order.getCarId()));
+		String subject = "[" + carDTO.getCarmodel().getBrand() + "] " + carDTO.getCarmodel().getModel() + "Rentor Done";
+		String mailcontent = "Your order is finished by customer";
+		orderServices.sendOrderEmail(user.getEmail(), subject, mailcontent);
 		return "redirect:/home/myplan/";
 	}
 
 	@GetMapping("/home/myplan/cancel_from_user/{orderId}")
-	public String clientCancelBooking(@PathVariable(name = "orderId") String orderId) {
+	public String clientCancelBooking(@PathVariable(name = "orderId") String orderId)
+			throws UnsupportedEncodingException, MessagingException {
 		var order = orderServices.getById(Integer.parseInt(orderId));
 		String status = order.getStatus();
+		boolean isAccepted = false;
 		if (status.equals("accepted")) {
+			isAccepted = true;
 			// return only 90% of totalRent and fees with insurance
 			paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
 			paymentServices.createNewProfit(order.getUserId(), order.getTotalRent().multiply(BigDecimal.valueOf(0.1)),
@@ -943,7 +970,7 @@ public class UserSideCarController {
 						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 							user.setBalance(userBalance.subtract(amount));
 						}
-					});
+					}, false);
 		}
 		if (status.equals("waiting_for_verify")) {
 			paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
@@ -953,7 +980,7 @@ public class UserSideCarController {
 						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 							user.setBalance(userBalance.add(amount));
 						}
-					});
+					}, false);
 		}
 		order.setStatus(Constants.orderStatus.RENTOR_DECLINED);
 		orderServices.save(order);
@@ -963,6 +990,22 @@ public class UserSideCarController {
 		vio.setCarId(Integer.parseInt(order.getCarId()));
 		vio.setReason(Constants.violations.USER_DECLINDED);
 		violationRepo.save(vio);
+
+		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
+		Users owner = userServices.findById(ownerId);
+		String reason = "";
+		CarInforDto carDTO = carServices.mapToDto(Integer.parseInt(order.getCarId()));
+		String subject = "[" + carDTO.getCarmodel().getBrand() + "] " + carDTO.getCarmodel().getModel()
+				+ "Customer Declined";
+		String mailcontent = "Your order is DECLINED by customer" + "<p>Reason: " + reason + "</p>";
+		orderServices.sendOrderEmail(owner.getEmail(), subject, mailcontent);
+
+		Users user = userServices.findById(order.getUserId());
+		String mailcontentUser = "You have just canceled this order, you will get a violation ticket, if you have 3 tickets in a month you can not use our service temporary!";
+		if (isAccepted) {
+			mailcontentUser += "<p>Because this order was accepted, you will be charge 10% by total amount of this order as a pusnishment</p>";
+		}
+		orderServices.sendOrderEmail(user.getEmail(), subject, mailcontentUser);
 
 		return "redirect:/home/myplan/";
 	}
@@ -998,6 +1041,12 @@ public class UserSideCarController {
 			var itemDto = carServices.mapToDto(item.getId());
 			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
+			List<Violation> vioSize = violationRepo.getEnabledByCarId(itemDto.getId());
+			itemDto.setActiveViolationAmount(vioSize.size());
+			List<OrderDetailsDTO> finishedList = orderServices.getDTOFromCarId(item.getId());
+			finishedList.removeIf(i -> !i.getStatus().equals("owner_trip_done"));
+			itemDto.setFinishedOrders(finishedList.size());
+
 			var historyBooking = "historyBooking" + itemDto.getCarmodel().getObjectId();
 			List<OrderDetailsDTO> historyBookingList = orderServices.getDTOFromCarId(item.getId());
 			ModelView.addAttribute(historyBooking, historyBookingList);
@@ -1047,17 +1096,6 @@ public class UserSideCarController {
 		System.out.println(newDiscount);
 		return "redirect:/home/myplan/";
 	}
-// chổ này làm ảnh hưởng phần nạp nên sally xóa
-//	@PostMapping("/home/myplan/charge/")
-//	public String charge(HttpServletRequest request) {
-//
-//		String email = request.getSession().getAttribute("emailLogin").toString();
-//		Users user = userServices.findUserByEmail(email);
-//		user.setBalance(BigDecimal.valueOf(10000));
-//		userServices.saveUserReset(user);
-//
-//		return "redirect:/home/myplan/";
-//	}
 
 	@PostMapping("/home/myplan/paypal-charge/")
 	public String paypalCharge(HttpServletRequest request) {

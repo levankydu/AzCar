@@ -1,0 +1,5 @@
+package com.project.AzCar.Dto.DriverLicense;
+
+public class DriverLicenseBack {
+	private boolean isDriverLicense;
+}

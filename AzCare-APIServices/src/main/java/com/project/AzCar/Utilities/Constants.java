@@ -39,11 +39,12 @@ public class Constants {
 	}
 
 	public static interface paymentStatus {
-		String ADMIN_FEE = "admin_fee";
 		String LOCKED = "locked";
 		String REFUND = "unlocked";
 		String PROFIT = "profit";
 		String EXPENSE = "expense";
+		String DEPOSIT = "deposit";
+		String WITHDRAW = "withdraw";
 	}
 
 	public static interface violations {

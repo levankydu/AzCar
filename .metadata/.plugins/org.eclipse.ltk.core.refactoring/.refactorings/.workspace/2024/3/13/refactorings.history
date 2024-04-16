@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;AzCare-WebPortal/src/main/resources/META-INF/additional-spring-configuration-metadata.json&apos;" deleteContents="false" description="Delete resource &apos;AzCare-WebPortal/src/main/resources/META-INF/additional-spring-configuration-metadata.json&apos;" element1="/AzCare-WebPortal/src/main/resources/META-INF/additional-spring-configuration-metadata.json" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1711734917122"/>
+</session>

@@ -136,7 +136,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
 								public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 									user.setBalance(userBalance.add(amount));
 								}
-							});
+							}, false);
 				}
 			}
 			List<Violation> noRes_violations = violationRepo.getByUserAndCarId(ownerId, car.getId(), true,

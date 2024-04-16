@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+
+
+<title>Az CAR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<!-- External CSS libraries -->
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/bootstrap.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/magnific-popup.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.selectBox.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/rangeslider.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/animate.min.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/slick.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.mCustomScrollbar.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/flaticon/font/flaticon.css">
+
+<!-- Favicon icon -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico"
+	type="image/x-icon">
+
+<!-- Google fonts -->
+<link rel="stylesheet" type="text/css"
+	href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
+
+<!-- Custom Stylesheet -->
+<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" type="text/css" id="style_sheet"
+	href="/assets/css/skins/default.css">
+<link rel="stylesheet"
+	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
+
+<link rel="stylesheet" href="/assets/css/notiCss.css">
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+
+
+<script type="text/javascript" src="/assets/js/notiJs.js"></script>
+<style>
+/* CSS */
+.button-92 {
+	--c: #fff;
+	/* text color */
+	background: linear-gradient(90deg, #0000 33%, #fff5, #0000 67%)
+		var(--_p, 100%)/300% no-repeat, #3c5bfc;
+	/* background color */
+	color: #0000;
+	border: none;
+	transform: perspective(500px) rotateY(calc(20deg * var(--_i, -1)));
+	text-shadow: calc(var(--_i, -1)* 0.08em) -.01em 0 var(--c),
+		calc(var(--_i, -1)*-0.08em) .01em 2px #0004;
+	outline-offset: .1em;
+	transition: 0.3s;
+}
+
+.button-92:hover, .button-92:focus-visible {
+	--_p: 0%;
+	--_i: 1;
+}
+
+.button-92:active {
+	text-shadow: none;
+	color: var(--c);
+	box-shadow: inset 0 0 9e9q #0005;
+	transition: 0s;
+}
+
+.button-92 {
+	font-weight: bold;
+	font-size: 2rem;
+	margin: 0;
+	cursor: pointer;
+	padding: .1em .3em;
+}
+</style>
+</head>
+
+
+<!-- main header start -->
+<header class="main-header sticky-header header-with-top"
+	id="main-header-2">
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<nav class="navbar navbar-expand-lg navbar-light rounded">
+					<a class="navbar-brand logo navbar-brand d-flex mr-auto" href="/">
+						<img src="/assets/img/logos/black-logo.png" alt="logo">
+					</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse"
+						data-target="#navbar" aria-controls="navbar" aria-expanded="false"
+						aria-label="Toggle navigation">
+						<span class="fa fa-bars"></span>
+					</button>
+					<div class="navbar-collapse collapse w-100" id="navbar">
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item"><a class="nav-link"
+								th:href="@{/home/availablecars}">Available Cars</a></li>
+							<li class="nav-item" th:if="${session.user}"><a
+								class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
+							<li class="nav-item "><a class="nav-link" href="#">
+									About Us </a></li>
+
+							<li class="nav-item"><a class="nav-link" href="#">
+									Contact Us </a></li>
+							<div id="openNoti">
+								<div class="" tabindex="0" id="noti">
+									<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+										xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 30"
+										enable-background="new 0 0 50 30" xml:space="preserve">
+										<g class="bell-icon__group">
+											<path class="" id="ball" fill-rule="evenodd"
+											stroke-width="1.5" clip-rule="evenodd" fill="none"
+											stroke="#currentColor" stroke-miterlimit="10"
+											d="M28.7,25 c0,1.9-1.7,3.5-3.7,3.5s-3.7-1.6-3.7-3.5s1.7-3.5,3.7-3.5S28.7,23,28.7,25z" />
+											<path class="" id="shell" fill-rule="evenodd"
+											clip-rule="evenodd" fill="#FFFFFF" stroke="#currentColor"
+											stroke-width="2" stroke-miterlimit="10"
+											d="M35.9,21.8c-1.2-0.7-4.1-3-3.4-8.7c0.1-1,0.1-2.1,0-3.1h0c-0.3-4.1-3.9-7.2-8.1-6.9c-3.7,0.3-6.6,3.2-6.9,6.9h0 c-0.1,1-0.1,2.1,0,3.1c0.6,5.7-2.2,8-3.4,8.7c-0.4,0.2-0.6,0.6-0.6,1v1.8c0,0.2,0.2,0.4,0.4,0.4h22.2c0.2,0,0.4-0.2,0.4-0.4v-1.8 C36.5,22.4,36.3,22,35.9,21.8L35.9,21.8z" />
+										</g>
+									</svg>
+									<div class="notification-amount">
+										<span id="notiCounter"></span>
+									</div>
+								</div>
+
+							</div>
+							<div id="modal-container">
+								<div class="modal-background">
+									<div class="modal">
+										<h2>All Notification</h2>
+										<div id="messages"></div>
+										<svg class="modal-svg" xmlns="http://www.w3.org/2000/svg"
+											width="100%" height="100%" preserveAspectRatio="none">
+											<rect x="0" y="0" fill="none" width="226" height="162" rx="3"
+												ry="3"></rect>
+										</svg>
+									</div>
+								</div>
+							</div>
+
+
+
+							<li class="nav-item dropdown" th:if="${session.user}"><a
+								class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+								th:href="@{/user/profile/} + ${session.user}"
+								th:text="Hello+', ' +${session.user}"></a> <a
+								class="btn btn-sm btn-theme btn-round signup-link"
+								href="/logout">LogOut</a></li>
+
+
+							<li class="nav-item dropdown" th:if="${session.admin}"><a
+								class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+								th:href="@{/user/profile/}+ ${session.admin}"
+								th:text="Hello+', ' +${session.admin}"></a> <a
+								class="btn btn-sm btn-theme btn-round signup-link"
+								href="/dashboard/">Dash board</a> <a
+								class="btn btn-sm btn-theme btn-round signup-link"
+								href="/logout">Logout</a></li>
+							<li class="nav-item dropdown" th:unless="${session.isAuthen}"><a
+								class="btn btn-sm btn-theme btn-round signup-link" href="/login">Login</a>
+								<a class="btn btn-sm btn-theme btn-round signup-link"
+								href="/register">Register</a></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</div>
+	</div>
+</header>
+<!-- main header end -->
+
+<!-- Sub banner start -->
+<div class="sub-banner overview-bgi">
+	<div class="container">
+		<div class="page-name">
+			<h1>My Plan</h1>
+		</div>
+	</div>
+	<div class="page-info">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-5">
+					<div class="breadcrumb-area">
+						<ul>
+							<li><a href="/">Index</a></li>
+							<li><span>/</span>My Plan</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-md-7">
+					<div class="contact-info">
+						<ul>
+							<li><i class="fa fa-phone"></i> +84-3939-7979</li>
+							<li><a href="tel:+84-3939-7979" class="btn btn-md btn-theme">Contact
+									us</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Sub banner end -->
+
+<!-- Agent page start -->
+<div class="agent-page content-area-2">
+	<!-- Agent detail start -->
+	<div class="agent-detail">
+		<div class="container">
+			<div class="row">
+
+				<p id="toast-failed-create_data" hidden="true"
+					class="btn btn-outline-primary btn-lg btn-block">example</p>
+
+				<h4 class="col-10 offset-md-1"
+					style="text-align: center; font-weight: bold;">
+					Welcome, <span th:text="${session.emailLogin}"></span>
+				</h4>
+
+				<form class="col-4 offset-md-8" style="text-align: center"
+					id="charge" th:action="@{/home/myplan/charge/}" method="post">
+
+
+
+				</form>
+
+				<div class="col-10 offset-md-1">
+
+
+					<div class="agent-description">
+						<div class="tabbing tabbing-box mb-30">
+							<ul class="nav nav-tabs offset-5" id="carTab" role="tablist">
+								<li class="nav-item"><a class="nav-link active show"
+									id="one-tab" data-toggle="tab" href="#one" role="tab"
+									aria-controls="one" aria-selected="false">Form submit new
+										car Model</a></li>
+
+							</ul>
+							<div class="tab-content" id="carTabContent">
+								<div class="tab-pane fade active show" id="one" role="tabpanel"
+									aria-labelledby="one-tab">
+									<form th:action="@{/home/carregister/addNewModel}" id="addModel"
+										method="post">
+
+										<div class="row col-10 offset-1">
+
+											<div class="form-group col-6">
+												<label for="brandSelect">Brand</label> <select
+													id="brandSelect" class="form-control"
+													onchange="yesnoCheckBrand();" name="brand"
+													th:field="*{brandsList}">
+													<option value="">Select Brand</option>
+													<option value="typeBrandName">Type New Brand</option>
+													<option th:each="car : ${brandsList}" th:value="${car}"
+														th:text="${car}"></option>
+												</select> <input type="text" name="brand"
+													class="col-md-8 mt-2 form-control" id="brandText"
+													hidden="true" disabled="disabled" placeholder="New Brand">
+											</div>
+											<div class="form-group col-6">
+												<label for="categorySelect">Category</label> <select
+													id="categorySelect" class="form-control"
+													onchange="yesnoCheckCate();" th:field="*{categoryList}">
+													<option value="">Select Category</option>
+													<option value="typeCatName">Type A New Category</option>
+													<option th:each="cate : ${categoryList}" th:value="${cate}"
+														th:text="${cate}"></option>
+												</select> <input type="text" name=""
+													class="col-md-8 mt-2 form-control" id="categoryText"
+													hidden="true" disabled="disabled"
+													placeholder="New Category">
+
+											</div>
+
+											<div class="form-group col-6">
+												<label for="modelSelect">Model</label> <input type="text"
+													id="modelName" class="form-control" name="model"
+													placeholder="Model Name">
+
+
+
+											</div>
+
+											<div class="form-group col-6">
+												<label for="yearSelect">Year of production</label> <input
+													type="number" id="year" class="form-control" name="year"
+													placeholder="Year of Factory">
+											</div>
+										</div>
+										<div class="row offset-4 mt-4">
+											<button class="btn btn-primary"
+												onclick="return addModelCheck()">Submit your model</button>
+											<a th:href="@{/home/carregister/}">
+												<button class="button-92 ml-5" role="button">Register
+													Car</button>
+											</a>
+										</div>
+									</form>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- Agent detail end -->
+</div>
+<!-- Agent page end -->
+
+<!-- Footer start -->
+<footer class="footer">
+	<div class="container footer-inner">
+		<div class="row">
+			<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+				<div class="footer-item">
+					<h4>Contact Us</h4>
+					<div class="f-border"></div>
+					<ul class="contact-info">
+						<li>Address: 590 CMT8, P.11, Q.3, Tp.Hồ Chí Minh</li>
+						<li>Email: <a href="mailto:AzCars@AzCars.com">AzCars@AzCars.com</a>
+						</li>
+						<li>Phone: <a href="tel:+84-3939-7979">+84-3939-7979</a></li>
+						<li>Fax: <a href="fax:+84-3939-7979">+84-3939-7979</a></li>
+					</ul>
+
+					<ul class="social-list clearfix">
+						<li><a href="#" class="facebook-bgh"><i
+								class="fa fa-facebook"></i></a></li>
+						<li><a href="#" class="twitter-bgh"><i
+								class="fa fa-twitter"></i></a></li>
+						<li><a href="#" class="google-bgh"><i
+								class="fa fa-google-plus"></i></a></li>
+						<li><a href="#" class="rss-bgh"><i class="fa fa-rss"></i></a>
+						</li>
+						<li><a href="#" class="linkedin-bgh"><i
+								class="fa fa-linkedin"></i></a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+				<div class="footer-item">
+					<h4>Useful Links</h4>
+					<div class="f-border"></div>
+					<ul class="links">
+						<li><a href="#"><i class="flaticon-arrows"></i>About us</a></li>
+
+						<li><a href="#"><i class="flaticon-arrows"></i>Available
+								Cars Listing</a></li>
+
+
+						<li><a href="#"><i class="flaticon-arrows"></i>Contact Us</a></li>
+
+						<li><a href="#"><i class="flaticon-arrows"></i>Car
+								Details</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+				<div class="recent-posts footer-item">
+					<h4>Recent Posts</h4>
+					<div class="f-border"></div>
+					<div class="media mb-4">
+						<a class="pr-3" href="/"> <img
+							src="/assets/img/sub-car/sub-car.jpg" alt="car" />
+						</a>
+						<div class="media-body align-self-center">
+							<h5>
+								<a href="car-details.html">2016 Audi S5 Coupe</a>
+							</h5>
+							<p>February 27, 2022</p>
+							<p>
+								<strong>$245,000</strong>
+							</p>
+						</div>
+					</div>
+					<div class="media mb-4">
+						<a class="pr-3" href="/"> <img
+							src="/assets/img/sub-car/sub-car-2.jpg" alt="car" />
+						</a>
+						<div class="media-body align-self-center">
+							<h5>
+								<a href="car-details.html">2016 Audi R8</a>
+							</h5>
+							<p>February 27, 2022</p>
+							<p>
+								<strong>$245,000</strong>
+							</p>
+						</div>
+					</div>
+					<div class="media">
+						<a class="pr-3" href="/"> <img
+							src="/assets/img/sub-car/sub-car-3.jpg" alt="car" />
+						</a>
+						<div class="media-body align-self-center">
+							<h5>
+								<a href="car-details.html">Read Audi A7 TDI</a>
+							</h5>
+							<p>February 27, 2022</p>
+							<p>
+								<strong>$245,000</strong>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+				<div class="footer-item clearfix">
+					<h4>Subscribe</h4>
+					<div class="f-border"></div>
+					<div class="Subscribe-box">
+						<p>Excepteur sint occaecat cupidatat non proident, sunt in
+							culpa qui officia deserunt mollit.</p>
+						<form action="#" method="GET">
+							<p>
+								<input type="text" class="form-contact" name="email"
+									placeholder="Enter Address" />
+							</p>
+							<p>
+								<button type="submit" name="submitNewsletter"
+									class="btn btn-block btn-color">Subscribe</button>
+							</p>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xl-12">
+				<p class="copy">
+					&copy; 2024 <a href="/" target="_blank">Az Cars</a>. Group 3 Final
+					Project .
+				</p>
+			</div>
+		</div>
+	</div>
+</footer>
+<!-- Footer end -->
+
+<!-- Off-canvas sidebar -->
+<div class="off-canvas-sidebar">
+	<div class="off-canvas-sidebar-wrapper">
+		<div class="off-canvas-header">
+			<a class="close-offcanvas" href="#"><span class="fa fa-times"></span></a>
+		</div>
+		<div class="off-canvas-content">
+			<aside class="canvas-widget">
+				<div class="logo text-center">
+					<img src="/assets/img/logos/logo.png" alt="logo">
+				</div>
+			</aside>
+			<aside class="canvas-widget">
+				<ul class="menu">
+					<li class="menu-item menu-item-has-children"><a
+						href="index.html">Home</a></li>
+					<li class="menu-item"><a href="car-grid-leftside.html">Car
+							List</a></li>
+					<li class="menu-item"><a href="car-details.html">Car
+							Detail</a></li>
+					<li class="menu-item"><a href="blog-single-sidebar-right.html">Blog</a></li>
+					<li class="menu-item"><a href="about-1.html">About US</a></li>
+					<li class="menu-item"><a href="contact-1.html">Contact US</a></li>
+				</ul>
+			</aside>
+			<aside class="canvas-widget">
+				<ul class="social-icons">
+					<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+					<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+					<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+					<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+					<li><a href="#"><i class="fa fa-vk"></i></a></li>
+				</ul>
+			</aside>
+		</div>
+	</div>
+</div>
+
+
+
+<!-- External JS libraries -->
+<script src="/assets/js/jquery-2.2.0.min.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/jquery.selectBox.js"></script>
+<script src="/assets/js/rangeslider.js"></script>
+<script src="/assets/js/jquery.magnific-popup.min.js"></script>
+<script src="/assets/js/jquery.filterizr.js"></script>
+<script src="/assets/js/wow.min.js"></script>
+<script src="/assets/js/backstretch.js"></script>
+<script src="/assets/js/jquery.countdown.js"></script>
+<script src="/assets/js/jquery.scrollUp.js"></script>
+<script src="/assets/js/particles.min.js"></script>
+<script src="/assets/js/typed.min.js"></script>
+<script src="/assets/js/dropzone.js"></script>
+<script src="/assets/js/jquery.mb.YTPlayer.js"></script>
+<script src="/assets/js/slick.min.js"></script>
+<script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="/assets/js/ie-emulation-modes-warning.js"></script>
+<script src="https://kit.fontawesome.com/56c961acc9.js"
+	crossorigin="anonymous"></script>
+<script
+	th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
+
+<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
+
+<!-- Custom JS Script -->
+<script src="/assets/js/app.js"></script>
+<script>
+	categorySelect.setAttribute("name", "category");
+	brandSelect.setAttribute("name", "brand");
+	function yesnoCheckCate() {
+		if (categorySelect.value == "typeCatName") {
+			document.getElementById("categoryText").removeAttribute("hidden");
+			document.getElementById("categoryText").removeAttribute("disabled");
+
+			document.getElementById("categoryText").setAttribute("name",
+					"category");
+			categorySelect.setAttribute("name", "");
+
+		} else {
+			document.getElementById("categoryText")
+					.setAttribute("hidden", true);
+			document.getElementById("categoryText").setAttribute("disabled",
+					"disabled");
+			document.getElementById("categoryText").setAttribute("name", "");
+			categorySelect.setAttribute("name", "category");
+
+		}
+
+	}
+	function yesnoCheckBrand() {
+		if (brandSelect.value == "typeBrandName") {
+			document.getElementById("brandText").removeAttribute("hidden");
+			document.getElementById("brandText").removeAttribute("disabled");
+			document.getElementById("brandText").setAttribute("name", "brand");
+			brandSelect.setAttribute("name", "");
+
+		} else {
+			document.getElementById("brandText").setAttribute("hidden", true);
+			document.getElementById("brandText").setAttribute("disabled",
+					"disabled");
+			document.getElementById("brandText").setAttribute("name", "");
+			brandSelect.setAttribute("name", "brand");
+
+		}
+
+	}
+	function addModelCheck() {
+
+		if (categorySelect.value == "" && categoryText.value == ""
+				|| modelName.value == "" || brandSelect.value == ""
+				&& brandText.value == "" || year.value == "" || year.value <= 0) {
+			document.getElementById('toast-failed-create_data').click();
+
+			addModel.reset();
+			document.getElementById("addModel").addEventListener("submit",
+					function(event) {
+						event.preventDefault()
+					});
+
+		} else {
+			return addModel.submit();
+		}
+
+	}
+</script>
+
+</body>

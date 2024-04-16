@@ -59,8 +59,6 @@
 			<div class="row">
 				<p id="toast-success-logout" hidden="true" class="btn btn-outline-primary btn-lg btn-block">Success
 					Logout</p>
-
-
 				<div class="col-12">
 					<nav class="navbar navbar-expand-lg navbar-light rounded">
 						<a class="navbar-brand logo navbar-brand d-flex mr-auto" href="/">
@@ -72,18 +70,11 @@
 						</button>
 						<div class="navbar-collapse collapse w-100" id="navbar">
 							<ul class="navbar-nav ml-auto">
-
-
+								<li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
 								<li class="nav-item"><a class="nav-link" onclick="return checkLogin();"
 										th:href="@{/home/availablecars}">Available Cars</a></li>
 								<li class="nav-item" th:if="${session.emailLogin}"><a class="nav-link"
 										th:href="@{/home/myplan/}">My Plan</a></li>
-
-								<li class="nav-item"><a class="nav-link" href="#">
-										About Us </a></li>
-
-								<li class="nav-item"><a class="nav-link" href="#">
-										Contact Us </a></li>
 								<div id="openNoti">
 									<div class="" tabindex="0" id="noti">
 										<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
@@ -685,26 +676,6 @@
 	</div>
 	<!-- Testimonial end -->
 
-	<!-- intro section start -->
-	<div class="intro-section">
-		<div class="container">
-			<div class="row">
-				<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12">
-					<img src="/assets/img/logos/logo-white.png" alt="loo" />
-				</div>
-				<div class="col-xl-8 col-lg-7 col-md-7 col-sm-12">
-					<div class="intro-text">
-						<h3>have any queries? call us anytime</h3>
-					</div>
-				</div>
-				<div class="col-xl-2 col-lg-3 col-md-3 col-sm-12">
-					<a href="contact-1.html" class="btn btn-md">Contact Us</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- intro section end -->
-
 	<!-- Footer start -->
 	<footer class="footer">
 		<div class="container footer-inner">
@@ -731,70 +702,8 @@
 						</ul>
 					</div>
 				</div>
-				<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
-					<div class="footer-item">
-						<h4>Useful Links</h4>
-						<div class="f-border"></div>
-						<ul class="links">
-							<li><a href="#"><i class="flaticon-arrows"></i>About us</a>
-							</li>
-
-							<li><a href="#"><i class="flaticon-arrows"></i>Available
-									Cars Listing</a></li>
-
-
-							<li><a href="#"><i class="flaticon-arrows"></i>Contact
-									Us</a></li>
-
-							<li><a href="#"><i class="flaticon-arrows"></i>Car
-									Details</a></li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
-					<div class="recent-posts footer-item">
-						<h4>Recent Posts</h4>
-						<div class="f-border"></div>
-						<div class="media mb-4">
-							<a class="pr-3" href="/"> <img src="assets/img/sub-car/sub-car.jpg" alt="car" />
-							</a>
-							<div class="media-body align-self-center">
-								<h5>
-									<a href="car-details.html">2016 Audi S5 Coupe</a>
-								</h5>
-								<p>February 27, 2022</p>
-								<p>
-									<strong>$245,000</strong>
-								</p>
-							</div>
-						</div>
-						<div class="media mb-4">
-							<a class="pr-3" href="/"> <img src="assets/img/sub-car/sub-car-2.jpg" alt="car" />
-							</a>
-							<div class="media-body align-self-center">
-								<h5>
-									<a href="car-details.html">2016 Audi R8</a>
-								</h5>
-								<p>February 27, 2022</p>
-								<p>
-									<strong>$245,000</strong>
-								</p>
-							</div>
-						</div>
-						<div class="media">
-							<a class="pr-3" href="/"> <img src="assets/img/sub-car/sub-car-3.jpg" alt="car" />
-							</a>
-							<div class="media-body align-self-center">
-								<h5>
-									<a href="car-details.html">Read Audi A7 TDI</a>
-								</h5>
-								<p>February 27, 2022</p>
-								<p>
-									<strong>$245,000</strong>
-								</p>
-							</div>
-						</div>
-					</div>
+				<div class="col-6 text-center">
+					<img src="/assets/img/logos/logo-white.png" class="w-75" alt="loo"/>
 				</div>
 				<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
 					<div class="footer-item clearfix">
@@ -803,15 +712,9 @@
 						<div class="Subscribe-box">
 							<p>Excepteur sint occaecat cupidatat non proident, sunt in
 								culpa qui officia deserunt mollit.</p>
-							<form action="#" method="GET">
-								<p>
-									<input type="text" class="form-contact" name="email" placeholder="Enter Address" />
-								</p>
-								<p>
-									<button type="submit" name="submitNewsletter"
-										class="btn btn-block btn-color">Subscribe</button>
-								</p>
-							</form>
+							<p>Excepteur sint occaecat cupidatat non proident, sunt in
+								culpa qui officia deserunt mollit.</p>
+							<img src="/assets/img/logos/bocongthuong.png" class="w-75" alt="loo" />
 						</div>
 					</div>
 				</div>
