@@ -1,0 +1,5 @@
+package com.project.AzCar.Dto.Payments;
+
+public class CarCategoryPie {
+
+}

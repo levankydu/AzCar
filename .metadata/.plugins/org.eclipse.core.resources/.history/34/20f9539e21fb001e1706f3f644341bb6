@@ -1,0 +1,8 @@
+package com.project.AzCar.Dto.DriverLicense;
+
+import lombok.Data;
+
+@Data
+public class DriverLicenseBack {
+	private boolean isDriverLicense;
+}

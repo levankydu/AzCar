@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+<title>Az CAR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<!-- External CSS libraries -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/magnific-popup.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.selectBox.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/rangeslider.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/animate.min.css">
+<link type="text/css" rel="stylesheet" href="/assets/css/slick.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.mCustomScrollbar.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/flaticon/font/flaticon.css">
+
+<!-- Favicon icon -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico"
+	type="image/x-icon">
+
+<!-- Google fonts -->
+<link rel="stylesheet" type="text/css"
+	href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700">
+
+<!-- Custom Stylesheet -->
+<link type="text/css" rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" type="text/css" id="style_sheet"
+	href="/assets/css/skins/default.css">
+<link rel="stylesheet"
+	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
+<style>
+.selected {
+	border: 1px solid blue;
+}
+
+.img-container {
+	position: relative;
+	display: inline-block;
+}
+
+.img-container button {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+
+.img-thumbnail {
+	width: 150px;
+	height: 150px;
+	margin: 5px;
+}
+</style>
+</head>
+
+<body id="top">
+
+	<!-- main header start -->
+	<header class="main-header sticky-header header-with-top"
+		id="main-header-2">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<nav class="navbar navbar-expand-lg navbar-light rounded">
+						<a class="navbar-brand logo navbar-brand d-flex mr-auto" href="/">
+							<img src="/assets/img/logos/black-logo.png" alt="logo">
+						</a>
+						<button class="navbar-toggler" type="button"
+							data-toggle="collapse" data-target="#navbar"
+							aria-controls="navbar" aria-expanded="false"
+							aria-label="Toggle navigation">
+							<span class="fa fa-bars"></span>
+						</button>
+						<div class="navbar-collapse collapse w-100" id="navbar">
+							<ul class="navbar-nav ml-auto">
+								<li class="nav-item"><a class="nav-link"
+									th:href="@{/home/availablecars}">Available Cars</a></li>
+								<li class="nav-item" th:if="${session.user}"><a
+									class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
+								<li class="nav-item "><a class="nav-link" href="#">
+										About Us </a></li>
+
+								<li class="nav-item"><a class="nav-link" href="#">
+										Contact Us </a></li>
+
+
+
+								<li class="nav-item dropdown" th:if="${session.user}"><a
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									th:href="@{/user/profile/} + ${session.user}"
+									th:text="Hello+', ' +${session.user}"></a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/logout">LogOut</a></li>
+
+
+								<li class="nav-item dropdown" th:if="${session.admin}"><a
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									th:href="@{/user/profile/}+ ${session.admin}"
+									th:text="Hello+', ' +${session.admin}"></a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/dashboard/">Dash board</a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/logout">Logout</a></li>
+								<li class="nav-item dropdown" th:unless="${session.isAuthen}"><a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/login">Login</a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/register">Register</a></li>
+							</ul>
+						</div>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- main header end -->
+
+	<!-- Sub banner start -->
+	<div class="sub-banner overview-bgi">
+		<div class="container">
+			<div class="page-name">
+				<h1>Car Register</h1>
+			</div>
+		</div>
+		<div class="page-info">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-5">
+						<div class="breadcrumb-area">
+							<ul>
+								<li><a href="/">Index</a></li>
+								<li><span>/</span>Car Register</li>
+
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-7">
+						<div class="contact-info">
+							<ul>
+								<li><i class="fa fa-phone"></i> +84-3939-7979</li>
+								<li><a href="tel:+84-3939-7979"
+									class="btn btn-md btn-theme">Contact us</a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Sub banner end -->
+
+	<!-- Agent page start -->
+	<div class="agent-page content-area-2">
+		<!-- Agent detail start -->
+		<div class="agent-detail">
+			<div class="container">
+				<div class="row ">
+					<p id="toast-success-registered-car" hidden="true"
+						class="btn btn-outline-primary btn-lg btn-block">Success
+						Example</p>
+					<p id="toast-failed-register-car" hidden="true"
+						class="btn btn-outline-primary btn-lg btn-block">Failed
+						Example</p>
+					<h4 class="col-8 offset-md-2"
+						style="text-align: center; font-weight: bold;">Register Car
+						Step-by-Step</h4>
+					<div class="col-8 offset-md-2">
+						<div class="agent-description">
+							<div class="tabbing tabbing-box mb-30">
+								<ul class="nav nav-tabs" id="carTab" role="tablist"
+									style="pointer-events: none;">
+									<li class="nav-item"><a class="nav-link active show"
+										id="one-tab" data-toggle="tab" href="#one" role="tab"
+										aria-controls="one" aria-selected="false">Information</a></li>
+									<li class="nav-item"><a class="nav-link" id="two-tab"
+										data-toggle="tab" href="#two" role="tab" aria-controls="two"
+										aria-selected="false">Rent Information</a></li>
+									<li class="nav-item"><a class="nav-link" id="three-tab"
+										data-toggle="tab" href="#three" role="tab"
+										aria-controls="three" aria-selected="true">Attachments</a></li>
+								</ul>
+
+								<form th:action="@{/home/carregister}" method="post"
+									enctype="multipart/form-data" id="registerRentCar">
+									<div class="tab-content" id="carTabContent">
+										<div class="tab-pane fade active show" id="one"
+											role="tabpanel" aria-labelledby="one-tab">
+
+											<div class="contact-2 contact-agent widget">
+
+												<h5 style="font-weight: bold;">License Plate</h5>
+												<span class="text-success">Note: The license plate
+													cannot be changed after registration. </span>
+												<div class="row">
+													<div class="form-group col-8">
+														<input type="text" id="car-plate-number"
+															name="licensePlates" class="form-control"
+															onkeyup="return validatePlate();"
+															placeholder="Car plate number, example: 12A-12345">
+
+
+													</div>
+													<div class="col-12 text-danger text-center">
+														<span id="validation-plate" class="text-danger"></span>
+													</div>
+												</div>
+												<br> <br>
+
+												<h5 style="font-weight: bold;">Basic information</h5>
+												<span class="text-success">Note: Basic information
+													cannot be changed after registration. </span>
+												<div class="row">
+													<input type="hidden" value="" id="modelIdSelect"
+														name="modelId">
+													<div class="form-group col-6">
+														<label for="brandSelect">Brand</label> <select
+															id="brandSelect" class="form-control" name="brand"
+															onchange="return brandSubmit();">
+															<option value="">Select Brand</option>
+
+															<option th:each="brand : ${brandList}"
+																th:value="${brand}" th:text="${brand}"></option>
+														</select>
+													</div>
+													<div class="form-group col-6">
+														<label for="categorySelect">Category</label> <select
+															disabled="disabled" id="categorySelect"
+															class="form-control" onchange="return categorySubmit()"
+															name="categorySelect">
+
+
+														</select>
+
+													</div>
+
+													<div class="form-group col-6">
+														<label for="modelSelect">Model</label> <select
+															disabled="disabled" id="modelSelect" class="form-control"
+															name="modelSelect" onchange="return modelSubmit();">
+
+
+														</select>
+													</div>
+
+													<div class="form-group col-6">
+														<label for="yearSelect">Year of production</label> <select
+															onchange="return yearSubmit();" disabled="disabled"
+															id="yearSelect" class="form-control" name="yearSelect"></select>
+													</div>
+													<div class="form-group col-6">
+														<label for="car-seat-qty">Number of seat</label> <input
+															type="number" id="car-seat-qty" name="seatQty"
+															onkeyup="return validateCarbasic()" class="form-control"
+															placeholder=""> <span
+															id="validation-numberOfSeat-result" class="text-danger"></span>
+
+													</div>
+
+
+													<div class="form-group col-6">
+														<label for="fuelCheck">Fuel Type</label> <select
+															id="fuelCheck" class="form-control"
+															onchange="return validateCarbasic();" name="fuelType">
+															<option value="">---Select Fuel Type---</option>
+															<option value="Gasoline">Gasoline</option>
+															<option value="Diesel">Diesel Oil</option>
+															<option value="Electric">Electric</option>
+														</select>
+													</div>
+													<div class="form-group col-6" style="display: none"
+														id="fuelResponse">
+														<label for="transmissionCheck">Transmission</label> <select
+															onchange="return validateCarbasic();"
+															id="transmissionCheck" class="form-control"
+															name="engineInformationTranmission">
+															<option value="">---Select Transmission Type---</option>
+															<option value="0">Manual Transmission</option>
+															<option value="1">Auto Transmission</option>
+
+														</select>
+													</div>
+													<div class="col-12 text-danger text-center">
+														<span id="validation-result-final"></span>
+													</div>
+
+
+												</div>
+												<br> <br>
+
+												<h5 style="font-weight: bold;">Description</h5>
+												<div class="row">
+													
+														<div class="form-group col-6">
+															<label for="hintDescriptionSelect">Hint
+																Description</label> <select id="hintDescriptionSelect"
+																class="form-control" name="hintDescription"
+																onchange="return hintDescriptionSubmit();">
+																<option value="">Select Demo Description</option>
+
+																<option th:each="hint : ${description}"
+																	th:value="${hint.description}"
+																	th:text="${hint.description}"></option>
+															</select>
+														</div>
+														<div class="form-group col-12">
+															<label for="car-description">Your Description</label>
+															<textarea id="car-description" name="description"
+																onkeyup="return carDesciptionCheck()"
+																class="form-control"
+																placeholder="Toyota Fortuner, automatic transmission, registered in June 2018. Well-maintained by the family, it's in great condition with regular maintenance. The interior is spacious and clean. Safety and convenience features include parking sensors, automatic wipers, automatic headlights, and a dashcam. Suitable for family use, with free shuttle services. The Fortuner is ready for new journeys with you."></textarea>
+														</div>
+														<div class="form-group col-12 text-danger text-center">
+															<span id="validation-carDescription" class="text-danger"></span>
+														</div>
+														<br> <br>
+													
+
+												</div>
+
+
+												<h5 style="font-weight: bold;">Features</h5>
+												<input type="hidden" id="resultFeatures" value=""
+													name="services">
+												<div class="row">
+													<div class="col-3 mx-4 my-2 car-services" id="map-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/map-icon.png" alt="Map">
+														<span style="display: block;">Map</span> <input
+															class="d-none" name="features[map]" type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services"
+														id="bluetooth-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/bluetooth-icon.png"
+															alt="Bluetooth"> <span style="display: block;">Bluetooth</span>
+														<input class="d-none" name="features[bluetooth]"
+															type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services"
+														id="camera360-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/360_camera-icon.png"
+															alt="Camera 360"> <span style="display: block;">Camera
+															360</span> <input class="d-none" name="features[camera360]"
+															type="checkbox">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-3 mx-4 my-2 car-services"
+														id="parkingCamera-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/parking_camera-icon.png"
+															alt="Parking camera"> <span style="display: block;">Parking
+															camera</span> <input class="d-none" name="features[map]"
+															type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services"
+														id="dashCamera-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/dash_camera-icon.png"
+															alt="Dash camera"> <span style="display: block;">Dash
+															camera</span> <input class="d-none" name="features[bluetooth]"
+															type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services"
+														id="reverseCamera-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/reverse_camera-icon.png"
+															alt="Reverse camera"> <span style="display: block;">Reverse
+															Camera</span> <input class="d-none" name="features[camera360]"
+															type="checkbox">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-3 mx-4 my-2 car-services"
+														id="tireSensor-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/tpms-v2-icon.png"
+															alt="Tire Sensor"> <span style="display: block;">Tire
+															Sensor</span> <input class="d-none" name="features[map]"
+															type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services"
+														id="impactSensor-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/impact_sensor-icon.png"
+															alt="Impact Sensor"> <span style="display: block;">Impact
+															Sensor</span> <input class="d-none" name="features[bluetooth]"
+															type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services"
+														id="headUp-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/head_up-icon.png"
+															alt="Head Up"> <span style="display: block;">Head
+															Up</span> <input class="d-none" name="features[camera360]"
+															type="checkbox">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-3 mx-4 my-2 car-services"
+														id="sunRoof-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/sunroof-icon.png"
+															alt="Sunroof"> <span style="display: block;">Sun
+															roof</span> <input class="d-none" name="features[map]"
+															type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services" id="gps-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/gps-icon.png" alt="Gps">
+														<span style="display: block;">Gps</span> <input
+															class="d-none" name="features[bluetooth]" type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services"
+														id="babySeat-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/babyseat-icon.png"
+															alt="Baby seat"> <span style="display: block;">Baby
+															seat</span> <input class="d-none" name="features[camera360]"
+															type="checkbox">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-3 mx-4 my-2 car-services" id="usb-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/usb-icon.png" alt="Usb">
+														<span style="display: block;">USB</span> <input
+															class="d-none" name="features[map]" type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services"
+														id="spareTire-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/spare_tire-icon.png"
+															alt="Spare Tire"> <span style="display: block;">Spare
+															Tire-</span> <input class="d-none" name="features[bluetooth]"
+															type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services" id="dvd-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/dvd-icon.png" alt="dvd">
+														<span style="display: block;">DVD </span> <input
+															class="d-none" name="features[camera360]" type="checkbox">
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-3 mx-4 my-2 car-services"
+														id="bonnet-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/bonnet-icon.png"
+															alt="Bonnet"> <span style="display: block;">Bonnet</span>
+														<input class="d-none" name="features[map]" type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2 car-services" id="etc-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/etc-icon.png" alt="etc">
+														<span style="display: block;">ETC </span> <input
+															class="d-none" name="features[camera360]" type="checkbox">
+													</div>
+													<div class="col-3 mx-4 my-2  car-services"
+														id="airBags-service"
+														style="vertical-align: top; text-align: center; cursor: pointer; -webkit-user-select: none; user-select: none;">
+														<img class="img-fluid"
+															style="max-width: 50%; max-height: 50%"
+															src="/assets/img/icon-services/airbags-icon.png"
+															alt="Airbags"> <span style="display: block;">Airbags</span>
+														<input class="d-none" name="features[bluetooth]"
+															type="checkbox">
+													</div>
+
+												</div>
+
+
+											</div>
+											<div class="col-4">
+												<a onclick="return moveStep2()" class="btn btn-primary"
+													style="background-color: #3c5bfc;">Next step</a>
+											</div>
+										</div>
+										<div class="tab-pane fade" id="two" role="tabpanel"
+											aria-labelledby="two-tab">
+											<div class="contact-2 contact-agent widget">
+												<div class="row">
+													<div class="form-group col-12">
+														<h5 style="font-weight: bold;">Default Price</h5>
+														<p>This price is applied for all days .</p>
+														<div class="row">
+															<div class="col-6">
+																<label for="priceRent">Recommend price: $100/day</label>
+
+																<div class="input-group-prepend">
+																	<div class="input-group-text">$/day</div>
+																	<input type="number" class="form-control"
+																		id="priceRent" onkeyup="return priceRentCheck()"
+																		placeholder="100" name="price">
+																</div>
+															</div>
+															<div class="col-12 text-danger text-center">
+																<span id="validation-priceRent"></span>
+															</div>
+														</div>
+													</div>
+													<br> <br>
+													<div class="form-group col-12">
+														<div class="row">
+															<h5 style="font-weight: bold;" class="col-6">Discount</h5>
+															<div class="col-6">
+
+																<label class="switch"> <input type="checkbox"
+																	id="discountCheck" class="primary check-box"> <span
+																	class="slider round"></span>
+																</label>
+
+
+
+															</div>
+														</div>
+														<div class="row" id="discountCheckResponse"
+															style="display: none;">
+															<div class="col-6">
+
+																<h6>Weekly discount (% on bill)</h6>
+																<input type="range" class="form-control-range" min="1"
+																	disabled max="100" value="20" id="discountRange"
+																	name="discount"> <span>Recommend
+																	discount: 20%</span>
+
+															</div>
+															<div class="col-6">
+																<span id="discountValue"
+																	class="float-right text-success"></span>
+															</div>
+														</div>
+													</div>
+													<div class="form-group mb-3 col-12">
+														<h5 style="font-weight: bold;">Car address</h5>
+
+														<div class="input-group-prepend">
+															<input type="text" readonly class="form-control"
+																name="address" placeholder="Click to enter address"
+																onclick="return openModal.click();" id="carAddress"
+																value=""> <a href="#" data-toggle="modal"
+																data-target="#addressModal" id="openModal" hidden="true">Click
+																me</a>
+
+														</div>
+														<div class="col-12 text-danger text-center">
+															<span id="validation-NULL-address"></span>
+														</div>
+													</div>
+
+													<div class="form-group mb-3 col-12">
+														<div class="row">
+
+															<h5 style="font-weight: bold;" class="col-6">Delivery
+																of the car to the place</h5>
+															<div class="col-6">
+																<label class="switch "> <input type="checkbox"
+																	id="deliveryCheck" class="primary" name="isCarPlus">
+																	<span class="slider round"></span>
+																</label>
+															</div>
+
+															<div class="row col-12" id="deliveryResponse"
+																style="display: none;">
+																<div class="col-6 mb-3">
+																	<h6>Fee</h6>
+																	<input type="range" class="form-control-range" min="1"
+																		max="1000" value="100" id="deliveryDistanceRange"
+																		name="fee" disabled> <span>Recommended
+																		Fee: 100$</span>
+																</div>
+																<div class="col-6">
+																	<span id="deliveryDistanceValue"
+																		class="float-right text-success"></span>
+																</div>
+
+															</div>
+														</div>
+
+													</div>
+
+
+													<div class="form-group mb-3 col-12">
+														<div class="row">
+															<h5 class="col-6" style="font-weight: bold;">Extra
+																Fee</h5>
+															<div class="col-6">
+																<label class="switch "> <input type="checkbox"
+																	id="limitKmCheck" class="primary" name="isExtraFee">
+																	<span class="slider round"></span>
+																</label>
+															</div>
+															<div class="row col-12" id="limitKmResponse"
+																style="display: none;">
+																<div class="col-6 mb-3">
+																	<h6>Cleaning Fee</h6>
+																	<input type="range" class="form-control-range" min="1"
+																		max="500" value="100" id="maxKmRange"
+																		name="cleanningFee" disabled> <span>Recommended
+																		Fee: 100$</span>
+																</div>
+																<div class="col-6">
+																	<span id="maxKmValue" class="float-right text-success"></span>
+																</div>
+																<div class="col-6 mb-3">
+																	<h6>Decoration Fee</h6>
+																	<input type="range" class="form-control-range" min="1"
+																		name="decorationFee" max="500" value="100"
+																		id="overLimitFeeRange" disabled> <span>Recommended
+																		fee: 100$</span>
+																</div>
+																<div class="col-6">
+																	<span id="overLimitFeeValue"
+																		class="float-right text-success"></span>
+
+																</div>
+															</div>
+														</div>
+
+
+													</div>
+													<div class="form-group mb-3 col-12">
+														<div class="row">
+															<h5 class="col-6" style="font-weight: bold;">Some
+																Requirements Description</h5>
+														</div>
+														<div class="row form-group">
+															<div class="col-6 mb-2">
+																<label for="hintDescriptionSelect">Hint
+																	Rule</label> <select id="hintRuleSelect"
+																	class="form-control" name="hintRule"
+																	onchange="return hintRuleSubmit();">
+																	<option value="">Select Demo Rule</option>
+
+																	<option th:each="hint : ${rule}"
+																		th:value="${hint.description}"
+																		th:text="${hint.description}"></option>
+																</select>
+															</div>
+																
+															<div class="col-12">
+																<p>Specify the requirements so that guests can rent
+																	a car.</p>
+																<textarea cols="100" rows="1" name="rules" id="rules"
+																	onkeyup="return ruleCheck()"
+																	placeholder="Do not use the vehicle for illegal purposes. Drive carefully, keep the car clean, return the car on time. Surcharge 500k if smoking in the car."></textarea>
+															</div>
+														</div>
+
+
+
+
+														<div class="col-12 text-danger text-center">
+															<span id="validation-rules"></span>
+														</div>
+													</div>
+												</div>
+												<div class="col-4">
+													<a onclick="return backStep1();" class="btn btn-primary"
+														style="background-color: #3c5bfc;">Back </a> <a
+														onclick="return moveStep3();" class="btn btn-primary"
+														style="background-color: #3c5bfc;">Next step</a>
+
+												</div>
+											</div>
+										</div>
+										<div class="tab-pane fade " id="three" role="tabpanel"
+											aria-labelledby="three-tab">
+											<div class="form-group mb-3 col-12">
+												<div class="row">
+													<h5 class="col-12" style="font-weight: bold;">Upload
+														Your Car Images</h5>
+
+													<div class="form-group">
+														<label for="frontImg">Front Image: </label> <input
+															type="file" class="form-control-file imgCars"
+															id="frontImg" name="frontImg"
+															onchange="previewImage('frontImg','frontImgPre')">
+
+														<div class="col-md-8">
+															<br> <img src="" id="frontImgPre" height="100px" />
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label for="behindImg">Behind Image: </label> <input
+															type="file" class="form-control-file imgCars"
+															id="behindImg" name="behindImg"
+															onchange="previewImage('behindImg','behindImgPre')">
+														<div class="col-md-8">
+															<br> <img src="" id="behindImgPre" height="100px" />
+														</div>
+
+													</div>
+													<div class="form-group">
+														<label for="leftImg">Left Image: </label> <input
+															type="file" class="form-control-file imgCars"
+															id="leftImg" name="leftImg"
+															onchange="previewImage('leftImg','leftImgPre')">
+														<div class="col-md-8">
+															<br> <img src="" id="leftImgPre" height="100px" />
+														</div>
+													</div>
+													<div class="form-group">
+														<label for="rightImg">Right Image: </label> <input
+															type="file" class="form-control-file imgCars"
+															id="rightImg" name="rightImg"
+															onchange="previewImage('rightImg','rightImgPre')">
+														<div class="col-md-8">
+															<br> <img src="" id="rightImgPre" height="100px" />
+														</div>
+
+													</div>
+													<div class="form-group">
+														<label for="insideImg">Inside Image: </label> <input
+															type="file" class="form-control-file imgCars"
+															id="insideImg" name="insideImg"
+															onchange="previewImage('insideImg','insideImgPre')">
+														<div class="col-md-8">
+															<br> <img src="" id="insideImgPre" height="100px" />
+														</div>
+
+													</div>
+													<div class="col-12 text-danger text-center">
+														<span id="validation-image"></span>
+													</div>
+													<div class="col-12 text-danger text-center">
+														<span id="validation-NUll-img"></span>
+													</div>
+													<div class="col-12 text-danger text-center">
+														<span id="validation-Duplicate-image"></span>
+													</div>
+												</div>
+											</div>
+											<div class="col-4">
+												<a onclick="return backStep2();" class="btn btn-primary"
+													style="background-color: #3c5bfc;">Back </a>
+												<button onclick="return checkSubmitRegister();"
+													class="btn btn-primary" style="background-color: #3c5bfc;">Submit
+												</button>
+
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!-- Agent detail end -->
+	</div>
+	<!-- Agent page end -->
+
+	<div class="modal car-modal fade" id="addressModal" tabindex="-1"
+		role="dialog" aria-labelledby="addressModal" style="display: none;"
+		aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true" id="offModal">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-6 modal-left">
+							<div class="modal-left-content">
+								<div id="modalCarousel" class="carousel slide"
+									data-ride="carousel">
+									<div class="carousel-inner" role="listbox">
+										<div class="carousel-item active">
+											<img src="/assets/img/icon-services/address.jpg" alt="">
+										</div>
+									</div>
+								</div>
+								<div class="description">
+									<h3>Description</h3>
+									<p>Select your default address</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-6 modal-right">
+							<div class="modal-right-content bg-white">
+								<section class="form-group row">
+
+									<label class="col-3 col-form-label" for="provinceSelect">Province:</label>
+									<div class="col-7">
+										<select id="provinceSelect" class="form-control"
+											name="province" onchange="return provinceSubmit();">
+											<option value="">Select Province</option>
+
+											<option th:each="item : ${provinceList}"
+												th:value="${item.code}" th:text="${item.full_name}"></option>
+										</select>
+									</div>
+
+
+
+								</section>
+								<section class="form-group row">
+
+									<label class="col-3 col-form-label" for="districtSelect">District:</label>
+
+									<div class="col-7">
+										<select disabled="disabled" id="districtSelect"
+											class="form-control" onchange="return districtSubmit()"
+											name="districtSelect">
+										</select>
+									</div>
+
+
+
+								</section>
+								<section class="form-group row">
+									<label class="col-3 col-form-label" for="wardSelect">Ward:</label>
+									<div class="col-7">
+										<select disabled="disabled" id="wardSelect"
+											class="form-control" name="wardSelect">
+										</select>
+									</div>
+
+								</section>
+								<section class="form-group row">
+									<label class="col-3 col-form-label" for="street">Street:</label>
+									<div class="col-7">
+										<input class="form-control" id="street" type="text">
+									</div>
+								</section>
+								<section class="form-group row">
+									<label class="col-3 col-form-label" for="houseNo">House
+										No:</label>
+									<div class="col-7">
+										<input class="form-control" id="houseNo" type="text">
+									</div>
+								</section>
+
+								<section class="form-group row">
+									<span id="validation-address" class="text-danger text-center"></span>
+								</section>
+								<a href="#" class="btn btn-theme"
+									onclick="return addressSubmit();">Save</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Footer start -->
+	<footer class="footer">
+		<div class="container footer-inner">
+			<div class="row">
+				<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+					<div class="footer-item">
+						<h4>Contact Us</h4>
+						<div class="f-border"></div>
+						<ul class="contact-info">
+							<li>Address: 590 CMT8, P.11, Q.3, Tp.Hồ Chí Minh</li>
+							<li>Email: <a href="mailto:AzCars@AzCars.com">AzCars@AzCars.com</a>
+							</li>
+							<li>Phone: <a href="tel:+84-3939-7979">+84-3939-7979</a></li>
+							<li>Fax: <a href="fax:+84-3939-7979">+84-3939-7979</a></li>
+						</ul>
+
+						<ul class="social-list clearfix">
+							<li><a href="#" class="facebook-bgh"><i
+									class="fa fa-facebook"></i></a></li>
+							<li><a href="#" class="twitter-bgh"><i
+									class="fa fa-twitter"></i></a></li>
+							<li><a href="#" class="google-bgh"><i
+									class="fa fa-google-plus"></i></a></li>
+							<li><a href="#" class="rss-bgh"><i class="fa fa-rss"></i></a>
+							</li>
+							<li><a href="#" class="linkedin-bgh"><i
+									class="fa fa-linkedin"></i></a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+					<div class="footer-item">
+						<h4>Useful Links</h4>
+						<div class="f-border"></div>
+						<ul class="links">
+							<li><a href="#"><i class="flaticon-arrows"></i>About us</a>
+							</li>
+
+							<li><a href="#"><i class="flaticon-arrows"></i>Available
+									Cars Listing</a></li>
+
+
+							<li><a href="#"><i class="flaticon-arrows"></i>Contact
+									Us</a></li>
+
+							<li><a href="#"><i class="flaticon-arrows"></i>Car
+									Details</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
+					<div class="recent-posts footer-item">
+						<h4>Recent Posts</h4>
+						<div class="f-border"></div>
+						<div class="media mb-4">
+							<a class="pr-3" href="/"> <img
+								src="/assets/img/sub-car/sub-car.jpg" alt="car" />
+							</a>
+							<div class="media-body align-self-center">
+								<h5>
+									<a href="car-details.html">2016 Audi S5 Coupe</a>
+								</h5>
+								<p>February 27, 2022</p>
+								<p>
+									<strong>$245,000</strong>
+								</p>
+							</div>
+						</div>
+						<div class="media mb-4">
+							<a class="pr-3" href="/"> <img
+								src="/assets/img/sub-car/sub-car-2.jpg" alt="car" />
+							</a>
+							<div class="media-body align-self-center">
+								<h5>
+									<a href="car-details.html">2016 Audi R8</a>
+								</h5>
+								<p>February 27, 2022</p>
+								<p>
+									<strong>$245,000</strong>
+								</p>
+							</div>
+						</div>
+						<div class="media">
+							<a class="pr-3" href="/"> <img
+								src="/assets/img/sub-car/sub-car-3.jpg" alt="car" />
+							</a>
+							<div class="media-body align-self-center">
+								<h5>
+									<a href="car-details.html">Read Audi A7 TDI</a>
+								</h5>
+								<p>February 27, 2022</p>
+								<p>
+									<strong>$245,000</strong>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+					<div class="footer-item clearfix">
+						<h4>Subscribe</h4>
+						<div class="f-border"></div>
+						<div class="Subscribe-box">
+							<p>Excepteur sint occaecat cupidatat non proident, sunt in
+								culpa qui officia deserunt mollit.</p>
+							<form action="#" method="GET">
+								<p>
+									<input type="text" class="form-contact" name="email"
+										placeholder="Enter Address" />
+								</p>
+								<p>
+									<button type="submit" name="submitNewsletter"
+										class="btn btn-block btn-color">Subscribe</button>
+								</p>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xl-12">
+					<p class="copy">
+						&copy; 2024 <a href="/" target="_blank">Az Cars</a>. Group 3 Final
+						Project .
+					</p>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- Footer end -->
+
+	<!-- Full Page Search -->
+	<div id="full-page-search">
+		<button type="button" class="close">×</button>
+		<form action="#">
+			<input type="search" value="" placeholder="type keyword(s) here" />
+			<button type="button" class="btn btn-sm btn-color">Search</button>
+		</form>
+	</div>
+
+	<!-- Off-canvas sidebar -->
+	<div class="off-canvas-sidebar">
+		<div class="off-canvas-sidebar-wrapper">
+			<div class="off-canvas-header">
+				<a class="close-offcanvas" href="#"><span class="fa fa-times"></span></a>
+			</div>
+			<div class="off-canvas-content">
+				<aside class="canvas-widget">
+					<div class="logo text-center">
+						<img src="/assets/img/logos/logo.png" alt="logo">
+					</div>
+				</aside>
+				<aside class="canvas-widget">
+					<ul class="menu">
+						<li class="menu-item menu-item-has-children"><a
+							href="index.html">Home</a></li>
+						<li class="menu-item"><a href="car-grid-leftside.html">Car
+								List</a></li>
+						<li class="menu-item"><a href="car-details.html">Car
+								Detail</a></li>
+						<li class="menu-item"><a
+							href="blog-single-sidebar-right.html">Blog</a></li>
+						<li class="menu-item"><a href="about-1.html">About US</a></li>
+						<li class="menu-item"><a href="contact-1.html">Contact US</a></li>
+					</ul>
+				</aside>
+				<aside class="canvas-widget">
+					<ul class="social-icons">
+						<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+						<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+						<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+						<li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+						<li><a href="#"><i class="fa fa-vk"></i></a></li>
+					</ul>
+				</aside>
+			</div>
+		</div>
+	</div>
+
+	<script src="/assets/js/jquery-2.2.0.min.js"></script>
+	<script src="/assets/js/popper.min.js"></script>
+	<script src="/assets/js/bootstrap.min.js"></script>
+	<!-- <script src="/assets/js/jquery.selectBox.js"></script> -->
+	<script src="/assets/js/rangeslider.js"></script>
+	<script src="/assets/js/jquery.magnific-popup.min.js"></script>
+	<script src="/assets/js/jquery.filterizr.js"></script>
+	<script src="/assets/js/wow.min.js"></script>
+	<script src="/assets/js/backstretch.js"></script>
+	<script src="/assets/js/jquery.countdown.js"></script>
+	<script src="/assets/js/jquery.scrollUp.js"></script>
+	<script src="/assets/js/particles.min.js"></script>
+	<script src="/assets/js/typed.min.js"></script>
+	<script src="/assets/js/dropzone.js"></script>
+	<script src="/assets/js/jquery.mb.YTPlayer.js"></script>
+	<script src="/assets/js/slick.min.js"></script>
+	<script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
+
+	<script src="/assets/js/ie-emulation-modes-warning.js"></script>
+	<!-- Custom JS Script -->
+	<script src="/assets/js/app.js"></script>
+	<script
+		th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
+
+	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
+	<script type="text/javascript" src="/assets/js/registerCarJs.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+server:
+  port: 8081
+#app:
+#  jwtSecret: asdfghjklpoiuytrewqzxcvbnmqazwsxedcrfvtgbyh
+#  jwtExpirationMs: 86400000
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    check-template: true
+    check-template-location: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/azcarsdb
+    username: root
+    password: 1234
+
+
+
+    
+  jpa:
+    hibernate:
+      ddl-auto: update
+  mail:
+    host: smtp.gmail.com
+    password: pblt rtjz jdps zobm
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    username: dn169240@gmail.com
+    
