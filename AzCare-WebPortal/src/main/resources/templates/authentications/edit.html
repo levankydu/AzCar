@@ -604,26 +604,32 @@
 	<script type="text/javascript">
 		
 		
-		$(document).ready(function() {
-		    $('#dob').datepicker({
-		        format: 'dd-mm-yyyy',
-		        autoclose: true,
-		        endDate: '0d'
-		    }).on('changeDate', function(e) {
-		        $('#dob').attr('value', $('#dob').val());
-		        toggleSaveButtonVisibility(); 
-		    });
-		    
-		    var defaultDob = $('#dob').val();
+	$(document).ready(function() {
+	    // Subtract 18 years from the current date
+	    var minDob = new Date();
+	    minDob.setFullYear(minDob.getFullYear() - 18);
 
-		    if (defaultDob) {
-		        var parts = defaultDob.split(' ');
-		        var datePart = parts[0]; 
-		        
-		        $('#dob').val(datePart);
-		        $('#dob').attr('value', datePart);
-		    }
-		});
+	    $('#dob').datepicker({
+	        format: 'dd-mm-yyyy',
+	        autoclose: true,
+	        endDate: minDob 
+	    }).on('changeDate', function(e) {
+	        $('#dob').attr('value', $('#dob').val());
+	        toggleSaveButtonVisibility(); 
+	    });
+
+	    $('#dob').after('<span class="age-warning" style="color: red" >Phải đủ 18 tuổi</span>');
+
+	    var defaultDob = $('#dob').val();
+
+	    if (defaultDob) {
+	        var parts = defaultDob.split(' ');
+	        var datePart = parts[0]; 
+	          
+	        $('#dob').val(datePart);
+	        $('#dob').attr('value', datePart);
+	    }
+	});
 
 		function toggleSaveButtonVisibility() {
 		    const saveChangesBtn = document.getElementById("saveChangesBtn");

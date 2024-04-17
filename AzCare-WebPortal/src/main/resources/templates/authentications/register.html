@@ -287,12 +287,24 @@ End Google Tag Manager (noscript)
 		    var isValidConfirmPassword = validateConfirmPassword();
 
 		    if (isValidName && isValidEmail && isValidPassword && isValidConfirmPassword) {
+		        Swal.fire({
+		            title: 'Sending Mail',
+		            html: 'Loading...',
+		            timerProgressBar: true,
+		            showCancelButton: false,
+		            showConfirmButton: false,
+		            didOpen: () => {
+		                Swal.showLoading();
+		            }
+		        });
+
 		        var formData = new FormData(document.getElementById('registerUser'));
 		        fetch('/register', {
 		            method: 'POST',
 		            body: formData
 		        })
 		        .then(response => {
+		            Swal.close(); // Close the Swal modal once the response is received
 		            if (!response.ok) {
 		                throw new Error('Network response was not ok');
 		            }
@@ -300,39 +312,35 @@ End Google Tag Manager (noscript)
 		        })
 		        .then(data => {
 		            if (data === "Email already registered !!!") {
-		               
 		                document.getElementById('toast-failed-register-user').click();
 		                document.getElementById('validation-email').textContent = "Email already registered";
 		            } else if (data === "Confirm Password do not match." || data === "Validation error occurred." || data === "Error sending email." || data === "Error occurred.") {
-		               
 		                document.getElementById('toast-failed-register-user').click();
 		                alert(data); 
 		            } else {
-		                
 		                document.getElementById('toast-success-registered-user').click();
 		                document.getElementById('registerUser').reset(); 
 		            }
 		        })
 		        .catch(error => {
-		            
+		            Swal.close(); // Close the Swal modal on error
 		            document.getElementById('toast-failed-register-exit').click();
 		        });
 		    } else {
-		        
 		        document.getElementById('toast-failed-register-user').click();
 		    }
 		    return false; 
 		}
 		function togglePasswordVisibility(inputId) {
 		    var passwordField = document.getElementById(inputId);
-		    var toggleButton = document.getElementById("togglePassword" + inputId.slice(-1)); // Lấy số cuối cùng từ inputId
+		    var toggleButton = document.getElementById("togglePassword" + inputId.slice(-1)); 
 
 		    if (passwordField.type === "password") {
 		        passwordField.type = "text";
-		        toggleButton.innerHTML = '<i class="far fa-eye-slash"></i>'; // Sử dụng biểu tượng "eye-slash"
+		        toggleButton.innerHTML = '<i class="far fa-eye-slash"></i>'; 
 		    } else {
 		        passwordField.type = "password";
-		        toggleButton.innerHTML = '<i class="far fa-eye"></i>'; // Sử dụng biểu tượng "eye"
+		        toggleButton.innerHTML = '<i class="far fa-eye"></i>'; 
 		    }
 		}
 	</script>

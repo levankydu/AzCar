@@ -892,50 +892,51 @@
 	<script th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
 	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 	<script type="text/javascript">
-		function checkSubmitLogout() {
-			var xhr = new XMLHttpRequest();
-			xhr.open('POST', '/logout', true);
-			xhr.setRequestHeader('Content-Type', 'application/json');
-			xhr.onload = function () {
-				if (xhr.status === 200) {
+    function checkSubmitLogout() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/logout', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                
+                localStorage.setItem('logoutSuccess', 'true');
 
-					localStorage.setItem('logoutSuccess', 'true');
+                
+                window.location.href = "/";
+            } else {
+                console.error('Logout request failed');
+            }
+        };
+        xhr.onerror = function () {
+            console.error('Logout request failed');
+        };
+        xhr.send();
+    }
 
-					window.location.href = "/";
-				} else {
-					console.error('Logout request failed');
-				}
-			};
-			xhr.onerror = function () {
-				console.error('Logout request failed');
-			};
-			xhr.send();
-		}
+    document.addEventListener("DOMContentLoaded", function () {
+        const logoutSuccess = localStorage.getItem('logoutSuccess');
 
-		document.addEventListener("DOMContentLoaded", function () {
-			const logoutSuccess = localStorage.getItem('logoutSuccess');
+        
+        if (logoutSuccess === 'true') {
+            Swal2.fire({
+                icon: "success",
+                title: "Logout successful",
+            });
 
-			if (logoutSuccess === 'true') {
-				Swal2.fire({
-					icon: "success",
-					title: "Logout successful",
-				});
+         
+            localStorage.removeItem('logoutSuccess');
+        }
+    });
 
-				localStorage.removeItem('logoutSuccess');
-			}
-		});
-
-		function checkLogin() {
-			var emailLogin = document.getElementById('emailLogin').value;
-			if (emailLogin == "") {
-
-				document.getElementById('toast-failed-login').click();
-
-				return false;
-			}
-			return true;
-		}
-	</script>
+    function checkLogin() {
+        var emailLogin = document.getElementById('emailLogin').value;
+        if (emailLogin == "") {
+            document.getElementById('toast-failed-login').click();
+            return false;
+        }
+        return true;
+    }
+</script>
 
 
 
