@@ -16,4 +16,10 @@ public class PlateVerifyDto {
 
 	private Users userModel;
 	private List<PlateImages> plateImages;
+	private String status;
+	private String realName;
+	private String licenseNo;
+	private String expriedDay;
+	private String licenseClass;
+
 }

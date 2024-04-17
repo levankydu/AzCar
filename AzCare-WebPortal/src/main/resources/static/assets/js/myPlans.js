@@ -241,3 +241,44 @@ if (checkDriverLicense == "false"){
 else if (checkDriverLicense == "success") {
 	document.getElementById("addLicense-success").click();
 }
+
+function toggleRule1(){
+	var rule = document.getElementById('rule1');
+
+        if (rule.style.display === 'none' || rule.style.display === '') {
+            rule.style.display = 'block';
+        } else {
+            rule.style.display = 'none';
+        }
+    }
+
+function toggleRule2(){
+	var rule = document.getElementById('rule2');
+
+        if (rule.style.display === 'none' || rule.style.display === '') {
+            rule.style.display = 'block';
+        } else {
+            rule.style.display = 'none';
+        }
+	
+}
+function toggleRule3(){
+	var rule = document.getElementById('rule3');
+
+        if (rule.style.display === 'none' || rule.style.display === '') {
+            rule.style.display = 'block';
+        } else {
+            rule.style.display = 'none';
+        }
+	
+}
+function toggleRule4(){
+	var rule = document.getElementById('rule4');
+
+        if (rule.style.display === 'none' || rule.style.display === '') {
+            rule.style.display = 'block';
+        } else {
+            rule.style.display = 'none';
+        }
+	
+}
