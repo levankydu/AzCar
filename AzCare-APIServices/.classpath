@@ -21,15 +21,5 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-21/"/>
 	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
-	<classpathentry kind="lib" path="/Users/khuta/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-oauth2-core/6.2.1/1927cdcddce10f1f852e25ed3445e1f1b96c17ad/spring-security-oauth2-core-6.2.1.jar" sourcepath="/Users/khuta/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-oauth2-core/6.2.1/9fefa3288ce11be9f0ace023dd91f4b784cb31f4/spring-security-oauth2-core-6.2.1-sources.jar">
-		<attributes>
-			<attribute name="gradle_used_by_scope" value="main,test"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/khuta/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-oauth2-client/6.2.1/1e78c49fa10f72acb7f40e34e9ced1216753792c/spring-security-oauth2-client-6.2.1.jar" sourcepath="/Users/khuta/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-oauth2-client/6.2.1/54a9f30406a12092c5be48727a1e5292b42cdc78/spring-security-oauth2-client-6.2.1-sources.jar">
-		<attributes>
-			<attribute name="gradle_used_by_scope" value="main,test"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="bin/default"/>
 </classpath>

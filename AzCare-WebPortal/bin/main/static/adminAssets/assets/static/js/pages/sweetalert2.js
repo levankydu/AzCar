@@ -568,6 +568,23 @@ if (document.getElementById('toast-failed-upload-avatar')) {
 		})
 	})
 }
+
+if (document.getElementById('toast-success-loginGoogle')) {
+	document.getElementById('toast-success-loginGoogle').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'success',
+			title: 'Rgister Google successfully'
+		})
+	})
+}
+if (document.getElementById('toast-failed-loginGoogle')) {
+	document.getElementById('toast-failed-loginGoogle').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'error',
+			title: 'Rgister Google failed'
+		})
+	})
+}
 // End Điệp
 
 if (document.getElementById('toast-failed-uploadDriveLicense')) {
