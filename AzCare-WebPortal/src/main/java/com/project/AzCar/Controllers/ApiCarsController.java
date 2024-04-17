@@ -161,7 +161,7 @@ public class ApiCarsController {
 			throws UnsupportedEncodingException, MessagingException {
 		System.out.println(order);
 		boolean isPassed = true;
-		String message = "Greate, your order is signed up successfully!";
+		String message = "Great, your order is signed up successfully!";
 		List<CarInforDto> cars = this.getAllCars();
 		cars.removeIf(i -> i.getId() != Integer.parseInt(order.getCarId()));
 		CarInforDto car = cars.get(0);
@@ -221,11 +221,10 @@ public class ApiCarsController {
 			long daysDifference = ChronoUnit.DAYS.between(fromDatePhone, toDatePhone);
 			BigDecimal priceAfterDiscount = car.getPrice().subtract(
 					car.getPrice().multiply(BigDecimal.valueOf(car.getDiscount())).divide(BigDecimal.valueOf(100)));
-			BigDecimal totalRent = car.getPrice().multiply(BigDecimal.valueOf(daysDifference));
+			BigDecimal totalRent = priceAfterDiscount.multiply(BigDecimal.valueOf(daysDifference));
 			orderdetails.setDifferenceDate((int) daysDifference);
 			orderdetails.setTotalRent(totalRent);
-			orderdetails.setDeliveryAddress(
-					"12, PhoneD5, " + order.getWard() + ", " + order.getDistrict() + ", " + order.getProvince());
+			orderdetails.setDeliveryAddress(order.getWard() + ", " + order.getDistrict() + ", " + order.getProvince());
 			orderdetails.setUserId(Integer.parseInt(order.getUserId()));
 			orderdetails.setCarId(order.getCarId());
 			orderdetails.setDiscount(car.getDiscount());
