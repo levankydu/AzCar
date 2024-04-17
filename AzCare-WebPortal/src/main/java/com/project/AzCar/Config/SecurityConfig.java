@@ -17,9 +17,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
-import org.springframework.security.oauth2.client.web.reactive.function.client.ServletOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -46,7 +43,7 @@ public class SecurityConfig {
 
 		http.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests((requests) -> requests.requestMatchers("/").permitAll().requestMatchers("/ws/**")
-						.permitAll().requestMatchers("/api/**").permitAll().requestMatchers("/data/**").permitAll()
+						.permitAll().requestMatchers("/api/auth/**").permitAll().requestMatchers("/data/**").permitAll()
 						.requestMatchers("/api/cars/**").permitAll().requestMatchers("/user/profile/flutter/avatar/**")
 						.permitAll().requestMatchers("/home/availablecars/flutter/img/**").permitAll()
 						.requestMatchers("/forgot_password/**").permitAll().requestMatchers("/reset_password/**")
@@ -72,7 +69,7 @@ public class SecurityConfig {
 							public void onAuthenticationSuccess(HttpServletRequest request,
 									HttpServletResponse response, Authentication authentication)
 									throws IOException, ServletException {
-								// Kiểm tra xác thực thành công
+								// Kiá»ƒm tra xÃ¡c thá»±c thÃ nh cÃ´ng
 								System.out.println("AuthenticationSuccessHandler invoked");
 								System.out.println("Authentication name: " + authentication.getName());
 								CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
@@ -91,7 +88,7 @@ public class SecurityConfig {
 									System.out.println("Google:" + email);
 									response.sendRedirect("/login");
 								}
-								// Xác định lỗi và redirect tùy thuộc vào quyền truy cập
+								// XÃ¡c Ä‘á»‹nh lá»—i vÃ  redirect tÃ¹y thuá»™c vÃ o quyá»�n truy cáº­p
 								request.getSession().removeAttribute("signin_error");
 								request.getSession().setAttribute("emailLogin", name);
 								if (authentication.getAuthorities().toString().contains(Constants.Roles.USER)) {
@@ -111,9 +108,8 @@ public class SecurityConfig {
 
 				.logout((logout) -> logout.permitAll().logoutUrl("/logout").logoutSuccessUrl("/")
 						.invalidateHttpSession(true).deleteCookies("JSESSIONID"))
-				//.exceptionHandling(handling -> handling.accessDeniedPage("/access-denied"));
-				.exceptionHandling(t -> System.out.print(t.toString())
-				);
+				// .exceptionHandling(handling -> handling.accessDeniedPage("/access-denied"));
+				.exceptionHandling(t -> System.out.print(t.toString()));
 		http.authenticationProvider(daoAuthen());
 
 		return http.build();
@@ -153,8 +149,6 @@ public class SecurityConfig {
 	AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
 		return configuration.getAuthenticationManager();
 	}
-	
-	
 
 	@Autowired
 	private CustomOAuth2UserService oauthUserService;

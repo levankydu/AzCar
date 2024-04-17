@@ -12,11 +12,8 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/azcarsdb
     username: root
-    password: tincute1
+    password: 
 
-
-
-    
   jpa:
     hibernate:
       ddl-auto: update
@@ -31,7 +28,6 @@ spring:
           starttls:
             enable: true
     username: dn169240@gmail.com
-
   security:
     oauth2:
       client:
@@ -42,13 +38,13 @@ spring:
             scope:
               - email
               - profile
-
-    
-
-    
+     
+     
+     
+     
+     
 paypal:
   mode: sandbox
   client:
     app: AWaDcggq4KGALzjm9IZzE-7kBccuEVGBgdRnH_UJB19P5mTwzne77Rs-c40xjjFdBo8pNDq5Z_RaQThP 
     secret: EJsJSziQmYd6jJXvY8W6Ca_QUQAbR7nCXReKLl9_u8kZp2aJ-LCOqfZochCtqu_RVTwObwDPIypJ_qE-
-

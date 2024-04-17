@@ -1,13 +1,19 @@
 package com.project.AzCar.Controllers;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,20 +31,31 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.project.AzCar.Dto.DriverLicense.DriverLicenseBack;
+import com.project.AzCar.Dto.DriverLicense.DriverLicenseFront;
 import com.project.AzCar.Dto.Users.EditApiDto;
 import com.project.AzCar.Dto.Users.ForgotPasswordApiDto;
 import com.project.AzCar.Dto.Users.LoginApiDto;
+
 import com.project.AzCar.Dto.Users.ResetPasswordApiDto;
+
 import com.project.AzCar.Dto.Users.SignUpApiDto;
 import com.project.AzCar.Dto.Users.TokenApiDto;
 import com.project.AzCar.Dto.Users.UserDto;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Services.Users.UserServices;
 
+import com.project.AzCar.Utilities.OcrService;
+
 import ch.qos.logback.core.testUtil.RandomUtil;
 import jakarta.servlet.http.HttpServletRequest;
+
 import net.bytebuddy.utility.RandomString;
+
+import net.sourceforge.tess4j.TesseractException;
+
 
 @RestController
 @RequestMapping("/api/auth")
@@ -52,7 +69,10 @@ public class ApiUsersController {
 	private AuthenticationManager authenticationManager;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+	@Autowired
+	private OcrService ocrService;
+
+
 	@GetMapping("/getUsers")
 	public List<UserDto> getList() {
 		List<UserDto> list = new ArrayList<>();
@@ -185,6 +205,70 @@ public class ApiUsersController {
 	
 	
 	//send mail Register 
+	@PostMapping("/upload")
+	public ResponseEntity<DriverLicenseFront> upload(@RequestParam("file") MultipartFile file)
+			throws IOException, TesseractException {
+
+		DriverLicenseFront driverLicenseFront = new DriverLicenseFront();
+		var ocrResult = ocrService.ocr(file).getResult();
+		// Regular expressions
+		// Regular expressions
+		Pattern licenseNumberPattern = Pattern.compile("No:\\s*(\\d+)");
+		Pattern fullNamePattern = Pattern.compile("Full name:\\s*([^\\n]+)");
+		Pattern dateOfBirthPattern = Pattern.compile("Date of Birth:\\s*(\\d{2}/\\d{2}/\\d{4})");
+		Pattern licenseClassPattern = Pattern.compile("Class:\\s*([\\w\\d]+)");
+		Pattern expiresPattern = Pattern.compile("Expires:\\s*(\\d{2}/\\d{2}/\\d{4})");
+		Pattern isdriverLicense = Pattern.compile("DRIVER'S LICENSE");
+
+		Matcher matcher;
+
+		matcher = licenseNumberPattern.matcher(ocrResult);
+		if (matcher.find()) {
+			driverLicenseFront.setLicenseNumber(matcher.group(1).trim());
+		}
+
+		matcher = fullNamePattern.matcher(ocrResult);
+		if (matcher.find()) {
+			driverLicenseFront.setFullName(matcher.group(1).trim());
+		}
+
+		matcher = dateOfBirthPattern.matcher(ocrResult);
+		if (matcher.find()) {
+			driverLicenseFront.setDateOfBirth(matcher.group(1).trim());
+		}
+
+		matcher = licenseClassPattern.matcher(ocrResult);
+		if (matcher.find()) {
+			driverLicenseFront.setLicenseClass(matcher.group(1).trim());
+		}
+
+		matcher = expiresPattern.matcher(ocrResult);
+		if (matcher.find()) {
+			driverLicenseFront.setExpires(matcher.group(1).trim());
+		}
+
+		matcher = isdriverLicense.matcher(ocrResult);
+		if (matcher.find()) {
+			driverLicenseFront.setDriverLicense(true);
+		}
+		return ResponseEntity.ok(driverLicenseFront);
+	}
+
+	@PostMapping("/upload2")
+	public ResponseEntity<DriverLicenseBack> upload2(@RequestParam("file") MultipartFile file)
+			throws IOException, TesseractException {
+
+		DriverLicenseBack driverLicenseBack = new DriverLicenseBack();
+		var ocrResult = ocrService.ocr(file).getResult();
+		Pattern isdriverLicense = Pattern.compile("CLASSIFICATION OF MOTOR VEHICLES");
+		Matcher matcher;
+		matcher = isdriverLicense.matcher(ocrResult);
+		if (matcher.find()) {
+			driverLicenseBack.setDriverLicense(true);
+		}
+		return ResponseEntity.ok(driverLicenseBack);
+	}
+
 	private void sendEmail(String email) throws UnsupportedEncodingException, jakarta.mail.MessagingException {
 		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
@@ -194,11 +278,12 @@ public class ApiUsersController {
 		helper.setTo(email);
 
 		String subject = "Welcom to AzCar";
-		String content = "Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi";
+		String content = "CaÌ‰m Æ¡n baÌ£n Ä‘aÌƒ sÆ°Ì‰ duÌ£ng diÌ£ch vuÌ£ cuÌ‰a chuÌ�ng tÃ´i";
 		helper.setSubject(subject);
 		helper.setText(content, true);
 		mailSender.send(message);
 	}
+
 	private void sendEmail(String email, String token)
 			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
 		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
