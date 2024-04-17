@@ -58,6 +58,6 @@
     <fullyQualifiedTypeName name="com.project.AzCar.Dto.DriverLicense.DriverLicenseBack"/>
     <fullyQualifiedTypeName name="java.time.LocalDate"/>
     <fullyQualifiedTypeName name="org.springframework.ui.Model"/>
-    <fullyQualifiedTypeName name="com.project.AzCar.Entities.Cars.PlateImages"/>
     <fullyQualifiedTypeName name="com.project.AzCar.Dto.PlateVerify.PlateVerifyDto"/>
+    <fullyQualifiedTypeName name="com.project.AzCar.Entities.Cars.PlateImages"/>
 </qualifiedTypeNameHistroy>

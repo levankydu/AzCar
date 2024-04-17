@@ -8,13 +8,13 @@
 		<item key="wrap" value="true"/>
 		<item key="incremental" value="false"/>
 		<list key="findhistory">
+			<item value="plates"/>
 			<item value="driverLi"/>
 			<item value="showOrder"/>
 			<item value="cancel"/>
 			<item value="payment"/>
 			<item value="Invalid date"/>
 			<item value="invalid day"/>
-			<item value="plates"/>
 			<item value="front Lin"/>
 		</list>
 		<list key="replacehistory">
