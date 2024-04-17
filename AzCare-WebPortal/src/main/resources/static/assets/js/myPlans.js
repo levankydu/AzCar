@@ -272,3 +272,13 @@ function toggleRule3(){
         }
 	
 }
+function toggleRule4(){
+	var rule = document.getElementById('rule4');
+
+        if (rule.style.display === 'none' || rule.style.display === '') {
+            rule.style.display = 'block';
+        } else {
+            rule.style.display = 'none';
+        }
+	
+}

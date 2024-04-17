@@ -969,43 +969,87 @@ select {
 													<h5 style="font-weight: bold;">Requirement upload your
 														image</h5>
 													<div>
-														<div id="error-resolution" class="col-12 text-danger" style="cursor: pointer;"
-															onclick="toggleRule1()">
+														<div id="error-resolution" class="col-12 text-danger"
+															style="cursor: pointer;" onclick="toggleRule1()">
 															<span style="font-weight: bold;">Check 1: </span> <span><i
 																class="fa-solid fa-quote-left"></i></span> Please upload an
 															image with sufficient resolution. <span><i
 																class="fa-solid fa-quote-right"></i></span>
 														</div>
 														<div id="rule1" style="display: none;">
-														<p><span style="font-weight: bold;">Resolution:</span> Require users to provide images with sufficient resolution for easy character recognition.</p>
-														<p><span style="font-weight: bold;">Lighting:</span> Images must have adequate lighting, avoiding dark or overly bright areas that could blur the information.</p>
-														<p><span style="font-weight: bold;">Focus:</span> Ensure the entire driver's license is captured clearly and in focus, without being cropped or obscured.</p>
+															<p>
+																<span style="font-weight: bold;">Resolution:</span>
+																Require users to provide images with sufficient
+																resolution for easy character recognition.
+															</p>
+															<p>
+																<span style="font-weight: bold;">Lighting:</span> Images
+																must have adequate lighting, avoiding dark or overly
+																bright areas that could blur the information.
+															</p>
+															<p>
+																<span style="font-weight: bold;">Focus:</span> Ensure
+																the entire driver's license is captured clearly and in
+																focus, without being cropped or obscured.
+															</p>
 														</div>
 
-														<div id="error-lighting" class="col-12 text-danger" style="cursor: pointer;"
-															onclick="toggleRule2()">
+														<div id="error-lighting" class="col-12 text-danger"
+															style="cursor: pointer;" onclick="toggleRule2()">
 															<span style="font-weight: bold;">Check 2: </span> <span><i
 																class="fa-solid fa-quote-left"></i></span> Please ensure the
 															image has adequate lighting. <span><i
 																class="fa-solid fa-quote-right"></i></span>
 														</div>
-															<div id="rule2" style="display: none;">
-															<p>Instruct users to capture the driver's license from a straight, non-tilted angle to avoid character distortion.</p>
-															<p>Ensure the driver's license photo is not skewed or rotated.</p>
-															
-															
-															</div>
-														<div id="error-focus" class="col-12 text-danger" style="cursor: pointer;"
-															onclick="toggleRule3()">
+														<div id="rule2" style="display: none;">
+															<p>Instruct users to capture the driver's license
+																from a straight, non-tilted angle to avoid character
+																distortion.</p>
+															<p>Ensure the driver's license photo is not skewed or
+																rotated.</p>
+
+
+														</div>
+														<div id="error-focus" class="col-12 text-danger"
+															style="cursor: pointer;" onclick="toggleRule3()">
 															<span style="font-weight: bold;">Check 3: </span> <span><i
 																class="fa-solid fa-quote-left"></i></span> Please capture the
 															entire driver's license clearly. <span><i
 																class="fa-solid fa-quote-right"></i></span>
 														</div>
 														<div id="rule3" style="display: none">
-														<p><span style="font-weight: bold;">Image Format:</span> Only accept common image formats such as JPEG, PNG.</p>
-														<p><span style="font-weight: bold;">Image Size:</span> Specify minimum and maximum image sizes, avoiding uploads that are too small or too large.</p>
-														
+															<p>
+																<span style="font-weight: bold;">Image Format:</span>
+																Only accept common image formats such as JPEG, PNG.
+															</p>
+															<p>
+																<span style="font-weight: bold;">Image Size:</span>
+																Specify minimum and maximum image sizes, avoiding
+																uploads that are too small or too large.
+															</p>
+
+
+														</div>
+														<div id="error-image" class="col-12 text-danger"
+															style="cursor: pointer;" onclick="return toggleRule4()">
+															<span style="font-weight: bold;">Check 3: </span> <span><i
+																class="fa-solid fa-quote-left"></i></span> Example Images
+															Accepted. <span><i class="fa-solid fa-quote-right"></i></span>
+														</div>
+														<div id="rule4" style="display: none">
+															<div class="form-group col-md-8">
+																<label for="frontImg">Front License: </label> <img
+																	class="form-control-file imgCars"
+																	src="/assets/img/front-demo.jpg" style="height: 200px">
+															</div>
+
+															<div class="form-group col-md-8">
+																<label for="behindImg">Behind License: </label> <img
+																	class="form-control-file imgCars"
+																	src="/assets/img/behind-demo.jpg" style="height: 200px">
+
+															</div>
+
 														</div>
 													</div>
 												</div>
