@@ -27,6 +27,7 @@ import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
 import com.project.AzCar.Entities.Locations.Ward;
 import com.project.AzCar.Entities.Users.Users;
+import com.project.AzCar.Repositories.Cars.BrandRepository;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
 import com.project.AzCar.Services.Cars.CarServices;
@@ -63,7 +64,8 @@ public class ApiCarsController {
 	private BrandServices brandServices;
 	@Autowired
 	private CarImageServices carImageServices;
-
+	@Autowired
+	private BrandRepository brandRepo;
 	@Autowired
 	private UserServices userServices;
 	@Autowired
@@ -154,6 +156,28 @@ public class ApiCarsController {
 	@GetMapping("/getWards")
 	public List<Ward> getWards(@RequestParam("districtCode") String districtCode) {
 		return wardServices.getWardByDistrictCode(districtCode);
+	}
+
+	@GetMapping("/getBrands")
+	public List<String> getBrands() {
+		return brandRepo.getBrandList();
+	}
+
+	@GetMapping("/getCategoryListByBrand")
+	public List<String> getCategoryListByBrand(@RequestParam("brandName") String brandName) {
+		return brandRepo.getCategoryListByBrand(brandName);
+	}
+
+	@GetMapping("/getModelListByCateAndBrand")
+	public List<String> getModelListByCateAndBrand(@RequestParam("brandName") String brandName,
+			@RequestParam("cateName") String cateName) {
+		return brandRepo.getModelListByCateAndBrand(brandName, cateName);
+	}
+
+	@GetMapping("/getYearList")
+	public List<String> getYearList(@RequestParam("brandName") String brandName,
+			@RequestParam("cateName") String cateName, @RequestParam("modelName") String modelName) {
+		return brandRepo.getYearList(brandName, cateName, modelName);
 	}
 
 	@PostMapping("/postOrderDetails")
