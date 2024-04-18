@@ -261,7 +261,7 @@
 					<h4 class="col-4 offset-md-8"
 						style="text-align: center; font-weight: bold;">
 						Your balance: $ <span
-							th:text="${user.balance!=null?user.balance :'0'}"></span>
+						th:id="balance_123"	th:text="${user.balance!=null?user.balance :'0'}"></span>
 
 					</h4>
 					<!-- khi click charge sẽ hiển thị dialog -->
@@ -296,7 +296,7 @@
 										<label for="amount">Amount:</label>
 										<div>
 											<input type="number" id="customAmount" name="customAmount"
-												min="100" step="1" placeholder="Nhập số tiền tùy ý">
+												min="100" step="1" placeholder="Please enter amount">
 										</div>
 										<div>
 											<button type="button" class="amount-btn" data-amount="500">500$
@@ -1151,8 +1151,8 @@ select {
 							th:value="${user.Id}" readonly hidden><br> <br>
 						<label for="amount">Amount:</label>
 						<div>
-							<input type="number" id="amount123" name="amount123" min="100000"
-								step="1000" placeholder="Nhập số tiền tùy ý">
+							<input type="number" id="amount123" name="amount123" min="100"
+								step="10" placeholder="Please enter amount">
 						</div>
 						<div>
 							<button type="button" class="amount-btn" data-amount123="500">500$
@@ -1169,8 +1169,8 @@ select {
 						<button type="submit">Pay</button>
 					</div>
 
-					<div class="col-md">
-						<!--<div class="form-floating">
+					<div class="col-md" th:if="${cardbankuser !=null}">
+						<div class="form-floating">
 							<label for="floatingInputGrid">Bank NAME</label>
 							<input class="form-control" type="text" th:value="${cardbankuser.bankName}" readonly>
 
@@ -1188,7 +1188,7 @@ select {
 						<div class="form-floating">
 							<label for="floatingInputGrid">ADDRESS</label>
 							<input class="form-control" type="text" th:value="${cardbankuser.addressbank}" readonly>
-						</div> -->
+						</div> 
 					</div>
 				</div>
 			</form>
@@ -1446,7 +1446,7 @@ select {
 					return response.ok;
 				})
 				.then(data => {
-					alert('Nạp tiền thành công!');
+					alert('Deposit successful!');
 					modal.style.display = "none";
 				})
 				.catch(error => {
@@ -1500,16 +1500,29 @@ select {
 		var form123 = document.getElementById("paymentForm123");
 		form123.addEventListener('submit', function (event) {
 			event.preventDefault();
+			var amount = document.getElementById("amount123").value;
+			console.log(amount);
+			var amout1 = document.getElementById("balance_123").textContent;
+			console.log(amout1);
+		
+			if(	parseFloat(amount) > parseFloat(amout1))
+			{
+				alert("số dư không đủ");
+				return;
+			}
 			var referenceNumber = document.getElementById("referenceNumber123").value;
+			var withdraw = document.getElementById("amount123").value;
 			console.log(referenceNumber);
 			var formData = new FormData(form);
-
+			formData.append("withdraw",withdraw);;
+			formData.append("referenceNumber",referenceNumber)
+			
 			var jsonObject = {};
 			formData.forEach(function (value, key) {
 				jsonObject[key] = value;
 			});
-			var formData1 = new FormData();
-			var amout = document.getElementById("amount").value;
+			
+		
 			var jsonData = JSON.stringify(jsonObject);
 
 			console.log(jsonData)
@@ -1528,7 +1541,7 @@ select {
 					return response.ok;
 				})
 				.then(data => {
-					alert('Nạp tiền thành công!');
+					alert('Deposit successful!');
 					modal123.style.display = "none";
 				})
 				.catch(error => {

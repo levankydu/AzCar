@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="com.project.AzCar.Services.Orders.OrderDetailsService"/>
-    <fullyQualifiedTypeName name="com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Dynamic"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.ModelAttribute"/>
     <fullyQualifiedTypeName name="jakarta.mail.search.IntegerComparisonTerm"/>
     <fullyQualifiedTypeName name="com.project.AzCar.Services.Payments.PaymentService"/>
     <fullyQualifiedTypeName name="java.io.Serializable"/>
-    <fullyQualifiedTypeName name="com.project.AzCar.Services.Users.UserServices"/>
-    <fullyQualifiedTypeName name="com.project.AzCar.Entities.Users.Users"/>
     <fullyQualifiedTypeName name="jakarta.annotation.PostConstruct"/>
     <fullyQualifiedTypeName name="com.project.AzCar.Utilities.Constants"/>
     <fullyQualifiedTypeName name="org.modelmapper.ModelMapper"/>
@@ -18,7 +13,6 @@
     <fullyQualifiedTypeName name="java.lang.System"/>
     <fullyQualifiedTypeName name="org.thymeleaf.expression.Dates"/>
     <fullyQualifiedTypeName name="java.time.format.DateTimeFormatter"/>
-    <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.Query"/>
     <fullyQualifiedTypeName name="java.time.LocalDateTime"/>
     <fullyQualifiedTypeName name="java.util.Set"/>
     <fullyQualifiedTypeName name="java.util.HashSet"/>
@@ -60,4 +54,10 @@
     <fullyQualifiedTypeName name="org.springframework.ui.Model"/>
     <fullyQualifiedTypeName name="com.project.AzCar.Entities.Cars.PlateImages"/>
     <fullyQualifiedTypeName name="com.project.AzCar.Dto.PlateVerify.PlateVerifyDto"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
+    <fullyQualifiedTypeName name="com.project.AzCar.Dto.Users.UserDto"/>
+    <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.Query"/>
+    <fullyQualifiedTypeName name="org.springframework.data.repository.query.Param"/>
+    <fullyQualifiedTypeName name="com.project.AzCar.Services.Users.UserServices"/>
+    <fullyQualifiedTypeName name="com.project.AzCar.Entities.Users.Users"/>
 </qualifiedTypeNameHistroy>

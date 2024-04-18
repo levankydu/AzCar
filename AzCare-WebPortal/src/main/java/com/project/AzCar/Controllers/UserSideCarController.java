@@ -1074,7 +1074,10 @@ public class UserSideCarController {
 
 		}
 		ModelView.addAttribute("cardbank", c);
-
+		Cardbank cardbank = cardService.findCardbankByUserId((int) user.getId());
+		if (cardbank != null) {
+			ModelView.addAttribute("cardbankuser", cardbank);
+		}
 		ModelView.addAttribute("rentorDone", rentorDone);
 		ModelView.addAttribute("orderList", latestOrders);
 		ModelView.addAttribute("ImgLicense", listImg);
