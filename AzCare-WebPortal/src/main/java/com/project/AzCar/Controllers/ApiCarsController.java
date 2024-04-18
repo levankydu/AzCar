@@ -129,7 +129,34 @@ public class ApiCarsController {
 		result.removeIf(t -> !t.getStatus().equals(Constants.carStatus.READY));
 		result.removeIf(t -> t.getCarOwnerId() != user.getId());
 		return result;
+	}
 
+	@GetMapping("/getCarsExceptUserCar")
+	public List<CarInforDto> getCarsExceptUserCar(@RequestParam("emailLogin") String emailLogin) {
+		List<CarInfor> list = carServices.findAll();
+		List<CarInforDto> result = new ArrayList<>();
+
+		Users user = userServices.findUserByEmail(emailLogin);
+		for (var item : list) {
+			CarInforDto model = carServices.mapToDto(item.getId());
+
+			var carExtraFee = extraFeeServices.findByCarId(model.getId());
+			if (carExtraFee != null) {
+
+				model.setExtraFeeModel(carExtraFee);
+			}
+			var carPLusService = plusServiceServices.findByCarId(model.getId());
+			if (carPLusService != null) {
+
+				model.setCarPlusModel(carPLusService);
+			}
+			model.setCarmodel(brandServices.getModel(item.getModelId()));
+			model.setImages(carImageServices.getImgByCarId(item.getId()));
+			result.add(model);
+		}
+		result.removeIf(t -> !t.getStatus().equals(Constants.carStatus.READY));
+		result.removeIf(t -> t.getCarOwnerId() == user.getId());
+		return result;
 	}
 
 	@GetMapping("/getOrdersByCarId")
