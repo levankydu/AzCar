@@ -1,8 +1,0 @@
-INDEX VERSION 1.4+/Users/khuta/Desktop/BaiHoc/AzCar/AzCar/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
-2321291363.index
-980146454.index
-4219418938.index
-3010568831.index
-706557069.index
-1387701258.index
-1797004821.index
