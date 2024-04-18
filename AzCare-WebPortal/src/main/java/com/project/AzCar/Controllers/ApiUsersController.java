@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -162,9 +163,15 @@ public class ApiUsersController {
 		}
 	}
 
+	private Set<String> usedTokens = new HashSet<>();
+  
 	@PostMapping("/tokenProcess")
 	public ResponseEntity<String> tokenProcess(@RequestBody TokenApiDto tokenProcess, HttpServletRequest request) {
 		String token = tokenProcess.getToken();
+		if (usedTokens.contains(token)) {
+			usedTokens.add(token); // Đánh dấu token đã được sử dụng
+			return ResponseEntity.badRequest().body("Token has already been used.");
+		}
 		if (token == null || token.isEmpty()) {
 			return ResponseEntity.badRequest().body("Email is required.");
 		}

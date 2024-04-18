@@ -80,11 +80,11 @@
 						</button>
 						<div class="navbar-collapse collapse w-100" id="navbar">
 							<ul class="navbar-nav ml-auto">
-						<li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
-								<li class="nav-item"><a class="nav-link" th:href="@{/home/availablecars}">Available
-										Cars</a></li>
-								<li class="nav-item" th:if="${session.user}"><a class="nav-link"
-										th:href="@{/home/myplan/}">My Plan</a></li>
+								<li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
+								<li class="nav-item"><a class="nav-link"
+									th:href="@{/home/availablecars}">Available Cars</a></li>
+								<li class="nav-item" th:if="${session.user}"><a
+									class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
 								<li class="nav-item dropdown" th:if="${session.user}"><a
 									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
 									th:href="@{/user/profile/} + ${session.user}"
@@ -159,6 +159,9 @@
 				th:href="@{/user/profile/changePassword/{email} (email=${email})}">Change
 				Password</a> <a class="nav-link"
 				th:href="@{/user/profile/edit/{email} (email=${email})}">Edit</a>
+				<a class="nav-link"
+				th:href="@{/user/profile/edit/cardbank/{email} (email=${email})}">Card Bank Edit</a>
+				
 		</nav>
 		<hr class="mt-0 mb-4">
 
@@ -257,14 +260,15 @@
 									</div>
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputAddress">Address </label>
-										<input class="form-control" id="address" name="address"
-											type="text" th:value="*{address}"
-											onclick="return openModal.click();"
-											onkeyup="toggleSaveButtonVisibility();"><a href="#"
-											data-toggle="modal" data-target="#addressModal"
-											id="openModal" hidden="true">Click me</a> <span
-											id="validation-address" class="text-danger"></span>
+										<input style="cursor: pointer; text-align: center;" type="text" readonly
+												class="form-control" name="address"
+												placeholder="Click here to enter custom address"
+												onclick="return openModal.click();"  id="carAddress" th:value="*{address}" onchange="toggleSaveButtonVisibility();">
+											<a href="#" data-toggle="modal" data-target="#addressModal" id="openModal"
+												hidden="true">Click me</a>
 									</div>
+									
+
 								</div>
 								<!-- Save changes button -->
 								<button id="saveChangesBtn" style="display: none;"
@@ -273,7 +277,100 @@
 						</div>
 					</div>
 				</form>
+				<div class="modal car-modal fade" id="addressModal" tabindex="-1"
+					role="dialog" aria-labelledby="addressModal" style="display: none;"
+					aria-hidden="true">
+					<div class="modal-dialog modal-lg" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true" id="offModal">×</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-lg-6 modal-left">
+										<div class="modal-left-content">
+											<div id="modalCarousel" class="carousel slide"
+												data-ride="carousel">
+												<div class="" role="listbox">
+													<div class="">
+														<img src="/assets/img/icon-services/address.jpg" alt="">
+													</div>
+												</div>
+											</div>
+											<div class="description">
+												<h3>Description</h3>
+												<p>Select your car receiving address</p>
+												<p class="text-danger">* For the best experience, make
+													sure you have picked the most convenient place for owner to
+													delivery this car to you</p>
 
+											</div>
+										</div>
+									</div>
+									<div class="col-lg-6 modal-right">
+										<div class="modal-right-content bg-white">
+											<section class="form-group row">
+												<label class="col-3 col-form-label" for="provinceSelect">Province:</label>
+												<div class="col-7">
+													<select id="provinceSelect" class="form-control"
+														name="province" onchange="return provinceSubmit();">
+														<option value="">Select Province</option>
+
+														<option th:each="item : ${provinceList}"
+															th:value="${item.code}" th:text="${item.full_name}"></option>
+													</select>
+												</div>
+											</section>
+											<section class="form-group row">
+
+												<label class="col-3 col-form-label" for="districtSelect">District:</label>
+
+												<div class="col-7">
+													<select disabled="disabled" id="districtSelect"
+														class="form-control" onchange="return districtSubmit()"
+														name="districtSelect">
+													</select>
+												</div>
+											</section>
+											<section class="form-group row">
+												<label class="col-3 col-form-label" for="wardSelect">Ward:</label>
+												<div class="col-7">
+													<select disabled="disabled" id="wardSelect"
+														class="form-control" name="wardSelect">
+													</select>
+												</div>
+
+											</section>
+											<section class="form-group row">
+												<label class="col-3 col-form-label" for="street">Street:</label>
+												<div class="col-7">
+													<input class="form-control" id="street" type="text">
+												</div>
+											</section>
+											<section class="form-group row">
+												<label class="col-3 col-form-label" for="houseNo">House
+													No:</label>
+												<div class="col-7">
+													<input class="form-control" id="houseNo" type="text">
+												</div>
+											</section>
+
+											<section class="form-group row">
+												<span id="validation-address"
+													class="text-danger text-center"></span>
+											</section>
+											<button class="btn btn-theme"
+												onclick="return addressSubmit();">Save</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
 			</div>
 
@@ -597,80 +694,85 @@
 	<script type="text/javascript">
 		
 		
-		$(document).ready(function() {
-		    $('#dob').datepicker({
-		        format: 'dd-mm-yyyy',
-		        autoclose: true,
-		        endDate: '0d'
-		    }).on('changeDate', function(e) {
-		        $('#dob').attr('value', $('#dob').val());
-		        toggleSaveButtonVisibility(); 
-		    });
-		    
-		    var defaultDob = $('#dob').val();
+	$(document).ready(function() {
+	    // Subtract 18 years from the current date
+	    var minDob = new Date();
+	    minDob.setFullYear(minDob.getFullYear() - 18);
 
-		    if (defaultDob) {
-		        var parts = defaultDob.split(' ');
-		        var datePart = parts[0]; 
-		        
-		        $('#dob').val(datePart);
-		        $('#dob').attr('value', datePart);
-		    }
-		});
+	    $('#dob').datepicker({
+	        format: 'dd-mm-yyyy',
+	        autoclose: true,
+	        endDate: minDob 
+	    }).on('changeDate', function(e) {
+	        $('#dob').attr('value', $('#dob').val());
+	        toggleSaveButtonVisibility(); 
+	    });
 
-		function toggleSaveButtonVisibility() {
-		    const saveChangesBtn = document.getElementById("saveChangesBtn");
-		    const firstNameInput = document.getElementById("firstName");
-		    const lastNameInput = document.getElementById("lastName");
-		    const phoneInput = document.getElementById("phone");
-		    const dobInput = document.getElementById("dob");
-		    const genderInput = document.getElementById("gender");
+	    $('#dob').after('<span class="age-warning" style="color: red" >Phải đủ 18 tuổi</span>');
 
-		   
-		    const isValidFirstName = firstNameInput.value.trim() !== "";
-		    const isValidLastName = lastNameInput.value.trim() !== "";
-		    const isValidPhone = phoneInput.value.trim() !== "";
-		    const isValidDob = dobInput.value.trim() !== "";
-		    const isValidGender = genderInput.value.trim() !== "";
+	    var defaultDob = $('#dob').val();
 
-		   
-		    if (!isValidFirstName) {
-		        firstNameInput.classList.add("invalid-input");
-		    } else {
-		        firstNameInput.classList.remove("invalid-input");
-		    }
+	    if (defaultDob) {
+	        var parts = defaultDob.split(' ');
+	        var datePart = parts[0]; 
+	          
+	        $('#dob').val(datePart);
+	        $('#dob').attr('value', datePart);
+	    }
+	});
+	
+	function toggleSaveButtonVisibility() {
+	    const saveChangesBtn = document.getElementById("saveChangesBtn");
+	    const firstNameInput = document.getElementById("firstName");
+	    const lastNameInput = document.getElementById("lastName");
+	    const phoneInput = document.getElementById("phone");
+	    const dobInput = document.getElementById("dob");
+	    const genderInput = document.getElementById("gender");
+	    const addressInput = document.getElementById("carAddress");
 
-		    if (!isValidLastName) {
-		        lastNameInput.classList.add("invalid-input");
-		    } else {
-		        lastNameInput.classList.remove("invalid-input");
-		    }
+	    const isValidFirstName = firstNameInput.value.trim() !== "";
+	    const isValidLastName = lastNameInput.value.trim() !== "";
+	    const isValidPhone = phoneInput.value.trim() !== "";
+	    const isValidDob = dobInput.value.trim() !== "";
+	    const isValidGender = genderInput.value.trim() !== "";
+	    const isValidAddress = addressInput.value.trim() !== "";
 
-		    if (!isValidPhone) {
-		        phoneInput.classList.add("invalid-input");
-		    } else {
-		        phoneInput.classList.remove("invalid-input");
-		    }
+	    // Xóa các lớp CSS invalid-input trước khi kiểm tra lại
+	    firstNameInput.classList.remove("invalid-input");
+	    lastNameInput.classList.remove("invalid-input");
+	    phoneInput.classList.remove("invalid-input");
+	    dobInput.classList.remove("invalid-input");
+	    genderInput.classList.remove("invalid-input");
+	    addressInput.classList.remove("invalid-input");
 
-		    if (!isValidDob) {
-		        dobInput.classList.add("invalid-input");
-		    } else {
-		        dobInput.classList.remove("invalid-input");
-		    }
+	    // Kiểm tra và thêm lớp CSS invalid-input nếu cần
+	    if (!isValidFirstName) {
+	        firstNameInput.classList.add("invalid-input");
+	    }
+	    if (!isValidLastName) {
+	        lastNameInput.classList.add("invalid-input");
+	    }
+	    if (!isValidPhone) {
+	        phoneInput.classList.add("invalid-input");
+	    }
+	    if (!isValidDob) {
+	        dobInput.classList.add("invalid-input");
+	    }
+	    if (!isValidGender) {
+	        genderInput.classList.add("invalid-input");
+	    }
+	    if (!isValidAddress) {
+	        addressInput.classList.add("invalid-input");
+	    }
 
-		    if (!isValidGender) {
-		        genderInput.classList.add("invalid-input");
-		    } else {
-		        genderInput.classList.remove("invalid-input");
-		    }
+	    // Kiểm tra nếu tất cả các trường hợp đều hợp lệ, hiển thị nút lưu, ngược lại ẩn nút lưu
+	    if (isValidFirstName && isValidLastName && isValidPhone && isValidDob && isValidGender && isValidAddress) {
+	        saveChangesBtn.style.display = "block";
+	    } else {
+	        saveChangesBtn.style.display = "none";
+	    }
+	}
 
-		   
-		    if (isValidFirstName || isValidLastName || isValidPhone || isValidDob || isValidGender) {
-		        saveChangesBtn.style.display = "block";
-		    } else {
-		        saveChangesBtn.style.display = "none";
-		    }
-		}
 
 		function submitForm() {
 		    const email = document.getElementById("emailInput").value;
@@ -745,6 +847,86 @@
 				localStorage.removeItem('logoutSuccess');
 			}
 		});
+		
+		
+		function validateAddress(){
+			
+			var addressResult= document.getElementById('carAddress').value;
+			
+			if(addressResult==""){    
+		
+				document.getElementById('validation-NULL-address').textContent = "Car address must be declared";
+			}else{
+				document.getElementById('validation-NULL-address').textContent = "";
+			}
+			
+		}
+		
+		function provinceSubmit() {
+			const districtSelect = $("#districtSelect").get(0);
+			const wardSelect = $("#wardSelect").get(0);
+		
+			$.ajax({
+				url: "/home/carregister/getDistrict",
+				type: "get",
+				data: { provinceCode: $("#provinceSelect").val() },
+				success: function (res) {
+					$(districtSelect).removeAttr('disabled');
+					$(districtSelect).html('<option value ="">--Select District--</option>');
+					$.each(res.districtList, function (key, value) {
+						$(districtSelect).append('<option value="' + value.code + '">' + value.full_name + '</option>');
+					});
+					$(wardSelect).html('<option value="" >--Select Ward--</option>');
+
+
+
+				}
+			});
+		};
+		function districtSubmit() {
+			
+		const districtSelect = $("#districtSelect").get(0);
+			const wardSelect = $("#wardSelect").get(0);
+		
+			$.ajax({
+				url: "/home/carregister/getWard",
+				type: "get",
+				data: { districtCode: $("#districtSelect").val() },
+				success: function (res) {
+					$(wardSelect).removeAttr('disabled');
+					$(wardSelect).html('<option value ="">--Select Ward--</option>');
+					$.each(res.wardList, function (key, value) {
+						$(wardSelect).append('<option value="' + value.code + '">' + value.full_name + '</option>');
+					});
+					
+
+
+
+				}
+			}); 
+		};
+		function addressSubmit(){
+			const houseNo=document.getElementById('houseNo').value;
+			const street =document.getElementById('street').value;
+			if(houseNo =="" || street ==""){
+				document.getElementById('validation-address').textContent = "Address is not valid";
+				validateAddress();
+				return false;
+			}else{
+				
+			        document.getElementById('validation-address').textContent = "";
+			        var address = $("#houseNo").val() + ", "+$("#street").val()+", " + $("#wardSelect option:selected").text() + ", " + $("#districtSelect option:selected").text() + ", " + $("#provinceSelect option:selected").text();
+					$("#carAddress").val(address);
+					console.log(address);
+					console.log($("#carAddress").val());
+					
+					carAddress.setAttribute("value",address);
+					
+					offModal.click();
+					validateAddress();
+					toggleSaveButtonVisibility();
+		}	
+		}
 	</script>
 
 </body>

@@ -1470,7 +1470,7 @@
 										must update your driving license before rent</p>
 									<p th:if="${customer.phone == null}" class="text-danger">You
 										must update your phone number before rent</p>
-									<a class="btn btn-md btn-info" th:href="@{/user/profile/} + ${session.user}">Go to
+									<a class="btn btn-md btn-outline-warning" th:href="@{/user/profile/} + ${session.user}">Go to
 										profile</a>
 								</div>
 								<p th:if="${customer.id==user.id}" class="text-danger text-center">You
@@ -1909,8 +1909,7 @@
 						selectedDateFormatted = $.datepicker.parseDate("dd-mm-yy", formattedDate);
 					}
 					toDateInput.datepicker("option", "minDate", selectedDateFormatted);
-					updateTotalRent();
-
+					
 					// Kiểm tra nếu có ngày bị disable trong khoảng từ fromDate đến toDate
 					var fromDate = $("#form-fromDate").datepicker("getDate");
 					var toDate = $("#form-toDate").datepicker("getDate");
@@ -1937,6 +1936,7 @@
 					}
 
 					$("#alert-notice-datepicker").text(disableMessage);
+					updateTotalRent();
 				}
 			}).datepicker("setDate", todayFormatted);
 
@@ -1966,6 +1966,11 @@
 		});
 
 		function updateTotalRent() {
+			if($("#alert-notice-datepicker").text()){
+				$("#form-submit-btn").prop("disabled", true);
+			}else{
+				$("#form-submit-btn").prop("disabled", false);
+			}
 			console.log('running total rent function');
 			// Lấy giá xe mỗi ngày từ thuộc tính data-price
 			var dailyPrice = parseFloat(document.getElementById("form-details-amount").getAttribute("data-price"));
@@ -2158,7 +2163,7 @@
 										<td colspan=2 style="font-weight: 700" class="text-center">Extra Fee</td>
 									</tr>
 									<tr>
-										<th class="text-left">Delivery fee: </th>
+										<td class="text-left">Delivery fee: </td>
 										<td class="text-right">$${deliveryFee11.toLocaleString()}</td>
 									</tr>
 									<tr>
