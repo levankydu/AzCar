@@ -4,3 +4,4 @@
 AzCare-APIServices/src/main/resources/application.properties
 .metadata/.log
 .metadata/.plugins/org.eclipse.e4.workbench/workbench.xmi
+.metadata/
