@@ -585,6 +585,23 @@ if (document.getElementById('toast-failed-loginGoogle')) {
 		})
 	})
 }
+
+if (document.getElementById('toast-success-reset-password')) {
+	document.getElementById('toast-success-reset-password').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'success',
+			title: 'Reset Password successfully'
+		})
+	})
+}
+if (document.getElementById('toast-failed-reset-password')) {
+	document.getElementById('toast-failed-reset-password').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'error',
+			title: 'Reset Password failed'
+		})
+	})
+}
 // End Điệp
 
 if (document.getElementById('toast-failed-uploadDriveLicense')) {

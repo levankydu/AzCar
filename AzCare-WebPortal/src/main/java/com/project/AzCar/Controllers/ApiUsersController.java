@@ -6,14 +6,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-
 import java.util.Random;
 import java.util.Set;
-import java.util.UUID;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,24 +34,16 @@ import com.project.AzCar.Dto.DriverLicense.DriverLicenseFront;
 import com.project.AzCar.Dto.Users.EditApiDto;
 import com.project.AzCar.Dto.Users.ForgotPasswordApiDto;
 import com.project.AzCar.Dto.Users.LoginApiDto;
-
 import com.project.AzCar.Dto.Users.ResetPasswordApiDto;
-
 import com.project.AzCar.Dto.Users.SignUpApiDto;
 import com.project.AzCar.Dto.Users.TokenApiDto;
 import com.project.AzCar.Dto.Users.UserDto;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Services.Users.UserServices;
-
 import com.project.AzCar.Utilities.OcrService;
 
-import ch.qos.logback.core.testUtil.RandomUtil;
 import jakarta.servlet.http.HttpServletRequest;
-
-import net.bytebuddy.utility.RandomString;
-
 import net.sourceforge.tess4j.TesseractException;
-
 
 @RestController
 @RequestMapping("/api/auth")
@@ -71,7 +59,6 @@ public class ApiUsersController {
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private OcrService ocrService;
-
 
 	@GetMapping("/getUsers")
 	public List<UserDto> getList() {
@@ -158,7 +145,7 @@ public class ApiUsersController {
 			Random random = new Random();
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < 5; i++) {
-			    sb.append(random.nextInt(10));
+				sb.append(random.nextInt(10));
 			}
 			String token = sb.toString();
 			System.out.println("Email: " + email);
@@ -176,35 +163,40 @@ public class ApiUsersController {
 					.body("Email not found. Please check your email address.");
 		}
 	}
-	
+
+	private Set<String> usedTokens = new HashSet<>();
+
 	@PostMapping("/tokenProcess")
-	public ResponseEntity<String> tokenProcess(@RequestBody TokenApiDto tokenProcess,HttpServletRequest request ){
+	public ResponseEntity<String> tokenProcess(@RequestBody TokenApiDto tokenProcess, HttpServletRequest request) {
 		String token = tokenProcess.getToken();
+		if (usedTokens.contains(token)) {
+			usedTokens.add(token); // Đánh dấu token đã được sử dụng
+			return ResponseEntity.badRequest().body("Token has already been used.");
+		}
 		if (token == null || token.isEmpty()) {
 			return ResponseEntity.badRequest().body("Email is required.");
 		}
 		Users user = userServices.findUserByToken(token);
-	    if (user != null) {
-	        return ResponseEntity.ok("User found and actions performed.");
-	    } else {
-	        
-	        return ResponseEntity.notFound().build();
-	    }
+		if (user != null) {
+
+			return ResponseEntity.ok("User found and actions performed.");
+		} else {
+
+			return ResponseEntity.notFound().build();
+		}
 	}
-	
-	
+
 	@PostMapping("/resetPassword")
-	public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordApiDto resetDto,HttpServletRequest request ){
-		Users user = userServices.findUserByToken(resetDto.getToken());		
-		
-			user.setPassword(passwordEncoder.encode( resetDto.getPassword()));
-			userServices.saveUserReset(user);
-			return new ResponseEntity<>("Password changed successfully.", HttpStatus.OK);
-		 
+	public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordApiDto resetDto, HttpServletRequest request) {
+		Users user = userServices.findUserByToken(resetDto.getToken());
+
+		user.setPassword(passwordEncoder.encode(resetDto.getPassword()));
+		userServices.saveUserReset(user);
+		return new ResponseEntity<>("Password changed successfully.", HttpStatus.OK);
+
 	}
-	
-	
-	//send mail Register 
+
+	// send mail Register
 	@PostMapping("/upload")
 	public ResponseEntity<DriverLicenseFront> upload(@RequestParam("file") MultipartFile file)
 			throws IOException, TesseractException {
@@ -294,13 +286,11 @@ public class ApiUsersController {
 		helper.setTo(email);
 
 		String subject = "Here's the link to reset your password";
-		String content = "<p>Hello,</p>"
-	            + "<p>You have requested to reset your password.</p>"
-	            + "<p>Here is your password reset token:</p>"
-	            + "<p><b>" + token + "</b></p>"
-	            + "<p>Use this token to reset your password.</p>"
-	            + "<p>Ignore this email if you do remember your password, or you have not made the request</p>";
-	    helper.setSubject(subject);
+		String content = "<p>Hello,</p>" + "<p>You have requested to reset your password.</p>"
+				+ "<p>Here is your password reset token:</p>" + "<p><b>" + token + "</b></p>"
+				+ "<p>Use this token to reset your password.</p>"
+				+ "<p>Ignore this email if you do remember your password, or you have not made the request</p>";
+		helper.setSubject(subject);
 		helper.setText(content, true);
 		mailSender.send(message);
 	}
