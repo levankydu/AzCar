@@ -2,3 +2,4 @@
 .metadata/.log
 /.metadata
 AzCare-APIServices/src/main/resources/application.properties
+.metadata/.log

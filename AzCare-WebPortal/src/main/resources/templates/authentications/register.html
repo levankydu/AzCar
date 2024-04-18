@@ -304,7 +304,7 @@ End Google Tag Manager (noscript)
 		            body: formData
 		        })
 		        .then(response => {
-		            Swal.close(); // Close the Swal modal once the response is received
+		            Swal.close(); 
 		            if (!response.ok) {
 		                throw new Error('Network response was not ok');
 		            }

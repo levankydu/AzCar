@@ -31,7 +31,7 @@
 		<item key="create_unimplemented" value="true"/>
 	</section>
 	<section name="BuildPathsPropertyPage">
-		<item key="pageIndex" value="2"/>
+		<item key="pageIndex" value="1"/>
 	</section>
 	<section name="RefactoringWizard.preview">
 		<item key="width" value="630"/>

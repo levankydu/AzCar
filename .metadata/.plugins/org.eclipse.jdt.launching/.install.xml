@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <dirs>
-    <entry loc="/opt/homebrew/Cellar/openjdk/21.0.2/libexec/openjdk.jdk/Contents/Home" stamp="1705421940000"/>
-    <entry loc="/Library/Java/JavaVirtualMachines/jdk-20.jdk/Contents/Home" stamp="1703641814612"/>
+    <entry loc="D:\Spring\sts-4.21.0.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.9.v20231028-0858\jre" stamp="1703209006550"/>
+    <entry loc="C:\Program Files\Java\jdk-21" stamp="1699327474542"/>
+    <entry loc="D:\Spring\sts-4.21.0.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_17.0.9.v20231028-0858" stamp="1703209006595"/>
 </dirs>
