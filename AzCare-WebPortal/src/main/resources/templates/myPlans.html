@@ -700,7 +700,7 @@ select {
 														th:classappend="${car.status == 'declined' || car.status == 'blocked' || car.status == 'violation_blocked' ? 'badge-danger' : (car.status == 'ready_for_booking' ? 'badge-success' : (car.status == 'waiting_for_verify' ? 'badge-warning' : 'badge-info'))}"
 														th:text="${car.getStatusOnView()}"></p>
 													<a style="top: 60px; cursor: pointer;"
-														th:attr="data-car='${car}'"
+														th:attr="data-car-id=${car.Id}"
 														onclick="onGetEmergencyService(this)"
 														class="btn btn-warning btn-lg">Emergency contact?</a>
 													<div class="mt-3">
@@ -1322,6 +1322,7 @@ select {
 		const userViolated = /*[[${userViolated}]]*/ '';
 		/*]]>*/
 		if (userViolated == true) {
+			$("#openModalBtn2").prop("disabled", true);
 			swal.fire({
 				title: "BANNED TEMPORARY",
 				text: "Your are being banned temporary because of declinding too many cars in a month. You must pay $200 to keep using our service, you are not allowed to withdraw money on your wallet until you pay your fine (deposit is allowed)",
@@ -1422,18 +1423,18 @@ select {
 			});
 		}
 		function onGetEmergencyService(element) {
-			const car = element.getAttribute('data-car');
+			const carId = element.getAttribute('data-car-id');
 			swal.fire({
 				title: "Emergency Service",
 				html: `
-				<form>
-					<input type="hidden" name="carId" value="${car.id}">
-					<div class="form-group">
-					    <label for="">Description</label>
-					    <textarea rows="6"" type="text" name="description" class="form-control text-center" placeholder="Describe your situation"></textarea>
-					 </div>
-				</form>
-			`,
+					<form action="/home/myplan/emergencyContact" method="post" id="sweet-form-emergency-contact">
+						<input type="hidden" name="carId" value="${carId}">
+						<div class="form-group">
+						    <label for="">Description</label>
+						    <textarea required rows="6"" type="text" name="description" class="form-control text-center" placeholder="Describe your situation"></textarea>
+						 </div>
+					</form>
+				`,
 				showCancelButton: true,
 				confirmButtonColor: "#3085d6",
 				cancelButtonColor: "#d33",
@@ -1441,8 +1442,22 @@ select {
 				cancelButtonText: "Cancel"
 			}).then((result) => {
 				if (result.isConfirmed) {
-
-				}
+		            const formData = new FormData(document.getElementById('sweet-form-emergency-contact'));
+		            $.ajax({
+		                type: 'POST',
+		                url: '/home/myplan/emergencyContact',
+		                data: formData,
+		                processData: false,
+		                contentType: false,
+		                success: function(res) {
+		                   if(res == "Sent"){
+		                	   Swal.fire("We have received your message, please pay attention to your phone!");
+		                   }else{
+		                	   Swal.fire("Failed, try again please!");
+		                   }
+		                },
+		            });
+		        }
 			});
 		}
 		function rentorDoneSubmit(element) {

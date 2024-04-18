@@ -55,14 +55,15 @@ public class CarInforDto implements Serializable {
 	private PlusServices carPlusModel;
 	private int activeViolationAmount;
 	private int finishedOrders;
+	private boolean isFavorite;
 
 	private ExtraFee extraFeeModel;
 
 	private List<OrderDetails> orders;
-	
+
 	public String getStatusOnView() {
-	    String status = this.getStatus();
-	    String statusOnView = status.replaceAll("_", " ").toUpperCase();
-	    return statusOnView;
+		String status = this.getStatus();
+		String statusOnView = status.replaceAll("_", " ").toUpperCase();
+		return statusOnView;
 	}
 }
