@@ -1,20 +1,18 @@
 package com.project.AzCar.Notification;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Message {
 	private String text;
 
 	private String to;
 
-	public String getText() {
-		return text;
-	}
-
-	public String getTo() {
-		return to;
-	}
-
-	public void setTo(String to) {
-		this.to = to;
-	}
+	private String contact;
+	private String from;
 
 }

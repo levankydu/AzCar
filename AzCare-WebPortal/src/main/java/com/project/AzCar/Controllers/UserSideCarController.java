@@ -52,6 +52,7 @@ import com.project.AzCar.Entities.Cars.OrderDetails;
 import com.project.AzCar.Entities.Cars.PlateImages;
 import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Comments.Comments;
+import com.project.AzCar.Entities.Coupon.EnumCoupon;
 import com.project.AzCar.Entities.Deposit.Cardbank;
 import com.project.AzCar.Entities.HintText.HintText;
 import com.project.AzCar.Entities.Locations.City;
@@ -448,18 +449,17 @@ public class UserSideCarController {
 		}
 		List<OrderDetails> orderDetailsOfThisCar = orderServices.getFromCarId(Integer.parseInt(carId));
 		orderDetailsOfThisCar.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
-		        && !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
+				&& !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
 		List<OrderDetails> userOrders = orderServices.getFromCreatedBy((int) user.getId());
 		userOrders.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
-		        && !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
+				&& !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
 		if (userOrders.size() > 0) {
-		    for (OrderDetails userOrder : userOrders) {
-		        boolean exists = orderDetailsOfThisCar.stream()
-		                .anyMatch(item -> item.getId() == userOrder.getId());
-		        if (!exists) {
-		            orderDetailsOfThisCar.add(userOrder);
-		        }
-		    }
+			for (OrderDetails userOrder : userOrders) {
+				boolean exists = orderDetailsOfThisCar.stream().anyMatch(item -> item.getId() == userOrder.getId());
+				if (!exists) {
+					orderDetailsOfThisCar.add(userOrder);
+				}
+			}
 		}
 		ModelView.addAttribute("orderDetailsOfThisCar", orderDetailsOfThisCar);
 
@@ -1079,7 +1079,9 @@ public class UserSideCarController {
 
 		OrderDetailsDTO rentorDone = orderServices.getDTORentorTripDoneOrder();
 
-		Cardbank c = cardService.findCardbankbyId(1);
+		List<Cardbank> cards = cardService.getListCardBankAdmin();
+		cards.removeIf(i -> i.getActive() == EnumCoupon.InActive);
+		Cardbank c = cards.get(0);
 
 		if (request.getSession().getAttribute("add_driverLicense") != null) {
 			ModelView.addAttribute("driverLicense", request.getSession().getAttribute("add_driverLicense"));
@@ -1087,7 +1089,10 @@ public class UserSideCarController {
 
 		}
 		ModelView.addAttribute("cardbank", c);
-
+		Cardbank cardbank = cardService.findCardbankByUserId((int) user.getId());
+		if (cardbank != null) {
+			ModelView.addAttribute("cardbankuser", cardbank);
+		}
 		ModelView.addAttribute("rentorDone", rentorDone);
 		ModelView.addAttribute("orderList", latestOrders);
 		ModelView.addAttribute("ImgLicense", listImg);

@@ -10,9 +10,10 @@ import com.project.AzCar.Repository.PaymentDetails.cardbankRepository;
 
 @Service
 
-public class CardbankServiceImpl implements ICarbankService{
- @Autowired
- private cardbankRepository cardRepo;
+public class CardbankServiceImpl implements ICarbankService {
+	@Autowired
+	private cardbankRepository cardRepo;
+
 	@Override
 	public List<Cardbank> getListCardBank() {
 		// TODO Auto-generated method stub
@@ -31,4 +32,20 @@ public class CardbankServiceImpl implements ICarbankService{
 		return cardRepo.findById(id).get();
 	}
 
+	@Override
+	public Cardbank findCardbankByUserId(int id) {
+		// TODO Auto-generated method stub
+		return cardRepo.findByUserId(id);
+	}
+
+<<<<<<< HEAD
+	@Override
+	public List<Cardbank> getListCardBankAdmin() {
+		List<Cardbank> cards = cardRepo.findAll();
+		cards.removeIf(i -> i.getUser() != null);
+		return cards;
+	}
+
+=======
+>>>>>>> 46f90fc3fb8dc50ff5e40fa667557365d0ae2229
 }

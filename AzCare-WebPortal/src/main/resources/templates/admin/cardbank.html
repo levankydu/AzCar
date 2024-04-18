@@ -202,7 +202,7 @@
 											<td th:text="${card.bankNumber}"></td>
 											<td th:text="${card.beneficiaryName}"></td>
 											<td th:text="${card.addressbank}"></td>
-											<td th:id="'status_'+ ${card.id}" th:value="${card.active}"
+											<td class="cardbank-status" th:id="'status_'+ ${card.id}" th:value="${card.active}"
 												th:text="${card.active}"></td>
 											<td><span class="badge bg-success"
 													th:data-reference-number="${card.active}"
@@ -285,7 +285,7 @@
 									alert('Số tài khoản ngân hàng phải từ 9 đến 15 chữ số');
 									return;
 								}
-								console.log(bankName, bankNumber, bankAddress, beneficiaryName);
+								console.log(bankName, bankNumber, bankaddress, beneficiaryName);
 								// Gửi AJAX request để lưu thông tin ngân hàng mới
 								$.ajax({
 									type: 'POST',
@@ -294,7 +294,7 @@
 									data: JSON.stringify({
 										bankName: bankName,
 										bankNumber: bankNumber,
-										bankaddress: bankaddress,
+										addressbank: bankaddress,
 										beneficiaryName: beneficiaryName
 									}),
 									success: function (response) {
@@ -343,6 +343,10 @@
 									}
 									if(status === "InActive")
 									{
+										const cardsStatus = document.querySelectorAll('.cardbank-status');
+										cardsStatus.forEach(card => {
+										    card.textContent = "InActive";
+										});
 										change_status.textContent = "Active";
 									}
 								

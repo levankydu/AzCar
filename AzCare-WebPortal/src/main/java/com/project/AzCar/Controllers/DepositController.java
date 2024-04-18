@@ -14,31 +14,29 @@ import com.project.AzCar.Service.Deposit.IDepositService;
 
 @Controller
 public class DepositController {
-	@Autowired 
+	@Autowired
 	IDepositService depositService;
-	
+
 	@GetMapping("/dashboard/depositmanager")
-	public String getdasshboardDeposit(Model model)
-	{
-	List<Deposit> depo = depositService.findListDeposit();
-	List<PaymentDetailsDTO> ldto = new ArrayList<>();
-	if(!depo.isEmpty())
-	{
-		for(Deposit d : depo)
-		{
-			PaymentDetailsDTO dto  = new PaymentDetailsDTO();
-			dto.setId(d.getId());
-			dto.setAmount(d.getAmount());
-			dto.setEmail(d.getUser().getEmail());
-			dto.setReferenceNumber(d.getReferenceNumber());
-			dto.setStatus(d.getStatus().toString());
-			ldto.add(dto);
+	public String getdasshboardDeposit(Model model) {
+		List<Deposit> depo = depositService.findListDeposit();
+		List<PaymentDetailsDTO> ldto = new ArrayList<>();
+		if (!depo.isEmpty()) {
+			for (Deposit d : depo) {
+				PaymentDetailsDTO dto = new PaymentDetailsDTO();
+				dto.setId(d.getId());
+				dto.setAmount(d.getAmount());
+				dto.setEmail(d.getUser().getEmail());
+				dto.setReferenceNumber(d.getReferenceNumber());
+				dto.setStatus(d.getStatus().toString());
+				dto.setWithdraw(d.getWithdraw());
+				ldto.add(dto);
+			}
+
 		}
-		
-	}
-	
-	model.addAttribute("listDeposit", ldto);
+
+		model.addAttribute("listDeposit", ldto);
 		return "admin/DepositManager";
 	}
-	
+
 }
