@@ -40,6 +40,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
 import com.project.AzCar.Dto.Users.UserDto;
 import com.project.AzCar.Entities.Cars.CarInfor;
+import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Mailer.EmailService;
 import com.project.AzCar.Services.Cars.BrandServices;
@@ -53,7 +54,6 @@ import com.project.AzCar.Utilities.Utility;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import net.bytebuddy.utility.RandomString;
 import net.minidev.json.JSONObject;
 
 @Controller
@@ -233,6 +233,9 @@ public class HomeController {
 	@GetMapping("/user/profile/edit/{email}")
 	public String editProfile(@PathVariable("email") String email, Model model) {
 		Users user = uServices.findUserByEmail(email);
+
+		List<City> provinces = provinceServices.getListCity();
+		model.addAttribute("provinceList", provinces);
 		if (user != null) {
 			model.addAttribute("user", user);
 			model.addAttribute("uDto", new UserDto());
@@ -319,7 +322,7 @@ public class HomeController {
 			Random random = new Random();
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < 5; i++) {
-			    sb.append(random.nextInt(10));
+				sb.append(random.nextInt(10));
 			}
 			String token = sb.toString();
 			System.out.println("Email: " + email);
@@ -445,7 +448,7 @@ public class HomeController {
 				fileStorageServices.save(image, dir);
 				user.setImage(image.getOriginalFilename());
 				uServices.saveUserReset(user);
-				return "redirect:/user/profile/" + user.getEmail();
+				return "redirect:/user/profile/edit/" + user.getEmail();
 
 			} catch (Exception e) {
 				System.out.println(e);
