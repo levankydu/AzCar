@@ -1,5 +1,7 @@
 package com.project.AzCar.Controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,6 +72,13 @@ public class APICardbankController {
 	public ResponseEntity<?> acceptPayment(@PathVariable("id") int id) {
 
 		Cardbank cb = cardService.findCardbankbyId(id);
+		List<Cardbank> cards = cardService.getListCardBankAdmin();
+		for (Cardbank item : cards) {
+			if (item.getId() != id && cb.getActive() == EnumCoupon.InActive) {
+				item.setActive(EnumCoupon.InActive);
+				cardService.saveCardbank(item);
+			}
+		}
 		System.out.println(cb);
 		if (cb != null) {
 			if (cb.getActive() == EnumCoupon.Active) {

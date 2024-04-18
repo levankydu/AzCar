@@ -290,19 +290,21 @@ public class AdminController {
 
 	@GetMapping("/dashboard/platesVerify/")
 	public String getPlatesVerifyPage(Model ModelView) {
-		List<Long> listUserId = plateImageServices.getUserIdList();
+
 		List<PlateImages> listImg = plateImageServices.getAll();
 		List<PlateVerifyDto> listPlateDto = new ArrayList<>();
 
-		for (var item : listUserId) {
-			var PlateVerifyDto = new PlateVerifyDto();
-			PlateVerifyDto.setUserModel(userServices.findById(item));
-			List<PlateImages> userImages = listImg.stream().filter(img -> img.getUserId() == item)
+		for (var item : listImg) {
+			var dto = plateImageServices.maptoDto(item.getId());
+			List<PlateImages> userImages = listImg.stream().filter(img -> img.getUserId() == item.getUserId())
 					.collect(Collectors.toList());
-			PlateVerifyDto.setPlateImages(userImages);
-			listPlateDto.add(PlateVerifyDto);
-		}
 
+			Users user = userServices.findById(item.getUserId());
+			dto.setUserModel(user);
+			dto.setPlateImages(userImages);
+			listPlateDto.add(dto);
+		}
+		listPlateDto.removeIf(i -> i.getRealName() == null);
 		ModelView.addAttribute("listPlates", listPlateDto);
 		return "admin/verifyPlates";
 

@@ -10,6 +10,7 @@ import com.project.AzCar.Entities.Deposit.Cardbank;
 public interface ICarbankService {
 	List<Cardbank> getListCardBank();
 
+	List<Cardbank> getListCardBankAdmin();
 	Cardbank saveCardbank(Cardbank c);
 
 	Cardbank findCardbankbyId(int id);

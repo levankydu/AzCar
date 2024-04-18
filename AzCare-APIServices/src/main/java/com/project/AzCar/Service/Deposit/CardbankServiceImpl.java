@@ -38,4 +38,10 @@ public class CardbankServiceImpl implements ICarbankService {
 		return cardRepo.findByUserId(id);
 	}
 
+	@Override
+	public List<Cardbank> getListCardBankAdmin() {
+		List<Cardbank> cards = cardRepo.findAll();
+		cards.removeIf(i -> i.getUser() != null);
+		return cards;
+	}
 }

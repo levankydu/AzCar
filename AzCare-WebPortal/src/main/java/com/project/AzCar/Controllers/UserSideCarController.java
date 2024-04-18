@@ -52,6 +52,7 @@ import com.project.AzCar.Entities.Cars.OrderDetails;
 import com.project.AzCar.Entities.Cars.PlateImages;
 import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Comments.Comments;
+import com.project.AzCar.Entities.Coupon.EnumCoupon;
 import com.project.AzCar.Entities.Deposit.Cardbank;
 import com.project.AzCar.Entities.HintText.HintText;
 import com.project.AzCar.Entities.Locations.City;
@@ -425,6 +426,8 @@ public class UserSideCarController {
 	public String getDetailsPage(HttpServletRequest request, @PathVariable("carId") String carId, Model ModelView) {
 		var model = carServices.findById(Integer.parseInt(carId));
 		var modelDto = carServices.mapToDto(model.getId());
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users user = userServices.findUserByEmail(email);
 		List<String> listProvince = provinceServices.getListCityString();
 
 		var carExtraFee = extraFeeServices.findByCarId(model.getId());
@@ -447,6 +450,17 @@ public class UserSideCarController {
 		List<OrderDetails> orderDetailsOfThisCar = orderServices.getFromCarId(Integer.parseInt(carId));
 		orderDetailsOfThisCar.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
 				&& !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
+		List<OrderDetails> userOrders = orderServices.getFromCreatedBy((int) user.getId());
+		userOrders.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
+				&& !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
+		if (userOrders.size() > 0) {
+			for (OrderDetails userOrder : userOrders) {
+				boolean exists = orderDetailsOfThisCar.stream().anyMatch(item -> item.getId() == userOrder.getId());
+				if (!exists) {
+					orderDetailsOfThisCar.add(userOrder);
+				}
+			}
+		}
 		ModelView.addAttribute("orderDetailsOfThisCar", orderDetailsOfThisCar);
 
 		List<City> provinces = provinceServices.getListCity();
@@ -454,7 +468,6 @@ public class UserSideCarController {
 
 		ModelView.addAttribute("fullAddress", model.getAddress());
 		ModelView.addAttribute("carDetails", modelDto);
-		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users customer = userServices.findUserByEmail(email);
 		if (customer.isEnabled() == false) {
 			ModelView.addAttribute("userViolated", true);
@@ -1066,7 +1079,9 @@ public class UserSideCarController {
 
 		OrderDetailsDTO rentorDone = orderServices.getDTORentorTripDoneOrder();
 
-		Cardbank c = cardService.findCardbankbyId(1);
+		List<Cardbank> cards = cardService.getListCardBankAdmin();
+		cards.removeIf(i -> i.getActive() == EnumCoupon.InActive);
+		Cardbank c = cards.get(0);
 
 		if (request.getSession().getAttribute("add_driverLicense") != null) {
 			ModelView.addAttribute("driverLicense", request.getSession().getAttribute("add_driverLicense"));
