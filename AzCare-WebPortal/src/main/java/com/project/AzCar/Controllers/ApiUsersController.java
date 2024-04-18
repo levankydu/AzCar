@@ -178,7 +178,6 @@ public class ApiUsersController {
 		}
 		Users user = userServices.findUserByToken(token);
 		if (user != null) {
-
 			return ResponseEntity.ok("User found and actions performed.");
 		} else {
 
@@ -243,6 +242,7 @@ public class ApiUsersController {
 		if (matcher.find()) {
 			driverLicenseFront.setDriverLicense(true);
 		}
+		System.out.println(driverLicenseFront);
 		return ResponseEntity.ok(driverLicenseFront);
 	}
 
@@ -259,6 +259,21 @@ public class ApiUsersController {
 			driverLicenseBack.setDriverLicense(true);
 		}
 		return ResponseEntity.ok(driverLicenseBack);
+	}
+
+	@PostMapping("/upload3")
+	public ResponseEntity<DriverLicenseBack> upload3(@RequestParam("frontImg") MultipartFile frontImg,
+			@RequestParam("behindImg") MultipartFile behindImg, @RequestParam("leftImg") MultipartFile leftImg,
+			@RequestParam("rightImg") MultipartFile rightImg, @RequestParam("insideImg") MultipartFile insideImg)
+			throws IOException, TesseractException {
+
+		System.out.println(frontImg.getOriginalFilename());
+		System.out.println(behindImg.getOriginalFilename());
+		System.out.println(leftImg.getOriginalFilename());
+		System.out.println(rightImg.getOriginalFilename());
+		System.out.println(insideImg.getOriginalFilename());
+
+		return null;
 	}
 
 	private void sendEmail(String email) throws UnsupportedEncodingException, jakarta.mail.MessagingException {

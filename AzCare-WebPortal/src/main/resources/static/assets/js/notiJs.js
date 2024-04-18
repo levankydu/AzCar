@@ -321,8 +321,6 @@ privateStompClient.connect({}, function(frame) {
 
 		show(JSON.parse(result.body));
 
-
-
 	});
 });
 
@@ -336,9 +334,37 @@ function sendMessage() {
 function sendPrivateMessage() {
 	var text = document.getElementById('privateText').value;
 	var to = document.getElementById('to').value;
+
+
 	stompClient.send("/app/private", {}, JSON.stringify({
 		'text': text,
-		'to': to
+		'to': to,
+	}));
+}
+function sendPrivateMessageAdmin() {
+	var text = document.getElementById('chat-input').value;
+	var to = document.getElementById('to').value;
+	var contact = document.getElementById('contact').value;
+	var from = document.getElementById('from').value;
+	stompClient.send("/app/private", {}, JSON.stringify({
+		'text': text,
+		'to': to,
+		'contact': contact,
+		'from': from
+
+	}));
+}
+function ReplyPrivateMessageAdmin(lastInputId) {
+	var text = document.getElementById('chat-input').value;
+	var to = lastInputId;
+	var contact = document.getElementById('contact').value;
+	var from = document.getElementById('from').value;
+	stompClient.send("/app/private", {}, JSON.stringify({
+		'text': text,
+		'to': to,
+		'contact': contact,
+		'from': from
+
 	}));
 }
 
@@ -355,7 +381,8 @@ function show(message) {
 	var response = document.getElementById('messages');
 	var adminRespones = document.getElementById('Adminmessages');
 	var p = document.createElement('p');
-	if (adminRespones) {
+
+	if (message.contact != "contact") {
 		p.innerHTML = message.text;
 		adminRespones.appendChild(p);
 		countParagraphs('Adminmessages');
@@ -363,85 +390,74 @@ function show(message) {
 		let moneyNumber = moneyStr.replace(/\$|,/g, '') + message.text;
 		let demo = new CountUp('profitResult', eval(moneyNumber));
 		var xhr = new XMLHttpRequest();
-
-		// Đặt phương thức và URL cho request
 		xhr.open('GET', "/dashboard/chartDrawing", true);
-
-		// Xử lý sự kiện khi request hoàn thành
 		xhr.onload = function() {
 			if (this.status >= 200 && this.status < 400) {
 				// Xử lý dữ liệu trả về từ server
 				var data = JSON.parse(this.response);
 				console.log(data);
-Highcharts.chart('containerProfit', {
+				Highcharts.chart('containerProfit', {
 
-			chart : {
-				type : 'column',
-				styledMode : true
-			},
+					chart: {
+						type: 'column',
+						styledMode: true
+					},
 
-			title : {
-				text : '',
-				align : 'left'
-			},
+					title: {
+						text: '',
+						align: 'left'
+					},
 
-			subtitle : {
-				text : 'AzCar Profit data ',
-				align : 'left'
-			},
+					subtitle: {
+						text: 'AzCar Profit data ',
+						align: 'left'
+					},
 
-			xAxis : {
-				categories : data.result.dayList
-			},
+					xAxis: {
+						categories: data.result.dayList
+					},
 
-			yAxis : [ { // Primary axis
-				className : 'highcharts-color-0',
-				title : {
-					text : 'Income Value'
-				}
-			}, { // Secondary axis
-				className : 'highcharts-color-1',
-				opposite : true,
-				title : {
-					text : 'Expense Value'
-				}
-			} ],
+					yAxis: [{ // Primary axis
+						className: 'highcharts-color-0',
+						title: {
+							text: 'Income Value'
+						}
+					}, { // Secondary axis
+						className: 'highcharts-color-1',
+						opposite: true,
+						title: {
+							text: 'Expense Value'
+						}
+					}],
 
-			plotOptions : {
-				column : {
-					borderRadius : 5
-				}
-			},
+					plotOptions: {
+						column: {
+							borderRadius: 5
+						}
+					},
 
-			series : [ {
-				name : 'Income Value',
-				data : data.result.totalIn,
-				tooltip : {
-					valueSuffix : ' $'
-				}
-			}, {
-				name : 'Expense Value',
-				data : data.result.totalOut,
-				yAxis : 0,
-				tooltip : {
-					valueSuffix : ' $'
-				}
-			} ]
-
-		});
-				
+					series: [{
+						name: 'Income Value',
+						data: data.result.totalIn,
+						tooltip: {
+							valueSuffix: ' $'
+						}
+					}, {
+						name: 'Expense Value',
+						data: data.result.totalOut,
+						yAxis: 0,
+						tooltip: {
+							valueSuffix: ' $'
+						}
+					}]
+				});
 			} else {
-				// Xử lý khi có lỗi từ server
 				console.error('Đã có lỗi từ server!');
 			}
 		};
-
-		// Xử lý sự kiện khi có lỗi xảy ra trong quá trình request
 		xhr.onerror = function() {
 			console.error('Có lỗi khi thực hiện request!');
 		};
-
-		// Gửi request
 		xhr.send();
 		console.log(demo);
 		if (!demo.error) {
@@ -449,8 +465,80 @@ Highcharts.chart('containerProfit', {
 		} else {
 			console.log('error');
 		}
-
 	}
+	if (message.contact == "contact" && message.from != "admin@admin") {
+		generate_message(message.text, 'user');
+		/*p.innerHTML = "From Admin: " + message.text;
+		response.appendChild(p);*/
+		if (document.getElementById("chat-circle")) {
+			var chatCircle = document.getElementById("chat-circle");
+			if (!chatCircle.clicked) {
+				chatCircle.click();
+				chatCircle.clicked = true;
+			}
+		}
+		if (!document.getElementById(message.from)) {
+
+			var input = document.createElement("input");
+			input.type = "text";
+			input.value = message.from;
+			input.id = message.from;
+			input.id = message.from;
+			response.appendChild(input);
+		} else {
+			console.log("Id" + message.from + " đã tồn tại!");
+		}
+	} if (message.from == "admin@admin") {
+		generate_messageAdmin(message.text, 'user');
+		if (document.getElementById("chat-circle")) {
+			var chatCircle = document.getElementById("chat-circle");
+			if (chatCircle.style.display === 'none' || chatCircle.style.display === '') {
+				chatCircle.style.display = 'block';
+			}
+
+		}
+	}
+	var INDEX = 0;
+	function generate_message(msg, type) {
+		INDEX++;
+		var str = "";
+		str += "<div id='cm-msg-" + INDEX + "' class=\"chat-msg " + type + "\">";
+		str += "          <span class=\"msg-avatar\">";
+		str += "            <img src=\"https://cdn-icons-png.flaticon.com/512/3177/3177440.png\">";
+		str += "          <\/span>";
+		str += "          <div class=\"cm-msg-text\">";
+		str += msg;
+		str += "          <\/div>";
+		str += "        <\/div>";
+		$(".chat-logs").append(str);
+		$("#cm-msg-" + INDEX).hide().fadeIn(300);
+		if (type == 'self') {
+			$("#chat-input").val('');
+		}
+		$(".chat-logs").stop().animate({ scrollTop: $(".chat-logs")[0].scrollHeight }, 1000);
+	}
+	function generate_messageAdmin(msg, type) {
+		INDEX++;
+		var str = "";
+		str += "<div id='cm-msg-" + INDEX + "' class=\"chat-msg " + type + "\">";
+		str += "          <span class=\"msg-avatar\">";
+		str += "            <img src=\"https://png.pngtree.com/png-clipart/20230409/original/pngtree-admin-and-customer-service-job-vacancies-png-image_9041264.png\">";
+		str += "          <\/span>";
+		str += "          <div class=\"cm-msg-text\">";
+		str += msg;
+		str += "          <\/div>";
+		str += "        <\/div>";
+		$(".chat-logs").append(str);
+		$("#cm-msg-" + INDEX).hide().fadeIn(300);
+		if (type == 'self') {
+			$("#chat-input").val('');
+		}
+		$(".chat-logs").stop().animate({ scrollTop: $(".chat-logs")[0].scrollHeight }, 1000);
+	}
+
+}
+function showContact() {
+	var response = document.getElementById('messagesContact');
 	if (response) {
 
 		p.innerHTML = "From Admin: " + message.text;
@@ -459,10 +547,7 @@ Highcharts.chart('containerProfit', {
 
 
 	}
-
-
 }
-
 
 function countParagraphs(elementId) {
 

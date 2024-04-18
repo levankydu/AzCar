@@ -3,7 +3,6 @@ package com.project.AzCar.Entities.Deposit;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.project.AzCar.Entities.Coupon.EnumCoupon;
 import com.project.AzCar.Entities.Users.Users;
 
 import jakarta.persistence.Entity;
@@ -17,25 +16,24 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name="tb_deposit")
+@Table(name = "tb_deposit")
 public class Deposit {
-	
+
 	@Id
-	 @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-	  @ManyToOne
-	    @JoinColumn(name = "user_id")
-	    private Users user;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private Users user;
+
 	private BigDecimal amount;
-	
-	
+
 	private LocalDateTime paymentDateAt;
-	
-	
-	 private String referenceNumber; // Số tham chiếu
-	
+
+	private String referenceNumber; //
+
 	private EnumDeposit status;
+	private BigDecimal withdraw;
 
 }
