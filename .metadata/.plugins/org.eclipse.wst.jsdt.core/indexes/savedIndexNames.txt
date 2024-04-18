@@ -1,8 +1,0 @@
-INDEX VERSION 1.4+D:\Project\AzCar-main\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
-1704473085.index
-51546674.index
-2241191052.index
-11394813.index
-664194844.index
-3590006490.index
-3418689303.index
