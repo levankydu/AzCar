@@ -1,10 +1,7 @@
 package com.project.AzCar.Controllers;
 
-<<<<<<< HEAD
 import java.util.List;
 
-=======
->>>>>>> 46f90fc3fb8dc50ff5e40fa667557365d0ae2229
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -164,7 +165,7 @@ public class ApiUsersController {
 	}
 
 	private Set<String> usedTokens = new HashSet<>();
-  
+
 	@PostMapping("/tokenProcess")
 	public ResponseEntity<String> tokenProcess(@RequestBody TokenApiDto tokenProcess, HttpServletRequest request) {
 		String token = tokenProcess.getToken();

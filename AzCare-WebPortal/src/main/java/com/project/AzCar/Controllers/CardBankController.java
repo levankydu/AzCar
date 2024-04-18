@@ -22,11 +22,7 @@ public class CardBankController {
 
 	@GetMapping("/dashboard/cardbank")
 	public String getdasshboardDepositCard(Model model) {
-<<<<<<< HEAD
 		List<Cardbank> depo = cardService.getListCardBankAdmin();
-=======
-		List<Cardbank> depo = cardService.getListCardBank();
->>>>>>> 46f90fc3fb8dc50ff5e40fa667557365d0ae2229
 		model.addAttribute("listCardbank", depo);
 		return "admin/cardbank";
 	}
