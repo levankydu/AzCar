@@ -151,7 +151,6 @@ public class UserSideCarController {
 	private PaypalService paypalService;
 	@Autowired
 	private ContactRepo contactRepo;
-
 	@Autowired
 	private CarThingsRepo carThingsRepo;
 

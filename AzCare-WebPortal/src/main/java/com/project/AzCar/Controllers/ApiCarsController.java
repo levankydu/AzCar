@@ -7,9 +7,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,13 +23,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
 import com.project.AzCar.Dto.Orders.OrderDetailsDTO;
 import com.project.AzCar.Dto.Orders.PhoneOrder;
+import com.project.AzCar.Entities.CarThings.FavoriteCar;
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Cars.OrderDetails;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
 import com.project.AzCar.Entities.Locations.Ward;
 import com.project.AzCar.Entities.Users.Users;
+import com.project.AzCar.Entities.Users.Violation;
+import com.project.AzCar.Repositories.CarThings.CarThingsRepo;
 import com.project.AzCar.Repositories.Cars.BrandRepository;
+import com.project.AzCar.Repositories.Orders.ViolationRepository;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
 import com.project.AzCar.Services.Cars.CarServices;
@@ -76,6 +82,10 @@ public class ApiCarsController {
 	private DistrictServices districtServices;
 	@Autowired
 	private WardServices wardServices;
+	@Autowired
+	private ViolationRepository violationRepo;
+	@Autowired
+	private CarThingsRepo carThingsRepo;
 
 	@GetMapping("/getAllCars")
 	public List<CarInforDto> getAllCars() {
@@ -84,7 +94,13 @@ public class ApiCarsController {
 		List<CarInforDto> result = new ArrayList<>();
 		for (var item : list) {
 			CarInforDto model = carServices.mapToDto(item.getId());
-
+			/* Add violation count */
+			List<Violation> vioSize = violationRepo.getEnabledByCarId(model.getId());
+			model.setActiveViolationAmount(vioSize.size());
+			/* add finished order count */
+			List<OrderDetailsDTO> finishedList = orderServices.getDTOFromCarId(model.getId());
+			finishedList.removeIf(i -> !i.getStatus().equals("owner_trip_done"));
+			model.setFinishedOrders(finishedList.size());
 			var carExtraFee = extraFeeServices.findByCarId(model.getId());
 			if (carExtraFee != null) {
 
@@ -111,6 +127,16 @@ public class ApiCarsController {
 		Users user = userServices.findUserByEmail(emailLogin);
 		for (var item : list) {
 			CarInforDto model = carServices.mapToDto(item.getId());
+			FavoriteCar favor = carThingsRepo.getByCarAndUser(item.getId(), (int) user.getId());
+			model.setFavorite(favor != null);
+
+			/* Add violation count */
+			List<Violation> vioSize = violationRepo.getEnabledByCarId(model.getId());
+			model.setActiveViolationAmount(vioSize.size());
+			/* add finished order count */
+			List<OrderDetailsDTO> finishedList = orderServices.getDTOFromCarId(model.getId());
+			finishedList.removeIf(i -> !i.getStatus().equals("owner_trip_done"));
+			model.setFinishedOrders(finishedList.size());
 
 			var carExtraFee = extraFeeServices.findByCarId(model.getId());
 			if (carExtraFee != null) {
@@ -139,6 +165,16 @@ public class ApiCarsController {
 		Users user = userServices.findUserByEmail(emailLogin);
 		for (var item : list) {
 			CarInforDto model = carServices.mapToDto(item.getId());
+			FavoriteCar favor = carThingsRepo.getByCarAndUser(item.getId(), (int) user.getId());
+			model.setFavorite(favor != null);
+
+			/* Add violation count */
+			List<Violation> vioSize = violationRepo.getEnabledByCarId(model.getId());
+			model.setActiveViolationAmount(vioSize.size());
+			/* add finished order count */
+			List<OrderDetailsDTO> finishedList = orderServices.getDTOFromCarId(model.getId());
+			finishedList.removeIf(i -> !i.getStatus().equals("owner_trip_done"));
+			model.setFinishedOrders(finishedList.size());
 
 			var carExtraFee = extraFeeServices.findByCarId(model.getId());
 			if (carExtraFee != null) {
@@ -207,6 +243,27 @@ public class ApiCarsController {
 		return brandRepo.getYearList(brandName, cateName, modelName);
 	}
 
+	@GetMapping("/getOrderOfThisCar")
+	public List<OrderDetails> getOrderOfThisCar(@RequestParam("carId") String carId) {
+		return getNeededOrders(Integer.parseInt(carId), 0);
+	}
+
+	@GetMapping("/processFavorite")
+	public ResponseEntity<String> processingFavorite(@RequestParam("carId") String carId,
+			@RequestParam("userEmail") String email, HttpServletRequest request) {
+		Users user = userServices.findUserByEmail(email);
+		FavoriteCar favorite = carThingsRepo.getByCarAndUser(Integer.parseInt(carId), (int) user.getId());
+		if (favorite == null) {
+			FavoriteCar newFavor = new FavoriteCar();
+			newFavor.setUserId((int) user.getId());
+			newFavor.setCarId(Integer.parseInt(carId));
+			carThingsRepo.save(newFavor);
+			return new ResponseEntity<String>("Added", HttpStatus.OK);
+		}
+		carThingsRepo.delete(favorite);
+		return new ResponseEntity<String>("Removed", HttpStatus.OK);
+	}
+
 	@PostMapping("/postOrderDetails")
 	public ResponseEntity<String> postOrderDetails(@RequestBody PhoneOrder order, HttpServletRequest request)
 			throws UnsupportedEncodingException, MessagingException {
@@ -217,20 +274,8 @@ public class ApiCarsController {
 		cars.removeIf(i -> i.getId() != Integer.parseInt(order.getCarId()));
 		CarInforDto car = cars.get(0);
 
-		List<OrderDetails> orderDetailsOfThisCar = orderServices.getFromCarId(Integer.parseInt(order.getCarId()));
-		orderDetailsOfThisCar.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
-				&& !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
-		List<OrderDetails> userOrders = orderServices.getFromCreatedBy(Integer.parseInt(order.getUserId()));
-		userOrders.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
-				&& !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
-		if (userOrders.size() > 0) {
-			for (OrderDetails userOrder : userOrders) {
-				boolean exists = orderDetailsOfThisCar.stream().anyMatch(item -> item.getId() == userOrder.getId());
-				if (!exists) {
-					orderDetailsOfThisCar.add(userOrder);
-				}
-			}
-		}
+		List<OrderDetails> orderDetailsOfThisCar = getNeededOrders(Integer.parseInt(order.getCarId()),
+				Integer.parseInt(order.getUserId()));
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		LocalDateTime fromDatePhone = LocalDate.parse(order.getFromDate(), formatter).atStartOfDay();
@@ -245,8 +290,8 @@ public class ApiCarsController {
 			if (isOverlapping) {
 				// Hai khoảng ngày trùng nhau
 				isPassed = false;
-				message = "These dates were picked (" + fromDateStr + " - " + toDateStr
-						+ "), please choose another dates";
+				message = "These days were picked or you have picked another car at these days. (" + fromDateStr + " - "
+						+ toDateStr + "), please choose another dates";
 				break;
 			}
 		}
@@ -343,5 +388,26 @@ public class ApiCarsController {
 		LocalDate fromDate1 = LocalDate.parse(fromDateStr1, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 		LocalDate toDate1 = LocalDate.parse(toDateStr1, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 		return !(toDate1.isBefore(fromDate2.toLocalDate()) || toDate2.toLocalDate().isBefore(fromDate1));
+	}
+
+	private List<OrderDetails> getNeededOrders(int carId, int userId) {
+		List<OrderDetails> orderDetailsOfThisCar = orderServices.getFromCarId(carId);
+		orderDetailsOfThisCar.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
+				&& !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
+		if (userId != 0) {
+			List<OrderDetails> userOrders = orderServices.getFromCreatedBy(userId);
+			userOrders.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
+					&& !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
+			if (userOrders.size() > 0) {
+				for (OrderDetails userOrder : userOrders) {
+					boolean exists = orderDetailsOfThisCar.stream().anyMatch(item -> item.getId() == userOrder.getId());
+					if (!exists) {
+						orderDetailsOfThisCar.add(userOrder);
+					}
+				}
+			}
+		}
+		Collections.sort(orderDetailsOfThisCar, (a, b) -> a.getFromDate().compareTo(b.getFromDate()));
+		return orderDetailsOfThisCar;
 	}
 }
