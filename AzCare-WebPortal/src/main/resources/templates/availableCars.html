@@ -306,21 +306,20 @@
 	<!-- Search area start -->
 	<div class="search-area" id="search-area-1">
 		<div class="container">
-		
-		<!-- start component chat -->
-		<div style="display: block">
-		<div id="messages"></div>
-		<button id="sendPrivateMessage" onclick="sendPrivateMessage();">Send
-			Private</button>
-		<input type="text" id="privateText" placeholder="Private Message" />
-		<input type="text" id="to" value="admin@admin"
-			placeholder="To" />
-			<input type="text" id="contact" value="contact"
-			placeholder="To" />
-			<input type="text" id="from" th:value="${session.user}" placeholder="To" />
-			
-	</div>
-	<!-- End componetChat -->
+
+			<!-- start component chat -->
+			<div style="display: none">
+				<div id="messages"></div>
+				<button id="sendPrivateMessage" onclick="sendPrivateMessage();">Send
+					Private</button>
+				<input type="text" id="privateText" placeholder="Private Message" />
+				<input type="text" id="to" value="admin@admin" placeholder="To" />
+				<input type="text" id="contact" value="contact" placeholder="To" />
+				<input type="text" id="from" th:value="${session.user}"
+					placeholder="To" />
+
+			</div>
+			<!-- End componetChat -->
 			<div class="search-area-inner">
 				<div class="search-contents ">
 					<form action="/home/availablecars" method="post" id=searchCar>
@@ -424,12 +423,20 @@
 									</div>
 								</div>
 								<div class="form-group">
-
 									<div class="checkbox-wrapper-29 mt-3">
 										<label class="checkbox"> <input type="checkbox"
 											name="isCarPlus" class="checkbox__input" id="carPlusDefault"
 											th:checked="${carPlus != null}" /> <span
 											class="checkbox__label"></span> Delivery To Customer Locale
+										</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="checkbox-wrapper-29 mt-3">
+										<label class="checkbox"> <input type="checkbox"
+											name="favorite" class="checkbox__input"
+											th:checked="${favorite_check == true}" /> <span
+											class="checkbox__label"></span> By Favorite
 										</label>
 									</div>
 								</div>
@@ -464,6 +471,11 @@
 								<div class="listing-badges" th:if="${car.discount} > 0">
 									<span class="featured"
 										th:text="'SALES ' + ${car.discount}+'%' "></span>
+								</div>
+								<div th:attr="data-car-id=${car.id}" onclick="processFavorite(event, this)" style="position: absolute; right: 20px; z-index: 991;">
+									<i th:classappend="${car.isFavorite ? 'fa-solid' : 'fa-regular' }"
+										style="padding-left: 100px; padding-top: 10px; font-size: 30px; color: red"
+										class="fa-heart"></i>
 								</div>
 								<div id="carouselExampleIndicators1" class="carousel slide"
 									data-ride="carousel">
@@ -776,6 +788,20 @@
 					});
 				}
 			});
+			
+			function processFavorite(event, element){
+				event.preventDefault();
+				event.stopPropagation();
+				const id = element.getAttribute('data-car-id');
+				$.ajax({
+					url : "/home/availablecars/processingFavorite/" + id,
+					type : "get",
+					success : function(res) {
+						element.querySelector("i").classList.toggle("fa-regular");
+						element.querySelector("i").classList.toggle("fa-solid");
+					}
+				});
+			}
 		</script>
 </body>
 

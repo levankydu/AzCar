@@ -2,7 +2,11 @@ package com.project.AzCar.Controllers;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +33,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.AzCar.Dto.CarInfos.CarInforDto;
+import com.project.AzCar.Dto.CarInfos.CarInforFlutter;
 import com.project.AzCar.Dto.DriverLicense.DriverLicenseBack;
 import com.project.AzCar.Dto.DriverLicense.DriverLicenseFront;
 import com.project.AzCar.Dto.Users.EditApiDto;
@@ -38,8 +46,19 @@ import com.project.AzCar.Dto.Users.ResetPasswordApiDto;
 import com.project.AzCar.Dto.Users.SignUpApiDto;
 import com.project.AzCar.Dto.Users.TokenApiDto;
 import com.project.AzCar.Dto.Users.UserDto;
+import com.project.AzCar.Entities.Cars.CarImages;
+import com.project.AzCar.Entities.Cars.CarInfor;
+import com.project.AzCar.Entities.Cars.ExtraFee;
+import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Users.Users;
+import com.project.AzCar.Services.Cars.BrandServices;
+import com.project.AzCar.Services.Cars.CarImageServices;
+import com.project.AzCar.Services.Cars.CarServices;
+import com.project.AzCar.Services.Cars.ExtraFeeServices;
+import com.project.AzCar.Services.Cars.PlusServiceServices;
+import com.project.AzCar.Services.UploadFiles.FilesStorageServices;
 import com.project.AzCar.Services.Users.UserServices;
+import com.project.AzCar.Utilities.Constants;
 import com.project.AzCar.Utilities.OcrService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -59,6 +78,18 @@ public class ApiUsersController {
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private OcrService ocrService;
+	@Autowired
+	private FilesStorageServices fileStorageServices;
+	@Autowired
+	private CarImageServices carImageServices;
+	@Autowired
+	private ExtraFeeServices extraFeeServices;
+	@Autowired
+	private PlusServiceServices plusServiceServices;
+	@Autowired
+	private BrandServices brandServices;
+	@Autowired
+	private CarServices carServices;
 
 	@GetMapping("/getUsers")
 	public List<UserDto> getList() {
@@ -262,18 +293,164 @@ public class ApiUsersController {
 	}
 
 	@PostMapping("/upload3")
-	public ResponseEntity<DriverLicenseBack> upload3(@RequestParam("frontImg") MultipartFile frontImg,
+	public ResponseEntity<String> upload3(@RequestParam("frontImg") MultipartFile frontImg,
 			@RequestParam("behindImg") MultipartFile behindImg, @RequestParam("leftImg") MultipartFile leftImg,
-			@RequestParam("rightImg") MultipartFile rightImg, @RequestParam("insideImg") MultipartFile insideImg)
-			throws IOException, TesseractException {
+			@RequestParam("rightImg") MultipartFile rightImg, @RequestParam("insideImg") MultipartFile insideImg,
+			@RequestParam("data") String jsonData) throws IOException, TesseractException {
 
 		System.out.println(frontImg.getOriginalFilename());
 		System.out.println(behindImg.getOriginalFilename());
 		System.out.println(leftImg.getOriginalFilename());
 		System.out.println(rightImg.getOriginalFilename());
 		System.out.println(insideImg.getOriginalFilename());
+		System.out.println(jsonData);
+		String message = "Great, your car is register successfully!";
+		CarInforFlutter modelData = new CarInforFlutter();
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			modelData = objectMapper.readValue(jsonData, CarInforFlutter.class);
 
-		return null;
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		String modelId = brandServices.getModelId(modelData.getBrand(), modelData.getCategory(), modelData.getModel(),
+				modelData.getYear());
+		System.out.println(modelId);
+		System.out.println(modelData);
+		CarInfor newRegisterCar = new CarInfor();
+		int min = 0; // Minimum value
+		int max = 999999999; // Maximum value
+
+		Random rand = new Random();
+		int number = rand.nextInt(max - min + 1) + min;
+		newRegisterCar.setId(number);
+		newRegisterCar.setModelId(modelId);
+		newRegisterCar.setServices(modelData.getServices().replace("[", "").replace("]", ""));
+		newRegisterCar.setAddress(modelData.getAddress());
+		newRegisterCar.setSeatQty(modelData.getSeatQty());
+		newRegisterCar.setStatus(Constants.carStatus.VERIFY);
+		newRegisterCar.setLicensePlates(modelData.getLicensePlate());
+		newRegisterCar.setDescription(modelData.getDescription());
+		newRegisterCar.setRules(modelData.getRules());
+		newRegisterCar.setPrice(modelData.getDefaultPrice());
+		newRegisterCar.setDiscount((int) modelData.getDiscount());
+		newRegisterCar.setFuelType(modelData.getFuelType());
+		if (modelData.getFuelType() == "Electric") {
+			newRegisterCar.setEngineInformationTranmission(true);
+		} else {
+			newRegisterCar.setEngineInformationTranmission(false);
+		}
+
+		newRegisterCar.setCarOwnerId(Integer.parseInt(modelData.getUserId()));
+		CarImages frontImgModel = new CarImages();
+		CarImages behindImgModel = new CarImages();
+		CarImages leftImgModel = new CarImages();
+		CarImages rightImgModel = new CarImages();
+		CarImages insideImgModel = new CarImages();
+
+		String dir = "./UploadFiles/carImages" + "/" + modelId + "-" + newRegisterCar.getId();
+		Path path = Paths.get(dir);
+
+		try {
+			Files.createDirectories(path);
+		} catch (IOException e) {
+			throw new RuntimeException("Could not initialize folder for upload!");
+		}
+
+		try {
+
+			fileStorageServices.save(frontImg, dir);
+			frontImgModel.setName("frontImg");
+			frontImgModel.setUrlImage(frontImg.getOriginalFilename());
+			frontImgModel.setCarId(number);
+			carImageServices.saveImg(frontImgModel);
+
+			fileStorageServices.save(behindImg, dir);
+			behindImgModel.setName("behindImg");
+			behindImgModel.setUrlImage(behindImg.getOriginalFilename());
+			behindImgModel.setCarId(number);
+			carImageServices.saveImg(behindImgModel);
+
+			fileStorageServices.save(leftImg, dir);
+			leftImgModel.setName("leftImg");
+			leftImgModel.setUrlImage(leftImg.getOriginalFilename());
+			leftImgModel.setCarId(number);
+			carImageServices.saveImg(leftImgModel);
+
+			fileStorageServices.save(rightImg, dir);
+			rightImgModel.setName("rightImg");
+			rightImgModel.setUrlImage(rightImg.getOriginalFilename());
+			rightImgModel.setCarId(number);
+			carImageServices.saveImg(rightImgModel);
+
+			fileStorageServices.save(insideImg, dir);
+			insideImgModel.setName("insideImg");
+			insideImgModel.setUrlImage(insideImg.getOriginalFilename());
+			insideImgModel.setCarId(number);
+			carImageServices.saveImg(insideImgModel);
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		if (modelData.getDecorationFee().compareTo(BigDecimal.ZERO) > 0
+				|| modelData.getCleaningFee().compareTo(BigDecimal.ZERO) > 0) {
+			newRegisterCar.setExtraFee(true);
+			ExtraFee extraFee = new ExtraFee();
+			extraFee.setCarRegisterId(number);
+			extraFee.setCleanningFee((modelData.getDecorationFee().longValue()));
+			extraFee.setDecorationFee(modelData.getCleaningFee().longValue());
+			extraFeeServices.save(extraFee);
+
+		} else {
+			newRegisterCar.setExtraFee(false);
+		}
+		if (modelData.getDeliveryFee().compareTo(BigDecimal.ZERO) > 0) {
+			newRegisterCar.setCarPlus(true);
+			PlusServices plusServices = new PlusServices();
+			plusServices.setCarRegisterId(number);
+			plusServices.setFee(modelData.getDeliveryFee().longValue());
+			plusServiceServices.save(plusServices);
+		} else {
+			newRegisterCar.setCarPlus(false);
+		}
+
+		try {
+			System.out.println(newRegisterCar);
+			carServices.saveCarRegister(newRegisterCar);
+			var carDto = carServices.mapToDto(newRegisterCar.getId());
+			carDto.setCarmodel(brandServices.getModel(newRegisterCar.getModelId()));
+			sendEmail(modelData.getUserEmail(), carDto);
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return ResponseEntity.ok(message);
+	}
+
+	private void sendEmail(String email, CarInforDto carDetails)
+			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+				StandardCharsets.UTF_8.name());
+
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		String subject = "Successfull register your car";
+		String content = "<p>Hello," + email + "</p>" + "<p>Thank you for registering your car rental with AzCar.</p>"
+				+ "<p>Below are some main details of your car:</p>" + "<p><b>Car Details:</b></p>" + "<p>" + "Brand: "
+				+ carDetails.getCarmodel().getBrand() + "</p>" + "<p>" + "Model: " + carDetails.getCarmodel().getModel()
+				+ "</p>" + "<p>" + "Price: " + carDetails.getPrice() + " $/day" + "</p>" + "<p>" + "License Plates: "
+				+ carDetails.getLicensePlates() + "</p>" + "<p>" + "Pick-up Location: " + carDetails.getAddress()
+				+ "</p>" +
+
+				"<p>This is to confirm that we already got info of your car, We will send you an email after verify your information</p>"
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
+
 	}
 
 	private void sendEmail(String email) throws UnsupportedEncodingException, jakarta.mail.MessagingException {
