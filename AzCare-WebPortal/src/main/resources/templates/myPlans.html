@@ -1556,7 +1556,7 @@ select {
 				.catch(error => {
 
 					console.error('There was an error!', error);
-					alert('Có lỗi xảy ra. Vui lòng thử lại sau!');
+					alert('An error has occurred. Please try again later!');
 				});
 		});
 
@@ -1611,7 +1611,7 @@ select {
 		
 			if(	parseFloat(amount) > parseFloat(amout1))
 			{
-				alert("số dư không đủ");
+				alert("Insufficient balance!");
 				return;
 			}
 			var referenceNumber = document.getElementById("referenceNumber123").value;
@@ -1645,13 +1645,13 @@ select {
 					return response.ok;
 				})
 				.then(data => {
-					alert('Deposit successful!');
+					alert('Withdraw successful!');
 					modal123.style.display = "none";
 				})
 				.catch(error => {
 
 					console.error('There was an error!', error);
-					alert('Có lỗi xảy ra. Vui lòng thử lại sau!');
+					alert('An error has occurred. Please try again later!');
 				});
 		});
 

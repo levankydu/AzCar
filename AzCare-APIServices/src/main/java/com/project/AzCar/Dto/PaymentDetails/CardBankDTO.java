@@ -8,5 +8,5 @@ public class CardBankDTO {
 	private String bankNumber;
 	private String beneficiaryName;
 	private String addressbank;
-	private long userId;
+	private Long userId;
 }

@@ -22,7 +22,6 @@ public class CardbankServiceImpl implements ICarbankService {
 
 	@Override
 	public Cardbank saveCardbank(Cardbank c) {
-		// TODO Auto-generated method stub
 		return cardRepo.save(c);
 	}
 
@@ -33,7 +32,7 @@ public class CardbankServiceImpl implements ICarbankService {
 	}
 
 	@Override
-	public Cardbank findCardbankByUserId(int id) {
+	public Cardbank findCardbankByUserId(long id) {
 		// TODO Auto-generated method stub
 		return cardRepo.findByUserId(id);
 	}
@@ -44,4 +43,5 @@ public class CardbankServiceImpl implements ICarbankService {
 		cards.removeIf(i -> i.getUser() != null);
 		return cards;
 	}
+
 }
