@@ -1,8 +1,0 @@
-INDEX VERSION 1.4+D:\kyusadiasbdiha\abcvjasduhas\AzCar\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
-1022468823.index
-3963615108.index
-103000879.index
-3633135223.index
-1704473085.index
-2100094461.index
-1917344946.index

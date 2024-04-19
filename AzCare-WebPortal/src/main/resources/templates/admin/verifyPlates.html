@@ -288,9 +288,12 @@
 									<thead>
 										<tr>
 
-											<th>Email Owner</th>
+											<th>Email Customer</th>
 											<th>Front Plate</th>
 											<th>Behind Plate</th>
+											<th>Name</th>
+											<th>LicenseNo/Class</th>
+											<th>Expire Date</th>
 											<th>Status</th>
 											<th>Action</th>
 										</tr>
@@ -303,6 +306,10 @@
 													style="height: 100px"></td>
 											<td><img th:src="${'/dashboard/platesVerfy/'+plate.plateImages.get(1).ImageUrl}"
 													style="height: 100px"></td>
+													
+											<td th:text="${plate.realName}"></td>
+											<td th:text="${plate.licenseNo + '/Class: '+ plate.licenseClass}"></td>
+											<td th:text="${plate.expriedDay}"></td>	
 											<td>
 												<p th:text="${plate.plateImages.get(0).status}" class="badge"
 													th:classappend="${plate.plateImages.get(0).status == 'accepted' ? 'bg-success' : 'bg-warning'}">

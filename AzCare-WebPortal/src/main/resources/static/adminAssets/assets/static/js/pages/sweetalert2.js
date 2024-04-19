@@ -568,6 +568,40 @@ if (document.getElementById('toast-failed-upload-avatar')) {
 		})
 	})
 }
+
+if (document.getElementById('toast-success-loginGoogle')) {
+	document.getElementById('toast-success-loginGoogle').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'success',
+			title: 'Rgister Google successfully'
+		})
+	})
+}
+if (document.getElementById('toast-failed-loginGoogle')) {
+	document.getElementById('toast-failed-loginGoogle').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'error',
+			title: 'Rgister Google failed'
+		})
+	})
+}
+
+if (document.getElementById('toast-success-reset-password')) {
+	document.getElementById('toast-success-reset-password').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'success',
+			title: 'Reset Password successfully'
+		})
+	})
+}
+if (document.getElementById('toast-failed-reset-password')) {
+	document.getElementById('toast-failed-reset-password').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'error',
+			title: 'Reset Password failed'
+		})
+	})
+}
 // End Điệp
 
 if (document.getElementById('toast-failed-uploadDriveLicense')) {

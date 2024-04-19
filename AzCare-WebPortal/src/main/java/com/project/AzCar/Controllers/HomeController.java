@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +40,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
 import com.project.AzCar.Dto.Users.UserDto;
 import com.project.AzCar.Entities.Cars.CarInfor;
+import com.project.AzCar.Entities.Deposit.Cardbank;
+import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Mailer.EmailService;
+import com.project.AzCar.Service.Deposit.CardbankServiceImpl;
 import com.project.AzCar.Services.Cars.BrandServices;
 import com.project.AzCar.Services.Cars.CarImageServices;
 import com.project.AzCar.Services.Cars.CarServices;
@@ -52,7 +56,6 @@ import com.project.AzCar.Utilities.Utility;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import net.bytebuddy.utility.RandomString;
 import net.minidev.json.JSONObject;
 
 @Controller
@@ -84,6 +87,9 @@ public class HomeController {
 	@Autowired
 	private UserServices userServices;
 
+	@Autowired
+	private CardbankServiceImpl cardBank;
+
 	@GetMapping("/")
 	public String getHome(Model ModelView, HttpServletRequest request, @AuthenticationPrincipal OAuth2User user) {
 		List<CarInfor> list = carServices.findAll();
@@ -113,22 +119,22 @@ public class HomeController {
 		}
 
 		for (var item : listDto) {
-			if (item.getAddress().contains("Hồ Chí Minh")) {
+			if (item.getAddress().contains("Há»“ ChÃ­ Minh")) {
 				listcarsInHcm.add(item);
 			}
 		}
 		for (var item : listDto) {
-			if (item.getAddress().contains("Hà Nội")) {
+			if (item.getAddress().contains("HÃ  Ná»™i")) {
 				listcarsInHn.add(item);
 			}
 		}
 		for (var item : listDto) {
-			if (item.getAddress().contains("Đà Nẵng")) {
+			if (item.getAddress().contains("Ä�Ã  Náºµng")) {
 				listcarsInDn.add(item);
 			}
 		}
 		for (var item : listDto) {
-			if (item.getAddress().contains("Bình Dương")) {
+			if (item.getAddress().contains("BÃ¬nh DÆ°Æ¡ng")) {
 				listcarsInBd.add(item);
 			}
 		}
@@ -190,7 +196,7 @@ public class HomeController {
 				Map<String, Object> templateModel = new HashMap<>();
 				templateModel.put("recipientName", userDto.getEmail());
 				templateModel.put("hello", "Welcome to AzCar");
-				templateModel.put("text", "Cảm ơn Bạn đã sử dụng dịch vụ thuê xe của chúng tôi");
+				templateModel.put("text", "CaÌ‰m Æ¡n BaÌ£n Ä‘aÌƒ sÆ°Ì‰ duÌ£ng diÌ£ch vuÌ£ thuÃª xe cuÌ‰a chuÌ�ng tÃ´i");
 				emailService.sendMessageUsingThymeleafTemplate(userDto.getEmail(), "AzCar", templateModel);
 				return ResponseEntity.ok("Registration successful.");
 			} catch (Exception e) {
@@ -232,6 +238,9 @@ public class HomeController {
 	@GetMapping("/user/profile/edit/{email}")
 	public String editProfile(@PathVariable("email") String email, Model model) {
 		Users user = uServices.findUserByEmail(email);
+
+		List<City> provinces = provinceServices.getListCity();
+		model.addAttribute("provinceList", provinces);
 		if (user != null) {
 			model.addAttribute("user", user);
 			model.addAttribute("uDto", new UserDto());
@@ -242,6 +251,18 @@ public class HomeController {
 
 			return "redirect:/user/profile/" + email;
 		}
+	}
+
+	@GetMapping("/user/profile/edit/card/{email}")
+	public String editCardBank(@PathVariable("email") String email, Model model) {
+		Users user = uServices.findUserByEmail(email);
+
+		Cardbank cardbank = cardBank.findCardbankByUserId(user.getId());
+		model.addAttribute("user", user);
+		model.addAttribute("cardbank", cardbank);
+
+		return "authentications/cardbankedit";
+
 	}
 
 	@PostMapping("/user/profile/edit/{email}")
@@ -315,7 +336,12 @@ public class HomeController {
 
 		Users user = uServices.findUserByEmail(email);
 		if (user != null) {
-			String token = RandomString.make(10);
+			Random random = new Random();
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < 5; i++) {
+				sb.append(random.nextInt(10));
+			}
+			String token = sb.toString();
 			System.out.println("Email: " + email);
 			System.out.println("Token: " + token);
 			try {
@@ -362,7 +388,7 @@ public class HomeController {
 		if (codeModel != null) {
 			codeModel.setPassword(passwordEncoder.encode(password));
 			uServices.saveUserReset(codeModel);
-			usedTokens.add(tokenModel); // Đánh dấu token đã được sử dụng
+			usedTokens.add(tokenModel); // Ä�Ã¡nh dáº¥u token Ä‘Ã£ Ä‘Æ°á»£c sá»­ dá»¥ng
 			return ResponseEntity.ok("Password changed successfully.");
 		} else {
 			return ResponseEntity.notFound().build();
@@ -439,7 +465,7 @@ public class HomeController {
 				fileStorageServices.save(image, dir);
 				user.setImage(image.getOriginalFilename());
 				uServices.saveUserReset(user);
-				return "redirect:/user/profile/" + user.getEmail();
+				return "redirect:/user/profile/edit/" + user.getEmail();
 
 			} catch (Exception e) {
 				System.out.println(e);

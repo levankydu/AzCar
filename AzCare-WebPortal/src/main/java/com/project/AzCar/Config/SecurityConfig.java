@@ -46,11 +46,16 @@ public class SecurityConfig {
 						.permitAll().requestMatchers("/api/auth/**").permitAll().requestMatchers("/data/**").permitAll()
 						.requestMatchers("/api/cars/**").permitAll().requestMatchers("/user/profile/flutter/avatar/**")
 						.permitAll().requestMatchers("/home/availablecars/flutter/img/**").permitAll()
-						.requestMatchers("/forgot_password/**").permitAll().requestMatchers("/reset_password/**")
-						.permitAll().requestMatchers("/register/**").permitAll().requestMatchers("/login/**")
-						.permitAll().requestMatchers("/oauth2/**").permitAll().requestMatchers("/registeradmin")
-						.permitAll().requestMatchers("/get/**").permitAll().requestMatchers("/home/carregister/**")
-						.hasAnyRole("USER", "ADMIN").requestMatchers("/home/myplan/**").hasAnyRole("USER", "ADMIN")
+						.requestMatchers("/home/myplan/createpayments/deposit/**").permitAll()
+						.requestMatchers("/getmoneywallet/returnmywallet/**").permitAll()
+						.requestMatchers("/cardBank/**").permitAll()
+
+						.requestMatchers("/deposits/user/**").permitAll().requestMatchers("/forgot_password/**")
+						.permitAll().requestMatchers("/reset_password/**").permitAll().requestMatchers("/register/**")
+						.permitAll().requestMatchers("/login/**").permitAll().requestMatchers("/oauth2/**").permitAll()
+						.requestMatchers("/registeradmin").permitAll().requestMatchers("/get/**").permitAll()
+						.requestMatchers("/home/carregister/**").hasAnyRole("USER", "ADMIN")
+						.requestMatchers("/home/myplan/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers("/home/availablecars**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers("/home/availablecars/**").hasAnyRole("USER", "ADMIN")
 						.requestMatchers("/user/profile/**").hasAnyRole("USER", "ADMIN")
@@ -88,7 +93,8 @@ public class SecurityConfig {
 									System.out.println("Google:" + email);
 									response.sendRedirect("/login");
 								}
-								// XÃ¡c Ä‘á»‹nh lá»—i vÃ  redirect tÃ¹y thuá»™c vÃ o quyá»�n truy cáº­p
+								// XÃ¡c Ä‘á»‹nh lá»—i vÃ  redirect tÃ¹y thuá»™c vÃ o
+								// quyá»�n truy cáº­p
 								request.getSession().removeAttribute("signin_error");
 								request.getSession().setAttribute("emailLogin", name);
 								if (authentication.getAuthorities().toString().contains(Constants.Roles.USER)) {

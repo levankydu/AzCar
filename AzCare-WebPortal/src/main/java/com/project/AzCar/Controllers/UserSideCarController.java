@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -44,6 +45,8 @@ import com.project.AzCar.Dto.DriverLicense.DriverLicenseFront;
 import com.project.AzCar.Dto.Orders.OrderDetailsDTO;
 import com.project.AzCar.Dto.Reply.ReplyDTO;
 import com.project.AzCar.Dto.Reviews.ReviewsDTO;
+import com.project.AzCar.Entities.CarThings.Contact;
+import com.project.AzCar.Entities.CarThings.FavoriteCar;
 import com.project.AzCar.Entities.Cars.CarImages;
 import com.project.AzCar.Entities.Cars.CarInfor;
 import com.project.AzCar.Entities.Cars.CarModelList;
@@ -52,6 +55,7 @@ import com.project.AzCar.Entities.Cars.OrderDetails;
 import com.project.AzCar.Entities.Cars.PlateImages;
 import com.project.AzCar.Entities.Cars.PlusServices;
 import com.project.AzCar.Entities.Comments.Comments;
+import com.project.AzCar.Entities.Coupon.EnumCoupon;
 import com.project.AzCar.Entities.Deposit.Cardbank;
 import com.project.AzCar.Entities.HintText.HintText;
 import com.project.AzCar.Entities.Locations.City;
@@ -62,6 +66,8 @@ import com.project.AzCar.Entities.Reviews.Reviews;
 import com.project.AzCar.Entities.ServiceAfterBooking.ServiceAfterBooking;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Entities.Users.Violation;
+import com.project.AzCar.Repositories.CarThings.CarThingsRepo;
+import com.project.AzCar.Repositories.CarThings.ContactRepo;
 import com.project.AzCar.Repositories.Orders.ViolationRepository;
 import com.project.AzCar.Repositories.ServiceAfterBooking.ServiceBookingRepositories;
 import com.project.AzCar.Service.Comments.ICommentsService;
@@ -143,6 +149,10 @@ public class UserSideCarController {
 	private IReplyService repService;
 	@Autowired
 	private PaypalService paypalService;
+	@Autowired
+	private ContactRepo contactRepo;
+	@Autowired
+	private CarThingsRepo carThingsRepo;
 
 	private Logger log = LoggerFactory.getLogger(getClass());
 
@@ -425,6 +435,8 @@ public class UserSideCarController {
 	public String getDetailsPage(HttpServletRequest request, @PathVariable("carId") String carId, Model ModelView) {
 		var model = carServices.findById(Integer.parseInt(carId));
 		var modelDto = carServices.mapToDto(model.getId());
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users user = userServices.findUserByEmail(email);
 		List<String> listProvince = provinceServices.getListCityString();
 
 		var carExtraFee = extraFeeServices.findByCarId(model.getId());
@@ -447,6 +459,17 @@ public class UserSideCarController {
 		List<OrderDetails> orderDetailsOfThisCar = orderServices.getFromCarId(Integer.parseInt(carId));
 		orderDetailsOfThisCar.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
 				&& !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
+		List<OrderDetails> userOrders = orderServices.getFromCreatedBy((int) user.getId());
+		userOrders.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
+				&& !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
+		if (userOrders.size() > 0) {
+			for (OrderDetails userOrder : userOrders) {
+				boolean exists = orderDetailsOfThisCar.stream().anyMatch(item -> item.getId() == userOrder.getId());
+				if (!exists) {
+					orderDetailsOfThisCar.add(userOrder);
+				}
+			}
+		}
 		ModelView.addAttribute("orderDetailsOfThisCar", orderDetailsOfThisCar);
 
 		List<City> provinces = provinceServices.getListCity();
@@ -454,7 +477,6 @@ public class UserSideCarController {
 
 		ModelView.addAttribute("fullAddress", model.getAddress());
 		ModelView.addAttribute("carDetails", modelDto);
-		String email = request.getSession().getAttribute("emailLogin").toString();
 		Users customer = userServices.findUserByEmail(email);
 		if (customer.isEnabled() == false) {
 			ModelView.addAttribute("userViolated", true);
@@ -569,6 +591,22 @@ public class UserSideCarController {
 		return lrepDTO;
 	}
 
+	@GetMapping("/home/availablecars/processingFavorite/{carId}")
+	public ResponseEntity<String> processingFavorite(@PathVariable("carId") String carId, HttpServletRequest request) {
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users user = userServices.findUserByEmail(email);
+		FavoriteCar favorite = carThingsRepo.getByCarAndUser(Integer.parseInt(carId), (int) user.getId());
+		if (favorite == null) {
+			FavoriteCar newFavor = new FavoriteCar();
+			newFavor.setUserId((int) user.getId());
+			newFavor.setCarId(Integer.parseInt(carId));
+			carThingsRepo.save(newFavor);
+			return new ResponseEntity<String>("Added", HttpStatus.OK);
+		}
+		carThingsRepo.delete(favorite);
+		return new ResponseEntity<String>("Removed", HttpStatus.OK);
+	}
+
 	@GetMapping("/home/availablecars/details/{carId}/{filename}")
 	public ResponseEntity<Resource> getDetailsImage(@PathVariable("carId") String carId,
 			@PathVariable("filename") String filename) {
@@ -611,6 +649,8 @@ public class UserSideCarController {
 						itemDto.setAddress(c);
 					}
 				}
+				FavoriteCar favor = carThingsRepo.getByCarAndUser(item.getId(), (int) owner.getId());
+				itemDto.setFavorite(favor != null);
 				listDto.add(itemDto);
 			}
 		}
@@ -688,7 +728,8 @@ public class UserSideCarController {
 			@RequestParam(name = "carAddress") String carAddress, @RequestParam(name = "carBrand") String carBrand,
 			@RequestParam(name = "carCate") String carCate, @RequestParam(name = "province") String province,
 			@RequestParam(name = "districtSelect", defaultValue = "") String districtSelect,
-			@RequestParam(name = "wardSelect", defaultValue = "") String wardSelect) {
+			@RequestParam(name = "wardSelect", defaultValue = "") String wardSelect,
+			@RequestParam(name = "favorite", defaultValue = "false") boolean favoriteChoose) {
 		List<CarInfor> list = carServices.findAll();
 		List<CarInforDto> listDto = new ArrayList<>();
 		List<String> brands = brandServices.getBrandList();
@@ -703,6 +744,8 @@ public class UserSideCarController {
 			var itemDto = carServices.mapToDto(item.getId());
 			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
+			FavoriteCar favor = carThingsRepo.getByCarAndUser(item.getId(), (int) owner.getId());
+			itemDto.setFavorite(favor != null);
 			listDto.add(itemDto);
 		}
 		List<CarInforDto> filteredListDto = new ArrayList<>();
@@ -781,8 +824,16 @@ public class UserSideCarController {
 				}
 			}
 		}
+		if (favoriteChoose) {
+			filteredListDto.removeIf(i -> {
+				FavoriteCar favor = carThingsRepo.getByCarAndUser(i.getId(), (int) owner.getId());
+				return favor == null;
+			});
+		}
 		filteredListDto.removeIf(t -> !t.getStatus().equals(Constants.carStatus.READY));
 		filteredListDto.removeIf(t -> t.getOwner().getId() == owner.getId());
+
+		ModelView.addAttribute("favorite_check", favoriteChoose);
 		ModelView.addAttribute("listBrand", brands);
 		ModelView.addAttribute("listCategory", categories);
 		ModelView.addAttribute("provinceList", provinces);
@@ -1010,6 +1061,23 @@ public class UserSideCarController {
 		return "redirect:/home/myplan/";
 	}
 
+	@PostMapping("/home/myplan/emergencyContact")
+	public ResponseEntity<String> emergencyContact(@RequestParam(name = "carId") String carId,
+			@RequestParam(name = "description", required = true, defaultValue = "") String description,
+			HttpServletRequest request) {
+		String email = request.getSession().getAttribute("emailLogin").toString();
+		Users user = userServices.findUserByEmail(email);
+		if (!description.isEmpty()) {
+			Contact contact = new Contact();
+			contact.setCarId(Integer.parseInt(carId));
+			contact.setDescription(description);
+			contact.setUserId((int) user.getId());
+			contactRepo.save(contact);
+			return new ResponseEntity<String>("Sent", HttpStatus.OK);
+		}
+		return new ResponseEntity<String>("Failed", HttpStatus.OK);
+	}
+
 	@GetMapping("/home/myplan/")
 	public String getMyPlanPage(HttpServletRequest request, Model ModelView) {
 		String email = request.getSession().getAttribute("emailLogin").toString();
@@ -1066,7 +1134,9 @@ public class UserSideCarController {
 
 		OrderDetailsDTO rentorDone = orderServices.getDTORentorTripDoneOrder();
 
-		Cardbank c = cardService.findCardbankbyId(1);
+		List<Cardbank> cards = cardService.getListCardBankAdmin();
+		cards.removeIf(i -> i.getActive() == EnumCoupon.InActive);
+		Cardbank c = cards.get(0);
 
 		if (request.getSession().getAttribute("add_driverLicense") != null) {
 			ModelView.addAttribute("driverLicense", request.getSession().getAttribute("add_driverLicense"));
@@ -1074,7 +1144,10 @@ public class UserSideCarController {
 
 		}
 		ModelView.addAttribute("cardbank", c);
-
+		Cardbank cardbank = cardService.findCardbankByUserId((int) user.getId());
+		if (cardbank != null) {
+			ModelView.addAttribute("cardbankuser", cardbank);
+		}
 		ModelView.addAttribute("rentorDone", rentorDone);
 		ModelView.addAttribute("orderList", latestOrders);
 		ModelView.addAttribute("ImgLicense", listImg);

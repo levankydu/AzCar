@@ -3,10 +3,12 @@ package com.project.AzCar.Controllers;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -37,15 +39,32 @@ public class APIDepositController {
 	@Autowired
 	private OrderDetailsService orderServices;
 
+	@GetMapping("/deposits/user/{userId}")
+	public ResponseEntity<List<Deposit>> getDepositsByUserId(@PathVariable String userId) {
+		try {
+			// Parse the userId to an integer if necessary
+			int userIdFind = Integer.parseInt(userId);
+
+			// Assuming findListUserById needs an integer
+			List<Deposit> deposits = depositService.findListUserById(userIdFind);
+			return ResponseEntity.ok(deposits);
+		} catch (NumberFormatException e) {
+			// Handle the case where userId is not a valid integer
+			return ResponseEntity.badRequest().body(null);
+		}
+	}
+
 	@PostMapping(value = "/home/myplan/createpayments/deposit/{id}")
-	public ResponseEntity<?> createDeposit(@PathVariable("id") String id, @RequestBody PaymentDetailsDTO dt) {
-		Deposit d = depositService.findByRefenceId(id);
+	public ResponseEntity<?> createDeposit(@PathVariable("id") String referenceID, @RequestBody PaymentDetailsDTO dt) {
+		Deposit d = depositService.findByRefenceId(referenceID);
+
+		// check ma tham chiue co chua
 		if (d == null) {
 			Deposit temp = new Deposit();
 			temp.setAmount(dt.getAmount());
 			LocalDateTime time = LocalDateTime.now();
 			temp.setPaymentDateAt(time);
-			temp.setReferenceNumber(id);
+			temp.setReferenceNumber(referenceID);
 			temp.setStatus(EnumDeposit.Pending);
 			Users user = userService.findById(dt.getUserId());
 			if (user != null) {
@@ -67,39 +86,101 @@ public class APIDepositController {
 		Deposit d = depositService.findByRefenceId(dto.getReferenceNumber());
 		if (d != null) {
 			if (!d.getStatus().toString().contains("Done")) {
-				d.setStatus(EnumDeposit.Done);
-				depositService.updateDeposit(d);
-				Users user = userService.findById(d.getUser().getId());
-				BigDecimal balance = user.getBalance() != null ? user.getBalance() : BigDecimal.valueOf(0);
-				BigDecimal amount = d.getAmount();
-				System.out.println("sá»‘ dÆ° hiá»‡n táº¡i" + balance + ", Sá»‘ tiá»�n náº¡p vÃ o" + amount);
-				BigDecimal total = balance.add(amount);
-				System.out.print(total);
-				user.setBalance(total);
-				userService.saveUserReset(user);
-				String email = user.getEmail();
-				String mailContent = "<p>Hello " + email + ",</p>"
-						+ "<p>We are pleased to inform you that your deposit has been successfully processed.</p>"
-						+ "<p>Below are the details of your deposit:</p>" + "<table>" + "<tr>" + "<th>Bill Name: </th>"
-						+ "<td>" + "" + "</td>" + "</tr>" + "<tr>" + "<th>Deposit Amount: </th>" + "<td>$" + amount
-						+ "</td>" + "</tr>" + "<tr>" + "<th>Current Balance: </th>" + "<td>$" + user.getBalance()
-						+ "</td>" + "</tr>" + "<tr>" + "<th>Total Amount: </th>" + "<td>$" + total + "</td>" + "</tr>"
-						+ "<tr>" + "<th>Transaction ID: </th>" + "<td>" + d.getReferenceNumber() + "</td>" + "</tr>"
-						+ "</table>"
-						+ "<p>This email confirms that your deposit has been successfully processed. Your current balance is updated accordingly.</p>"
-						+ "<p>If you have any questions or concerns, please feel free to contact us.</p>"
-						+ "<p>Best regards,<br>AzCar Team</p>";
-				orderServices.sendOrderEmail(email, "Place Order Successfully", mailContent);
-				paymentServices.createNewProfit(user.getId(), amount, new ProfitCallBack() {
-					@Override
-					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
-					}
-				}, true);
-				return new ResponseEntity<Deposit>(d, HttpStatus.OK);
+				if (dto.getAmount() == null) {
+					System.out.print("Tiá»�n rÃºt: " + dto.getWithdraw());
+					d.setStatus(EnumDeposit.Done);
+					depositService.updateDeposit(d);
+					Users user = userService.findById(d.getUser().getId());
+					BigDecimal balance = user.getBalance() != null ? user.getBalance() : BigDecimal.valueOf(0);
+					BigDecimal withdraw = d.getWithdraw();
+					System.out.println("sá»‘ tiá»�n hiá»‡n táº¡i" + balance + ",sá»‘ tiá»�n sáº½ trá»«" + withdraw);
+					BigDecimal total;
+					total = balance.subtract(withdraw);
+					System.out.print(total);
+					user.setBalance(total);
+					userService.saveUserReset(user);
+					String email = user.getEmail();
+					String mailContent = "<p>Hello " + email + ",</p>"
+							+ "<p>We are pleased to inform you that your deposit has been successfully processed.</p>"
+							+ "<p>Below are the details of your deposit:</p>" + "<table>" + "<tr>"
+							+ "<th>Bill Name: </th>" + "<td>" + "" + "</td>" + "</tr>" + "<tr>"
+							+ "<th>Deposit Amount: </th>" + "<td>$" + withdraw + "</td>" + "</tr>" + "<tr>"
+							+ "<th>Current Balance: </th>" + "<td>$" + user.getBalance() + "</td>" + "</tr>" + "<tr>"
+							+ "<th>Total Amount: </th>" + "<td>$" + total + "</td>" + "</tr>" + "<tr>"
+							+ "<th>Transaction ID: </th>" + "<td>" + d.getReferenceNumber() + "</td>" + "</tr>"
+							+ "</table>"
+							+ "<p>This email confirms that your deposit has been successfully processed. Your current balance is updated accordingly.</p>"
+							+ "<p>If you have any questions or concerns, please feel free to contact us.</p>"
+							+ "<p>Best regards,<br>AzCar Team</p>";
+					orderServices.sendOrderEmail(email, "Place Order Successfully", mailContent);
+					paymentServices.createNewProfit(user.getId(), withdraw, new ProfitCallBack() {
+						@Override
+						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+						}
+					}, true);
+					return new ResponseEntity<Deposit>(d, HttpStatus.OK);
+
+				} else {
+					d.setStatus(EnumDeposit.Done);
+					depositService.updateDeposit(d);
+					Users user = userService.findById(d.getUser().getId());
+					BigDecimal balance = user.getBalance() != null ? user.getBalance() : BigDecimal.valueOf(0);
+					BigDecimal amount = d.getAmount();
+					System.out.println("sÃ¡Â»â€˜ dÃ†Â° hiÃ¡Â»â€¡n tÃ¡ÂºÂ¡i" + balance
+							+ ", SÃ¡Â»â€˜ tiÃ¡Â»ï¿½n nÃ¡ÂºÂ¡p vÃƒÂ o" + amount);
+					BigDecimal total = balance.add(amount);
+					System.out.print(total);
+					user.setBalance(total);
+					userService.saveUserReset(user);
+					String email = user.getEmail();
+					String mailContent = "<p>Hello " + email + ",</p>"
+							+ "<p>We are pleased to inform you that your deposit has been successfully processed.</p>"
+							+ "<p>Below are the details of your deposit:</p>" + "<table>" + "<tr>"
+							+ "<th>Bill Name: </th>" + "<td>" + "" + "</td>" + "</tr>" + "<tr>"
+							+ "<th>Deposit Amount: </th>" + "<td>$" + amount + "</td>" + "</tr>" + "<tr>"
+							+ "<th>Current Balance: </th>" + "<td>$" + user.getBalance() + "</td>" + "</tr>" + "<tr>"
+							+ "<th>Total Amount: </th>" + "<td>$" + total + "</td>" + "</tr>" + "<tr>"
+							+ "<th>Transaction ID: </th>" + "<td>" + d.getReferenceNumber() + "</td>" + "</tr>"
+							+ "</table>"
+							+ "<p>This email confirms that your deposit has been successfully processed. Your current balance is updated accordingly.</p>"
+							+ "<p>If you have any questions or concerns, please feel free to contact us.</p>"
+							+ "<p>Best regards,<br>AzCar Team</p>";
+					orderServices.sendOrderEmail(email, "Place Order Successfully", mailContent);
+					paymentServices.createNewProfit(user.getId(), amount, new ProfitCallBack() {
+						@Override
+						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+						}
+					}, true);
+					return new ResponseEntity<Deposit>(d, HttpStatus.OK);
+				}
+
 			}
 
 		}
 		return new ResponseEntity<String>("Bad Request", HttpStatus.BAD_REQUEST);
+	}
+
+	@PostMapping(value = "/getmoneywallet/returnmywallet/{id}")
+	public ResponseEntity<?> returnmywallet(@PathVariable("id") String id, @RequestBody PaymentDetailsDTO dt) {
+		Deposit d = depositService.findByRefenceId(id);
+		if (d == null) {
+			Deposit temp = new Deposit();
+			temp.setWithdraw(dt.getWithdraw());
+			LocalDateTime time = LocalDateTime.now();
+			temp.setPaymentDateAt(time);
+			temp.setReferenceNumber(id);
+			temp.setStatus(EnumDeposit.Pending);
+			Users user = userService.findById(dt.getUserId());
+			if (user != null) {
+				temp.setUser(user);
+			}
+
+			depositService.savePaymentDetails(temp);
+
+			return new ResponseEntity<String>("OK", HttpStatus.OK);
+		}
+		return new ResponseEntity<String>("Bad Request", HttpStatus.BAD_REQUEST);
+
 	}
 
 }
