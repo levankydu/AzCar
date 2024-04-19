@@ -201,7 +201,9 @@ public class ApiCarsController {
 		for (var item : mmmm) {
 			item.setUser(null);
 		}
-		mmmm.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.DECLINED));
+		mmmm.removeIf(i -> i.getStatus().equals(Constants.orderStatus.DECLINED));
+		mmmm.removeIf(i -> i.getStatus().equals(Constants.orderStatus.ACCEPTED));
+
 		return mmmm;
 
 	}

@@ -2,7 +2,7 @@
   position: fixed;
   bottom: 50px;
   right: 50px;
-  background: #5A5EB9;
+  background: #3c5bfc;
   width: 80px;
   height: 80px;  
   border-radius: 50%;
@@ -19,7 +19,7 @@
     border-radius: 45px;
     padding-right: 40px;
     padding-left: 40px;
-    color: #5865C3;
+    color: #3c5bfc;
 }
 #chat-overlay {
     background: rgba(255,255,255,0.1);
@@ -52,7 +52,7 @@
   cursor:pointer;
 }
 .chat-box-header {
-  background: #5A5EB9;
+  background: #3c5bfc;
   height:70px;
   border-top-left-radius:5px;
   border-top-right-radius:5px; 
@@ -122,7 +122,7 @@
   box-shadow:none;
   border:none;
   border-radius:50%;
-  color:#5A5EB9;
+  color:#3c5bfc;
   width:35px;
   height:35px;  
 }

@@ -200,7 +200,7 @@
 				</div>
 			</div>
 			<div class="col-xl-8">
-				<form th:action="@{/user/profile/edit/{email} (email=${email})}"
+			<form th:action="@{/user/profile/edit/{email} (email=${email})}"
 					th:method="post" enctype="multipart/form-data" th:object="${user}"
 					id="editForm">
 					<div class="col-xl-12">
@@ -708,7 +708,6 @@
 	        toggleSaveButtonVisibility(); 
 	    });
 
-	    $('#dob').after('<span class="age-warning" style="color: red" >Phải đủ 18 tuổi</span>');
 
 	    var defaultDob = $('#dob').val();
 
@@ -722,30 +721,29 @@
 	});
 	
 	function toggleSaveButtonVisibility() {
-	    const saveChangesBtn = document.getElementById("saveChangesBtn");
-	    const firstNameInput = document.getElementById("firstName");
-	    const lastNameInput = document.getElementById("lastName");
-	    const phoneInput = document.getElementById("phone");
-	    const dobInput = document.getElementById("dob");
-	    const genderInput = document.getElementById("gender");
-	    const addressInput = document.getElementById("carAddress");
+	    var saveChangesBtn = document.getElementById("saveChangesBtn");
+	    var firstNameInput = document.getElementById("firstName");
+	    var lastNameInput = document.getElementById("lastName");
+	    var phoneInput = document.getElementById("phone");
+	    var dobInput = document.getElementById("dob");
+	    var genderInput = document.getElementById("gender");
+	    var addressInput = document.getElementById("carAddress");
 
-	    const isValidFirstName = firstNameInput.value.trim() !== "";
-	    const isValidLastName = lastNameInput.value.trim() !== "";
-	    const isValidPhone = phoneInput.value.trim() !== "";
-	    const isValidDob = dobInput.value.trim() !== "";
-	    const isValidGender = genderInput.value.trim() !== "";
-	    const isValidAddress = addressInput.value.trim() !== "";
+	    var isValidFirstName = firstNameInput.value.trim() !== "";
+	    var isValidLastName = lastNameInput.value.trim() !== "";
+	    var isValidPhone = phoneInput.value.trim() !== "";
+	    var isValidDob = dobInput.value.trim() !== "";
+	    var isValidGender = genderInput.value.trim() !== "";
+	    var isValidAddress = addressInput.value.trim() !== "";
 
-	    // Xóa các lớp CSS invalid-input trước khi kiểm tra lại
-	    firstNameInput.classList.remove("invalid-input");
-	    lastNameInput.classList.remove("invalid-input");
-	    phoneInput.classList.remove("invalid-input");
-	    dobInput.classList.remove("invalid-input");
-	    genderInput.classList.remove("invalid-input");
-	    addressInput.classList.remove("invalid-input");
+	    var invalidInputs = [firstNameInput, lastNameInput, phoneInput, dobInput, genderInput, addressInput];
+	    
+	    // Remove previous invalid-input class
+	    invalidInputs.forEach(function(input) {
+	        input.classList.remove("invalid-input");
+	    });
 
-	    // Kiểm tra và thêm lớp CSS invalid-input nếu cần
+	    // Add invalid-input class to invalid inputs
 	    if (!isValidFirstName) {
 	        firstNameInput.classList.add("invalid-input");
 	    }
@@ -765,7 +763,7 @@
 	        addressInput.classList.add("invalid-input");
 	    }
 
-	    // Kiểm tra nếu tất cả các trường hợp đều hợp lệ, hiển thị nút lưu, ngược lại ẩn nút lưu
+	    // Toggle save button visibility
 	    if (isValidFirstName && isValidLastName && isValidPhone && isValidDob && isValidGender && isValidAddress) {
 	        saveChangesBtn.style.display = "block";
 	    } else {
@@ -928,6 +926,5 @@
 		}	
 		}
 	</script>
-
 </body>
 </html>
