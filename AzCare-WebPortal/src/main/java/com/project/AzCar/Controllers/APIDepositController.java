@@ -3,10 +3,12 @@ package com.project.AzCar.Controllers;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,6 +38,21 @@ public class APIDepositController {
 	UserServices userService;
 	@Autowired
 	private OrderDetailsService orderServices;
+
+	@GetMapping("/deposits/user/{userId}")
+	public ResponseEntity<List<Deposit>> getDepositsByUserId(@PathVariable String userId) {
+		try {
+			// Parse the userId to an integer if necessary
+			int userIdFind = Integer.parseInt(userId);
+
+			// Assuming findListUserById needs an integer
+			List<Deposit> deposits = depositService.findListUserById(userIdFind);
+			return ResponseEntity.ok(deposits);
+		} catch (NumberFormatException e) {
+			// Handle the case where userId is not a valid integer
+			return ResponseEntity.badRequest().body(null);
+		}
+	}
 
 	@PostMapping(value = "/home/myplan/createpayments/deposit/{id}")
 	public ResponseEntity<?> createDeposit(@PathVariable("id") String referenceID, @RequestBody PaymentDetailsDTO dt) {
@@ -70,13 +87,13 @@ public class APIDepositController {
 		if (d != null) {
 			if (!d.getStatus().toString().contains("Done")) {
 				if (dto.getAmount() == null) {
-					System.out.print("Tiền rút: " + dto.getWithdraw());
+					System.out.print("Tiá»�n rÃºt: " + dto.getWithdraw());
 					d.setStatus(EnumDeposit.Done);
 					depositService.updateDeposit(d);
 					Users user = userService.findById(d.getUser().getId());
 					BigDecimal balance = user.getBalance() != null ? user.getBalance() : BigDecimal.valueOf(0);
 					BigDecimal withdraw = d.getWithdraw();
-					System.out.println("số tiền hiện tại" + balance + ",số tiền sẽ trừ" + withdraw);
+					System.out.println("sá»‘ tiá»�n hiá»‡n táº¡i" + balance + ",sá»‘ tiá»�n sáº½ trá»«" + withdraw);
 					BigDecimal total;
 					total = balance.subtract(withdraw);
 					System.out.print(total);
@@ -109,7 +126,8 @@ public class APIDepositController {
 					Users user = userService.findById(d.getUser().getId());
 					BigDecimal balance = user.getBalance() != null ? user.getBalance() : BigDecimal.valueOf(0);
 					BigDecimal amount = d.getAmount();
-					System.out.println("sá»‘ dÆ° hiá»‡n táº¡i" + balance + ", Sá»‘ tiá»�n náº¡p vÃ o" + amount);
+					System.out.println("sÃ¡Â»â€˜ dÃ†Â° hiÃ¡Â»â€¡n tÃ¡ÂºÂ¡i" + balance
+							+ ", SÃ¡Â»â€˜ tiÃ¡Â»ï¿½n nÃ¡ÂºÂ¡p vÃƒÂ o" + amount);
 					BigDecimal total = balance.add(amount);
 					System.out.print(total);
 					user.setBalance(total);

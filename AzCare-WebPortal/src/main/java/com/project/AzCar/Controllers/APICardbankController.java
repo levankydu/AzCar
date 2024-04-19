@@ -31,13 +31,21 @@ public class APICardbankController {
 	private UserServices uService;
 
 	@GetMapping("/cardBank/user/{userId}")
-	public ResponseEntity<Cardbank> findCardBankByUserId(@PathVariable("userId") Long userId) {
-		Cardbank cardBanks = cardService.findCardbankByUserId(userId);
+	public ResponseEntity<Cardbank> findCardBankByUserId(@PathVariable("userId") String userId) {
+		Long longUserId = Long.parseLong(userId); // Chuyển đổi String sang Long
+
+		Cardbank cardBanks = cardService.findCardbankByUserId(longUserId);
 		if (cardBanks != null) {
 			return new ResponseEntity<>(cardBanks, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+	}
+
+	@GetMapping("/cardBank/admin")
+	public ResponseEntity<List<Cardbank>> getListCardBankAdmin() {
+		List<Cardbank> cards = cardService.getListCardBankAdmin();
+		return ResponseEntity.ok(cards); // Returns the list of card banks with HTTP status 200
 	}
 
 	@PostMapping("/dashboard/createBank")
@@ -56,10 +64,11 @@ public class APICardbankController {
 	@PostMapping("/cardBank/create")
 	public ResponseEntity<?> createCardbank(@RequestParam("bankName") String bankName,
 			@RequestParam("bankNumber") String bankNumber, @RequestParam("beneficiaryName") String beneficiaryName,
-			@RequestParam("addressbank") String addressbank, @RequestParam("userId") Long userId) {
+			@RequestParam("addressbank") String addressbank, @RequestParam("userId") String userId) {
 
+		Long longUser = Long.parseLong(userId);
 		Cardbank cb = new Cardbank();
-		Users u = uService.findById(userId);
+		Users u = uService.findById(longUser);
 
 		cb.setBankName(bankName);
 		cb.setAddressbank(addressbank);
