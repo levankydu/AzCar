@@ -7,6 +7,10 @@ plugins {
 group = 'com.project'
 version = '0.0.1-SNAPSHOT'
 
+compileJava {
+    options.compilerArgs << '-parameters'
+}
+
 java {
 	sourceCompatibility = '21'
 }

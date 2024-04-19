@@ -10,5 +10,6 @@ import com.project.AzCar.Entities.Deposit.Cardbank;
 @Repository
 public interface cardbankRepository extends JpaRepository<Cardbank, Integer> {
 	@Query(value = "select * from tb_cardbank r where r.user_id = :id", nativeQuery = true)
-	Cardbank findByUserId(@Param("id") int id);
+	Cardbank findByUserId(@Param("id") long id);
+
 }

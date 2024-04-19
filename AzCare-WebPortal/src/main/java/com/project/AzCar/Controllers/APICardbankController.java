@@ -5,11 +5,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.AzCar.Dto.PaymentDetails.CardBankDTO;
 import com.project.AzCar.Entities.Coupon.EnumCoupon;
@@ -18,7 +22,7 @@ import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Service.Deposit.ICarbankService;
 import com.project.AzCar.Services.Users.UserServices;
 
-@RestController
+@Controller
 public class APICardbankController {
 
 	@Autowired
@@ -26,7 +30,17 @@ public class APICardbankController {
 	@Autowired
 	private UserServices uService;
 
-	@PostMapping(value = "/dashboard/createBank")
+	@GetMapping("/cardBank/user/{userId}")
+	public ResponseEntity<Cardbank> findCardBankByUserId(@PathVariable("userId") Long userId) {
+		Cardbank cardBanks = cardService.findCardbankByUserId(userId);
+		if (cardBanks != null) {
+			return new ResponseEntity<>(cardBanks, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@PostMapping("/dashboard/createBank")
 	public ResponseEntity<?> createKeyword(@RequestBody CardBankDTO dto) {
 		Cardbank cb = new Cardbank();
 		cb.setBankName(dto.getBankName());
@@ -39,33 +53,39 @@ public class APICardbankController {
 		return new ResponseEntity<Cardbank>(cb, HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/create/createBank")
-	public ResponseEntity<?> createCardbank(@RequestBody CardBankDTO dto) {
+	@PostMapping("/cardBank/create")
+	public ResponseEntity<?> createCardbank(@RequestParam("bankName") String bankName,
+			@RequestParam("bankNumber") String bankNumber, @RequestParam("beneficiaryName") String beneficiaryName,
+			@RequestParam("addressbank") String addressbank, @RequestParam("userId") Long userId) {
+
 		Cardbank cb = new Cardbank();
-		Users u = uService.findById(dto.getUserId());
-		cb = cardService.findCardbankByUserId((int) dto.getUserId());
+		Users u = uService.findById(userId);
 
-		if (u != null) {
-			if (cb != null) {
-				cb.setBankName(dto.getBankName());
-				cb.setAddressbank(dto.getAddressbank());
-				cb.setBankNumber(dto.getBankNumber());
-				cb.setBeneficiaryName(dto.getBeneficiaryName());
-				cb.setActive(EnumCoupon.Active);
-				cb.setUser(u);
-				cardService.saveCardbank(cb);
-			} else {
-				cb.setBankName(dto.getBankName());
-				cb.setAddressbank(dto.getAddressbank());
-				cb.setBankNumber(dto.getBankNumber());
-				cb.setBeneficiaryName(dto.getBeneficiaryName());
-				cb.setActive(EnumCoupon.Active);
-				cb.setUser(u);
-				cardService.saveCardbank(cb);
-			}
+		cb.setBankName(bankName);
+		cb.setAddressbank(addressbank);
+		cb.setBankNumber(bankNumber);
+		cb.setBeneficiaryName(beneficiaryName);
+		cb.setActive(EnumCoupon.Active);
+		cb.setUser(u);
+		cardService.saveCardbank(cb);
 
-		}
 		return new ResponseEntity<Cardbank>(cb, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/cardBank/update/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<?> updateCardbank(@PathVariable("id") int id, @RequestBody CardBankDTO cardbankDTO) {
+
+		Cardbank cb = cardService.findCardbankbyId(id);
+		Users u = uService.findById(cardbankDTO.getUserId());
+		cb.setBankName(cardbankDTO.getBankName());
+		cb.setAddressbank(cardbankDTO.getAddressbank());
+		cb.setBankNumber(cardbankDTO.getBankNumber());
+		cb.setBeneficiaryName(cardbankDTO.getBeneficiaryName());
+		cb.setActive(EnumCoupon.Active);
+		cb.setUser(u);
+		cardService.saveCardbank(cb);
+
+		return ResponseEntity.ok().build();
 	}
 
 	@PutMapping(value = "/dashboard/acceptmethodPayment/{id}")
@@ -88,7 +108,6 @@ public class APICardbankController {
 			}
 
 			cardService.saveCardbank(cb);
-			System.out.println(cb);
 			return new ResponseEntity<Cardbank>(cb, HttpStatus.OK);
 		}
 

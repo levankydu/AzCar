@@ -26,8 +26,6 @@ public class Cardbank {
 	private String beneficiaryName;
 	private String addressbank;
 
-	// chổ này mình set thẻ nếu mà thẻ active thì cho phép chuyển qua
-	// còn ko thì nghỉ
 	private EnumCoupon active;
 	@OneToOne
 	@JoinColumn(name = "user_id")
