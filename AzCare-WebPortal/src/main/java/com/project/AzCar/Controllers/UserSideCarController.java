@@ -436,6 +436,9 @@ public class UserSideCarController {
 		var model = carServices.findById(Integer.parseInt(carId));
 		var modelDto = carServices.mapToDto(model.getId());
 		String email = request.getSession().getAttribute("emailLogin").toString();
+		if (email.equals("admin@admin")) {
+			return "redirect:/";
+		}
 		Users user = userServices.findUserByEmail(email);
 		List<String> listProvince = provinceServices.getListCityString();
 
@@ -1110,6 +1113,7 @@ public class UserSideCarController {
 			itemDto.setCarmodel(brandServices.getModel(item.getModelId()));
 			itemDto.setImages(carImageServices.getImgByCarId(item.getId()));
 			List<Violation> vioSize = violationRepo.getEnabledByCarId(itemDto.getId());
+			vioSize.removeIf(i -> i.getUserId() != user.getId());
 			itemDto.setActiveViolationAmount(vioSize.size());
 			List<OrderDetailsDTO> finishedList = orderServices.getDTOFromCarId(item.getId());
 			finishedList.removeIf(i -> !i.getStatus().equals("owner_trip_done"));
@@ -1145,9 +1149,9 @@ public class UserSideCarController {
 		}
 		ModelView.addAttribute("cardbank", c);
 		Cardbank cardbank = cardService.findCardbankByUserId((int) user.getId());
-		if (cardbank != null) {
-			ModelView.addAttribute("cardbankuser", cardbank);
-		}
+
+		ModelView.addAttribute("cardbankuser", cardbank);
+
 		ModelView.addAttribute("rentorDone", rentorDone);
 		ModelView.addAttribute("orderList", latestOrders);
 		ModelView.addAttribute("ImgLicense", listImg);

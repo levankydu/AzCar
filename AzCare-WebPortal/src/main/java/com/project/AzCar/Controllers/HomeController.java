@@ -119,22 +119,22 @@ public class HomeController {
 		}
 
 		for (var item : listDto) {
-			if (item.getAddress().contains("Há»“ ChÃ­ Minh")) {
+			if (item.getAddress().contains("Hồ Chí Minh")) {
 				listcarsInHcm.add(item);
 			}
 		}
 		for (var item : listDto) {
-			if (item.getAddress().contains("HÃ  Ná»™i")) {
+			if (item.getAddress().contains("Hà Nội")) {
 				listcarsInHn.add(item);
 			}
 		}
 		for (var item : listDto) {
-			if (item.getAddress().contains("Ä�Ã  Náºµng")) {
+			if (item.getAddress().contains("Đà Nẵng")) {
 				listcarsInDn.add(item);
 			}
 		}
 		for (var item : listDto) {
-			if (item.getAddress().contains("BÃ¬nh DÆ°Æ¡ng")) {
+			if (item.getAddress().contains("Bình Dương")) {
 				listcarsInBd.add(item);
 			}
 		}
@@ -171,8 +171,14 @@ public class HomeController {
 	}
 
 	@GetMapping("/login")
-	public String getLogin(Model model) {
-		model.addAttribute("user", new Users());
+	public String getLogin(Model ModelView, HttpServletRequest request) {
+		ModelView.addAttribute("user", new Users());
+
+		if (request.getSession().getAttribute("goolgleVerify") != null) {
+			ModelView.addAttribute("goolgleVerify", request.getSession().getAttribute("goolgleVerify"));
+			request.getSession().removeAttribute("goolgleVerify");
+
+		}
 		return "/authentications/login";
 	}
 

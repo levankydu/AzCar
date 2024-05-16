@@ -508,7 +508,7 @@ if (document.getElementById('toast-failed-register-user')) {
 	document.getElementById('toast-failed-register-user').addEventListener('click', () => {
 		Toast.fire({
 			icon: 'error',
-			title: 'Edit failed'
+			title: 'Registeres failed'
 		})
 	})
 }

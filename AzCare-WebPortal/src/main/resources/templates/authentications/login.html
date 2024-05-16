@@ -84,6 +84,11 @@ End Google Tag Manager (noscript)
 						<div class="details">
 							<!-- Name -->
 							<h3>Sign into your account</h3>
+							<div th:if="${goolgleVerify !=null}">
+							<h5  class="text-success" th:text="${'Success Register by Google'}"></h5>
+							<h6 class="text-success" th:text="${'Check your mail to continue Login'}"></h6>
+							</div>
+							
 							<p id="toast-failed-login" hidden="true" class="btn btn-outline-primary btn-lg btn-block">
 								Failed
 								Example</p>

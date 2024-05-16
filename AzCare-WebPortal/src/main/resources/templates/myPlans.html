@@ -1255,7 +1255,9 @@ select {
 							required> <label for="referenceNumber">Reference
 							Number:</label> <input type="text" id="referenceNumber123"
 							name="referenceNumber123" readonly><br> <br>
-						<button type="submit">Pay</button>
+						<button th:if="${cardbankuser != null }" type="submit">Pay</button>
+						<span th:if="${cardbankuser == null}" class="text-danger">You must add your bank account before withdrawing</span>
+						<p><a class="btn btn-success btn-md" th:if="${cardbankuser == null}" th:href="'/user/profile/' + ${session.user}">Update Bank Account</a></p>
 					</div>
 
 					<div class="col-md" th:if="${cardbankuser !=null}">

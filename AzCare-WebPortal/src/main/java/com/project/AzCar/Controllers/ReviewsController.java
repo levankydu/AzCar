@@ -85,7 +85,7 @@ public class ReviewsController {
 
 		reviewServices.save(review);
 		System.out.println(review.getComment());
-		return "redirect:/";
+		return "redirect:/home/availablecars/details/" + carId;
 
 	}
 
