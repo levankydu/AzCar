@@ -158,10 +158,11 @@
 				class="nav-link"
 				th:href="@{/user/profile/changePassword/{email} (email=${email})}">Change
 				Password</a> <a class="nav-link"
-				th:href="@{/user/profile/edit/{email} (email=${email})}">Edit</a>
-				<a class="nav-link"
-				th:href="@{/user/profile/edit/cardbank/{email} (email=${email})}">Card Bank Edit</a>
-				
+				th:href="@{/user/profile/edit/{email} (email=${email})}">Edit</a> <a
+				class="nav-link"
+				th:href="@{/user/profile/edit/cardbank/{email} (email=${email})}">Card
+				Bank Edit</a>
+
 		</nav>
 		<hr class="mt-0 mb-4">
 
@@ -260,14 +261,16 @@
 									</div>
 									<div class="col-md-6">
 										<label class="small mb-1" for="inputAddress">Address </label>
-										<input style="cursor: pointer; text-align: center;" type="text" readonly
-												class="form-control" name="address"
-												placeholder="Click here to enter custom address"
-												onclick="return openModal.click();"  id="carAddress" th:value="*{address}" onchange="toggleSaveButtonVisibility();">
-											<a href="#" data-toggle="modal" data-target="#addressModal" id="openModal"
-												hidden="true">Click me</a>
+										<input style="cursor: pointer; text-align: center;"
+											type="text" readonly class="form-control" name="address"
+											placeholder="Click here to enter custom address"
+											onclick="return openModal.click();" id="carAddress"
+											th:value="*{address}"
+											onchange="toggleSaveButtonVisibility();"> <a href="#"
+											data-toggle="modal" data-target="#addressModal"
+											id="openModal" hidden="true">Click me</a>
 									</div>
-									
+
 
 								</div>
 								<!-- Save changes button -->
@@ -666,9 +669,6 @@
 	<script src="/assets/js/jquery.mb.YTPlayer.js"></script>
 	<script src="/assets/js/slick.min.js"></script>
 	<script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
-	<script
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0N5pbJN10Y1oYFRd0MJ_v2g8W2QT74JE"></script>
-	<script src="/assets/js/ie-emulation-modes-warning.js"></script>
 	<!-- Custom JS Script -->
 	<script src="/assets/js/app.js"></script>
 	<!-- Bootstrap CSS -->
@@ -681,8 +681,6 @@
 	<!-- Bootstrap JS -->
 	<script
 		src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-
-	<!-- Bootstrap Datepicker JS -->
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
@@ -708,7 +706,6 @@
 	        toggleSaveButtonVisibility(); 
 	    });
 
-	    $('#dob').after('<span class="age-warning" style="color: red" >Phải đủ 18 tuổi</span>');
 
 	    var defaultDob = $('#dob').val();
 
@@ -722,30 +719,29 @@
 	});
 	
 	function toggleSaveButtonVisibility() {
-	    const saveChangesBtn = document.getElementById("saveChangesBtn");
-	    const firstNameInput = document.getElementById("firstName");
-	    const lastNameInput = document.getElementById("lastName");
-	    const phoneInput = document.getElementById("phone");
-	    const dobInput = document.getElementById("dob");
-	    const genderInput = document.getElementById("gender");
-	    const addressInput = document.getElementById("carAddress");
+	    var saveChangesBtn = document.getElementById("saveChangesBtn");
+	    var firstNameInput = document.getElementById("firstName");
+	    var lastNameInput = document.getElementById("lastName");
+	    var phoneInput = document.getElementById("phone");
+	    var dobInput = document.getElementById("dob");
+	    var genderInput = document.getElementById("gender");
+	    var addressInput = document.getElementById("carAddress");
 
-	    const isValidFirstName = firstNameInput.value.trim() !== "";
-	    const isValidLastName = lastNameInput.value.trim() !== "";
-	    const isValidPhone = phoneInput.value.trim() !== "";
-	    const isValidDob = dobInput.value.trim() !== "";
-	    const isValidGender = genderInput.value.trim() !== "";
-	    const isValidAddress = addressInput.value.trim() !== "";
+	    var isValidFirstName = firstNameInput.value.trim() !== "";
+	    var isValidLastName = lastNameInput.value.trim() !== "";
+	    var isValidPhone = phoneInput.value.trim() !== "";
+	    var isValidDob = dobInput.value.trim() !== "";
+	    var isValidGender = genderInput.value.trim() !== "";
+	    var isValidAddress = addressInput.value.trim() !== "";
 
-	    // Xóa các lớp CSS invalid-input trước khi kiểm tra lại
-	    firstNameInput.classList.remove("invalid-input");
-	    lastNameInput.classList.remove("invalid-input");
-	    phoneInput.classList.remove("invalid-input");
-	    dobInput.classList.remove("invalid-input");
-	    genderInput.classList.remove("invalid-input");
-	    addressInput.classList.remove("invalid-input");
+	    var invalidInputs = [firstNameInput, lastNameInput, phoneInput, dobInput, genderInput, addressInput];
+	    
+	    // Remove previous invalid-input class
+	    invalidInputs.forEach(function(input) {
+	        input.classList.remove("invalid-input");
+	    });
 
-	    // Kiểm tra và thêm lớp CSS invalid-input nếu cần
+	    // Add invalid-input class to invalid inputs
 	    if (!isValidFirstName) {
 	        firstNameInput.classList.add("invalid-input");
 	    }
@@ -765,7 +761,7 @@
 	        addressInput.classList.add("invalid-input");
 	    }
 
-	    // Kiểm tra nếu tất cả các trường hợp đều hợp lệ, hiển thị nút lưu, ngược lại ẩn nút lưu
+	    // Toggle save button visibility
 	    if (isValidFirstName && isValidLastName && isValidPhone && isValidDob && isValidGender && isValidAddress) {
 	        saveChangesBtn.style.display = "block";
 	    } else {
@@ -853,12 +849,19 @@
 			
 			var addressResult= document.getElementById('carAddress').value;
 			
-			if(addressResult==""){    
+			if(addressResult==""){
+				if(document.getElementById('validation-NULL-address')){
+					document.getElementById('validation-NULL-address').textContent = "Car address must be declared";
+				}
 		
-				document.getElementById('validation-NULL-address').textContent = "Car address must be declared";
+				
 			}else{
-				document.getElementById('validation-NULL-address').textContent = "";
+				if(document.getElementById('validation-NULL-address')){
+					document.getElementById('validation-NULL-address').textContent = "";
+				}
+				
 			}
+			
 			
 		}
 		
@@ -924,10 +927,10 @@
 					
 					offModal.click();
 					validateAddress();
-					toggleSaveButtonVisibility();
+				
 		}	
+			toggleSaveButtonVisibility();
 		}
 	</script>
-
 </body>
 </html>

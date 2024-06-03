@@ -86,11 +86,12 @@ public class SecurityConfig {
 								if (authentication.getPrincipal() instanceof OAuth2User) {
 									System.out.println("Success logged in user---------------: " + name);
 									OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
-									String email = oauth2User.getAttribute("email");
+									String goolgleVerify = oauth2User.getAttribute("email");
 //									request.getSession().setAttribute("isAuthen", "a");
 //									request.getSession().setAttribute("user", email);
 //									request.getSession().setAttribute("role", "user");
-									System.out.println("Google:" + email);
+									System.out.println("Google:" + goolgleVerify);
+									request.getSession().setAttribute("goolgleVerify", goolgleVerify);
 									response.sendRedirect("/login");
 								}
 								// XÃ¡c Ä‘á»‹nh lá»—i vÃ  redirect tÃ¹y thuá»™c vÃ o

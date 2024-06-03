@@ -163,13 +163,14 @@ public class AdminController {
 		List<BigDecimal> totalOut = new ArrayList<>();
 		BigDecimal sumIncome = BigDecimal.ZERO;
 		BigDecimal sumExpense = BigDecimal.ZERO;
-		BigDecimal totalOutByDate = BigDecimal.ZERO;
-		BigDecimal totalInByDate = BigDecimal.ZERO;
+
 		if (dateRange.isBlank() || dateRange.isEmpty()) {
 			for (var item : dayList) {
 				List<PaymentDTO> in = paymentService
 						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
 				in.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.PROFIT));
+
+				BigDecimal totalInByDate = BigDecimal.ZERO;
 				for (var i : in) {
 					totalInByDate = totalInByDate.add(i.getAmount());
 				}
@@ -179,6 +180,7 @@ public class AdminController {
 				List<PaymentDTO> out = paymentService
 						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
 				out.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.EXPENSE));
+				BigDecimal totalOutByDate = BigDecimal.ZERO;
 				for (var i : out) {
 					totalOutByDate = totalOutByDate.add(i.getAmount());
 				}
@@ -205,6 +207,7 @@ public class AdminController {
 				in.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.PROFIT));
 				in.removeIf(i -> i.getCreatedAt().isBefore(localDateTimeStart));
 				in.removeIf(i -> i.getCreatedAt().isAfter(localDateTimeEnd));
+				BigDecimal totalInByDate = BigDecimal.ZERO;
 				for (var i : in) {
 					totalInByDate = totalInByDate.add(i.getAmount());
 				}
@@ -217,7 +220,7 @@ public class AdminController {
 				out.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.EXPENSE));
 				out.removeIf(i -> i.getCreatedAt().isBefore(localDateTimeStart));
 				out.removeIf(i -> i.getCreatedAt().isAfter(localDateTimeEnd));
-
+				BigDecimal totalOutByDate = BigDecimal.ZERO;
 				for (var i : out) {
 					if (totalOutByDate != BigDecimal.ZERO) {
 						totalOutByDate = totalOutByDate.add(i.getAmount());
@@ -244,6 +247,7 @@ public class AdminController {
 						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
 				in.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.PROFIT));
 				in.removeIf(i -> !i.getCreatedAt().toLocalDate().isEqual(localDateTimeStart.toLocalDate()));
+				BigDecimal totalInByDate = BigDecimal.ZERO;
 				for (var i : in) {
 					totalInByDate = totalInByDate.add(i.getAmount());
 				}
@@ -255,7 +259,7 @@ public class AdminController {
 						.getPaymentByDate(LocalDate.parse(item, DateTimeFormatter.ofPattern("d/M/yyyy")));
 				out.removeIf(i -> !i.getStatus().equals(Constants.paymentStatus.EXPENSE));
 				out.removeIf(i -> !i.getCreatedAt().toLocalDate().isEqual(localDateTimeStart.toLocalDate()));
-
+				BigDecimal totalOutByDate = BigDecimal.ZERO;
 				for (var i : out) {
 					totalOutByDate = totalOutByDate.add(i.getAmount());
 				}

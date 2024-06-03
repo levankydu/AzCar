@@ -29,6 +29,7 @@ import com.project.AzCar.Entities.Cars.OrderDetails;
 import com.project.AzCar.Entities.Locations.City;
 import com.project.AzCar.Entities.Locations.District;
 import com.project.AzCar.Entities.Locations.Ward;
+import com.project.AzCar.Entities.ServiceAfterBooking.ServiceAfterBooking;
 import com.project.AzCar.Entities.Users.Users;
 import com.project.AzCar.Entities.Users.Violation;
 import com.project.AzCar.Repositories.CarThings.CarThingsRepo;
@@ -157,6 +158,13 @@ public class ApiCarsController {
 		return result;
 	}
 
+	@GetMapping("/getOrderByUser")
+	public List<OrderDetailsDTO> getOrderByUser(@RequestParam("userId") String userId) {
+		List<OrderDetailsDTO> list = orderServices.getDTOFromCreatedBy(Integer.parseInt(userId));
+		Collections.sort(list, (a, b) -> b.getFromDate().compareTo(a.getFromDate()));
+		return list;
+	}
+
 	@GetMapping("/getCarsExceptUserCar")
 	public List<CarInforDto> getCarsExceptUserCar(@RequestParam("emailLogin") String emailLogin) {
 		List<CarInfor> list = carServices.findAll();
@@ -201,7 +209,9 @@ public class ApiCarsController {
 		for (var item : mmmm) {
 			item.setUser(null);
 		}
-		mmmm.removeIf(i -> !i.getStatus().equals(Constants.orderStatus.DECLINED));
+		mmmm.removeIf(i -> i.getStatus().equals(Constants.orderStatus.DECLINED));
+		mmmm.removeIf(i -> i.getStatus().equals(Constants.orderStatus.ACCEPTED));
+
 		return mmmm;
 
 	}
@@ -245,7 +255,9 @@ public class ApiCarsController {
 
 	@GetMapping("/getOrderOfThisCar")
 	public List<OrderDetails> getOrderOfThisCar(@RequestParam("carId") String carId) {
-		return getNeededOrders(Integer.parseInt(carId), 0);
+		List<OrderDetails> orderDetailsOfThisCar = orderServices.getFromCarId(Integer.parseInt(carId));
+		Collections.sort(orderDetailsOfThisCar, (a, b) -> b.getFromDate().compareTo(a.getFromDate()));
+		return orderDetailsOfThisCar;
 	}
 
 	@GetMapping("/processFavorite")
@@ -262,6 +274,171 @@ public class ApiCarsController {
 		}
 		carThingsRepo.delete(favorite);
 		return new ResponseEntity<String>("Removed", HttpStatus.OK);
+	}
+
+	@GetMapping("/ownerAccepted")
+	public ResponseEntity<String> acceptRequestBooking(@RequestParam("orderId") String orderId)
+			throws UnsupportedEncodingException, MessagingException {
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		order.setStatus(Constants.orderStatus.ACCEPTED);
+
+		orderServices.save(order);
+		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
+		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().divide(BigDecimal.valueOf(2)));
+		Users user = userServices.findById(order.getUserId());
+		CarInforDto car = carServices.mapToDto(Integer.parseInt(order.getCarId()));
+		String subject = "[" + car.getCarmodel().getBrand() + "] " + car.getCarmodel().getModel() + "Order Accepted";
+		String mailcontent = "Your order is ACCEPTED by owner";
+		orderServices.sendOrderEmail(user.getEmail(), subject, mailcontent);
+		return new ResponseEntity<String>("OK", HttpStatus.OK);
+	}
+
+	@GetMapping("/ownerDeclined")
+	public ResponseEntity<String> declinedRequestBooking(@RequestParam("orderId") String orderId)
+			throws UnsupportedEncodingException, MessagingException {
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
+		var car = carServices.findById(Integer.parseInt(order.getCarId()));
+		order.setStatus(Constants.orderStatus.DECLINED);
+		orderServices.save(order);
+		Violation vio = new Violation();
+		vio.setUserId(ownerId);
+		vio.setCarId(car.getId());
+		vio.setReason(Constants.violations.OWNER_DECLINED);
+		violationRepo.save(vio);
+		paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
+		paymentServices.createNewExpense(order.getUserId(), BigDecimal.valueOf(order.getExtraFee().getInsurance()),
+				new ProfitCallBack() {
+					@Override
+					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+						user.setBalance(userBalance.add(amount));
+					}
+				}, false);
+		Users user = userServices.findById(order.getUserId());
+		CarInforDto carDTO = carServices.mapToDto(Integer.parseInt(order.getCarId()));
+		String subject = "[" + carDTO.getCarmodel().getBrand() + "] " + carDTO.getCarmodel().getModel()
+				+ "Order Declined";
+		String reason = "";
+		String mailcontent = "Your order is DECLINED by owner" + "<p>Reason: " + reason + "</p>";
+		orderServices.sendOrderEmail(user.getEmail(), subject, mailcontent);
+
+		Users owner = userServices.findById(ownerId);
+		String mailcontentOnwer = "Decline successfully, you will get a violation ticket, if you have 3 tickets in a month your car will be disabled temporary!";
+		orderServices.sendOrderEmail(owner.getEmail(), subject, mailcontentOnwer);
+
+		return new ResponseEntity<String>("OK", HttpStatus.OK);
+	}
+
+	@GetMapping("/userRentalDone")
+	public ResponseEntity<String> clientDoneRequestBooking(@RequestParam("orderId") String orderId)
+			throws UnsupportedEncodingException, MessagingException {
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		order.setStatus(Constants.orderStatus.RENTOR_TRIP_DONE);
+		orderServices.save(order);
+		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
+		paymentServices.createNewRefund(ownerId, order.getId(), order.getTotalRent().multiply(BigDecimal.valueOf(0.4)));
+		paymentServices.createNewProfit(ownerId, order.getTotalRent().multiply(BigDecimal.valueOf(0.1)),
+				new ProfitCallBack() {
+					@Override
+					public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+					}
+				}, false);
+		Users user = userServices.findById(ownerId);
+		CarInforDto carDTO = carServices.mapToDto(Integer.parseInt(order.getCarId()));
+		String subject = "[" + carDTO.getCarmodel().getBrand() + "] " + carDTO.getCarmodel().getModel() + "Rentor Done";
+		String mailcontent = "Your order is finished by customer";
+		orderServices.sendOrderEmail(user.getEmail(), subject, mailcontent);
+		return new ResponseEntity<String>("OK", HttpStatus.OK);
+	}
+
+	@GetMapping("/userCancel")
+	public ResponseEntity<String> clientCancelBooking(@RequestParam("orderId") String orderId)
+			throws UnsupportedEncodingException, MessagingException {
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		String status = order.getStatus();
+		boolean isAccepted = false;
+		if (status.equals("accepted")) {
+			isAccepted = true;
+			// return only 90% of totalRent and fees with insurance
+			paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
+			paymentServices.createNewProfit(order.getUserId(), order.getTotalRent().multiply(BigDecimal.valueOf(0.1)),
+					new ProfitCallBack() {
+						@Override
+						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+							user.setBalance(userBalance.subtract(amount));
+						}
+					}, false);
+		}
+		if (status.equals("waiting_for_verify")) {
+			paymentServices.createNewRefund(order.getUserId(), order.getId(), order.getTotalAndFeesWithoutInsurance());
+			paymentServices.createNewExpense(order.getUserId(), BigDecimal.valueOf(order.getExtraFee().getInsurance()),
+					new ProfitCallBack() {
+						@Override
+						public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
+							user.setBalance(userBalance.add(amount));
+						}
+					}, false);
+		}
+		order.setStatus(Constants.orderStatus.RENTOR_DECLINED);
+		orderServices.save(order);
+
+		Violation vio = new Violation();
+		vio.setUserId(order.getUserId());
+		vio.setCarId(Integer.parseInt(order.getCarId()));
+		vio.setReason(Constants.violations.USER_DECLINDED);
+		violationRepo.save(vio);
+
+		var ownerId = carServices.findById(Integer.parseInt(order.getCarId())).getCarOwnerId();
+		Users owner = userServices.findById(ownerId);
+		String reason = "";
+		CarInforDto carDTO = carServices.mapToDto(Integer.parseInt(order.getCarId()));
+		String subject = "[" + carDTO.getCarmodel().getBrand() + "] " + carDTO.getCarmodel().getModel()
+				+ "Customer Declined";
+		String mailcontent = "Your order is DECLINED by customer" + "<p>Reason: " + reason + "</p>";
+		orderServices.sendOrderEmail(owner.getEmail(), subject, mailcontent);
+
+		Users user = userServices.findById(order.getUserId());
+		String mailcontentUser = "You have just canceled this order, you will get a violation ticket, if you have 3 tickets in a month you can not use our service temporary!";
+		if (isAccepted) {
+			mailcontentUser += "<p>Because this order was accepted, you will be charge 10% by total amount of this order as a pusnishment</p>";
+		}
+		orderServices.sendOrderEmail(user.getEmail(), subject, mailcontentUser);
+
+		return new ResponseEntity<String>("OK", HttpStatus.OK);
+	}
+
+	@GetMapping("/ownerFinishReview")
+	public ResponseEntity<String> retalReview(@RequestParam("cleanCheck") boolean cleanCheck,
+			@RequestParam("smellCheck") boolean smellCheck, @RequestParam("description") String decriptions,
+			@RequestParam(name = "carId", required = false, defaultValue = "false") String carId,
+			@RequestParam(name = "orderId", required = false, defaultValue = "false") String orderId) {
+		ServiceAfterBooking tuReview = new ServiceAfterBooking();
+		var order = orderServices.getById(Integer.parseInt(orderId));
+		var car = carServices.findById(Integer.parseInt(carId));
+		if (cleanCheck) {
+			paymentServices.createNewRefund(car.getCarOwnerId(), order.getId(),
+					BigDecimal.valueOf(order.getExtraFee().getCleanFee()));
+			tuReview.setCleanning(true);
+		} else {
+			paymentServices.createNewRefund(order.getUserId(), order.getId(),
+					BigDecimal.valueOf(order.getExtraFee().getCleanFee()));
+		}
+		if (smellCheck) {
+			paymentServices.createNewRefund(car.getCarOwnerId(), order.getId(),
+					BigDecimal.valueOf(order.getExtraFee().getSmellFee()));
+			tuReview.setSmelling(true);
+		} else {
+			paymentServices.createNewRefund(order.getUserId(), order.getId(),
+					BigDecimal.valueOf(order.getExtraFee().getSmellFee()));
+		}
+
+		order.setStatus(Constants.orderStatus.OWNER_TRIP_DONE);
+		orderServices.save(order);
+		tuReview.setOrderId(order.getId());
+		tuReview.setDecriptions(decriptions);
+		tuReview.setCarId(Integer.parseInt(carId));
+
+		return new ResponseEntity<String>("OK", HttpStatus.OK);
 	}
 
 	@PostMapping("/postOrderDetails")
@@ -394,19 +571,19 @@ public class ApiCarsController {
 		List<OrderDetails> orderDetailsOfThisCar = orderServices.getFromCarId(carId);
 		orderDetailsOfThisCar.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
 				&& !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
-		if (userId != 0) {
-			List<OrderDetails> userOrders = orderServices.getFromCreatedBy(userId);
-			userOrders.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
-					&& !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
-			if (userOrders.size() > 0) {
-				for (OrderDetails userOrder : userOrders) {
-					boolean exists = orderDetailsOfThisCar.stream().anyMatch(item -> item.getId() == userOrder.getId());
-					if (!exists) {
-						orderDetailsOfThisCar.add(userOrder);
-					}
+
+		List<OrderDetails> userOrders = orderServices.getFromCreatedBy(userId);
+		userOrders.removeIf(item -> !item.getStatus().equals(Constants.orderStatus.WAITING)
+				&& !item.getStatus().equals(Constants.orderStatus.ACCEPTED));
+		if (userOrders.size() > 0) {
+			for (OrderDetails userOrder : userOrders) {
+				boolean exists = orderDetailsOfThisCar.stream().anyMatch(item -> item.getId() == userOrder.getId());
+				if (!exists) {
+					orderDetailsOfThisCar.add(userOrder);
 				}
 			}
 		}
+
 		Collections.sort(orderDetailsOfThisCar, (a, b) -> a.getFromDate().compareTo(b.getFromDate()));
 		return orderDetailsOfThisCar;
 	}
