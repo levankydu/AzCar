@@ -156,26 +156,26 @@ function hintPrice(modalId) {
 	const count = category.split(",").length - 1;
 	var priceSelected = parseFloat(document.getElementById(newPriceId).value);
 	if (count == 3) {
-		hintMessageElement.textContent = "Recommended price for your Car's category : 1000-1500 $/day ";
+		hintMessageElement.textContent = "Recommended price for your Car's category : 1,000,000 - 1,500,000 VND/day ";
 		if (priceSelected <= 1500 && priceSelected >= 1000) {
 			hintMessageElement.textContent = "";
 		}
 	}
 	if (count == 2) {
-		hintMessageElement.textContent = "Recommended price for your Car's category : 700-999 $/day ";
+		hintMessageElement.textContent = "Recommended price for your Car's category : 700,000 - 999,000 VND/day ";
 		if (priceSelected <= 999 && priceSelected >= 700) {
 			hintMessageElement.textContent = "";
 		}
 	}
 
 	if (count == 1) {
-		hintMessageElement.textContent = "Recommended price for your Car's category : 400-699 $/day ";
+		hintMessageElement.textContent = "Recommended price for your Car's category : 400,000 - 699,000 VND/day ";
 		if (priceSelected <= 699 && priceSelected >= 400) {
 			hintMessageElement.textContent = "";
 		}
 	}
 	if (count == 0) {
-		hintMessageElement.textContent = "Recommended price for your Car's category : 100-399 $/day ";
+		hintMessageElement.textContent = "Recommended price for your Car's category : 100,000 - 399,000 VND/day ";
 		if (priceSelected <= 399 && priceSelected >= 100) {
 			hintMessageElement.textContent = "";
 		}
@@ -282,3 +282,15 @@ function toggleRule4(){
         }
 	
 }
+function changeTextColor(checkbox) {
+       var label = document.getElementById('checkboxLabel');
+        if (checkbox.checked) {
+			console.log("checked")
+            label.classList.remove('text-danger');
+            label.classList.add('text-success');
+        } else {
+			console.log("unchecked")
+            label.classList.remove('text-success');
+            label.classList.add('text-danger');
+        }
+    }

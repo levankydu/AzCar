@@ -400,7 +400,7 @@ input[type="number"] {
 											<div class="text-center">
 
 												<h4>
-													Profit: <span th:text="'$ ' + ${profit} + ''" class="badge"
+													Profit: <span th:text="${profit} +' VND' + ''" class="badge"
 														th:classappend="${profit >0 ? 'bg-success' : 'bg-danger'}"
 														id="profitResult"></span>
 
@@ -498,14 +498,14 @@ input[type="number"] {
 				name : 'Income Value',
 				data : totalIn,
 				tooltip : {
-					valueSuffix : ' $'
+					valueSuffix : ' VND'
 				}
 			}, {
 				name : 'Expense Value',
 				data : totalOut,
 				yAxis : 0,
 				tooltip : {
-					valueSuffix : ' $'
+					valueSuffix : ' VND'
 				}
 			} ]
 

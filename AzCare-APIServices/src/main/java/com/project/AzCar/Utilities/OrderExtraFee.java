@@ -14,7 +14,7 @@ public class OrderExtraFee {
 		this.deliveryFee = deliveryFee;
 		this.cleanFee = cleanFee;
 		this.smellFee = smellFee;
-		this.insurance = 200;
+		this.insurance = 200000;
 	}
 
 	public float getDeliveryFee() {

@@ -3,6 +3,7 @@ package com.project.AzCar.Controllers;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -311,6 +312,8 @@ public class UserSideCarController {
 		if (isExtraFee) {
 			carInfor.setExtraFee(true);
 			extraFee.setCarRegisterId(number);
+			extraFee.setCleanningFee(extraFee.getCleanningFee() * 10 * 1000 * carInfor.getPrice().longValue() / 100);
+			extraFee.setDecorationFee(extraFee.getDecorationFee() * 10 * 1000 * carInfor.getPrice().longValue() / 100);
 			System.out.println(extraFee);
 			extraFeeServices.save(extraFee);
 
@@ -318,11 +321,13 @@ public class UserSideCarController {
 		if (isCarPlus) {
 			carInfor.setCarPlus(true);
 			plusServices.setCarRegisterId(number);
+			plusServices.setFee(plusServices.getFee() * 10 * 1000 * carInfor.getPrice().longValue() / 100);
 			System.out.println(plusServices);
 			plusServiceServices.save(plusServices);
 		}
 
 		try {
+			carInfor.setPrice(carInfor.getPrice().multiply(BigDecimal.valueOf(1000)));
 			System.out.println(carInfor);
 			carServices.saveCarRegister(carInfor);
 			var carDto = carServices.mapToDto(carInfor.getId());
@@ -396,26 +401,26 @@ public class UserSideCarController {
 		String mailContent = "<p>Below are some main details of your car:</p>" + "<table>" + "<tr>" + "<th>Model: </th>"
 				+ "<td>" + "[" + carDetailsDto.getCarmodel().getBrand() + "] " + carDetailsDto.getCarmodel().getModel()
 				+ "</td>" + "</tr>" + "<tr>" + "<th>Year: </th>" + "<td>" + carDetailsDto.getCarmodel().getYear()
-				+ "</td>" + "</tr>" + "<tr>" + "<th>Rental per day: </th>" + "<td>$" + orderdetails.getOriginPrice()
-				+ "</td>" + "</tr>" + "<tr>" + "<th>Discount: </th>" + "<td>" + orderdetails.getDiscount() + "% </td>"
-				+ "</tr>" + "<tr>" + "<th>Price After Discount: </th>" + "<td>$" + priceAfterDiscount + "</td>"
-				+ "</tr>" + "<tr>" + "<th>From: </th>" + "<td>"
+				+ "</td>" + "</tr>" + "<tr>" + "<th>Rental per day: </th>" + "<td>" + orderdetails.getOriginPrice()
+				+ " VND" + "</td>" + "</tr>" + "<tr>" + "<th>Discount: </th>" + "<td>" + orderdetails.getDiscount()
+				+ "% </td>" + "</tr>" + "<tr>" + "<th>Price After Discount: </th>" + "<td>" + priceAfterDiscount
+				+ " VND" + "</td>" + "</tr>" + "<tr>" + "<th>From: </th>" + "<td>"
 				+ orderdetails.getFromDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "</td>" + "</tr>"
 				+ "<tr>" + "<th>To: </th>" + "<td>"
 				+ orderdetails.getToDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "</td>" + "</tr>"
 				+ "<tr>" + "<th>Total days: </th>" + "<td>" + orderdetails.getDifferenceDate() + "</td>" + "</tr>"
 				+ "<tr>" + "<th>Delivery fee: </th>" + "<td>$" + orderdetails.getExtraFee().getDeliveryFee() + "</td>"
-				+ "</tr>" + "<tr>" + "<th>Sub Total: </th>" + "<td> <h4>$" + subTotal + "</h4></td>" + "</tr>" + "<tr>"
-				+ "<td colspan=2 class=text-center>Extra Fee</td>" + "</tr>" + "<tr>"
-				+ "<td class=text-left>Cleanning Fee: </td>" + "<td class=text-right>$"
-				+ orderdetails.getExtraFee().getCleanFee() + "</td>" + "</tr>" + "<tr>"
-				+ "<td class=text-left>Smell Fee: </td>" + "<td class=text-right>$"
-				+ orderdetails.getExtraFee().getSmellFee() + "</td>" + "</tr>" + "<tr>"
-				+ "<td class=text-left>Insurance Fee: </td>" + "<td class=text-right>$200</td>" + "</tr>" + "<tr>"
-				+ "<th>Total: </th>" + "<td>" + "<h4>$"
+				+ "</tr>" + "<tr>" + "<th>Sub Total: </th>" + "<td> <h4>" + subTotal + " VND" + "</h4></td>" + "</tr>"
+				+ "<tr>" + "<td colspan=2 class=text-center>Extra Fee</td>" + "</tr>" + "<tr>"
+				+ "<td class=text-left>Cleanning Fee: </td>" + "<td class=text-right>"
+				+ orderdetails.getExtraFee().getCleanFee() + " VND" + "</td>" + "</tr>" + "<tr>"
+				+ "<td class=text-left>Smell Fee: </td>" + "<td class=text-right>"
+				+ orderdetails.getExtraFee().getSmellFee() + " VND" + "</td>" + "</tr>" + "<tr>"
+				+ "<td class=text-left>Insurance Fee: </td>" + "<td class=text-right>200,000 VND</td>" + "</tr>"
+				+ "<tr>" + "<th>Total: </th>" + "<td>" + "<h4>"
 				+ orderdetails.getTotalAndFees()
 						.subtract(BigDecimal.valueOf(orderdetails.getExtraFee().getDeliveryFee()))
-				+ "</h4>" + "</td>" + "</tr>" + "</table>";
+				+ " VND" + "</h4>" + "</td>" + "</tr>" + "</table>";
 		orderServices.sendOrderEmail(email, "Place Order Successfully", "<p>Hello," + email + "</p>"
 				+ "<p>Thank you for ordering with AzCar.</p>" + mailContent
 				+ "<p>This is to confirm that we already got your order, We will send you an email after car owner accept or declined your order</p>"
@@ -911,7 +916,7 @@ public class UserSideCarController {
 			vio.setEnabled(false);
 			violationRepo.save(vio);
 		}
-		paymentServices.createNewProfit(owner.getId(), BigDecimal.valueOf(200), new ProfitCallBack() {
+		paymentServices.createNewProfit(owner.getId(), BigDecimal.valueOf(200000), new ProfitCallBack() {
 			@Override
 			public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 				user.setBalance(userBalance.subtract(amount));
@@ -939,7 +944,7 @@ public class UserSideCarController {
 			vio.setEnabled(false);
 			violationRepo.save(vio);
 		}
-		paymentServices.createNewProfit(owner.getId(), BigDecimal.valueOf(400), new ProfitCallBack() {
+		paymentServices.createNewProfit(owner.getId(), BigDecimal.valueOf(400000), new ProfitCallBack() {
 			@Override
 			public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 				user.setBalance(userBalance.subtract(amount));
@@ -1163,14 +1168,39 @@ public class UserSideCarController {
 
 	@PostMapping("/home/myplan/updateCar")
 	public String updateCar(@ModelAttribute("newDiscount") String newDiscount,
-			@ModelAttribute("newPrice") String newPrice, @ModelAttribute("carId") String carId) {
+			@ModelAttribute("newPrice") String newPrice, @ModelAttribute("carId") String carId,
+			@RequestParam(name = "isUpdateSerivces", required = false, defaultValue = "false") boolean isUpdateSerivces) {
 		CarInfor car = carServices.findById(Integer.parseInt(carId));
 		car.setDiscount(Integer.parseInt(newDiscount));
-		car.setPrice(new BigDecimal(newPrice));
-		carServices.saveCarRegister(car);
+		BigDecimal priceData = new BigDecimal(newPrice).multiply(new BigDecimal(1000));
+
+		if (isUpdateSerivces) {
+			var plusService = plusServiceServices.findByCarId(car.getId());
+			if (plusService != null) {
+				BigDecimal plusOption = car.getPrice().divide(BigDecimal.valueOf(plusService.getFee()), 2,
+						RoundingMode.HALF_UP);
+				BigDecimal newFee = priceData.divide(plusOption, 2, RoundingMode.HALF_UP);
+				plusService.setFee(newFee.longValue());
+				plusServiceServices.save(plusService);
+			}
+			var extraFee = extraFeeServices.findByCarId(car.getId());
+			if (extraFee != null) {
+				BigDecimal cleanOption = car.getPrice().divide(BigDecimal.valueOf(extraFee.getCleanningFee()), 2,
+						RoundingMode.HALF_UP);
+				BigDecimal newClean = priceData.divide(cleanOption, 2, RoundingMode.HALF_UP);
+				extraFee.setCleanningFee(newClean.longValue());
+				BigDecimal decorOption = car.getPrice().divide(BigDecimal.valueOf(extraFee.getDecorationFee()), 2,
+						RoundingMode.HALF_UP);
+				BigDecimal newDecorFee = priceData.divide(decorOption, 2, RoundingMode.HALF_UP);
+				extraFee.setDecorationFee(newDecorFee.longValue());
+				extraFeeServices.save(extraFee);
+			}
+		}
+		car.setPrice(priceData);
 		System.out.println(carId);
-		System.out.println(newPrice);
+		System.out.println(priceData);
 		System.out.println(newDiscount);
+		carServices.saveCarRegister(car);
 		return "redirect:/home/myplan/";
 	}
 
@@ -1475,7 +1505,7 @@ public class UserSideCarController {
 		String content = "<p>Hello," + email + "</p>" + "<p>Thank you for registering your car rental with AzCar.</p>"
 				+ "<p>Below are some main details of your car:</p>" + "<p><b>Car Details:</b></p>" + "<p>" + "Brand: "
 				+ carDetails.getCarmodel().getBrand() + "</p>" + "<p>" + "Model: " + carDetails.getCarmodel().getModel()
-				+ "</p>" + "<p>" + "Price: " + carDetails.getPrice() + " $/day" + "</p>" + "<p>" + "License Plates: "
+				+ "</p>" + "<p>" + "Price: " + carDetails.getPrice() + " VND/day" + "</p>" + "<p>" + "License Plates: "
 				+ carDetails.getLicensePlates() + "</p>" + "<p>" + "Pick-up Location: " + carDetails.getAddress()
 				+ "</p>" +
 
