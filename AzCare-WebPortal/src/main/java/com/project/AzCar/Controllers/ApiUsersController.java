@@ -26,6 +26,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +40,7 @@ import com.project.AzCar.Dto.CarInfos.CarInforDto;
 import com.project.AzCar.Dto.CarInfos.CarInforFlutter;
 import com.project.AzCar.Dto.DriverLicense.DriverLicenseBack;
 import com.project.AzCar.Dto.DriverLicense.DriverLicenseFront;
+import com.project.AzCar.Dto.Users.ChangePasswordApiDto;
 import com.project.AzCar.Dto.Users.EditApiDto;
 import com.project.AzCar.Dto.Users.ForgotPasswordApiDto;
 import com.project.AzCar.Dto.Users.LoginApiDto;
@@ -224,6 +226,46 @@ public class ApiUsersController {
 		userServices.saveUserReset(user);
 		return new ResponseEntity<>("Password changed successfully.", HttpStatus.OK);
 
+	}
+
+	@PostMapping("/changePassword")
+	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordApiDto changeDto) {
+		// Retrieve email from DTO
+		String email = changeDto.getEmail();
+		Users user = userServices.findUserByEmail(email);
+
+		// Check if user exists
+		if (user == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found.");
+		}
+
+		String dbPassword = user.getPassword();
+
+		// Check if new passwords match
+		if (!changeDto.getNewPassword().equals(changeDto.getConfirmPassword())) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords do not match.");
+		}
+
+		// Check if old password is correct
+		if (!passwordEncoder.matches(changeDto.getOldPassword(), dbPassword)) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Old password is incorrect.");
+		}
+
+		// Check if new password is different from old password
+		if (passwordEncoder.matches(changeDto.getNewPassword(), dbPassword)) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body("New password cannot be the same as old password.");
+		}
+
+		try {
+			// Set new password
+			user.setPassword(passwordEncoder.encode(changeDto.getNewPassword()));
+			// Save user with updated password
+			userServices.saveUserReset(user);
+			return ResponseEntity.ok("Password changed successfully.");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to change password.");
+		}
 	}
 
 	// send mail Register
