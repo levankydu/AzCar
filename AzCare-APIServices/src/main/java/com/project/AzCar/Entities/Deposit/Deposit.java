@@ -35,5 +35,6 @@ public class Deposit {
 
 	private EnumDeposit status;
 	private BigDecimal withdraw;
+	private String decription;
 
 }

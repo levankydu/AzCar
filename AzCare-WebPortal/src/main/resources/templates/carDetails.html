@@ -646,6 +646,9 @@
 					<h3 class="heading">Reviews Section</h3>
 					<div class="star-ratings">
 						<style>
+						.totalStar{
+						color: rebeccapurple;
+						}
 							.star {
 								color: gold;
 								/* Màu sao */
@@ -673,9 +676,12 @@
 							.rating-count {
 								margin-left: 5px;
 							}
-						</style>
-						<!-- đây sẽ hiển thị tổng số đánh giá theo phần trăm-->
-						<div class="star-statistics" th:if="${not #lists.isEmpty(reviews)}">
+						</style>	  <!-- Cột tính trung bình tổng -->
+   
+   	<div class="row">
+   	
+   	<!-- đây sẽ hiển thị tổng số đánh giá theo phần trăm-->
+						<div class="star-statistics col-9" th:if="${not #lists.isEmpty(reviews)}">
 							<div class="star-rating">
 								<span class="star">★★★★★</span>
 								<div class="rating-bar"
@@ -711,12 +717,23 @@
 								</div>
 								<span class="rating-count" th:text="${oneStar}"></span>
 							</div>
+
 						</div>
+						 <div class="col-3">
+        <span >Total Reviews </span>
+       <h1 class="totalStar" th:text="${totalReviewsCount}"></h1>
+       <div>
+       <h6 th:text="'('+${totalReviews}+') lượt đánh giá '"></h6>
+       </div>
+     
+    </div>
+   	</div>				
 						<div class="star-statistics" th:if="${ #lists.isEmpty(reviews)}">
 							<p>No review</p>
 						</div>
 					</div>
-					<!-- Reviews-->
+					<br/>
+<!-- Reviews-->
 					<div class="comments-section">
 						<ul class="comments" th:each="review : ${reviews}">
 
@@ -742,7 +759,9 @@
 										</div>
 										<div class="clearfix"></div>
 										<div class="comment-body">
-											
+											   <div >
+        <i th:each="i : ${#numbers.sequence(1, review.rating)}" class="fa fa-star"></i>
+    </div>
 											<p th:text="${review.comment}">Lorem ipsum dolor sit
 												amet, consectetur adipiscing elit. Donec luctus tincidunt
 												aliquam. Aliquam gravida massa at sem vulputate interdum et
@@ -2264,6 +2283,231 @@
 
 
 	</script>
+
+<script>
+    let currentIndex = 0;
+    const commentsPerPage = 2;
+    let allComments = [];
+
+    // Chuyển đổi dữ liệu bình luận từ phần ẩn HTML
+    function parseComments() {
+        const commentsData = document.querySelectorAll('#all-comments ul li');
+        commentsData.forEach(comment => {
+            const avatar = comment.querySelector('img').src;
+            const userName = comment.querySelector('.comment-meta-author').innerText;
+            const reviewDate = comment.querySelector('.comment-meta-date span').innerText;
+            const rating = comment.querySelectorAll('.fa-star').length;
+            const commentText = comment.querySelector('.comment-body p').innerText;
+            allComments.push({ avatar, userName, reviewDate, rating, comment: commentText });
+        });
+    }
+
+    // Hàm để hiển thị các ngôi sao
+    function createStars(rating) {
+        let stars = '';
+        for (let i = 0; i < rating; i++) {
+            stars += '<i class="fa fa-star"></i>';
+        }
+        return stars;
+    }
+
+    // Hàm để hiển thị bình luận
+    function displayComments(start, end) {
+        const commentsList = document.getElementById('comments-list');
+        for (let i = start; i < end; i++) {
+            if (i >= allComments.length) {
+                document.getElementById('load-more-comments').style.display = 'none';
+                break;
+            }
+            const review = allComments[i];
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <div class="comment">
+                    <div class="comment-author">
+                        <a href="#"><img src="${review.avatar}" class="rounded-circle" alt="avatar"></a>
+                    </div>
+                    <div class="comment-content">
+                        <div class="comment-meta">
+                            <div class="comment-meta-author">${review.userName}</div>
+                            <div class="comment-meta-reply"></div>
+                            <div class="comment-meta-date">
+                                <span>${review.reviewDate}</span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="comment-body">
+                            <div>
+                                ${createStars(review.rating)}
+                            </div>
+                            <p>${review.comment}</p>
+                        </div>
+                    </div>
+                </div>`;
+            commentsList.appendChild(li);
+        }
+        currentIndex = end;
+    }
+
+    // Hàm để tải thêm bình luận
+    function loadMoreComments() {
+        displayComments(currentIndex, currentIndex + commentsPerPage);
+    }
+
+    // Tải tất cả bình luận khi trang được tải
+    document.addEventListener('DOMContentLoaded', () => {
+        parseComments();
+        displayComments(0, commentsPerPage);
+    });
+</script>
+
+<script>
+    let currentPage = 0;
+  /*let allComments = [];
+    const commentsPerPage = 5; */
+  
+  		
+
+    // Chuyển đổi dữ liệu bình luận từ phần ẩn HTML
+    function parseComments() {
+        const commentsData = document.querySelectorAll('#all-comments ul li');
+        commentsData.forEach(comment => {
+            const avatar = comment.querySelector('img').src;
+            const userName = comment.querySelector('.comment-meta-author').innerText;
+            const reviewDate = comment.querySelector('.comment-meta-date').innerText;
+            const rating = comment.querySelectorAll('.fa-star').length;
+            const commentText = comment.querySelector('.comment-body p').innerText;
+            const replies = [];
+            const replyElements = comment.querySelectorAll('ul li');
+            replyElements.forEach(reply => {
+                const replyUserName = reply.querySelector('.comment-meta-author').innerText;
+                const replyDate = reply.querySelector('.comment-meta-date').innerText;
+                const replyRating = reply.querySelectorAll('.fa-star').length;
+                const replyText = reply.querySelector('.comment-body p').innerText;
+                replies.push({ userName: replyUserName, reviewDate: replyDate, rating: replyRating, comment: replyText });
+            });
+            allComments.push({ avatar, userName, reviewDate, rating, comment: commentText, replies });
+        });
+    }
+
+    // Hàm để hiển thị các ngôi sao
+    function createStars(rating) {
+        let stars = '';
+        for (let i = 0; i < rating; i++) {
+            stars += '<i class="fa fa-star"></i>';
+        }
+        return stars;
+    }
+
+    // Hàm để hiển thị bình luận
+    function displayComments(start, end) {
+        const commentsList = document.getElementById('comments-list');
+        commentsList.innerHTML = '';
+        for (let i = start; i < end; i++) {
+            if (i >= allComments.length) {
+                document.getElementById('pagination-nav').style.display = 'none';
+                break;
+            }
+            const review = allComments[i];
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <div class="comment">
+                    <div class="comment-author">
+                        <a href="#"><img src="${review.avatar}" class="rounded-circle" alt="avatar"></a>
+                    </div>
+                    <div class="comment-content">
+                        <div class="comment-meta">
+                            <div class="comment-meta-author">${review.userName}</div>
+                            <div class="comment-meta-reply"><a href="#" onclick="toggleReply(${i})">Reply</a></div>
+                            <div class="comment-meta-date">${review.reviewDate}</div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="comment-body">
+                            <div class="comment-rating">${createStars(review.rating)}</div>
+                            <p>${review.comment}</p>
+                        </div>
+                        <div class="reply-container" id="replyContainer_${i}" style="display: none;">
+                            <form id="replyForm">
+                                <textarea id="replyText_${i}" placeholder="Nhập nội dung reply của bạn..."></textarea>
+                                <button type="button" onclick="submitReply(${i})">Gửi</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <ul>
+                    ${review.replies.map(reply => `
+                        <li>
+                            <div class="comment">
+                                <div class="comment-author">
+                                    <a href="#"><img src="${review.avatar}" class="rounded-circle" alt="avatar"></a>
+                                </div>
+                                <div class="comment-content">
+                                    <div class="comment-meta">
+                                        <div class="comment-meta-author">${reply.userName}</div>
+                                        <div class="comment-meta-date">${reply.reviewDate}</div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="comment-body">
+                                        <div class="comment-rating">${createStars(reply.rating)}</div>
+                                        <p>${reply.comment}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>`).join('')}
+                </ul>`;
+            commentsList.appendChild(li);
+        }
+    }
+
+    // Hàm để thiết lập phân trang
+    /*
+    function setupPagination(totalPages) {
+        const paginationNav = document.getElementById('pagination-nav');
+        const paginationList = paginationNav.querySelector('.pagination');
+        paginationList.innerHTML = '';
+
+        for (let i = 0; i < totalPages; i++) {
+            const li = document.createElement('li');
+            li.classList.add('page-item');
+            if (i === currentPage) {
+                li.classList.add('active');
+            }
+            li.innerHTML = `<a class="page-link" href="#">${i + 1}</a>`;
+            li.addEventListener('click', (e) => {
+                e.preventDefault();
+                currentPage = i;
+                displayComments(i * commentsPerPage, (i + 1) * commentsPerPage);
+                setupPagination(Math.ceil(allComments.length / commentsPerPage));
+            });
+            paginationList.appendChild(li);
+        }
+    }*/
+
+    document.addEventListener('DOMContentLoaded', () => {
+        parseComments();
+        displayComments(0, commentsPerPage);
+        setupPagination(Math.ceil(allComments.length / commentsPerPage));
+    });
+
+    function toggleReply(commentId) {
+        const replyContainer = document.getElementById(`replyContainer_${commentId}`);
+        replyContainer.style.display = replyContainer.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function submitReply(commentId) {
+        const replyText = document.getElementById(`replyText_${commentId}`).value;
+        if (replyText !== '') {
+            const reply = {
+                userName: 'User',  // Thay bằng tên người dùng thực tế
+                reviewDate: new Date().toLocaleString(),
+                rating: 0,  // Thay bằng đánh giá thực tế nếu có
+                comment: replyText
+            };
+            allComments[commentId].replies.push(reply);
+            displayComments(currentPage * commentsPerPage, (currentPage + 1) * commentsPerPage);
+        }
+    }
+</script>
+
 
 
 </body>

@@ -66,10 +66,10 @@
 					</div>
 				</div>
 				<div class="sidebar-menu">
-					<ul class="menu">
+				<ul class="menu">
 						<li class="sidebar-title">Menu</li>
 
-						<li class="sidebar-item active "><a th:href="@{/dashboard/}" class='sidebar-link'> <i
+						<li class="sidebar-item "><a th:href="@{/dashboard/}" class='sidebar-link'> <i
 									class="bi bi-grid-fill"></i> <span>Dashboard</span>
 							</a></li>
 
@@ -90,10 +90,13 @@
 									Management</span> </a>
 							<ul class="submenu ">
 
-								<li class="submenu-item  "><a th:href="@{/dashboard/depositmanager}"
+								<li class="submenu-item  "><a th:href="@{/dashboard/payment/listwithdraw}"
 										class="submenu-link">List
-										Payment </a></li>
-								<li class="submenu-item  "><a th:href="@{/dashboard/depositmanager/cardbank}"
+										Withdraw </a></li>
+											<li class="submenu-item  "><a th:href="@{/dashboard/payment/transaction}"
+										class="submenu-link">List
+										Transaction </a></li>
+								<li class="submenu-item  "><a th:href="@{/dashboard/cardbank}"
 										class="submenu-link">List Payment Card </a></li>
 							</ul>
 						</li>

@@ -256,14 +256,27 @@
 						Example</p>
 					<h4 class="col-10 offset-md-1"
 						style="text-align: center; font-weight: bold;">
-						Welcome, <span th:text="${session.emailLogin}"></span>
+						Welcome, <span id="emailSpan"  th:text="${session.emailLogin}"></span>
 					</h4>
 					<h4 class="col-4 offset-md-8"
 						style="text-align: center; font-weight: bold;">
-						Your balance: $ <span
+						Your balance: VND <span
 						th:id="balance_123"	th:text="${user.balance!=null?user.balance :'0'}"></span>
 
 					</h4>
+					
+					<script>
+					  document.addEventListener("DOMContentLoaded", function() {
+					    const balanceElement = document.getElementById("balance_123");
+					    if (balanceElement) {
+					      const balanceText = balanceElement.textContent.trim();
+					      const balanceValue = parseFloat(balanceText.replace(/,/g, ''));
+					      if (!isNaN(balanceValue)) {
+					        balanceElement.textContent = balanceValue.toLocaleString('vi-VN');
+					      }
+					    }
+					  });
+					</script>
 					<!-- khi click charge sẽ hiển thị dialog -->
 					<!-- Button to open the modal -->
 					<div class="col-4 offset-md-8">
@@ -280,7 +293,7 @@
 						</div>
 					</div>
 					<!-- The Modal -->
-					<div id="myModal" class="modal" style="z-index: 9999999">
+						<div id="myModal" class="modal" style="z-index: 9999999">
 						<div class="modal-content">
 							<span class="close">&times;</span>
 							<h2>Deposit</h2>
@@ -296,50 +309,23 @@
 										<label for="amount">Amount:</label>
 										<div>
 											<input type="number" id="customAmount" name="customAmount"
-												min="100" step="1" placeholder="Please enter amount">
+												min="50000" step="1" placeholder="Please enter amount">
 										</div>
 										<div>
-											<button type="button" class="amount-btn" data-amount="500">500$
+											<button type="button" class="amount-btn" data-amount="50000">50,000 VND
 											</button>
-											<button type="button" class="amount-btn" data-amount="1000">1,000$
+											<button type="button" class="amount-btn" data-amount="100000">100,000 VND
 											</button>
-											<button type="button" class="amount-btn" data-amount="2000">2,000$
+											<button type="button" class="amount-btn" data-amount="200000">200,000 VND
 											</button>
 										</div>
 										<input type="hidden" id="amount" name="amount" required>
 										<!-- Field hidden để lưu giá trị số tiền -->
-
-										<label for="referenceNumber">Reference Number:</label> <input
-											type="text" id="referenceNumber" name="referenceNumber"
-											readonly><br> <br>
+	
+										<br> <br>
 										<button type="submit">Deposit</button>
 									</div>
-									<div class="col-md">
-										<div class="form-floating">
-											<label for="floatingInputGrid">Bank NAME</label> <input
-												class="form-control" type="text"
-												th:value="${cardbank.bankName}" readonly>
-
-										</div>
-										<div class="form-floating">
-											<label for="floatingInputGrid">Bank ID</label> <input
-												class="form-control" type="text"
-												th:value="${cardbank.bankNumber}" readonly>
-
-										</div>
-										<div class="form-floating">
-											<label for="floatingInputGrid"> BENEFICIARY NAME</label> <input
-												class="form-control" type="text"
-												th:value="${cardbank.beneficiaryName}" readonly>
-
-										</div>
-										<div class="form-floating">
-											<label for="floatingInputGrid">ADDRESS</label> <input
-												class="form-control" type="text"
-												th:value="${cardbank.addressbank}" readonly>
-
-										</div>
-									</div>
+									
 								</div>
 							</form>
 						</div>
@@ -1240,15 +1226,15 @@ select {
 							th:value="${user.Id}" readonly hidden><br> <br>
 						<label for="amount">Amount:</label>
 						<div>
-							<input type="number" id="amount123" name="amount123" min="100"
+							<input type="number" id="amount123" name="amount123" min="100000"
 								step="10" placeholder="Please enter amount">
 						</div>
 						<div>
-							<button type="button" class="amount-btn" data-amount123="500">500$
+							<button type="button" class="amount-btn" data-amount123="50000">50,000 VND
 							</button>
-							<button type="button" class="amount-btn" data-amount123="1000">1,000$
+							<button type="button" class="amount-btn" data-amount123="100000">100,000 VND
 							</button>
-							<button type="button" class="amount-btn" data-amount123="2000">2,000$
+							<button type="button" class="amount-btn" data-amount123="200000">200,000 VND
 							</button>
 						</div>
 						<input type="hidden" id="customAmount123" name="customAmount123"
@@ -1489,8 +1475,7 @@ select {
 		var openModalBtn = document.getElementById("openModalBtn");
 		var span = document.getElementsByClassName("close")[0];
 		openModalBtn.onclick = function () {
-			var referenceNumber = generateReferenceNumber();
-			document.getElementById("referenceNumber").value = referenceNumber;
+
 			modal.style.display = "block";
 		}
 		const submitInp = document.getElementById("customAmount");
@@ -1507,15 +1492,7 @@ select {
 				document.getElementById("customAmount").value = amount;
 			});
 		});
-		function generateReferenceNumber() {
-			var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-			var length = 8;
-			var result = '';
-			for (var i = 0; i < length; i++) {
-				result += characters.charAt(Math.floor(Math.random() * characters.length));
-			}
-			return result;
-		}
+		
 		span.onclick = function () {
 			modal.style.display = "none";
 		}
@@ -1524,35 +1501,33 @@ select {
 				modal.style.display = "none";
 			}
 		}
+		
 		var form = document.getElementById("paymentForm");
 		form.addEventListener('submit', function (event) {
 			event.preventDefault();
-			var referenceNumber = document.getElementById("referenceNumber").value;
-			console.log(referenceNumber);
-			var formData = new FormData(form);
-			var jsonObject = {};
-			formData.forEach(function (value, key) {
-				jsonObject[key] = value;
-			});
-			var jsonData = JSON.stringify(jsonObject);
-
-			console.log(jsonData)
-			fetch('createpayments/deposit/' + referenceNumber, {
-				method: 'POST',
-				body: jsonData,
+			 // Xây dựng URL với các tham số query
+			 const amount = document.getElementById('customAmount').value;
+			 const bankCode = "NCB";
+			 const email = document.getElementById('emailSpan').textContent;
+    	
+   	 const url = `http://localhost:8081/api/v1/payment/vn-pay?amount=${amount}&bankCode=${bankCode}`;
+   
+  		fetch(url, {
+				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json'
 				},
-
 			})
-				.then(response => {
-					if (!response.ok) {
-						throw new Error('Network response was not ok');
-					}
-					return response.ok;
-				})
+				.then(response => response.json())
 				.then(data => {
-					alert('Deposit successful!');
+					if (data && data.paymentUrl) {
+                    // Mở URL thanh toán trong tab mới
+                    window.open(data.paymentUrl, '_blank');
+                } else {
+                    console.error('Invalid response:', data);
+                }
+					// alert('Deposit successful!');
+				
 					modal.style.display = "none";
 				})
 				.catch(error => {
@@ -1560,6 +1535,7 @@ select {
 					console.error('There was an error!', error);
 					alert('An error has occurred. Please try again later!');
 				});
+				
 		});
 
 	</script>

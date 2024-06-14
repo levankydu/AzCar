@@ -1,5 +1,6 @@
 package com.project.AzCar.Controllers;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +17,34 @@ import com.project.AzCar.Service.Deposit.IDepositService;
 public class DepositController {
 	@Autowired
 	IDepositService depositService;
+	
 
-	@GetMapping("/dashboard/depositmanager")
+	@GetMapping("/dashboard/payment/listwithdraw")
 	public String getdasshboardDeposit(Model model) {
-		List<Deposit> depo = depositService.findListDeposit();
+		List<Deposit> depo = depositService.findListDepositWithDraw();
+		List<PaymentDetailsDTO> ldto = new ArrayList<>();
+		if (!depo.isEmpty()) {
+			for (Deposit d : depo) {
+				PaymentDetailsDTO dto = new PaymentDetailsDTO();
+				dto.setId(d.getId());
+				dto.setEmail(d.getUser().getEmail());
+				dto.setReferenceNumber(d.getReferenceNumber());
+				dto.setStatus(d.getStatus().toString());
+				dto.setWithdraw(d.getWithdraw());
+				  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:m ddMMyy");
+				String formatDate = d.getPaymentDateAt().format(formatter);
+				dto.setTimeCreated(formatDate);
+				ldto.add(dto);
+			}
+
+		}
+
+		model.addAttribute("listDeposit", ldto);
+		return "admin/DepositManager";
+	}
+	@GetMapping("/dashboard/payment/transaction")
+	public String getdasshboardTransaction(Model model) {
+		List<Deposit> depo = depositService.findListDepositTransaction();
 		List<PaymentDetailsDTO> ldto = new ArrayList<>();
 		if (!depo.isEmpty()) {
 			for (Deposit d : depo) {
@@ -29,14 +54,17 @@ public class DepositController {
 				dto.setEmail(d.getUser().getEmail());
 				dto.setReferenceNumber(d.getReferenceNumber());
 				dto.setStatus(d.getStatus().toString());
-				dto.setWithdraw(d.getWithdraw());
+				 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:m ddMMyy");
+					String formatDate = d.getPaymentDateAt().format(formatter);
+					dto.setTimeCreated(formatDate);
 				ldto.add(dto);
 			}
 
 		}
 
-		model.addAttribute("listDeposit", ldto);
-		return "admin/DepositManager";
+		model.addAttribute("listtransaction", ldto);
+		return "admin/listTransaction";
 	}
+	
 
 }

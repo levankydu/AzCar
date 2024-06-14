@@ -122,7 +122,7 @@
 
 								<li class="submenu-item  "><a th:href="@{/dashboard/payment/listwithdraw}"
 										class="submenu-link">List
-										Withdraw </a></li>
+										Payment </a></li>
 											<li class="submenu-item  "><a th:href="@{/dashboard/payment/transaction}"
 										class="submenu-link">List
 										Transaction </a></li>
@@ -192,15 +192,15 @@
 				<div class="page-title">
 					<div class="row">
 						<div class="col-12 col-md-6 order-md-1 order-last">
-							<h3>Withdraw Manager</h3>
+							<h3>User Manager</h3>
 
 						</div>
 						<div class="col-12 col-md-6 order-md-2 order-first">
 							<nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Payment Manager
-										</li>
+									<li class="breadcrumb-item active" aria-current="page">DataTable
+										jQuery</li>
 								</ol>
 							</nav>
 						</div>
@@ -219,24 +219,24 @@
 										<tr>
 											<th>Id</th>
 											<th>Email</th>
-										
-											<th>Withdraw</th>
+											<th>Amount</th>
 											<th>Reference Number</th>
 											<th>Status</th>
-											<th>Action</th>
-												<th>Time</th>
+											<th>Time</th>
+											<!-- <th>Action</th> -->
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="deposit : ${listDeposit}">
+										<tr th:each="deposit : ${listtransaction}">
 											<td th:text="${deposit.id}"></td>
 											<td th:text="${deposit.email}"></td>
-											
-											<td th:id="'withdraw_'+ ${deposit.id}" th:text="${deposit.withdraw}"></td>
+											<td  th:id="'amount_'+ ${deposit.id}" th:text="${deposit.amount}"></td>											
 											<td th:text="${deposit.referenceNumber}"></td>
 											<td th:id="'status_'+${deposit.id}" th:value="${deposit.Status}"
 												th:text="${deposit.Status}"></td>
-											<td th:if="${deposit.Status !='Done'}"><button class="badge bg-success"
+												<td th:text="${deposit.timeCreated}"></td>
+												
+						<!--				<td th:if="${deposit.Status !='Done'}"><button class="badge bg-success"
 											 th:data-reference-number="${deposit.referenceNumber}" 
 											 th:id="'acceptPayment_'+${deposit.id}"
 													th:onclick="'acceptPayment('+ ${deposit.id}+')'"
@@ -250,7 +250,7 @@
 													>Active</button>
 											
 													</td>
-													<td  th:id="'amount_'+ ${deposit.id}" th:text="${deposit.timeCreated}"></td>
+													-->
 
 										</tr>
 									</tbody>

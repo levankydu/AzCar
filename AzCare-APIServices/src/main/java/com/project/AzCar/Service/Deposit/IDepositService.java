@@ -18,4 +18,8 @@ public interface IDepositService {
 	public List<Deposit> findListUserById(int id);
 
 	public Deposit updateDeposit(Deposit c);
+	
+	
+	public List<Deposit> findListDepositWithDraw();
+	public List<Deposit> findListDepositTransaction();
 }
