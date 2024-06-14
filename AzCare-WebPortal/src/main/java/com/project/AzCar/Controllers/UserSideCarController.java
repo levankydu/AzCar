@@ -529,6 +529,7 @@ public class UserSideCarController {
 		ModelView.addAttribute("reviews", listReviewsDTO);
 		System.out.println("list Review" + listReviewsDTO);
 		System.out.println("Order Details: " + model.getId() + " & ");
+		float tbtotal = 0;
 		if (!listReviewsDTO.isEmpty()) {
 			System.out.println("reviews Details: " + listReviewsDTO + " & ");
 			for (ReviewsDTO reviewsDTO : listReviewsDTO) {
@@ -555,6 +556,24 @@ public class UserSideCarController {
 			}
 
 		}
+		System.out.println(listReviewsDTO.size());
+		if(listReviewsDTO.isEmpty())
+		{
+			tbtotal = 0;
+			ModelView.addAttribute("totalReviews", 0);
+		}
+		else
+		{
+			tbtotal = ((5 * fiveStar) + (4 * fourStar) + (3 * threeStar) + (2 * twoStar) + oneStar)
+					/ (float) listReviewsDTO.size();
+			ModelView.addAttribute("totalReviews", listReviewsDTO.size());
+		}
+	
+		String formattedNumber = String.format("%.1f", tbtotal);
+		System.out.println("Total TB: " + formattedNumber);
+		
+		
+		ModelView.addAttribute("totalReviewsCount", formattedNumber);
 		ModelView.addAttribute("fiveStar", fiveStar);
 		ModelView.addAttribute("fourStar", fourStar);
 		ModelView.addAttribute("threeStar", threeStar);
@@ -592,7 +611,24 @@ public class UserSideCarController {
 			repDTO.setComment_id(re.getComment_id().getId());
 			repDTO.setCarId(re.getComment_id().getCar_id().getId());
 			repDTO.setContent(re.getContent());
-			repDTO.setUser_name(re.getComment_id().getUser_id().getLastName());
+			String firstName = re.getComment_id().getUser_id().getFirstName();
+			String lastName = re.getComment_id().getUser_id().getLastName();
+
+			if (lastName == null && firstName != null) {
+				repDTO.setUser_name(firstName);
+			} else {
+				if (firstName == null && lastName != null) {
+					repDTO.setUser_name(lastName);
+				} else {
+					if (firstName == null && lastName == null) {
+						repDTO.setUser_name("Người tham gia ẩn danh");
+					} else {
+						repDTO.setUser_name(firstName + " " + lastName);
+					}
+
+				}
+			}
+//			
 			lrepDTO.add(repDTO);
 
 		}
@@ -691,7 +727,24 @@ public class UserSideCarController {
 					tempDTO.setId(tempC.getId());
 					tempDTO.setContent(tempC.getContent());
 					tempDTO.setUser_id(tempC.getUser_id().getId());
-					tempDTO.setUser_name(tempC.getUser_id().getFirstName());
+					String firstName = tempC.getUser_id().getFirstName();
+					String lastName = tempC.getUser_id().getLastName();
+					if (lastName == null && firstName != null) {
+						tempDTO.setUser_name(firstName);
+					} else {
+						if (firstName == null && lastName != null) {
+							tempDTO.setUser_name(lastName);
+						} else {
+							if (firstName == null && lastName == null) {
+								tempDTO.setUser_name("Người tham gia ẩn danh");
+							} else {
+								tempDTO.setUser_name(firstName + " " + lastName);
+							}
+
+						}
+					}
+
+//					tempDTO.setUser_name(tempC.getUser_id().getFirstName() + " " + tempC.getUser_id().getLastName());
 					tempDTO.setCar_id(car_id);
 					List<ReplyDTO> reply = getAllReplyByComment_id(tempC.getId());
 					tempDTO.setReply(reply);
