@@ -52,6 +52,81 @@
 <script type="text/javascript" src="/assets/js/notiJs.js"></script>
 <style>
 /* CSS */
+.checkbox-wrapper-29 {
+	--size: 1rem;
+	--background: #fff;
+	font-size: var(--size);
+}
+
+.checkbox-wrapper-29 *, .checkbox-wrapper-29 *::after,
+	.checkbox-wrapper-29 *::before {
+	box-sizing: border-box;
+}
+
+.checkbox-wrapper-29 input[type="checkbox"] {
+	visibility: hidden;
+	display: none;
+}
+
+.checkbox-wrapper-29 .checkbox__label {
+	width: var(--size);
+}
+
+.checkbox-wrapper-29 .checkbox__label:before {
+	content: ' ';
+	display: block;
+	height: var(--size);
+	width: var(--size);
+	position: absolute;
+	top: calc(var(--size)* 0.125);
+	left: 0;
+	background: var(--background);
+}
+
+.checkbox-wrapper-29 .checkbox__label:after {
+	content: ' ';
+	display: block;
+	height: var(--size);
+	width: var(--size);
+	border: calc(var(--size)* .14) solid #000;
+	transition: 200ms;
+	position: absolute;
+	top: calc(var(--size)* 0.125);
+	left: 0;
+	background: var(--background);
+}
+
+.checkbox-wrapper-29 .checkbox__label:after {
+	transition: 100ms ease-in-out;
+}
+
+.checkbox-wrapper-29 .checkbox__input:checked ~.checkbox__label:after {
+	border-top-style: none;
+	border-right-style: none;
+	-ms-transform: rotate(-45deg);
+	/* IE9 */
+	transform: rotate(-45deg);
+	height: calc(var(--size)* .5);
+	border-color: green;
+}
+
+.checkbox-wrapper-29 .checkbox {
+	position: relative;
+	display: flex;
+	cursor: pointer;
+	/* Mobile Safari: */
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.checkbox-wrapper-29 .checkbox__label:after:hover, .checkbox-wrapper-29 .checkbox__label:after:active
+	{
+	border-color: green;
+}
+
+.checkbox-wrapper-29 .checkbox__label {
+	margin-right: calc(var(--size)* 0.45);
+}
+
 .button-92 {
 	--c: #fff;
 	/* text color */
@@ -260,9 +335,8 @@
 					</h4>
 					<h4 class="col-4 offset-md-8"
 						style="text-align: center; font-weight: bold;">
-						Your balance: VND <span
-						th:id="balance_123"	th:text="${user.balance!=null?user.balance :'0'}"></span>
-
+						Your balance: <span th:id="balance_123"
+							th:text="${#numbers.formatDecimal((user.balance!=null?user.balance :'0'), 1, 'DEFAULT', 0, 'DEFAULT')} +' VND'"></span>
 					</h4>
 					
 					<script>
@@ -495,7 +569,7 @@ select {
 
 														<div class="listing-price">
 															Origin Price: <span class="new"
-																th:text="'$' + ${car.price}+'/day'"></span>
+																th:text="${#numbers.formatDecimal(car.price, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND/day'"></span>
 														</div>
 														<div class="listing-price">
 															Current Discount: <span class="new"
@@ -555,16 +629,44 @@ select {
 																						<tr>
 																							<th class="text-left">Old Price:</th>
 																							<td class="text-right"
-																								th:text="${'$'+car.price +'/day'}"></td>
+																								th:text="${#numbers.formatDecimal(car.price, 1, 'DEFAULT', 0, 'DEFAULT') +' VND/day'}"></td>
 																						</tr>
 																						<tr>
 																							<th class="text-left text-success">New Price
-																								($/day):</th>
-																							<td class="text-right"><input type="number"
-																								name="newPrice"
-																								th:id="'newPrice-'+${car.carmodel.objectId}"
-																								th:attr="onkeyup='return checkNewPrice(\'' + ${#strings.escapeJavaScript(car.carmodel.objectId)} + '\')'">
+																								(VND/day):</th>
+																							<td class="text-right">
+																								<div class="row input-group-prepend"
+																									style="flex-direction: row; justify-content: flex-end; padding-right: 12px;">
+																									<input type="number" name="newPrice"
+																										th:id="'newPrice-'+${car.carmodel.objectId}"
+																										th:attr="onkeyup='return checkNewPrice(\'' + ${#strings.escapeJavaScript(car.carmodel.objectId)} + '\')'">
+																									<div class="input-group-text">,000
+																										VND/day</div>
+																								</div>
 																							</td>
+																						</tr>
+																						<tr>
+																							<th class="text-left">
+																								<div class="checkbox-wrapper-29">
+																									<label class="checkbox text-success" id="checkboxLabel"> <input
+																										type="checkbox" name="isUpdateSerivces"
+																										class="checkbox__input" id="isUpdateSerivces" onchange="changeTextColor(this)"
+																										th:checked="true" /> <span
+																										class="checkbox__label "></span> Update new
+																										Service Price
+																									</label>
+																								</div>
+																							</th>
+																							<td class="text-right col-6"></td>
+
+																						</tr>
+																						<tr>
+																							<th colspan="2">
+																								<p class="text-warning">"If enabled, service fees will update to
+																									the latest rental prices (not excluding
+																									discounts). Otherwise, fees remain unchanged."</p>
+
+																							</th>
 																						</tr>
 																						<tr>
 																							<td class="text-right text-danger" colspan="2"
@@ -624,7 +726,7 @@ select {
 																	tabindex="-1" role="dialog"
 																	aria-labelledby="myLargeModalLabel" aria-hidden="true">
 																	<div class="modal-dialog modal-lg">
-																		<div class="modal-content">
+																		<div class="modal-content" style="width:max-content">
 																			<div class="modal-header">
 																				<h5 class="modal-title" id="exampleModalLabel">
 
@@ -662,7 +764,7 @@ select {
 																						<td th:text="${item.differenceDate+' day(s)'}">
 																						</td>
 																						<td style="white-space: nowrap;"
-																							th:text="${'$ '+item.totalRent}"></td>
+																							th:text="${#numbers.formatDecimal(item.totalRent, 1, 'DEFAULT', 0, 'DEFAULT')+' VND'}"></td>
 																						<td th:text="${item.getStatusOnView()}"
 																							th:class="${item.status == 'declined' || item.status == 'rentor_declined' ? 'badge badge-danger text-wrap mt-2' : 'badge badge-success text-wrap mt-2'}">
 
@@ -736,8 +838,12 @@ select {
 																			<td style="white-space: nowrap;"
 																				th:text="${item.dateFormat(item.toDate)}"></td>
 																			<td th:text="${item.differenceDate}"></td>
+																			
+																			
 																			<td style="white-space: nowrap;"
-																				th:text="'$' + ${item.totalRent}"></td>
+																				th:text="${#numbers.formatDecimal(item.totalRent, 1, 'DEFAULT', 0, 'DEFAULT')+' VND'}"></td>
+																				
+																				
 																			<td><a
 																				th:href="@{'/home/myplan/accepted/'+ ${item.id}}"
 																				style="position: relative;"
@@ -878,8 +984,9 @@ select {
 														</h3>
 
 														<div class="listing-price">
+														
 															Price: <span class="new"
-																th:text="'$' + ${item.originPrice - (item.discount * item.originPrice / 100)}+'/day' + (${item.discount} > 0 ? ' (Discounted ' + ${item.discount}+ '%)' : '')"></span>
+																th:text="${#numbers.formatDecimal((item.originPrice - (item.discount * item.originPrice / 100)), 1, 'DEFAULT', 0, 'DEFAULT')}+' VND/day' + (${item.discount} > 0 ? ' (Discounted ' + ${item.discount}+ '%)' : '')"></span>
 														</div>
 														<div class="listing-price">
 															From: <span class="new"
@@ -895,7 +1002,7 @@ select {
 														</div>
 														<div class="listing-price">
 															Total: <span class="new"
-																th:text="'$' + ${item.totalRent}"></span>
+																th:text="${#numbers.formatDecimal(item.totalRent, 1, 'DEFAULT', 0, 'DEFAULT')+' VND'}"></span>
 														</div>
 													</div>
 													<p class="btn text-white"
@@ -1242,30 +1349,39 @@ select {
 							Number:</label> <input type="text" id="referenceNumber123"
 							name="referenceNumber123" readonly><br> <br>
 						<button th:if="${cardbankuser != null }" type="submit">Pay</button>
-						<span th:if="${cardbankuser == null}" class="text-danger">You must add your bank account before withdrawing</span>
-						<p><a class="btn btn-success btn-md" th:if="${cardbankuser == null}" th:href="'/user/profile/' + ${session.user}">Update Bank Account</a></p>
+						<span th:if="${cardbankuser == null}" class="text-danger">You
+							must add your bank account before withdrawing</span>
+						<p>
+							<a class="btn btn-success btn-md" th:if="${cardbankuser == null}"
+								th:href="'/user/profile/' + ${session.user}">Update Bank
+								Account</a>
+						</p>
 					</div>
 
 					<div class="col-md" th:if="${cardbankuser !=null}">
 						<div class="form-floating">
-							<label for="floatingInputGrid">Bank NAME</label>
-							<input class="form-control" type="text" th:value="${cardbankuser.bankName}" readonly>
+							<label for="floatingInputGrid">Bank NAME</label> <input
+								class="form-control" type="text"
+								th:value="${cardbankuser.bankName}" readonly>
 
 						</div>
 						<div class="form-floating">
-							<label for="floatingInputGrid">Bank ID</label>
-							<input class="form-control" type="text" th:value="${cardbankuser.bankNumber}" readonly>
+							<label for="floatingInputGrid">Bank ID</label> <input
+								class="form-control" type="text"
+								th:value="${cardbankuser.bankNumber}" readonly>
 
 						</div>
 						<div class="form-floating">
-							<label for="floatingInputGrid"> BENEFICIARY NAME</label>
-							<input class="form-control" type="text" th:value="${cardbankuser.beneficiaryName}" readonly>
+							<label for="floatingInputGrid"> BENEFICIARY NAME</label> <input
+								class="form-control" type="text"
+								th:value="${cardbankuser.beneficiaryName}" readonly>
 
 						</div>
 						<div class="form-floating">
-							<label for="floatingInputGrid">ADDRESS</label>
-							<input class="form-control" type="text" th:value="${cardbankuser.addressbank}" readonly>
-						</div> 
+							<label for="floatingInputGrid">ADDRESS</label> <input
+								class="form-control" type="text"
+								th:value="${cardbankuser.addressbank}" readonly>
+						</div>
 					</div>
 				</div>
 			</form>
@@ -1313,7 +1429,7 @@ select {
 			$("#openModalBtn2").prop("disabled", true);
 			swal.fire({
 				title: "BANNED TEMPORARY",
-				text: "Your are being banned temporary because of declinding too many cars in a month. You must pay $200 to keep using our service, you are not allowed to withdraw money on your wallet until you pay your fine (deposit is allowed)",
+				text: "Your are being banned temporary because of declinding too many cars in a month. You must pay 200,000 VND to keep using our service, you are not allowed to withdraw money on your wallet until you pay your fine (deposit is allowed)",
 				icon: "warning",
 				//html: `
 				//	<p><img src="/assets/img/logos/200w.gif" alt=""></p>
@@ -1326,14 +1442,14 @@ select {
 				cancelButtonText: "Got it, I will think about it",
 			}).then((result) => {
 				if (result.isConfirmed) {
-					if (userBalance >= 200) {
-						document.getElementById('privateText').value = "+200";
+					if (userBalance >= 200000) {
+						document.getElementById('privateText').value = "+200000";
 						sendPrivateMoney();
 						window.location.href = "/home/myplan/payFine";
 					} else {
 						Swal.fire({
 							title: "Balance is not enough",
-							text: "Your balance is less than $200, deposit and try again",
+							text: "Your balance is less than 200,000 VND, deposit and try again",
 							icon: "warning",
 							confirmButtonColor: "#3754ec",
 						});
@@ -1365,7 +1481,7 @@ select {
 					}
 					if (status == "waiting_for_verify") {
 						var fee = parseFloat(declinedFee) * 0.1;
-						document.getElementById('privateText').value = "-200";
+						document.getElementById('privateText').value = "-200000";
 						sendPrivateMoney();
 					}
 
@@ -1404,7 +1520,7 @@ select {
 			}).then((result) => {
 				if (result.isConfirmed) {
 					// Redirect to cancel action with the provided URL
-					document.getElementById('privateText').value = "-200";
+					document.getElementById('privateText').value = "-200000";
 					sendPrivateMoney();
 					window.location.href = url;
 				}

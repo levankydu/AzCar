@@ -75,6 +75,43 @@
 .toggle-password.active i {
 	color: #333;
 }
+
+.text-danger {
+	font-size: 12px;
+	position: absolute;
+	left: 0;
+	top: 100%;
+	margin-top: 5px;
+	color: red;
+	display: flex;
+	align-items: center;
+}
+
+.text-danger i {
+	margin-right: 5px;
+}
+
+.btn-md {
+	display: inline-block;
+	padding: 10px 20px;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+	color: #fff;
+	background-color: #007bff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	text-decoration: none;
+}
+
+.btn-theme {
+	background-color: #007bff;
+}
+
+.mb-0 {
+	margin-bottom: 0;
+}
 </style>
 <body id="top">
 	<!-- Google Tag Manager (noscript) -->
@@ -116,33 +153,43 @@ End Google Tag Manager (noscript)
 								<div class="form-group">
 									<input type="text" id="name" name="name" class="input-text"
 										placeholder="Full Name" onkeyup="validateName();"> <span
-										id="validation-name" class="text-danger"></span>
+										id="validation-name" class="text-danger"> <i
+										class="fa fa-exclamation" style="display: none;"></i> <span
+										class="error-message"></span>
+									</span>
 								</div>
 								<div class="form-group">
 									<input type="text" id="email" name="email" class="input-text"
 										placeholder="Email Address" onkeyup="validateEmail();">
-									<span id="validation-email" class="text-danger"></span>
+									<span id="validation-email" class="text-danger"> <i
+										class="fa fa-exclamation" style="display: none;"></i> <span
+										class="error-message"></span>
+									</span>
 									<p class="text-danger" th:text="${errorMessage}"></p>
-
 								</div>
 								<div class="form-group">
 									<input type="password" id="password" name="password"
 										class="input-text" placeholder="Password"
 										onkeyup="validatePassword();"> <span
-										id="validation-password" class="text-danger"></span>
+										id="validation-password" class="text-danger"> <i
+										class="fa fa-exclamation" style="display: none;"></i> <span
+										class="error-message"></span>
+									</span>
 									<button type="button" class="toggle-password"
 										id="togglePassword1"
 										onclick="togglePasswordVisibility('password')">
 										<i class="fa fa-eye"></i>
 									</button>
 								</div>
-
 								<div class="form-group">
 									<input type="password" id="confirmPassword"
 										name="confirmPassword" class="input-text"
 										placeholder="Confirm Password"
 										onkeyup="validateConfirmPassword();"> <span
-										id="validation-confirmPassword" class="text-danger"></span>
+										id="validation-confirmPassword" class="text-danger"> <i
+										class="fa fa-exclamation" style="display: none;"></i> <span
+										class="error-message"></span>
+									</span>
 									<button type="button" class="toggle-password"
 										id="togglePassword2"
 										onclick="togglePasswordVisibility('confirmPassword')">
@@ -154,6 +201,9 @@ End Google Tag Manager (noscript)
 										onclick="return checkSubmitRegisterUser();">Signup</button>
 								</div>
 							</form>
+
+
+
 							<!-- Form end-->
 						</div>
 						<!-- Footer -->
@@ -218,132 +268,144 @@ End Google Tag Manager (noscript)
 	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 
 
+
+
+
+
+
 	<script>
-		function validateName() {
-			const nameValue = document.getElementById("name").value;
+    function validateName() {
+        const nameInput = document.getElementById("name");
+        const validationMessage = document.getElementById('validation-name').querySelector('.error-message');
+        const validationIcon = document.getElementById('validation-name').querySelector('i');
 
-			if (nameValue === "") {
-				document.getElementById('validation-name').textContent = "Name is required";
-				return false;
-			} else {
-				document.getElementById('validation-name').textContent = "";
-				return true;
-			}
-		}
+        if (nameInput.value.trim() === "") {
+            validationMessage.textContent = "Name is required";
+            validationIcon.style.display = "inline";
+            return false;
+        } else {
+            validationMessage.textContent = "";
+            validationIcon.style.display = "none";
+            return true;
+        }
+    }
 
-		function validateEmail() {
-			const emailValue = document.getElementById("email").value;
-			var pattern = /^[\w.]+@gmail\.com$/;
+    function validateEmail() {
+        const emailInput = document.getElementById("email");
+        const validationMessage = document.getElementById('validation-email').querySelector('.error-message');
+        const validationIcon = document.getElementById('validation-email').querySelector('i');
 
-			if (emailValue === "") {
-				document.getElementById('validation-email').textContent = "Email is required";
-				return false;
-			} else if (!pattern.test(emailValue)) {
-				document.getElementById('validation-email').textContent = "Email must be in correct format";
-				return false;
-			} else {
-				document.getElementById('validation-email').textContent = "";
+        if (emailInput.value.trim() === "") {
+            validationMessage.textContent = "Email is required";
+            validationIcon.style.display = "inline";
+            return false;
+        } else {
+            validationMessage.textContent = "";
+            validationIcon.style.display = "none";
+            return true;
+        }
+    }
 
-				return true;
-			}
-		}
+    function validatePassword() {
+        const passwordInput = document.getElementById("password");
+        const validationMessage = document.getElementById('validation-password').querySelector('.error-message');
+        const validationIcon = document.getElementById('validation-password').querySelector('i');
 
-		function validatePassword() {
-		    const passwordValue = document.getElementById("password").value;
+        if (passwordInput.value.trim() === "") {
+            validationMessage.textContent = "Password is required";
+            validationIcon.style.display = "inline";
+            return false;
+        } else {
+            validationMessage.textContent = "";
+            validationIcon.style.display = "none";
+            return true;
+        }
+    }
 
-		    if (passwordValue.length < 8) {
-		        document.getElementById('validation-password').textContent = "Password must be at least 8 characters long";
-		        return false;
-		    } else if (!/[A-Z]/.test(passwordValue)) {
-		        document.getElementById('validation-password').textContent = "Password must contain at least one uppercase letter";
-		        return false;
-		    } else {
-		        document.getElementById('validation-password').textContent = "";
-		        return true;
-		    }
-		}
+    function validateConfirmPassword() {
+        const confirmPasswordInput = document.getElementById("confirmPassword");
+        const validationMessage = document.getElementById('validation-confirmPassword').querySelector('.error-message');
+        const validationIcon = document.getElementById('validation-confirmPassword').querySelector('i');
 
-		function validateConfirmPassword() {
-			const passwordValue = document.getElementById("password").value;
-			const confirmPasswordValue = document
-					.getElementById("confirmPassword").value;
+        if (confirmPasswordInput.value.trim() === "") {
+            validationMessage.textContent = "Confirm Password is required";
+            validationIcon.style.display = "inline";
+            return false;
+        } else {
+            validationMessage.textContent = "";
+            validationIcon.style.display = "none";
+            return true;
+        }
+    }
 
-			if (confirmPasswordValue === "") {
-				document.getElementById('validation-confirmPassword').textContent = "Confirm Password is required";
-				return false;
-			} else if (passwordValue !== confirmPasswordValue) {
-				document.getElementById('validation-confirmPassword').textContent = "Passwords do not match";
-				return false;
-			} else {
-				document.getElementById('validation-confirmPassword').textContent = "";
-				return true;
-			}
-		}
+    function togglePasswordVisibility(inputId) {
+        const passwordField = document.getElementById(inputId);
+        const toggleButton = document.getElementById("togglePassword" + inputId.slice(-1));
 
-		function checkSubmitRegisterUser() {
-		    var isValidName = validateName();
-		    var isValidEmail = validateEmail();
-		    var isValidPassword = validatePassword();
-		    var isValidConfirmPassword = validateConfirmPassword();
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleButton.innerHTML = '<i class="fa fa-eye-slash"></i>';
+        } else {
+            passwordField.type = 'password';
+            toggleButton.innerHTML = '<i class="fa fa-eye"></i>';
+        }
+    }
 
-		    if (isValidName && isValidEmail && isValidPassword && isValidConfirmPassword) {
-		        Swal.fire({
-		            title: 'Regisering',
-		            html: 'Loading...',
-		            timerProgressBar: true,
-		            showCancelButton: false,
-		            showConfirmButton: false,
-		            didOpen: () => {
-		                Swal.showLoading();
-		            }
-		        });
+    function checkSubmitRegisterUser() {
+        const isValidName = validateName();
+        const isValidEmail = validateEmail();
+        const isValidPassword = validatePassword();
+        const isValidConfirmPassword = validateConfirmPassword();
 
-		        var formData = new FormData(document.getElementById('registerUser'));
-		        fetch('/register', {
-		            method: 'POST',
-		            body: formData
-		        })
-		        .then(response => {
-		            Swal.close(); 
-		            if (!response.ok) {
-		                throw new Error('Network response was not ok');
-		            }
-		            return response.text(); 
-		        })
-		        .then(data => {
-		            if (data === "Email already registered !!!") {
-		                document.getElementById('toast-failed-register-user').click();
-		                document.getElementById('validation-email').textContent = "Email already registered";
-		            } else if (data === "Confirm Password do not match." || data === "Validation error occurred." || data === "Error sending email." || data === "Error occurred.") {
-		                document.getElementById('toast-failed-register-user').click();
-		                alert(data); 
-		            } else {
-		                document.getElementById('toast-success-registered-user').click();
-		                document.getElementById('registerUser').reset(); 
-		            }
-		        })
-		        .catch(error => {
-		            Swal.close(); // Close the Swal modal on error
-		            document.getElementById('toast-failed-register-exit').click();
-		        });
-		    } else {
-		        document.getElementById('toast-failed-register-user').click();
-		    }
-		    return false; 
-		}
-		function togglePasswordVisibility(inputId) {
-		    var passwordField = document.getElementById(inputId);
-		    var toggleButton = document.getElementById("togglePassword" + inputId.slice(-1)); 
+        if (isValidName && isValidEmail && isValidPassword && isValidConfirmPassword) {
+        	Swal.fire({
+	            title: 'Regisering',
+	            html: 'Loading...',
+	            timerProgressBar: true,
+	            showCancelButton: false,
+	            showConfirmButton: false,
+	            didOpen: () => {
+	                Swal.showLoading();
+	            }
+	        });
 
-		    if (passwordField.type === "password") {
-		        passwordField.type = "text";
-		        toggleButton.innerHTML = '<i class="far fa-eye-slash"></i>'; 
-		    } else {
-		        passwordField.type = "password";
-		        toggleButton.innerHTML = '<i class="far fa-eye"></i>'; 
-		    }
-		}
-	</script>
+	        var formData = new FormData(document.getElementById('registerUser'));
+	        fetch('/register', {
+	            method: 'POST',
+	            body: formData
+	        })
+	        .then(response => {
+	            Swal.close(); 
+	            if (!response.ok) {
+	                throw new Error('Network response was not ok');
+	            }
+	            return response.text(); 
+	        })
+	        .then(data => {
+	            if (data === "Email already registered !!!") {
+	                document.getElementById('toast-failed-register-user').click();
+	                document.getElementById('validation-email').textContent = "Email already registered";
+	            } else if (data === "Confirm Password do not match." || data === "Validation error occurred." || data === "Error sending email." || data === "Error occurred.") {
+	                document.getElementById('toast-failed-register-user').click();
+	                alert(data); 
+	            } else {
+	                document.getElementById('toast-success-registered-user').click();
+	                document.getElementById('registerUser').reset(); 
+	            }
+	        })
+	        .catch(error => {
+	            Swal.close();
+	            document.getElementById('toast-failed-register-exit').click();
+	        });
+	    } else {
+	        document.getElementById('toast-failed-register-user').click();
+	    }
+	    return false; 
+    }
+</script>
+
+
+
 
 </body>
 </html>

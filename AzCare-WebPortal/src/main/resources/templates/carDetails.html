@@ -429,17 +429,17 @@
 
 							<li th:if="${plusService}!= null"><span>Delivery Car
 									Fee: </span>
-								<p class="mb-0" th:text="${plusService.fee}+' $'"></p>
+								<p class="mb-0" th:text="${#numbers.formatDecimal(plusService.fee, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND'"></p>
 							</li>
 
 
-							<li th:if="${extraFee}!= null"><span>Cleanning Fee :
+							<li th:if="${extraFee}!= null"><span>Cleaning Fee :
 								</span>
-								<p class="mb-0" th:text="${extraFee.cleanningFee}+' $'"></p>
+								<p class="mb-0" th:text="${#numbers.formatDecimal(extraFee.cleanningFee, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND'"></p>
 							</li>
 							<li th:if="${extraFee}!= null"><span>Decoration Fee:
 								</span>
-								<p class="mb-0" th:text="${extraFee.decorationFee}+' $'"></p>
+								<p class="mb-0" th:text="${#numbers.formatDecimal(extraFee.decorationFee, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND'"></p>
 							</li>
 						</ul>
 					</div>
@@ -1297,17 +1297,17 @@
 
 								<li th:if="${plusService}!= null"><span>Delivery Fee
 										: </span>
-									<p class="mb-0" th:text="${plusService.fee}+' $'"></p>
+									<p class="mb-0" th:text="${#numbers.formatDecimal(plusService.fee, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND'"></p>
 								</li>
 
 
-								<li th:if="${extraFee}!= null"><span>Cleanning Fee :
+								<li th:if="${extraFee}!= null"><span>Cleaning Fee :
 									</span>
-									<p class="mb-0" th:text="${extraFee.cleanningFee}+' $'"></p>
+									<p class="mb-0" th:text="${#numbers.formatDecimal(extraFee.cleanningFee, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND'"></p>
 								</li>
 								<li th:if="${extraFee}!= null"><span>Decoration Fee
 										: </span>
-									<p class="mb-0" th:text="${extraFee.decorationFee}+' $'"></p>
+									<p class="mb-0" th:text="${#numbers.formatDecimal(extraFee.decorationFee, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND'"></p>
 								</li>
 							</ul>
 						</div>
@@ -1319,7 +1319,7 @@
 									name="isSameProvince" value="0"> <input type="hidden" name="isSameDistrict"
 									value="0"> <input type="hidden" name="deliveryFee">
 								<h2 class=""
-									th:text="'$'+${carDetails.price - (carDetails.price * carDetails.discount / 100)}+'/day'">
+									th:text="${#numbers.formatDecimal((carDetails.price - (carDetails.price * carDetails.discount / 100)), 1, 'DEFAULT', 0, 'DEFAULT')}+' VND/day'">
 								</h2>
 								<div class="row">
 									<div th:if="${customer.id != user.id}" class="col-12">
@@ -1419,7 +1419,7 @@
 												<p class="float-left">Rental Unit Price:</p>
 											</div>
 											<div class="col-6">
-												<p class="float-right" th:text="'$'+${carDetails.price}+'/day'"></p>
+												<p class="float-right" th:text="${#numbers.formatDecimal(carDetails.price, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND/day'"></p>
 											</div>
 											<div class="col-6">
 												<p class="float-left">
@@ -1429,14 +1429,14 @@
 											</div>
 											<div class="col-6">
 												<p class="float-right"
-													th:text="'$'+${carDetails.price - (carDetails.price * carDetails.discount / 100)}+'/day'">
+													th:text="${#numbers.formatDecimal((carDetails.price - (carDetails.price * carDetails.discount / 100)), 1, 'DEFAULT', 0, 'DEFAULT')}+' VND/day'">
 												</p>
 											</div>
 											<div class="col-6">
 												<p class="float-left">Insurance:</p>
 											</div>
 											<div class="col-6">
-												<p class="float-right">$200.00
+												<p class="float-right">200,000 VND
 												</p>
 											</div>
 											<div class="col-6">
@@ -1445,7 +1445,7 @@
 											<div class="col-6">
 												<p class="float-right"
 													th:attr="data-price=${carDetails.price - (carDetails.price * carDetails.discount / 100)}"
-													id="form-details-amount"></p>
+													id="form-details-amount" th:text="${#numbers.formatDecimal((carDetails.price - (carDetails.price * carDetails.discount / 100)), 1, 'DEFAULT', 0, 'DEFAULT')+' VND'}"></p>
 											</div>
 											<div class="col-6">
 
@@ -1454,7 +1454,7 @@
 											</div>
 											<div class="col-6">
 												<p th:attr="data-delivery-fee=${plusService != null ? plusService.fee : 0}"
-													class="float-right" id="form-delivery-fee">$0</p>
+													class="float-right" id="form-delivery-fee">0 VND</p>
 											</div>
 										</div>
 									</div>
@@ -1720,7 +1720,7 @@
 		if (userViolated == true) {
 			swal.fire({
 				title: "BANNED TEMPORARY",
-				text: "Your are being banned temporary because of declinding too many cars in a month. You must pay $200 to keep using our service, you are not allowed to withdraw money on your wallet until you pay your fine (deposit is allowed)",
+				text: "Your are being banned temporary because of declinding too many cars in a month. You must pay 200,000 VND to keep using our service, you are not allowed to withdraw money on your wallet until you pay your fine (deposit is allowed)",
 				icon: "warning",
 				showCancelButton: true,
 				confirmButtonColor: "#3085d6",
@@ -1729,14 +1729,14 @@
 				cancelButtonText: "Got it, I will think about it",
 			}).then((result) => {
 				if (result.isConfirmed) {
-					if (userBalance >= 200) {
-						document.getElementById('privateText').value = "+200";
+					if (userBalance >= 200000) {
+						document.getElementById('privateText').value = "+200000";
 						sendPrivateMoney();
 						window.location.href = "/home/myplan/payFine";
 					} else {
 						Swal.fire({
 							title: "Balance is not enough",
-							text: "Your balance is less than $200, deposit and try again",
+							text: "Your balance is less than 200,000 VND, deposit and try again",
 							icon: "warning",
 							confirmButtonColor: "#3754ec",
 						});
@@ -2024,8 +2024,8 @@
 				var totalRent = dailyPrice * daysDifference;
 
 				// Cập nhật nội dung của phần tử total-rent
-				document.getElementById("form-details-amount").textContent = '$' + dailyPrice.toLocaleString() + ' x ' + daysDifference + (daysDifference > 1 ? ' days' : ' day');
-				document.getElementById("form-total").textContent = '$' + totalRent.toLocaleString();
+				document.getElementById("form-details-amount").textContent = dailyPrice.toLocaleString() +' VND' + ' x' + daysDifference + (daysDifference > 1 ? ' days' : 'day');
+				document.getElementById("form-total").textContent = totalRent.toLocaleString()+ ' VND';
 				document.querySelector("#form-car-rental input[name='totalRent']").value = totalRent;
 			}
 		}
@@ -2133,7 +2133,7 @@
 			} else {
 				if (carRawAddress.includes(userAddressArr ? userAddressArr[3] : $("#districtSelect option:selected").text())) {
 					console.log('trung quan(thanhpho) - giao free');
-					$('#form-delivery-fee').text('$0');
+					$('#form-delivery-fee').text('0 VND');
 					$('#form-submit-btn').removeAttr('disabled');
 					$('#form-delivery-fee').removeClass('text-danger');
 					$("#form-car-rental input[name='isSameProvince']").val(1);
@@ -2141,7 +2141,7 @@
 					updateTotalRent();
 				} else {
 					console.log('trung tinh - khong trung thanh pho - charge fee');
-					$('#form-delivery-fee').text('$' + $('#form-delivery-fee').data('delivery-fee'));
+					$('#form-delivery-fee').text($('#form-delivery-fee').data('delivery-fee')+ ' VND');
 					$('#form-submit-btn').removeAttr('disabled');
 					$('#form-delivery-fee').removeClass('text-danger');
 					$("#form-car-rental input[name='isSameProvince']").val(1);
@@ -2153,7 +2153,7 @@
 
 		$('#form-submit-btn').on('click', function (e) {
 			e.preventDefault();
-			let totalFinalRent = parseFloat($("#form-car-rental input[name='totalRent']").val()) + parseFloat(extraFeeeeeee ? extraFeeeeeee.decorationFee ?? 0 : 0) + parseFloat(extraFeeeeeee ? extraFeeeeeee.cleanningFee ?? 0 : 0) + 200;
+			let totalFinalRent = parseFloat($("#form-car-rental input[name='totalRent']").val()) + parseFloat(extraFeeeeeee ? extraFeeeeeee.decorationFee ?? 0 : 0) + parseFloat(extraFeeeeeee ? extraFeeeeeee.cleanningFee ?? 0 : 0) + 200000;
 			const uissa = $('p[data-uqwfjwissa]').data('uqwfjwissa');
 			if (parseFloat(uissa) < parseFloat(totalFinalRent)) {
 				Swal.fire({
@@ -2168,8 +2168,8 @@
 
 				let deliveryFee11 = 0;
 
-				if (deliveryFeeText11.includes('$')) {
-					deliveryFee11 = parseInt(deliveryFeeText11.replace('$', '').trim());
+				if (deliveryFeeText11.includes(' VND')) {
+					deliveryFee11 = parseInt(deliveryFeeText11.replace(' VND', '').trim());
 				}
 				totalFinalRent += deliveryFee11;
 				$("input[name='deliveryFee']").val(deliveryFee11);
@@ -2179,19 +2179,19 @@
 									</tr>
 									<tr>
 										<td class="text-left">Delivery fee: </td>
-										<td class="text-right">$${deliveryFee11.toLocaleString()}</td>
+										<td class="text-right">${deliveryFee11.toLocaleString()} VND</td>
 									</tr>
 									<tr>
 										<td class="text-left">Cleanning Fee: </td>
-										<td class="text-right">$${extraFeeeeeee && extraFeeeeeee.cleanningFee.toLocaleString() ? extraFeeeeeee.cleanningFee.toLocaleString() : 0}</td>
+										<td class="text-right">${extraFeeeeeee && extraFeeeeeee.cleanningFee.toLocaleString() ? extraFeeeeeee.cleanningFee.toLocaleString() : 0} VND</td>
 									</tr>
 									<tr>
 										<td class="text-left">Smell Fee: </td>
-										<td class="text-right">$${extraFeeeeeee && extraFeeeeeee.decorationFee.toLocaleString() ? extraFeeeeeee.decorationFee.toLocaleString() : 0}</td>
+										<td class="text-right">${extraFeeeeeee && extraFeeeeeee.decorationFee.toLocaleString() ? extraFeeeeeee.decorationFee.toLocaleString() : 0} VND</td>
 									</tr>
 									<tr>
 										<td class="text-left">Insurance Fee: </td>
-										<td class="text-right">$200</td>
+										<td class="text-right">200,000 VND</td>
 									</tr>`
 					;
 				Swal.fire({
@@ -2207,7 +2207,7 @@
 								</tr>
 								<tr>
 									<th class="text-left">Rental per day: </th>
-									<td class="text-right">$${$('p[data-price]').data('price').toLocaleString()}</td>
+									<td class="text-right">${$('p[data-price]').data('price').toLocaleString()} VND</td>
 								</tr>
 								<tr>
 									<th class="text-left">From: </th>
@@ -2224,20 +2224,20 @@
 								<tr>
 									<th class="text-left">Sub Total: </th>
 									<td class="text-right">
-										$${$("#form-car-rental input[name='totalRent']").val().toLocaleString()}
+										${$("#form-car-rental input[name='totalRent']").val().toLocaleString()} VND
 									</td>
 								</tr>
 								${extraFeeField}
 								<tr>
 									<th class="text-left">Total: </th>
 									<td class="text-right">
-										<h4>$${totalFinalRent.toLocaleString()}</h4>
-										<p class="text-success">Current balance: $${uissa.toLocaleString()}</p>
+										<h4>${totalFinalRent.toLocaleString()} VND</h4>
+										<p class="text-success">Current balance: ${uissa.toLocaleString()} VND</p>
 									</td>
 								</tr>
 								<tr>
 									<td colspan="2">
-										<p class="text-danger">* If you have agreed, you will be locked <span style="font-weight: 800;">$${totalFinalRent.toLocaleString()}</span> as a mortgage (fees included as notified), the fees incurred will be returned to you if no problems occur after car rental completed.</p>
+										<p class="text-danger">* If you have agreed, you will be locked <span style="font-weight: 800;">${totalFinalRent.toLocaleString()} VND</span> as a mortgage (fees included as notified), the fees incurred will be returned to you if no problems occur after car rental completed.</p>
 										<p class="text-danger">* If the car owner does not respond within 1 hour, the locked money will be fully refunded to you immediately.</p>
 									</td>
 								</tr>
@@ -2251,7 +2251,7 @@
 						setTimeout(function () {
 							const RENTAL_FORM = $('#form-car-rental').get(0);
 							RENTAL_FORM.submit();
-							document.getElementById('privateText').value = "+200";
+							document.getElementById('privateText').value = "+200000";
 							sendPrivateMoney();
 						}, 2000);
 						Swal.fire({

@@ -97,7 +97,7 @@ public class UserServicesImpl implements UserServices {
 			Users user = new Users("Admin", "admin@admin", passwordEncoder.encode("123"), Arrays.asList(role));
 			BigDecimal userBalance = user.getBalance() != null ? user.getBalance() : BigDecimal.valueOf(0);
 
-			BigDecimal amount = BigDecimal.valueOf(100000);
+			BigDecimal amount = BigDecimal.valueOf(100000000);
 			var payment = new Payment();
 			payment.setUserId((int) user.getId());
 			payment.setToUserId(0);
