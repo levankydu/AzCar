@@ -1425,7 +1425,7 @@
 											</div>
 											<div class="col-6">
 												<p class="float-right"
-													th:attr="data-price=${#numbers.formatDecimal((carDetails.price - (carDetails.price * carDetails.discount / 100)), 1, 'DEFAULT', 0, 'DEFAULT')+' VND'}"
+													th:attr="data-price=${carDetails.price - (carDetails.price * carDetails.discount / 100)}"
 													id="form-details-amount" th:text="${#numbers.formatDecimal((carDetails.price - (carDetails.price * carDetails.discount / 100)), 1, 'DEFAULT', 0, 'DEFAULT')+' VND'}"></p>
 											</div>
 											<div class="col-6">
@@ -2005,7 +2005,7 @@
 				var totalRent = dailyPrice * daysDifference;
 
 				// Cập nhật nội dung của phần tử total-rent
-				document.getElementById("form-details-amount").textContent = dailyPrice.toLocaleString() +' VND' + ' x ' + daysDifference + (daysDifference > 1 ? ' days' : ' day');
+				document.getElementById("form-details-amount").textContent = dailyPrice.toLocaleString() +' VND' + ' x' + daysDifference + (daysDifference > 1 ? ' days' : 'day');
 				document.getElementById("form-total").textContent = totalRent.toLocaleString()+ ' VND';
 				document.querySelector("#form-car-rental input[name='totalRent']").value = totalRent;
 			}

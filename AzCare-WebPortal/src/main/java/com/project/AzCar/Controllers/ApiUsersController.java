@@ -398,8 +398,10 @@ public class ApiUsersController {
 			newRegisterCar.setExtraFee(true);
 			ExtraFee extraFee = new ExtraFee();
 			extraFee.setCarRegisterId(number);
-			extraFee.setCleanningFee((modelData.getDecorationFee().longValue()));
-			extraFee.setDecorationFee(modelData.getCleaningFee().longValue());
+			extraFee.setCleanningFee(
+					(modelData.getDecorationFee().longValue()) * (newRegisterCar.getPrice().longValue()) / 100);
+			extraFee.setDecorationFee(
+					(modelData.getCleaningFee().longValue()) * (newRegisterCar.getPrice().longValue()) / 100);
 			extraFeeServices.save(extraFee);
 
 		} else {
@@ -409,7 +411,8 @@ public class ApiUsersController {
 			newRegisterCar.setCarPlus(true);
 			PlusServices plusServices = new PlusServices();
 			plusServices.setCarRegisterId(number);
-			plusServices.setFee(modelData.getDeliveryFee().longValue());
+			plusServices
+					.setFee((modelData.getDeliveryFee().longValue()) * (newRegisterCar.getPrice().longValue()) / 100);
 			plusServiceServices.save(plusServices);
 		} else {
 			newRegisterCar.setCarPlus(false);

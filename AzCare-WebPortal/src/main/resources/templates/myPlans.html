@@ -742,7 +742,7 @@ select {
 																	tabindex="-1" role="dialog"
 																	aria-labelledby="myLargeModalLabel" aria-hidden="true">
 																	<div class="modal-dialog modal-lg">
-																		<div class="modal-content">
+																		<div class="modal-content" style="width:max-content">
 																			<div class="modal-header">
 																				<h5 class="modal-title" id="exampleModalLabel">
 
@@ -780,7 +780,7 @@ select {
 																						<td th:text="${item.differenceDate+' day(s)'}">
 																						</td>
 																						<td style="white-space: nowrap;"
-																							th:text="${#numbers.formatDecimal(item.totalRent, 1, 'DEFAULT', 0, 'DEFAULT')+' VND/day'}"></td>
+																							th:text="${#numbers.formatDecimal(item.totalRent, 1, 'DEFAULT', 0, 'DEFAULT')+' VND'}"></td>
 																						<td th:text="${item.getStatusOnView()}"
 																							th:class="${item.status == 'declined' || item.status == 'rentor_declined' ? 'badge badge-danger text-wrap mt-2' : 'badge badge-success text-wrap mt-2'}">
 
@@ -854,8 +854,12 @@ select {
 																			<td style="white-space: nowrap;"
 																				th:text="${item.dateFormat(item.toDate)}"></td>
 																			<td th:text="${item.differenceDate}"></td>
+																			
+																			
 																			<td style="white-space: nowrap;"
-																				th:text="'$' + ${item.totalRent}"></td>
+																				th:text="${#numbers.formatDecimal(item.totalRent, 1, 'DEFAULT', 0, 'DEFAULT')+' VND'}"></td>
+																				
+																				
 																			<td><a
 																				th:href="@{'/home/myplan/accepted/'+ ${item.id}}"
 																				style="position: relative;"
@@ -996,8 +1000,9 @@ select {
 														</h3>
 
 														<div class="listing-price">
+														
 															Price: <span class="new"
-																th:text="'$' + ${item.originPrice - (item.discount * item.originPrice / 100)}+'/day' + (${item.discount} > 0 ? ' (Discounted ' + ${item.discount}+ '%)' : '')"></span>
+																th:text="${#numbers.formatDecimal((item.originPrice - (item.discount * item.originPrice / 100)), 1, 'DEFAULT', 0, 'DEFAULT')}+' VND/day' + (${item.discount} > 0 ? ' (Discounted ' + ${item.discount}+ '%)' : '')"></span>
 														</div>
 														<div class="listing-price">
 															From: <span class="new"
@@ -1013,7 +1018,7 @@ select {
 														</div>
 														<div class="listing-price">
 															Total: <span class="new"
-																th:text="'$' + ${item.totalRent}"></span>
+																th:text="${#numbers.formatDecimal(item.totalRent, 1, 'DEFAULT', 0, 'DEFAULT')+' VND'}"></span>
 														</div>
 													</div>
 													<p class="btn text-white"
