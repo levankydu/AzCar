@@ -65,6 +65,29 @@ public class DepositController {
 		model.addAttribute("listtransaction", ldto);
 		return "admin/listTransaction";
 	}
-	
+	@GetMapping("/dashboard/payment/deposit")
+	public String getDashboardDeposit(Model model) {
+		List<Deposit> depo = depositService.findListDepositTransaction();
+		List<PaymentDetailsDTO> ldto = new ArrayList<>();
+		if (!depo.isEmpty()) {
+			for (Deposit d : depo) {
+				PaymentDetailsDTO dto = new PaymentDetailsDTO();
+				dto.setId(d.getId());
+				dto.setAmount(d.getAmount());
+				dto.setEmail(d.getUser().getEmail());
+				dto.setReferenceNumber(d.getReferenceNumber());
+				dto.setStatus(d.getStatus().toString());
+				dto.setWithdraw(d.getWithdraw());
+				 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:m ddMMyy");
+					String formatDate = d.getPaymentDateAt().format(formatter);
+					dto.setTimeCreated(formatDate);
+				ldto.add(dto);
+			}
+
+		}
+
+		model.addAttribute("listDepositAll", ldto);
+		return "admin/DepositAllManager";
+	}
 
 }

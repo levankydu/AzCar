@@ -24,5 +24,5 @@ public class ReviewsDTO {
 	private int carId;
 	private String userName;
 	private ReviewStatus status;
-
+	
 }
