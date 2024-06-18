@@ -24,7 +24,7 @@ public class VnpayConfig {
 	private String vnp_TmnCode = "J8HZEM40";
 	@Getter
 	@Value("${payment.vnPay.secretKey}")
-	private String secretKey = "RJK1WYUHFQHYISCKJAJF1UQI6DNR530Z";
+	private String secretKey = "Q6CUG7BF7K3F0W455D2TBRNFCJR290W5";
 	@Value("${payment.vnPay.version}")
 	private String vnp_Version = "2.1.0";
 	@Value("${payment.vnPay.command}")

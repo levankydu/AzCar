@@ -807,6 +807,7 @@
 
 												<p th:text="${comment.content}">Nội dung đánh giá</p>
 											</div>
+
 											<!-- Container để chứa ô nhập nội dung reply -->
 											<div class="reply-container" th:id="'replyContainer_' + ${comment.id}"
 												style="display: none;">
@@ -919,6 +920,8 @@
 							<p>Chưa có bình luận</p>
 						</div>
 					</div>
+
+
 
 					<!-- bootstrap submit review -->
 
@@ -2458,29 +2461,7 @@
         }
     }
 
-    // Hàm để thiết lập phân trang
-    /*
-    function setupPagination(totalPages) {
-        const paginationNav = document.getElementById('pagination-nav');
-        const paginationList = paginationNav.querySelector('.pagination');
-        paginationList.innerHTML = '';
-
-        for (let i = 0; i < totalPages; i++) {
-            const li = document.createElement('li');
-            li.classList.add('page-item');
-            if (i === currentPage) {
-                li.classList.add('active');
-            }
-            li.innerHTML = `<a class="page-link" href="#">${i + 1}</a>`;
-            li.addEventListener('click', (e) => {
-                e.preventDefault();
-                currentPage = i;
-                displayComments(i * commentsPerPage, (i + 1) * commentsPerPage);
-                setupPagination(Math.ceil(allComments.length / commentsPerPage));
-            });
-            paginationList.appendChild(li);
-        }
-    }*/
+   
 
     document.addEventListener('DOMContentLoaded', () => {
         parseComments();

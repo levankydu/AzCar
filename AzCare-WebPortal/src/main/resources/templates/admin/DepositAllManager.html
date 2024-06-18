@@ -1,4 +1,4 @@
-myModal123<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
@@ -222,38 +222,33 @@ myModal123<!DOCTYPE html>
 										<tr>
 											<th>Id</th>
 											<th>Email</th>
-										
-											<th>Withdraw</th>
+											<th>Amount</th>
+											
 											<th>Reference Number</th>
 											<th>Status</th>
 											<th>Action</th>
-												<th>Time</th>
+											<th>Time</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr th:each="deposit : ${listDeposit}">
+										<tr th:each="deposit : ${listDepositAll}">
 											<td th:text="${deposit.id}"></td>
 											<td th:text="${deposit.email}"></td>
+											<td th:id="'amount_'+${deposit.id}" th:text="${deposit.amount}"></td>
 											
-											<td th:id="'withdraw_'+ ${deposit.id}" th:text="${deposit.withdraw}"></td>
 											<td th:text="${deposit.referenceNumber}"></td>
 											<td th:id="'status_'+${deposit.id}" th:value="${deposit.Status}"
 												th:text="${deposit.Status}"></td>
-											<td th:if="${deposit.Status !='Done'}"><button class="badge bg-success"
-											 th:data-reference-number="${deposit.referenceNumber}" 
-											 th:id="'acceptPayment_'+${deposit.id}"
-													th:onclick="'acceptPayment('+ ${deposit.id}+')'"
-													>Active</button>
-											
-													</td>
-													<td th:if="${deposit.Status =='Done'}"><button class="badge bg-danger"
-											 th:data-reference-number="${deposit.referenceNumber}" 
-											 th:id="'acceptPayment_'+${deposit.id}"
-													th:onclick="'acceptPayment('+ ${deposit.id}+')'"
-													>Active</button>
-											
-													</td>
-													<td  th:id="'amount_'+ ${deposit.id}" th:text="${deposit.timeCreated}"></td>
+								
+													<td th:switch="${deposit.Status}">
+	 <button th:case="'Pending'" th:classappend="'badge bg-success'" th:data-reference-number="${deposit.referenceNumber}" th:id="'acceptPayment_'+${deposit.id}" th:onclick="'acceptPayment('+${deposit.id}+')'">Active</button>
+  
+    <button th:case="'Done'" th:classappend="'badge bg-danger'" th:data-reference-number="${deposit.referenceNumber}" th:id="'acceptPayment_'+${deposit.id}" th:onclick="'acceptPayment('+${deposit.id}+')'">Active</button>
+    <button th:case="'Decline'" th:classappend="'badge bg-danger'" th:data-reference-number="${deposit.referenceNumber}" th:id="'acceptPayment_'+${deposit.id}" th:onclick="'acceptPayment('+${deposit.id}+')'">Active</button>
+</td>
+
+													
+													<td   th:text="${deposit.timeCreated}"></td>
 
 										</tr>
 									</tbody>
@@ -281,8 +276,8 @@ myModal123<!DOCTYPE html>
 							var referenceNumber = document.getElementById('acceptPayment_' + id).getAttribute('data-reference-number');
 							var depositStatus = document.getElementById('status_'+id);
 							console.log(referenceNumber, "và" , depositStatus);
-							var withdraw = document.getElementById('withdraw_'+id).textContent;
 						
+							var amount = document.getElementById('amount_'+id).textContent ;
 
 							
 		
@@ -295,7 +290,7 @@ myModal123<!DOCTYPE html>
 								},
 								 // Truyền dữ liệu vào body của yêu cầu PUT
 								 body: JSON.stringify({ referenceNumber: referenceNumber,
-									withdraw: withdraw })
+								amount:amount})
 							};
 
 							// Gửi request AJAX để cập nhật status
