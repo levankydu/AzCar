@@ -339,7 +339,7 @@
 							th:text="${#numbers.formatDecimal((user.balance!=null?user.balance :'0'), 1, 'DEFAULT', 0, 'DEFAULT')} +' VND'"></span>
 					</h4>
 					
-					<script>
+					<!-- <script>
 					  document.addEventListener("DOMContentLoaded", function() {
 					    const balanceElement = document.getElementById("balance_123");
 					    if (balanceElement) {
@@ -350,7 +350,7 @@
 					      }
 					    }
 					  });
-					</script>
+					</script> -->
 					<!-- khi click charge sẽ hiển thị dialog -->
 					<!-- Button to open the modal -->
 					<div class="col-4 offset-md-8">
@@ -1333,7 +1333,7 @@ select {
 							th:value="${user.Id}" readonly hidden><br> <br>
 						<label for="amount">Amount:</label>
 						<div>
-							<input type="number" id="amount123" name="amount123" min="10000"
+							<input type="number" id="amount123" name="amount123" min="50000" required="required"
 								step="10" placeholder="Please enter amount">
 						</div>
 						<div>
@@ -1700,11 +1700,13 @@ select {
 		form123.addEventListener('submit', function (event) {
 			event.preventDefault();
 			var amount = document.getElementById("amount123").value;
+			
 			console.log(amount);
-			var amout1 = document.getElementById("balance_123").textContent;
+			var amout1 = document.getElementById("balance_123").textContent.trim();
 			console.log(amout1);
-		
-			if(	parseFloat(amount) > parseFloat(amout1))
+			   const balanceValue = parseFloat(amount.replace(/,/g, '').replace(/\./g, ''));
+			   const balanceValue1 = parseFloat(amout1.replace(/,/g, '').replace(/\./g, ''));
+			if(	balanceValue > balanceValue1)
 			{
 				alert("Insufficient balance!");
 				return;
@@ -1742,8 +1744,7 @@ select {
 				.then(data => {
 					alert('Withdraw successful!');
 					modal123.style.display = "none";
-				})
-				.catch(error => {
+				}).catch(error => {
 
 					console.error('There was an error!', error);
 					alert('An error has occurred. Please try again later!');
@@ -1754,3 +1755,4 @@ select {
 </body>
 
 </html>
+	

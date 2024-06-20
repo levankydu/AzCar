@@ -121,7 +121,7 @@ function checkNewDiscount(modalId) {
 		.getElementById(newDiscountValidateId);
 	var validationMessage = "";
 
-	if (newDiscount == 0) {
+	if (newDiscount == "") {
 		validationMessage = "New discount must be valid numbers.";
 	}
 
