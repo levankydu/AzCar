@@ -78,4 +78,9 @@ public class BrandSevicesImpl implements BrandServices {
 		return brandRepo.getModelById(modelId);
 	}
 
+	@Override
+	public List<CarModelList> findAll() {
+		return brandRepo.findAll();
+	}
+
 }

@@ -16,8 +16,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "tbcarmodellist")
 public class CarModelList implements Serializable {
@@ -38,5 +38,6 @@ public class CarModelList implements Serializable {
 	private String model;
 
 	private Long year;
+	private String status = "accepted"; // Set default value
 
 }

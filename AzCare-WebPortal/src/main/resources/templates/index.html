@@ -1,52 +1,66 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
-	<title>Az CAR</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<meta charset="UTF-8" />
-	<!-- External CSS libraries -->
-	<link type="text/css" rel="stylesheet" href="/assets/css/bootstrap.min.css" />
-	<link type="text/css" rel="stylesheet" href="/assets/css/magnific-popup.css" />
-	<link type="text/css" rel="stylesheet" href="/assets/css/jquery.selectBox.css" />
-	<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css" />
-	<link type="text/css" rel="stylesheet" href="/assets/css/rangeslider.css" />
-	<link type="text/css" rel="stylesheet" href="/assets/css/animate.min.css" />
-	<link type="text/css" rel="stylesheet" href="/assets/css/slick.css" />
-	<link type="text/css" rel="stylesheet" href="/assets/css/jquery.mCustomScrollbar.css" />
-	<link type="text/css" rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css" />
-	<link type="text/css" rel="stylesheet" href="/assets/fonts/flaticon/font/flaticon.css" />
+<title>Az CAR</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" />
+<!-- External CSS libraries -->
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/bootstrap.min.css" />
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/magnific-popup.css" />
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.selectBox.css" />
+<link type="text/css" rel="stylesheet" href="/assets/css/dropzone.css" />
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/rangeslider.css" />
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/animate.min.css" />
+<link type="text/css" rel="stylesheet" href="/assets/css/slick.css" />
+<link type="text/css" rel="stylesheet"
+	href="/assets/css/jquery.mCustomScrollbar.css" />
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/font-awesome/css/font-awesome.min.css" />
+<link type="text/css" rel="stylesheet"
+	href="/assets/fonts/flaticon/font/flaticon.css" />
 
-	<!-- Favicon icon -->
-	<link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
+<!-- Favicon icon -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico"
+	type="image/x-icon" />
 
-	<!-- Google fonts -->
-	<link rel="stylesheet" type="text/css"
-		href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700" />
+<!-- Google fonts -->
+<link rel="stylesheet" type="text/css"
+	href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800%7CPlayfair+Display:400,700%7CRoboto:100,300,400,400i,500,700" />
 
-	<!-- Custom Stylesheet -->
-	<link type="text/css" rel="stylesheet" href="/assets/css/style.css" />
-	<link rel="stylesheet" type="text/css" id="style_sheet" href="/assets/css/skins/default.css">
-
-
-	<link rel="stylesheet" href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
-
-	<link rel="stylesheet" href="/assets/css/notiCss.css">
-
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+<!-- Custom Stylesheet -->
+<link type="text/css" rel="stylesheet" href="/assets/css/style.css" />
+<link rel="stylesheet" type="text/css" id="style_sheet"
+	href="/assets/css/skins/default.css">
 
 
-	<script type="text/javascript" src="/assets/js/notiJs.js"></script>
-	
-	<style>
-		.car-thumbnail img {
-			width: 100%;
-			height: 100%;
-			min-height: 300px;
-			max-height: 300px;
-		}
-	</style>
+<link rel="stylesheet"
+	href="/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.css">
+
+<link rel="stylesheet" href="/assets/css/notiCss.css">
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+
+
+<script type="text/javascript" src="/assets/js/notiJs.js"></script>
+
+<style>
+.car-thumbnail img {
+	width: 100%;
+	height: 100%;
+	min-height: 300px;
+	max-height: 300px;
+}
+</style>
 </head>
 
 <body id="top">
@@ -57,38 +71,42 @@
 	<header class="main-header sticky-header" id="main-header-2">
 		<div class="container">
 			<div class="row">
-				<p id="toast-success-logout" hidden="true" class="btn btn-outline-primary btn-lg btn-block">Success
-					Logout</p>
+				<p id="toast-success-logout" hidden="true"
+					class="btn btn-outline-primary btn-lg btn-block">Success Logout</p>
 				<div class="col-12">
 					<nav class="navbar navbar-expand-lg navbar-light rounded">
 						<a class="navbar-brand logo navbar-brand d-flex mr-auto" href="/">
 							<img src="/assets/img/logos/black-logo.png" alt="logo" />
 						</a>
-						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
-							aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+						<button class="navbar-toggler" type="button"
+							data-toggle="collapse" data-target="#navbar"
+							aria-controls="navbar" aria-expanded="false"
+							aria-label="Toggle navigation">
 							<span class="fa fa-bars"></span>
 						</button>
 						<div class="navbar-collapse collapse w-100" id="navbar">
 							<ul class="navbar-nav ml-auto">
 								<li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
-								<li class="nav-item"><a class="nav-link" onclick="return checkLogin();"
-										th:href="@{/home/availablecars}">Available Cars</a></li>
-								<li class="nav-item" th:if="${session.emailLogin}"><a class="nav-link"
-										th:href="@{/home/myplan/}">My Plan</a></li>
+								<li class="nav-item"><a class="nav-link"
+									onclick="return checkLogin();" th:href="@{/home/availablecars}">Available
+										Cars</a></li>
+								<li class="nav-item" th:if="${session.emailLogin}"><a
+									class="nav-link" th:href="@{/home/myplan/}">My Plan</a></li>
 								<div id="openNoti">
 									<div class="" tabindex="0" id="noti">
 										<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-											xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 50 30"
-											enable-background="new 0 0 50 30" xml:space="preserve">
+											xmlns:xlink="http://www.w3.org/1999/xlink"
+											viewBox="0 0 50 30" enable-background="new 0 0 50 30"
+											xml:space="preserve">
 											<g class="bell-icon__group">
-												<path class="" id="ball" fill-rule="evenodd" stroke-width="1.5"
-													clip-rule="evenodd" fill="none" stroke="#currentColor"
-													stroke-miterlimit="10"
-													d="M28.7,25 c0,1.9-1.7,3.5-3.7,3.5s-3.7-1.6-3.7-3.5s1.7-3.5,3.7-3.5S28.7,23,28.7,25z" />
-												<path class="" id="shell" fill-rule="evenodd" clip-rule="evenodd"
-													fill="#FFFFFF" stroke="#currentColor" stroke-width="2"
-													stroke-miterlimit="10"
-													d="M35.9,21.8c-1.2-0.7-4.1-3-3.4-8.7c0.1-1,0.1-2.1,0-3.1h0c-0.3-4.1-3.9-7.2-8.1-6.9c-3.7,0.3-6.6,3.2-6.9,6.9h0 c-0.1,1-0.1,2.1,0,3.1c0.6,5.7-2.2,8-3.4,8.7c-0.4,0.2-0.6,0.6-0.6,1v1.8c0,0.2,0.2,0.4,0.4,0.4h22.2c0.2,0,0.4-0.2,0.4-0.4v-1.8 C36.5,22.4,36.3,22,35.9,21.8L35.9,21.8z" />
+												<path class="" id="ball" fill-rule="evenodd"
+												stroke-width="1.5" clip-rule="evenodd" fill="none"
+												stroke="#currentColor" stroke-miterlimit="10"
+												d="M28.7,25 c0,1.9-1.7,3.5-3.7,3.5s-3.7-1.6-3.7-3.5s1.7-3.5,3.7-3.5S28.7,23,28.7,25z" />
+												<path class="" id="shell" fill-rule="evenodd"
+												clip-rule="evenodd" fill="#FFFFFF" stroke="#currentColor"
+												stroke-width="2" stroke-miterlimit="10"
+												d="M35.9,21.8c-1.2-0.7-4.1-3-3.4-8.7c0.1-1,0.1-2.1,0-3.1h0c-0.3-4.1-3.9-7.2-8.1-6.9c-3.7,0.3-6.6,3.2-6.9,6.9h0 c-0.1,1-0.1,2.1,0,3.1c0.6,5.7-2.2,8-3.4,8.7c-0.4,0.2-0.6,0.6-0.6,1v1.8c0,0.2,0.2,0.4,0.4,0.4h22.2c0.2,0,0.4-0.2,0.4-0.4v-1.8 C36.5,22.4,36.3,22,35.9,21.8L35.9,21.8z" />
 											</g>
 										</svg>
 										<div class="notification-amount">
@@ -102,36 +120,38 @@
 										<div class="modal">
 											<h2>All Notification</h2>
 											<div id="messages"></div>
-											<svg class="modal-svg" xmlns="http://www.w3.org/2000/svg" width="100%"
-												height="100%" preserveAspectRatio="none">
-												<rect x="0" y="0" fill="none" width="226" height="162" rx="3" ry="3">
+											<svg class="modal-svg" xmlns="http://www.w3.org/2000/svg"
+												width="100%" height="100%" preserveAspectRatio="none">
+												<rect x="0" y="0" fill="none" width="226" height="162"
+													rx="3" ry="3">
 												</rect>
 											</svg>
 										</div>
 									</div>
 								</div>
 								<li class="nav-item dropdown" th:if="${session.user}"><a
-
-										class="btn btn-sm btn-white-sm-outline btn-round signup-link"
-										th:href="@{/user/profile/} + ${session.user}"
-										th:text="Hello+', ' +${session.user}"></a>
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									th:href="@{/user/profile/} + ${session.user}"
+									th:text="Hello+', ' +${session.user}"></a>
 
 									<button id="logout"
 										class="btn btn-sm btn-theme btn-round signup-link">Logout</button>
 								</li>
 
 								<li class="nav-item dropdown" th:if="${session.admin}"><a
-										class="btn btn-sm btn-white-sm-outline btn-round signup-link" href="#"
-										th:text="Hello+', ' +${session.admin}"></a> <a
-										class="btn btn-sm btn-theme btn-round signup-link"
-										href="/dashboard/">Dashboard</a>
+									class="btn btn-sm btn-white-sm-outline btn-round signup-link"
+									href="#" th:text="Hello+', ' +${session.admin}"></a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/dashboard/">Dashboard</a>
 									<button id="logout"
 										class="btn btn-sm btn-theme btn-round signup-link">Logout</button>
 								</li>
 
 								<li class="nav-item dropdown" th:unless="${session.isAuthen}">
-									<a class="btn btn-sm btn-theme btn-round signup-link" href="/login">Login</a> <a
-										class="btn btn-sm btn-theme btn-round signup-link" href="/register">Register</a>
+									<a class="btn btn-sm btn-theme btn-round signup-link"
+									href="/login">Login</a> <a
+									class="btn btn-sm btn-theme btn-round signup-link"
+									href="/register">Register</a>
 								</li>
 							</ul>
 						</div>
@@ -144,14 +164,17 @@
 	<!-- main header end -->
 	<input type="hidden" th:value="${session.emailLogin}" id="emailLogin">
 
-	<p id="toast-failed-login" hidden="true" class="btn btn-outline-primary btn-lg btn-block">Failed Example</p>
+	<p id="toast-failed-login" hidden="true"
+		class="btn btn-outline-primary btn-lg btn-block">Failed Example</p>
 	<!-- Banner start -->
 	<div class="banner banner-bg" id="particles-banner-wrapper">
 		<div id="particles-banner"></div>
-		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+		<div id="carouselExampleIndicators" class="carousel slide"
+			data-ride="carousel">
 			<div class="carousel-inner">
 				<div class="carousel-item item-bg active">
-					<div class="carousel-caption banner-slider-inner d-flex h-100 text-left">
+					<div
+						class="carousel-caption banner-slider-inner d-flex h-100 text-left">
 						<div class="carousel-content container">
 							<div class="text-left max-w">
 								<h3 data-animation="animated fadeInDown delay-05s">
@@ -159,21 +182,25 @@
 								</h3>
 								<p data-animation="animated fadeInUp delay-10s">Ride with
 									Easy, Book with Confidence.</p>
-								<a data-animation="animated fadeInUp delay-10s" th:href="@{/home/carregister/}"
-									class="btn btn-lg btn-round btn-theme" onclick="return checkLogin()">Want rent your
-									Car ?</a>
+								<a data-animation="animated fadeInUp delay-10s"
+									th:href="@{/home/carregister/}"
+									class="btn btn-lg btn-round btn-theme"
+									onclick="return checkLogin()">Want rent your Car ?</a>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev"> <span
-					class="slider-mover-left" aria-hidden="true"> <i class="fa fa-angle-left"></i>
-				</span>
-			</a> <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-				<span class="slider-mover-right" aria-hidden="true"> <i class="fa fa-angle-right"></i>
-				</span>
+			<a class="carousel-control-prev" href="#carouselExampleIndicators"
+				role="button" data-slide="prev"> <span class="slider-mover-left"
+				aria-hidden="true"> <i class="fa fa-angle-left"></i>
+			</span>
+			</a> <a class="carousel-control-next" href="#carouselExampleIndicators"
+				role="button" data-slide="next"> <span
+				class="slider-mover-right" aria-hidden="true"> <i
+					class="fa fa-angle-right"></i>
+			</span>
 			</a>
 		</div>
 	</div>
@@ -196,31 +223,37 @@
 						<div class="car-box-4">
 							<!-- car img -->
 							<div class="car-thumbnail">
-								<a th:href="${'home/availablecars/details/'+carRegisterList.get(4).id}" class="car-img"
-									onclick="return checkLogin()"> <div class="listing-badges" th:if="${carRegisterList.get(4).discount} > 0">
-									<span class="featured" th:text="'SALES ' + ${carRegisterList.get(4).discount}+'%' "></span>
-								</div>
-									<img th:src="${'get/'+carRegisterList.get(4).images.get(4).urlImage}" alt="car-list"
-										class="img-fluid">
+								<a
+									th:href="${'home/availablecars/details/'+carRegisterList.get(4).id}"
+									class="car-img" onclick="return checkLogin()">
+									<div class="listing-badges"
+										th:if="${carRegisterList.get(4).discount} > 0">
+										<span class="featured"
+											th:text="'SALES ' + ${carRegisterList.get(4).discount}+'%' "></span>
+									</div> <img
+									th:src="${'get/'+carRegisterList.get(4).images.get(4).urlImage}"
+									alt="car-list" class="img-fluid">
 								</a>
 
 								<div class="text">
 									<h3>
 
-										<a th:href="${'home/availablecars/details/'+carRegisterList.get(4).id}"
+										<a
+											th:href="${'home/availablecars/details/'+carRegisterList.get(4).id}"
 											onclick="return checkLogin()"
 											th:text="${carRegisterList.get(4).carmodel.model}"></a>
 
 									</h3>
 									<ul class="facilities-list clearfix">
-										<li class="bordered-right"><i class="fa fa-map-marker" aria-hidden="true"></i>
-											<span th:text="${carRegisterList.get(4).address}"></span>
-										</li>
-										<li class="bordered-right"><i class="fa fa-car" aria-hidden="true"></i> <span
-												th:text="${carRegisterList.get(4).engineInformationTranmission}? 'Automatic' :'Manual'"></span>
+										<li class="bordered-right"><i class="fa fa-map-marker"
+											aria-hidden="true"></i> <span
+											th:text="${carRegisterList.get(4).address}"></span></li>
+										<li class="bordered-right"><i class="fa fa-car"
+											aria-hidden="true"></i> <span
+											th:text="${carRegisterList.get(4).engineInformationTranmission}? 'Automatic' :'Manual'"></span>
 										</li>
 										<li><i class="flaticon-petrol"></i> <span
-												th:text="${carRegisterList.get(4).fuelType}"></span></li>
+											th:text="${carRegisterList.get(4).fuelType}"></span></li>
 									</ul>
 								</div>
 							</div>
@@ -232,11 +265,14 @@
 							<div class="car-thumbnail">
 								<a onclick="return checkLogin()"
 									th:href="${'home/availablecars/details/'+carRegisterList.get(1).id}"
-									class="car-img"> <div class="listing-badges" th:if="${carRegisterList.get(1).discount} > 0">
-									<span class="featured" th:text="'SALES ' + ${carRegisterList.get(1).discount}+'%' "></span>
-								</div>
-									<img th:src="${'get/'+carRegisterList.get(1).images.get(1).urlImage}" alt="car-list"
-										class="img-fluid">
+									class="car-img">
+									<div class="listing-badges"
+										th:if="${carRegisterList.get(1).discount} > 0">
+										<span class="featured"
+											th:text="'SALES ' + ${carRegisterList.get(1).discount}+'%' "></span>
+									</div> <img
+									th:src="${'get/'+carRegisterList.get(1).images.get(1).urlImage}"
+									alt="car-list" class="img-fluid">
 								</a>
 
 								<div class="text">
@@ -245,14 +281,15 @@
 											th:text="${carRegisterList.get(1).carmodel.model}"></a>
 									</h3>
 									<ul class="facilities-list clearfix">
-										<li class="bordered-right"><i class="fa fa-map-marker" aria-hidden="true"></i>
-											<span th:text="${carRegisterList.get(1).address}"></span>
-										</li>
-										<li class="bordered-right"><i class="fa fa-car" aria-hidden="true"></i> <span
-												th:text="${carRegisterList.get(1).engineInformationTranmission}? 'Automatic' :'Manual'"></span>
+										<li class="bordered-right"><i class="fa fa-map-marker"
+											aria-hidden="true"></i> <span
+											th:text="${carRegisterList.get(1).address}"></span></li>
+										<li class="bordered-right"><i class="fa fa-car"
+											aria-hidden="true"></i> <span
+											th:text="${carRegisterList.get(1).engineInformationTranmission}? 'Automatic' :'Manual'"></span>
 										</li>
 										<li><i class="flaticon-petrol"></i> <span
-												th:text="${carRegisterList.get(1).fuelType}"></span></li>
+											th:text="${carRegisterList.get(1).fuelType}"></span></li>
 									</ul>
 								</div>
 							</div>
@@ -264,11 +301,14 @@
 							<div class="car-thumbnail">
 								<a onclick="return checkLogin()"
 									th:href="${'home/availablecars/details/'+carRegisterList.get(2).id}"
-									class="car-img"> <div class="listing-badges" th:if="${carRegisterList.get(2).discount} > 0">
-									<span class="featured" th:text="'SALES ' + ${carRegisterList.get(2).discount}+'%' "></span>
-								</div>
-									<img th:src="${'get/'+carRegisterList.get(2).images.get(1).urlImage}" alt="car-list"
-										class="img-fluid">
+									class="car-img">
+									<div class="listing-badges"
+										th:if="${carRegisterList.get(2).discount} > 0">
+										<span class="featured"
+											th:text="'SALES ' + ${carRegisterList.get(2).discount}+'%' "></span>
+									</div> <img
+									th:src="${'get/'+carRegisterList.get(2).images.get(1).urlImage}"
+									alt="car-list" class="img-fluid">
 								</a>
 
 								<div class="text">
@@ -277,14 +317,15 @@
 											th:text="${carRegisterList.get(2).carmodel.model}"></a>
 									</h3>
 									<ul class="facilities-list clearfix">
-										<li class="bordered-right"><i class="fa fa-map-marker" aria-hidden="true"></i>
-											<span th:text="${carRegisterList.get(2).address}"></span>
-										</li>
-										<li class="bordered-right"><i class="fa fa-car" aria-hidden="true"></i> <span
-												th:text="${carRegisterList.get(2).engineInformationTranmission}? 'Automatic' :'Manual'"></span>
+										<li class="bordered-right"><i class="fa fa-map-marker"
+											aria-hidden="true"></i> <span
+											th:text="${carRegisterList.get(2).address}"></span></li>
+										<li class="bordered-right"><i class="fa fa-car"
+											aria-hidden="true"></i> <span
+											th:text="${carRegisterList.get(2).engineInformationTranmission}? 'Automatic' :'Manual'"></span>
 										</li>
 										<li><i class="flaticon-petrol"></i> <span
-												th:text="${carRegisterList.get(2).fuelType}"></span></li>
+											th:text="${carRegisterList.get(2).fuelType}"></span></li>
 									</ul>
 								</div>
 							</div>
@@ -296,11 +337,14 @@
 							<div class="car-thumbnail">
 								<a onclick="return checkLogin()"
 									th:href="${'home/availablecars/details/'+carRegisterList.get(0).id}"
-									class="car-img"> <div class="listing-badges" th:if="${carRegisterList.get(0).discount} > 0">
-									<span class="featured" th:text="'SALES ' + ${carRegisterList.get(0).discount}+'%' "></span>
-								</div>
-									<img th:src="${'get/'+carRegisterList.get(0).images.get(1).urlImage}" alt="car-list"
-										class="img-fluid">
+									class="car-img">
+									<div class="listing-badges"
+										th:if="${carRegisterList.get(0).discount} > 0">
+										<span class="featured"
+											th:text="'SALES ' + ${carRegisterList.get(0).discount}+'%' "></span>
+									</div> <img
+									th:src="${'get/'+carRegisterList.get(0).images.get(1).urlImage}"
+									alt="car-list" class="img-fluid">
 								</a>
 
 								<div class="text">
@@ -309,14 +353,15 @@
 											th:text="${carRegisterList.get(0).carmodel.model}"></a>
 									</h3>
 									<ul class="facilities-list clearfix">
-										<li class="bordered-right"><i class="fa fa-map-marker" aria-hidden="true"></i>
-											<span th:text="${carRegisterList.get(0).address}"></span>
-										</li>
-										<li class="bordered-right"><i class="fa fa-car" aria-hidden="true"></i> <span
-												th:text="${carRegisterList.get(0).engineInformationTranmission}? 'Automatic' :'Manual'"></span>
+										<li class="bordered-right"><i class="fa fa-map-marker"
+											aria-hidden="true"></i> <span
+											th:text="${carRegisterList.get(0).address}"></span></li>
+										<li class="bordered-right"><i class="fa fa-car"
+											aria-hidden="true"></i> <span
+											th:text="${carRegisterList.get(0).engineInformationTranmission}? 'Automatic' :'Manual'"></span>
 										</li>
 										<li><i class="flaticon-petrol"></i> <span
-												th:text="${carRegisterList.get(0).fuelType}"></span></li>
+											th:text="${carRegisterList.get(0).fuelType}"></span></li>
 									</ul>
 								</div>
 							</div>
@@ -404,7 +449,7 @@
 		</div>
 	</div>
 	<!-- Latest offest end -->
-	
+
 	<!-- Agent start -->
 	<div class="agent content-area-2 bg-grea">
 		<div class="container">
@@ -422,10 +467,12 @@
 						<div class="row agent-5">
 							<div class="col-xl-5 col-lg-5 col-md-12 col-pad">
 								<div class="photo">
-									<img src="assets/img/avatar/avatar-10.jpg" alt="agent-list-2" class="img-fluid" />
+									<img src="assets/img/avatar/avatar-10.jpg" alt="agent-list-2"
+										class="img-fluid" />
 								</div>
 							</div>
-							<div class="col-xl-7 col-lg-7 col-md-12 col-pad align-self-center">
+							<div
+								class="col-xl-7 col-lg-7 col-md-12 col-pad align-self-center">
 								<div class="detail">
 									<h5>Authentication</h5>
 									<h4>
@@ -436,8 +483,8 @@
 										<ul>
 											<li><span>Address:</span><a href="#">590 CMT8, P.11,
 													Q.3, Hồ Chí Minh</a></li>
-											<li><span>Email:</span><a href="mailto:info@themevessel.com">
-													info@themevessel.com</a>
+											<li><span>Email:</span><a
+												href="mailto:info@themevessel.com"> info@themevessel.com</a>
 											</li>
 											<li><span>Mobile:</span><a href="tel:+554XX-634-7071">
 													+55 4XX-634-7071</a></li>
@@ -445,10 +492,14 @@
 									</div>
 
 									<ul class="social-list clearfix">
-										<li><a href="#" class="facebook-bg"><i class="fa fa-facebook"></i></a></li>
-										<li><a href="#" class="twitter-bg"><i class="fa fa-twitter"></i></a></li>
-										<li><a href="#" class="google-bg"><i class="fa fa-google-plus"></i></a></li>
-										<li><a href="#" class="linkedin-bg"><i class="fa fa-linkedin"></i></a></li>
+										<li><a href="#" class="facebook-bg"><i
+												class="fa fa-facebook"></i></a></li>
+										<li><a href="#" class="twitter-bg"><i
+												class="fa fa-twitter"></i></a></li>
+										<li><a href="#" class="google-bg"><i
+												class="fa fa-google-plus"></i></a></li>
+										<li><a href="#" class="linkedin-bg"><i
+												class="fa fa-linkedin"></i></a></li>
 									</ul>
 								</div>
 							</div>
@@ -458,10 +509,12 @@
 						<div class="row agent-5">
 							<div class="col-xl-5 col-lg-5 col-md-12 col-pad">
 								<div class="photo">
-									<img src="assets/img/avatar/avatar-10.jpg" alt="agent-list-10" class="img-fluid" />
+									<img src="assets/img/avatar/avatar-10.jpg" alt="agent-list-10"
+										class="img-fluid" />
 								</div>
 							</div>
-							<div class="col-xl-7 col-lg-7 col-md-12 col-pad align-self-center">
+							<div
+								class="col-xl-7 col-lg-7 col-md-12 col-pad align-self-center">
 								<div class="detail">
 									<h5>Office Manager</h5>
 									<h4>
@@ -472,8 +525,8 @@
 										<ul>
 											<li><span>Address:</span><a href="#"> 44 New Design
 													Street,</a></li>
-											<li><span>Email:</span><a href="mailto:info@themevessel.com">
-													info@themevessel.com</a>
+											<li><span>Email:</span><a
+												href="mailto:info@themevessel.com"> info@themevessel.com</a>
 											</li>
 											<li><span>Mobile:</span><a href="tel:+554XX-634-7071">
 													+55 4XX-634-7071</a></li>
@@ -481,10 +534,14 @@
 									</div>
 
 									<ul class="social-list clearfix">
-										<li><a href="#" class="facebook-bg"><i class="fa fa-facebook"></i></a></li>
-										<li><a href="#" class="twitter-bg"><i class="fa fa-twitter"></i></a></li>
-										<li><a href="#" class="google-bg"><i class="fa fa-google-plus"></i></a></li>
-										<li><a href="#" class="linkedin-bg"><i class="fa fa-linkedin"></i></a></li>
+										<li><a href="#" class="facebook-bg"><i
+												class="fa fa-facebook"></i></a></li>
+										<li><a href="#" class="twitter-bg"><i
+												class="fa fa-twitter"></i></a></li>
+										<li><a href="#" class="google-bg"><i
+												class="fa fa-google-plus"></i></a></li>
+										<li><a href="#" class="linkedin-bg"><i
+												class="fa fa-linkedin"></i></a></li>
 									</ul>
 								</div>
 							</div>
@@ -494,10 +551,12 @@
 						<div class="row agent-5">
 							<div class="col-xl-5 col-lg-5 col-md-12 col-pad">
 								<div class="photo">
-									<img src="assets/img/avatar/avatar-10.jpg" alt="agent-list-2" class="img-fluid" />
+									<img src="assets/img/avatar/avatar-10.jpg" alt="agent-list-2"
+										class="img-fluid" />
 								</div>
 							</div>
-							<div class="col-xl-7 col-lg-7 col-md-12 col-pad align-self-center">
+							<div
+								class="col-xl-7 col-lg-7 col-md-12 col-pad align-self-center">
 								<div class="detail">
 									<h5>Creative Director</h5>
 									<h4>
@@ -508,8 +567,8 @@
 										<ul>
 											<li><span>Address:</span><a href="#"> 44 New Design
 													Street,</a></li>
-											<li><span>Email:</span><a href="mailto:info@themevessel.com">
-													info@themevessel.com</a>
+											<li><span>Email:</span><a
+												href="mailto:info@themevessel.com"> info@themevessel.com</a>
 											</li>
 											<li><span>Mobile:</span><a href="tel:+554XX-634-7071">
 													+55 4XX-634-7071</a></li>
@@ -517,10 +576,14 @@
 									</div>
 
 									<ul class="social-list clearfix">
-										<li><a href="#" class="facebook-bg"><i class="fa fa-facebook"></i></a></li>
-										<li><a href="#" class="twitter-bg"><i class="fa fa-twitter"></i></a></li>
-										<li><a href="#" class="google-bg"><i class="fa fa-google-plus"></i></a></li>
-										<li><a href="#" class="linkedin-bg"><i class="fa fa-linkedin"></i></a></li>
+										<li><a href="#" class="facebook-bg"><i
+												class="fa fa-facebook"></i></a></li>
+										<li><a href="#" class="twitter-bg"><i
+												class="fa fa-twitter"></i></a></li>
+										<li><a href="#" class="google-bg"><i
+												class="fa fa-google-plus"></i></a></li>
+										<li><a href="#" class="linkedin-bg"><i
+												class="fa fa-linkedin"></i></a></li>
 									</ul>
 								</div>
 							</div>
@@ -530,10 +593,12 @@
 						<div class="row agent-5">
 							<div class="col-xl-5 col-lg-5 col-md-12 col-pad">
 								<div class="photo">
-									<img src="assets/img/avatar/avatar-10.jpg" alt="agent-list-10" class="img-fluid" />
+									<img src="assets/img/avatar/avatar-10.jpg" alt="agent-list-10"
+										class="img-fluid" />
 								</div>
 							</div>
-							<div class="col-xl-7 col-lg-7 col-md-12 col-pad align-self-center">
+							<div
+								class="col-xl-7 col-lg-7 col-md-12 col-pad align-self-center">
 								<div class="detail">
 									<h5>Office Manager</h5>
 									<h4>
@@ -544,8 +609,8 @@
 										<ul>
 											<li><span>Address:</span><a href="#"> 44 New Design
 													Street,</a></li>
-											<li><span>Email:</span><a href="mailto:info@themevessel.com">
-													info@themevessel.com</a>
+											<li><span>Email:</span><a
+												href="mailto:info@themevessel.com"> info@themevessel.com</a>
 											</li>
 											<li><span>Mobile:</span><a href="tel:+554XX-634-7071">
 													+55 4XX-634-7071</a></li>
@@ -553,16 +618,20 @@
 									</div>
 
 									<ul class="social-list clearfix">
-										<li><a href="#" class="facebook-bg"><i class="fa fa-facebook"></i></a></li>
-										<li><a href="#" class="twitter-bg"><i class="fa fa-twitter"></i></a></li>
-										<li><a href="#" class="google-bg"><i class="fa fa-google-plus"></i></a></li>
-										<li><a href="#" class="linkedin-bg"><i class="fa fa-linkedin"></i></a></li>
+										<li><a href="#" class="facebook-bg"><i
+												class="fa fa-facebook"></i></a></li>
+										<li><a href="#" class="twitter-bg"><i
+												class="fa fa-twitter"></i></a></li>
+										<li><a href="#" class="google-bg"><i
+												class="fa fa-google-plus"></i></a></li>
+										<li><a href="#" class="linkedin-bg"><i
+												class="fa fa-linkedin"></i></a></li>
 									</ul>
 								</div>
 							</div>
 						</div>
 					</div>
-				
+
 				</div>
 				<div class="slick-prev slick-arrow-buton">
 					<i class="fa fa-angle-left"></i>
@@ -576,7 +645,8 @@
 	<!-- Agent end -->
 
 	<!-- Testimonial start -->
-	<div class="testimonial overview-bgi wow fadeInUp delay-04s" style="background-image: url(assets/img/banner-2.jpg)">
+	<div class="testimonial overview-bgi wow fadeInUp delay-04s"
+		style="background-image: url(assets/img/banner-2.jpg)">
 		<div class="container">
 			<div class="row">
 				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -586,9 +656,11 @@
 								<span>Our</span> Review
 							</h1>
 						</header>
-						<div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
+						<div id="carouselExampleIndicators2" class="carousel slide"
+							data-ride="carousel">
 							<ol class="carousel-indicators">
-								<li data-target="#carouselExampleIndicators2" data-slide-to="0" class="active"></li>
+								<li data-target="#carouselExampleIndicators2" data-slide-to="0"
+									class="active"></li>
 								<li data-target="#carouselExampleIndicators2" data-slide-to="1"></li>
 								<li data-target="#carouselExampleIndicators2" data-slide-to="2"></li>
 							</ol>
@@ -658,28 +730,35 @@
 						</ul>
 
 						<ul class="social-list clearfix">
-							<li><a href="#" class="facebook-bgh"><i class="fa fa-facebook"></i></a></li>
-							<li><a href="#" class="twitter-bgh"><i class="fa fa-twitter"></i></a></li>
-							<li><a href="#" class="google-bgh"><i class="fa fa-google-plus"></i></a></li>
+							<li><a href="#" class="facebook-bgh"><i
+									class="fa fa-facebook"></i></a></li>
+							<li><a href="#" class="twitter-bgh"><i
+									class="fa fa-twitter"></i></a></li>
+							<li><a href="#" class="google-bgh"><i
+									class="fa fa-google-plus"></i></a></li>
 							<li><a href="#" class="rss-bgh"><i class="fa fa-rss"></i></a>
 							</li>
-							<li><a href="#" class="linkedin-bgh"><i class="fa fa-linkedin"></i></a></li>
+							<li><a href="#" class="linkedin-bgh"><i
+									class="fa fa-linkedin"></i></a></li>
 						</ul>
 					</div>
 				</div>
 				<div class="col-6 text-center">
-					<img src="/assets/img/logos/logo-white.png" class="w-75" alt="loo"/>
+					<img src="/assets/img/logos/logo-white.png" class="w-75" alt="loo" />
 				</div>
 				<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
 					<div class="footer-item clearfix">
 						<h4>Subscribe</h4>
 						<div class="f-border"></div>
 						<div class="Subscribe-box">
-							<p>Excepteur sint occaecat cupidatat non proident, sunt in
-								culpa qui officia deserunt mollit.</p>
-							<p>Excepteur sint occaecat cupidatat non proident, sunt in
-								culpa qui officia deserunt mollit.</p>
-							<img src="/assets/img/logos/bocongthuong.png" class="w-75" alt="loo" />
+							<p>Web-based car rental services offer 24/7 access, a wide
+								range of vehicles, transparent pricing, and user-friendly
+								interfaces.</p>
+							<p>Customers benefit from flexible booking, mobile
+								apps, and eco-friendly options, making the rental process quick,
+								easy, and efficient.</p>
+							<img src="/assets/img/logos/bocongthuong.png" class="w-75"
+								alt="loo" />
 						</div>
 					</div>
 				</div>
@@ -719,7 +798,8 @@
 								List</a></li>
 						<li class="menu-item"><a href="car-details.html">Car
 								Detail</a></li>
-						<li class="menu-item"><a href="blog-single-sidebar-right.html">Blog</a></li>
+						<li class="menu-item"><a
+							href="blog-single-sidebar-right.html">Blog</a></li>
 						<li class="menu-item"><a href="about-1.html">About US</a></li>
 						<li class="menu-item"><a href="contact-1.html">Contact US</a></li>
 					</ul>
@@ -757,54 +837,52 @@
 	<script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
 	<!-- Custom JS Script -->
 	<script src="/assets/js/app.js"></script>
-	<script th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
+	<script
+		th:src="@{/adminAssets/assets/extensions/sweetalert2/sweetalert2.min.js}"></script>
 	<script th:src="@{/adminAssets/assets/static/js/pages/sweetalert2.js}"></script>
 	<script type="text/javascript">
-    function checkSubmitLogout() {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/logout', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                
-                localStorage.setItem('logoutSuccess', 'true');
+		function checkSubmitLogout() {
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', '/logout', true);
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.onload = function() {
+				if (xhr.status === 200) {
 
-                
-                window.location.href = "/";
-            } else {
-                console.error('Logout request failed');
-            }
-        };
-        xhr.onerror = function () {
-            console.error('Logout request failed');
-        };
-        xhr.send();
-    }
+					localStorage.setItem('logoutSuccess', 'true');
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const logoutSuccess = localStorage.getItem('logoutSuccess');
+					window.location.href = "/";
+				} else {
+					console.error('Logout request failed');
+				}
+			};
+			xhr.onerror = function() {
+				console.error('Logout request failed');
+			};
+			xhr.send();
+		}
 
-        
-        if (logoutSuccess === 'true') {
-            Swal2.fire({
-                icon: "success",
-                title: "Logout successful",
-            });
+		document.addEventListener("DOMContentLoaded", function() {
+			const logoutSuccess = localStorage.getItem('logoutSuccess');
 
-         
-            localStorage.removeItem('logoutSuccess');
-        }
-    });
+			if (logoutSuccess === 'true') {
+				Swal2.fire({
+					icon : "success",
+					title : "Logout successful",
+				});
 
-    function checkLogin() {
-        var emailLogin = document.getElementById('emailLogin').value;
-        if (emailLogin == "") {
-            document.getElementById('toast-failed-login').click();
-            return false;
-        }
-        return true;
-    }
-</script>
+				localStorage.removeItem('logoutSuccess');
+			}
+		});
+
+		function checkLogin() {
+			var emailLogin = document.getElementById('emailLogin').value;
+			if (emailLogin == "") {
+				document.getElementById('toast-failed-login').click();
+				return false;
+			}
+			return true;
+		}
+	</script>
 
 
 
