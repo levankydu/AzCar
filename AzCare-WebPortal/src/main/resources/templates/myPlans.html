@@ -356,14 +356,14 @@
 					<div class="col-4 offset-md-8">
 						<div class="row">
 							<div class="col-6">
+								
+							</div>
+							<div class="col-6">
 								<button type="button" class="search-button btn-md btn-color"
 									style="border-width: 0; border-radius: 0" id="openModalBtn2">
 									Withdraw</button>
 							</div>
-							<div class="col-6">
-								<button id="openModalBtn" class="search-button btn-md btn-color"
-									style="border-width: 0; border-radius: 0">Deposit</button>
-							</div>
+							
 						</div>
 					</div>
 					<!-- The Modal -->
@@ -1700,11 +1700,13 @@ select {
 		form123.addEventListener('submit', function (event) {
 			event.preventDefault();
 			var amount = document.getElementById("amount123").value;
+			
 			console.log(amount);
-			var amout1 = document.getElementById("balance_123").textContent;
+			var amout1 = document.getElementById("balance_123").textContent.trim();
 			console.log(amout1);
-		
-			if(	parseFloat(amount) > parseFloat(amout1))
+			   const balanceValue = parseFloat(amount.replace(/,/g, '').replace(/\./g, ''));
+			   const balanceValue1 = parseFloat(amout1.replace(/,/g, '').replace(/\./g, ''));
+			if(	balanceValue > balanceValue1)
 			{
 				alert("Insufficient balance!");
 				return;

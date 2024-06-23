@@ -14,12 +14,14 @@ import com.project.AzCar.payments.vnpay.util.VNPayUtil;
 import lombok.Getter;
 
 @Configuration
+@Getter
 public class VnpayConfig {
 	@Getter
 	@Value("${payment.vnPay.url}")
 	private String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
 	@Value("${payment.vnPay.returnUrl}")
 	private String vnp_ReturnUrl = "http://localhost:8081/api/v1/payment/vn-pay-callback\r\n" + "";
+	@Getter
 	@Value("${payment.vnPay.tmnCode}")
 	private String vnp_TmnCode = "J8HZEM40";
 	@Getter
@@ -52,4 +54,7 @@ public class VnpayConfig {
 		vnpParamsMap.put("vnp_ExpireDate", vnp_ExpireDate);
 		return vnpParamsMap;
 	}
+	
+	
+ 	
 }

@@ -4,7 +4,10 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.project.AzCar.Entities.Deposit.Deposit;
 import com.project.AzCar.Entities.Deposit.EnumDeposit;
 import com.project.AzCar.Service.Deposit.IDepositService;
+import com.project.AzCar.payments.vnpay.VnpayDTO.VNPayResponse;
 import com.project.AzCar.payments.vnpay.util.VNPayUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,6 +38,7 @@ public class VnpayService {
 			vnpParamsMap.put("vnp_BankCode", bankCode);
 		}
 		vnpParamsMap.put("vnp_IpAddr", VNPayUtil.getIpAddress(request));
+		System.out.println("IP address: " + VNPayUtil.getIpAddress(request));
 		// build query url
 		String queryUrl = VNPayUtil.getPaymentURL(vnpParamsMap, true);
 		System.out.println("query URL : " + vnPayConfig.getVnp_PayUrl());
@@ -56,8 +61,44 @@ public class VnpayService {
 
 		}
 		
+		
+		
+		
 
 		return VnpayDTO.VNPayResponse.builder().code("ok").message("success").paymentUrl(paymentUrl).build();
 	}
+	public VNPayResponse createVnPayRefund(HttpServletRequest request,Deposit d)
+	{	
+	 Deposit d1 = 	depositService.findByRefenceId(d.getReferenceNumber());
+	 	if(d1 !=null)
+	 	{
+	 		Map<String, String> vnpParamsMap = vnPayConfig.getVNPayConfig();
+			vnpParamsMap.put("vnp_Amount", String.valueOf(d1.getAmount()));
+			vnpParamsMap.put("vnp_TxnRef", d1.getReferenceNumber());
+			vnpParamsMap.put("vnp_OrderInfo", "Hoan tien giao dich:  " +d1.getReferenceNumber() );
+			   String dateString = d1.getPaymentDateAt().toString();
+		        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+		        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+		        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+		        try {
+		            Date date = inputFormat.parse(dateString);
+		            calendar.setTime(date);
+		            
+		            // Định dạng lại thời gian theo "yyyyMMddHHmmss"
+		            String formattedDate = outputFormat.format(calendar.getTime());
+		            vnpParamsMap.put("vnp_TransactionDate",formattedDate);
+		            System.out.println("Formatted Date: " + formattedDate);
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        }
+		    	vnpParamsMap.put("vnp_IpAddr", VNPayUtil.getIpAddress(request));
+			
+			
+			
+	 		
+	 	}
+		return null;
+	}
+	
 	
 }

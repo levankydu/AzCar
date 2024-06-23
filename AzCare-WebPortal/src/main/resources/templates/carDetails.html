@@ -804,8 +804,10 @@
 											<div class="comment-body">
 
 												<div class="comment-rating"></div>
-
-												<p th:text="${comment.content}">Nội dung đánh giá</p>
+												<div class="form-group">
+												<p class="comment-text" contenteditable="true" th:text="${comment.content}">Nội dung đánh giá</p>
+												</div>
+												
 											</div>
 
 											<!-- Container để chứa ô nhập nội dung reply -->
@@ -813,7 +815,9 @@
 												style="display: none;">
 												<form id="replyForm">
 													<textarea th:id="'replyText_' + ${comment.id}"
-														placeholder="Nhập nội dung reply của bạn..."></textarea>
+														placeholder="Nhập nội dung reply của bạn..."
+														th:oninput="limitWords(this, 150" ></textarea>
+														  <small class="form-text text-muted word-count" id="'wordCount_'+ ${comment.id}">0/300</small>
 													<button type="button"
 														th:onclick="'submitReply('+${comment.id}+ ','+${comment.car_id}+')'">Gửi</button>
 												</form>
@@ -827,6 +831,7 @@
 															replyContainer.style.display = "none";
 														}
 													}
+													 
 												</script>
 												<script th:inline="javascript">
 													function submitReply(cmtId, car_id) {
@@ -875,6 +880,7 @@
 															replyContainer.style.display = "none";
 														}
 													}
+													
 												</script>
 											</div>
 
@@ -890,6 +896,7 @@
 											</div>
 											<div class="comment-content">
 												<div class="comment-meta">
+													
 													<div class="comment-meta-author"></div>
 													<div th:id="'comment-reply_' + ${comment.id}"
 														class="comment-meta-reply">
@@ -907,7 +914,7 @@
 
 													<div class="comment-rating"></div>
 
-													<p th:text="${reply.content}">Nội dung đánh giá</p>
+													<p  class="comment-text" contenteditable="true" th:text="${reply.content}">Nội dung đánh giá</p>
 												</div>
 											</div>
 									</ul>
@@ -933,7 +940,7 @@
 								<div class="mb-3">
 									<label for="content" class="form-label">Comment:</label>
 									<textarea class="form-control" id="content" name="content"
-										placeholder="Write to Comment..." rows="5" required></textarea>
+										placeholder="Write to Comment..." rows="5" th:oninput="limitWords(this, 150)" required></textarea>
 								</div>
 
 								<input type="hidden" id="carId" name="carId" th:value="${carDetails.id}" />
@@ -1245,7 +1252,7 @@
 										<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 											<div class="form-group message">
 												<textarea class="form-control" name="comment" id="comment"
-													placeholder="Write message"></textarea>
+												th:oninput="limitWords(this, 150" 	placeholder="Write message"></textarea>
 											</div>
 										</div>
 										<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
@@ -2158,14 +2165,14 @@
 			e.preventDefault();
 			let totalFinalRent = parseFloat($("#form-car-rental input[name='totalRent']").val()) + parseFloat(extraFeeeeeee ? extraFeeeeeee.decorationFee ?? 0 : 0) + parseFloat(extraFeeeeeee ? extraFeeeeeee.cleanningFee ?? 0 : 0) + 200000;
 			const uissa = $('p[data-uqwfjwissa]').data('uqwfjwissa');
-			if (parseFloat(uissa) < parseFloat(totalFinalRent)) {
+		/*	if (parseFloat(uissa) < parseFloat(totalFinalRent)) {
 				Swal.fire({
 					title: "Balance is not enough",
 					text: "You won't be able to rent this car",
 					icon: "warning",
 					confirmButtonColor: "#3754ec",
 				});
-			} else {
+			} else {*/
 				let deliveryFeeElement11 = $('#form-delivery-fee');
 				let deliveryFeeText11 = deliveryFeeElement11.text().trim();
 
@@ -2252,8 +2259,74 @@
 				}).then((result) => {
 					if (result.isConfirmed) {
 						setTimeout(function () {
-							const RENTAL_FORM = $('#form-car-rental').get(0);
-							RENTAL_FORM.submit();
+						
+							const amount = totalFinalRent;
+							
+							console.log(amount);
+							 const bankCode = "NCB";
+							const url = `http://localhost:8081/api/v1/payment/vn-pay?amount=${amount}&bankCode=${bankCode}`;
+							const RENTAL_FORM = $('#form-car-rental').get(0);  
+					  		fetch(url, {
+									method: 'GET',
+									headers: {
+										'Content-Type': 'application/json'
+									},
+								})
+									.then(response => response.json())
+									.then(data => {
+										if (data && data.paymentUrl) {
+											   // Mở URL thanh toán trong tab mới và lưu tham chiếu của nó
+						                    const paymentWindow = window.open(data.paymentUrl, '_blank');
+				
+						                    // Lắng nghe thông điệp từ tab thanh toán
+						                    window.addEventListener('message', (event) => {
+						                        if (event.origin === 'http://localhost:8081') {
+						                            if (event.data.status === 'COMPLETED') {
+						                                Swal.fire({
+						                                    title: "Payment Completed!",
+						                                    text: "Your payment has been completed successfully.",
+						                                    icon: "success"
+						                                });
+						                            } else if (event.data.status === 'FAILED') {
+						                                Swal.fire({
+						                                    title: "Payment Failed!",
+						                                    text: "There was an issue with your payment. Please try again.",
+						                                    icon: "error"
+						                                });
+						                            } 
+						                            if (event.data.status === 'CLOSED') {
+						                                Swal.fire({
+						                                    title: "Payment Status",
+						                                    text: "Payment window was closed before completion.",
+						                                    icon: "info"
+						                                })
+						                            };
+						                            // Đóng tab thanh toán
+						                            paymentWindow.close();
+						                            
+						                            RENTAL_FORM.submit();
+						                            
+						                        }
+						                    });
+						                 // Xử lý sự kiện trước khi tab thanh toán bị đóng
+						                    paymentWindow.addEventListener('beforeunload', () => {
+						                        window.postMessage({status: 'CLOSED'}, 'http://localhost:8081');
+						                    });
+						                 
+					                } else {
+					                    console.error('Invalid response:', data);
+					                }
+										// alert('Deposit successful!');
+									//RENTAL_FORM.submit();
+										//modal.style.display = "none";
+									})
+									.catch(error => {
+
+										console.error('There was an error!', error);
+										alert('An error has occurred. Please try again later!');
+									});
+					  		
+							
 							document.getElementById('privateText').value = "+200000";
 							sendPrivateMoney();
 						}, 2000);
@@ -2275,8 +2348,34 @@
 						});
 					}
 				});
-			}
+			//}
 		});
+		function checkPaymentStatus() {
+            const params = getQueryParams();
+            if (params.status) {
+                if (params.status === 'COMPLETED') {
+                    Swal.fire({
+                        title: "Payment Completed!",
+                        text: "Your payment has been completed successfully.",
+                        icon: "success"
+                    });
+                } else if (params.status === 'FAILED') {
+                    Swal.fire({
+                        title: "Payment Failed!",
+                        text: "There was an issue with your payment. Please try again.",
+                        icon: "error"
+                    });
+                }
+            }
+        }
+		function getQueryParams() {
+            const params = {};
+            window.location.search.substring(1).split('&').forEach(param => {
+                const [key, value] = param.split('=');
+                params[key] = decodeURIComponent(value);
+            });
+            return params;
+        }
 
 		// Gọi hàm cập nhật tổng giá thuê xe khi trang được tải và mỗi khi input thay đổi
 		window.onload = function () {
@@ -2284,7 +2383,23 @@
 			$('#form-submit-btn').attr('disabled', 'disabled');
 		};
 
+		 // Kiểm tra trạng thái thanh toán khi trang được tải lại
+        document.addEventListener("DOMContentLoaded", function() {
+            checkPaymentStatus();
 
+            // Lắng nghe thông điệp từ tab thanh toán
+            window.addEventListener('message', (event) => {
+                if (event.origin === 'http://localhost:8081') {
+                    if (event.data.status === 'CLOSED') {
+                        Swal.fire({
+                            title: "Payment Status",
+                            text: "Payment window was closed before completion.",
+                            icon: "info"
+                        });
+                    }
+                }
+            });
+        });
 	</script>
 
 <script>
@@ -2362,133 +2477,37 @@
         displayComments(0, commentsPerPage);
     });
 </script>
-
 <script>
-    let currentPage = 0;
-  /*let allComments = [];
-    const commentsPerPage = 5; */
-  
-  		
-
-    // Chuyển đổi dữ liệu bình luận từ phần ẩn HTML
-    function parseComments() {
-        const commentsData = document.querySelectorAll('#all-comments ul li');
-        commentsData.forEach(comment => {
-            const avatar = comment.querySelector('img').src;
-            const userName = comment.querySelector('.comment-meta-author').innerText;
-            const reviewDate = comment.querySelector('.comment-meta-date').innerText;
-            const rating = comment.querySelectorAll('.fa-star').length;
-            const commentText = comment.querySelector('.comment-body p').innerText;
-            const replies = [];
-            const replyElements = comment.querySelectorAll('ul li');
-            replyElements.forEach(reply => {
-                const replyUserName = reply.querySelector('.comment-meta-author').innerText;
-                const replyDate = reply.querySelector('.comment-meta-date').innerText;
-                const replyRating = reply.querySelectorAll('.fa-star').length;
-                const replyText = reply.querySelector('.comment-body p').innerText;
-                replies.push({ userName: replyUserName, reviewDate: replyDate, rating: replyRating, comment: replyText });
-            });
-            allComments.push({ avatar, userName, reviewDate, rating, comment: commentText, replies });
-        });
-    }
-
-    // Hàm để hiển thị các ngôi sao
-    function createStars(rating) {
-        let stars = '';
-        for (let i = 0; i < rating; i++) {
-            stars += '<i class="fa fa-star"></i>';
-        }
-        return stars;
-    }
-
-    // Hàm để hiển thị bình luận
-    function displayComments(start, end) {
-        const commentsList = document.getElementById('comments-list');
-        commentsList.innerHTML = '';
-        for (let i = start; i < end; i++) {
-            if (i >= allComments.length) {
-                document.getElementById('pagination-nav').style.display = 'none';
-                break;
+        function limitWords(textarea, maxWords) {
+          
+            let text = textarea.value;
+            let charCount = text.length;
+            console.log(charCount);
+            console.log(text);
+         
+		    if (charCount > maxWords) {
+                textarea.value = text.substring(0, maxWords);
+                charCount = maxWords;
             }
-            const review = allComments[i];
-            const li = document.createElement('li');
-            li.innerHTML = `
-                <div class="comment">
-                    <div class="comment-author">
-                        <a href="#"><img src="${review.avatar}" class="rounded-circle" alt="avatar"></a>
-                    </div>
-                    <div class="comment-content">
-                        <div class="comment-meta">
-                            <div class="comment-meta-author">${review.userName}</div>
-                            <div class="comment-meta-reply"><a href="#" onclick="toggleReply(${i})">Reply</a></div>
-                            <div class="comment-meta-date">${review.reviewDate}</div>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="comment-body">
-                            <div class="comment-rating">${createStars(review.rating)}</div>
-                            <p>${review.comment}</p>
-                        </div>
-                        <div class="reply-container" id="replyContainer_${i}" style="display: none;">
-                            <form id="replyForm">
-                                <textarea id="replyText_${i}" placeholder="Nhập nội dung reply của bạn..."></textarea>
-                                <button type="button" onclick="submitReply(${i})">Gửi</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <ul>
-                    ${review.replies.map(reply => `
-                        <li>
-                            <div class="comment">
-                                <div class="comment-author">
-                                    <a href="#"><img src="${review.avatar}" class="rounded-circle" alt="avatar"></a>
-                                </div>
-                                <div class="comment-content">
-                                    <div class="comment-meta">
-                                        <div class="comment-meta-author">${reply.userName}</div>
-                                        <div class="comment-meta-date">${reply.reviewDate}</div>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                    <div class="comment-body">
-                                        <div class="comment-rating">${createStars(reply.rating)}</div>
-                                        <p>${reply.comment}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>`).join('')}
-                </ul>`;
-            commentsList.appendChild(li);
+            console.log(textarea.value);
+	
+            // Cập nhật bộ đếm từ
+            const wordCountSpan = document.getElementById(`wordCount_${textarea.id.split('_')[1]}`);
+            if (wordCountSpan) {
+                wordCountSpan.textContent = `${wordCount}/${maxWords}`;
+            }
         }
-    }
 
-   
+      
 
-    document.addEventListener('DOMContentLoaded', () => {
-        parseComments();
-        displayComments(0, commentsPerPage);
-        setupPagination(Math.ceil(allComments.length / commentsPerPage));
-    });
-
-    function toggleReply(commentId) {
-        const replyContainer = document.getElementById(`replyContainer_${commentId}`);
-        replyContainer.style.display = replyContainer.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function submitReply(commentId) {
-        const replyText = document.getElementById(`replyText_${commentId}`).value;
-        if (replyText !== '') {
-            const reply = {
-                userName: 'User',  // Thay bằng tên người dùng thực tế
-                reviewDate: new Date().toLocaleString(),
-                rating: 0,  // Thay bằng đánh giá thực tế nếu có
-                comment: replyText
-            };
-            allComments[commentId].replies.push(reply);
-            displayComments(currentPage * commentsPerPage, (currentPage + 1) * commentsPerPage);
-        }
-    }
-</script>
-
+        // Đảm bảo hàm này được gọi sau khi DOM đã tải xong
+        document.addEventListener("DOMContentLoaded", function() {
+            const textareas = document.querySelectorAll('textarea[id^="replyText_"]');
+            textareas.forEach(function(textarea) {
+                limitWords(textarea, 300); // Cập nhật bộ đếm từ ban đầu
+            });
+        });
+    </script>
 
 
 </body>
