@@ -2495,10 +2495,10 @@
             const wordCountSpan = document.getElementById(`wordCount_${textarea.id.split('_')[1]}`);
             if (wordCountSpan) {
                 wordCountSpan.textContent = `${wordCount}/${maxWords}`;
+
             }
         }
 
-      
 
         // Đảm bảo hàm này được gọi sau khi DOM đã tải xong
         document.addEventListener("DOMContentLoaded", function() {

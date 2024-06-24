@@ -431,6 +431,8 @@ public class ApiCarsController {
 			paymentServices.createNewRefund(order.getUserId(), order.getId(),
 					BigDecimal.valueOf(order.getExtraFee().getSmellFee()));
 		}
+		paymentServices.createNewRefund(car.getCarOwnerId(), order.getId(),
+				BigDecimal.valueOf(order.getExtraFee().getDeliveryFee()));
 
 		order.setStatus(Constants.orderStatus.OWNER_TRIP_DONE);
 		orderServices.save(order);

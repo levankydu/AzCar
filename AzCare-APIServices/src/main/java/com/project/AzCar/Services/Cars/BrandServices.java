@@ -32,4 +32,7 @@ public interface BrandServices {
 	String getModelId(String brandName, String cateName, String modelName, int year);
 
 	CarModelList getModel(String modelId);
+
+	List<CarModelList> findAll();
+
 }

@@ -176,7 +176,7 @@ public class UserSideCarController {
 		return "registerCar";
 	}
 
-	// Chủ xe check khi khách trả
+	// Chá»§ xe check khi khÃ¡ch tráº£
 	@PostMapping("home/myplan/rentalReview")
 	public String retalReview(
 			@RequestParam(name = "clean-check", required = false, defaultValue = "false") boolean cleanCheck,
@@ -202,9 +202,10 @@ public class UserSideCarController {
 			tuReview.setSmelling(true);
 		} else {
 			paymentServices.createNewRefund(order.getUserId(), order.getId(),
-					BigDecimal.valueOf(order.getExtraFee().getSmellFee()));
+					BigDecimal.valueOf(order.getExtraFee().getDeliveryFee()));
 		}
-
+		paymentServices.createNewRefund(car.getCarOwnerId(), order.getId(),
+				BigDecimal.valueOf(order.getExtraFee().getSmellFee()));
 		order.setStatus(Constants.orderStatus.OWNER_TRIP_DONE);
 		orderServices.save(order);
 		tuReview.setOrderId(order.getId());
@@ -502,7 +503,7 @@ public class UserSideCarController {
 		ModelView.addAttribute("isKhongHaveBangLai", plates.size() == 0);
 
 		// Sally add
-		// Lấy danh sách các review cho chiếc xe và thêm vào model
+		// Láº¥y danh sÃ¡ch cÃ¡c review cho chiáº¿c xe vÃ  thÃªm vÃ o model
 		List<Reviews> reviews = reviewServices.findAllReviewsByCarId(Integer.parseInt(carId));
 
 		List<ReviewsDTO> listReviewsDTO = new ArrayList<>();
@@ -557,22 +558,18 @@ public class UserSideCarController {
 
 		}
 		System.out.println(listReviewsDTO.size());
-		if(listReviewsDTO.isEmpty())
-		{
+		if (listReviewsDTO.isEmpty()) {
 			tbtotal = 0;
 			ModelView.addAttribute("totalReviews", 0);
-		}
-		else
-		{
+		} else {
 			tbtotal = ((5 * fiveStar) + (4 * fourStar) + (3 * threeStar) + (2 * twoStar) + oneStar)
 					/ (float) listReviewsDTO.size();
 			ModelView.addAttribute("totalReviews", listReviewsDTO.size());
 		}
-	
+
 		String formattedNumber = String.format("%.1f", tbtotal);
 		System.out.println("Total TB: " + formattedNumber);
-		
-		
+
 		ModelView.addAttribute("totalReviewsCount", formattedNumber);
 		ModelView.addAttribute("fiveStar", fiveStar);
 		ModelView.addAttribute("fourStar", fourStar);
@@ -592,7 +589,7 @@ public class UserSideCarController {
 
 		System.out.println("id Car Details: " + model.getId() + " ");
 		OrderDetails order = getOrderDetailsByCaridandUserid(model.getId(), customer.getId());
-		// lấy status
+		// láº¥y status
 
 		System.out.println("Order Details: " + order + " & ");
 		ModelView.addAttribute("Status_detail", order);
@@ -621,7 +618,7 @@ public class UserSideCarController {
 					repDTO.setUser_name(lastName);
 				} else {
 					if (firstName == null && lastName == null) {
-						repDTO.setUser_name("Người tham gia ẩn danh");
+						repDTO.setUser_name("NgÆ°á»�i tham gia áº©n danh");
 					} else {
 						repDTO.setUser_name(firstName + " " + lastName);
 					}
@@ -736,7 +733,7 @@ public class UserSideCarController {
 							tempDTO.setUser_name(lastName);
 						} else {
 							if (firstName == null && lastName == null) {
-								tempDTO.setUser_name("Người tham gia ẩn danh");
+								tempDTO.setUser_name("NgÆ°á»�i tham gia áº©n danh");
 							} else {
 								tempDTO.setUser_name(firstName + " " + lastName);
 							}
@@ -765,13 +762,13 @@ public class UserSideCarController {
 		System.out.println("Order Details: " + " & " + carid + " & " + userid);
 		OrderDetails order = orderServices.getOrderDetailsByCarIdandUserId(carid, userid);
 		if (order != null) {
-			System.out.println("Order Details: đây " + order.getStatus());
+			System.out.println("Order Details: Ä‘Ã¢y " + order.getStatus());
 			if (order.getStatus().contains("rentor_trip_done")) {
 				if (order.isReview()) {
-					System.out.println("nếu nó đã review thì ko review nữa" + order.isReview());
+					System.out.println("náº¿u nÃ³ Ä‘Ã£ review thÃ¬ ko review ná»¯a" + order.isReview());
 					return null;
 				}
-				System.out.println("dòng này ");
+				System.out.println("dÃ²ng nÃ y ");
 				return order;
 			}
 			return null;
@@ -905,6 +902,7 @@ public class UserSideCarController {
 	@GetMapping("/home/carregister/addNewModel/")
 	public String getAddNewModelPage(Model ModelView) {
 		List<String> brands = brandServices.getBrandList();
+
 		List<String> categories = brandServices.getCategoryList();
 
 		ModelView.addAttribute("categoryList", categories);
@@ -916,7 +914,9 @@ public class UserSideCarController {
 
 	@PostMapping("/home/carregister/addNewModel")
 	public String postAddNewModelPage(@ModelAttribute("carModel") CarModelList carModel, BindingResult bindingResult,
-			HttpServletRequest request) {
+			HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
+		String email = request.getSession().getAttribute("emailLogin").toString();
+
 		Random random = new Random();
 		StringBuilder sb = new StringBuilder(10);
 		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -933,7 +933,9 @@ public class UserSideCarController {
 			return "redirect:/home/carregister/addNewModel/" + "?error";
 		} else {
 			carModel.setObjectId(resultId);
+			carModel.setStatus("waiting_for_accept_" + email);
 			brandServices.saveBrand(carModel);
+			sendEmailCreateNewCarModel(email, carModel);
 		}
 //		return "";
 		return "redirect:/home/carregister/addNewModel/";
@@ -1563,6 +1565,27 @@ public class UserSideCarController {
 				+ "</p>" +
 
 				"<p>This is to confirm that we already got info of your car, We will send you an email after verify your information</p>"
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
+	}
+
+	private void sendEmailCreateNewCarModel(String email, CarModelList carModel)
+			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+				StandardCharsets.UTF_8.name());
+
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		String subject = "Successfull register your car";
+		String content = "<p>Hello," + email + "</p>" + "<p>Thank you for registering your carModel with AzCar.</p>"
+				+ "<p>Below are some main details of your new Models:</p>" + "<p><b>Car Details:</b></p>" + "<p>"
+				+ "Brand: " + carModel.getBrand() + "</p>" + "<p>" + "Model: " + carModel.getModel() + "</p>" + "<p>"
+				+ "Category: " + carModel.getCategory() + "</p>" + "<p>" + "Year: " + carModel.getYear() + "</p>"
+				+ "<p>This is to confirm that we already got info of your car Model, We will send you an email after verify your information</p>"
 				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
 		helper.setSubject(subject);
 		helper.setText(content, true);
