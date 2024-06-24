@@ -263,7 +263,8 @@
 													<td th:text="${item.fromUser.email}"></td>
 													<td
 														th:text="${#temporals.format(item.createdAt, 'dd/MM/yyyy')}"></td>
-													<td th:text="${'$ '+item.amount}"></td>
+														
+													<td th:text="${#numbers.formatDecimal(item.amount, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND'"></td>
 													<td th:text="${item.status}"></td>
 													<td th:text="${item.description}"></td>
 												</tr>
@@ -306,7 +307,7 @@
 													<td th:text="${item.toUser.email}"></td>
 													<td
 														th:text="${#temporals.format(item.createdAt, 'dd/MM/yyyy')}"></td>
-													<td th:text="${'$ '+item.amount}"></td>
+													<td th:text="${#numbers.formatDecimal(item.amount, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND'"></td>
 													<td th:text="${item.status}"></td>
 													<td th:text="${item.description}"></td>
 												</tr>

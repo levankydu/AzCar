@@ -79,7 +79,7 @@ public class APIDepositController {
 
 	}
 
-	@PutMapping(value = "/dashboard/acceptPayment/{id}")
+	@PutMapping(value = "/dashboard/payment/acceptPayment/{id}")
 	public ResponseEntity<?> acceptPayment(@PathVariable("id") String id, @RequestBody PaymentDetailsDTO dto)
 			throws UnsupportedEncodingException, MessagingException {
 

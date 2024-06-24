@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -91,4 +92,43 @@ public class CommentController {
 		return "admin/CommentManager";
 
 	}
+	
+
+	  @GetMapping("/comments")
+	    public ResponseEntity<List<CommentsDTO>> getAllComments() {
+	        List<Comments> cmt = cmtService.getAllComment();
+	        List<CommentsDTO> cmtDTO = new ArrayList<>();
+	        for (Comments temp : cmt) {
+	            CommentsDTO tempC = new CommentsDTO();
+	            tempC.setId(temp.getId());
+				tempC.setCar_name(temp.getCar_id().getLicensePlates());
+				tempC.setCar_id(temp.getId());
+				tempC.setContent(temp.getContent());
+				tempC.setUser_id(temp.getUser_id().getId());
+				tempC.setUser_name(temp.getUser_id().getFirstName());
+				tempC.setStatus(temp.getStatus().toString());
+				cmtDTO.add(tempC);
+	        }
+	        return ResponseEntity.ok(cmtDTO);
+	    }
+	  
+	  @GetMapping("/comments/car/{carId}")
+	  public ResponseEntity<List<CommentsDTO>> getCommentsByCarId(@PathVariable("carId") int carId) {
+	      List<Comments> comments = cmtService.getAllCommentsByCarId(carId);
+	      List<CommentsDTO> commentsDTO = comments.stream().map(comment -> {
+	          CommentsDTO dto = new CommentsDTO();
+	          dto.setId(comment.getId());
+	          dto.setCar_name(comment.getCar_id().getLicensePlates());
+	          dto.setCar_id(comment.getCar_id().getId());
+	          dto.setContent(comment.getContent());
+	          dto.setUser_id(comment.getUser_id().getId());
+	          dto.setUser_name(comment.getUser_id().getFirstName());
+	          dto.setStatus(comment.getStatus().toString());
+	          return dto;
+	      }).collect(Collectors.toList());
+	      return ResponseEntity.ok(commentsDTO);
+	  }
+
+
+
 }

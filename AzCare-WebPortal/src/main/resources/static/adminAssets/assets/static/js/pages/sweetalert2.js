@@ -495,7 +495,22 @@ if (document.getElementById("toast-success-logout")) {
 		})
 	})
 }
-
+if (document.getElementById('toast-success-login')) {
+	document.getElementById('toast-success-login').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'success',
+			title: 'Login successfully'
+		})
+	})
+}
+if (document.getElementById('toast-failed-login')) {
+	document.getElementById('toast-failed-login').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'error',
+			title: 'Login failed'
+		})
+	})
+}
 if (document.getElementById('toast-success-registered-user')) {
 	document.getElementById('toast-success-registered-user').addEventListener('click', () => {
 		Toast.fire({
@@ -599,6 +614,14 @@ if (document.getElementById('toast-failed-reset-password')) {
 		Toast.fire({
 			icon: 'error',
 			title: 'Reset Password failed'
+		})
+	})
+}
+if (document.getElementById('toast-failed-forgot')) {
+	document.getElementById('toast-failed-forgot').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'error',
+			title: 'Forgot failed'
 		})
 	})
 }

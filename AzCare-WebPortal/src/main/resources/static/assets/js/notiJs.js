@@ -467,9 +467,15 @@ function show(message) {
 		}
 	}
 	if (message.contact == "contact" && message.from != "admin@admin") {
-		generate_message(message.text, 'user');
-		/*p.innerHTML = "From Admin: " + message.text;
-		response.appendChild(p);*/
+		generate_messageUser("#"+message.from+": "+message.text, 'user');
+/*		generate_message("#"+message.from+": "+message.text, 'user');
+*/		
+		
+		/*
+		p.innerHTML = "From Admin: " + message.text;
+		response.appendChild(p);
+		*/
+		
 		if (document.getElementById("chat-circle")) {
 			var chatCircle = document.getElementById("chat-circle");
 			if (!chatCircle.clicked) {
@@ -480,6 +486,7 @@ function show(message) {
 		if (!document.getElementById(message.from)) {
 
 			var input = document.createElement("input");
+			
 			input.type = "text";
 			input.value = message.from;
 			input.id = message.from;
@@ -487,9 +494,23 @@ function show(message) {
 			response.appendChild(input);
 		} else {
 			console.log("Id" + message.from + " đã tồn tại!");
+			var inputElement = document.getElementById(message.from);
+            if (inputElement) {
+                inputElement.remove();
+            } else {
+                console.log("Element not found");
+            }
+            var input = document.createElement("input");
+			input.type = "text";
+			input.value = message.from;
+			input.id = message.from;
+			input.id = message.from;
+			response.appendChild(input);
+            console.log("đã tạo mới ID :"+ message.from);
 		}
 	} if (message.from == "admin@admin") {
 		generate_messageAdmin(message.text, 'user');
+		
 		if (document.getElementById("chat-circle")) {
 			var chatCircle = document.getElementById("chat-circle");
 			if (chatCircle.style.display === 'none' || chatCircle.style.display === '') {

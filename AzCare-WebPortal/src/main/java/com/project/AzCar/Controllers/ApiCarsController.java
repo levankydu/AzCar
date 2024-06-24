@@ -542,8 +542,8 @@ public class ApiCarsController {
 					+ orderdetails.getExtraFee().getCleanFee() + "</td>" + "</tr>" + "<tr>"
 					+ "<td class=text-left>Smell Fee: </td>" + "<td class=text-right>$"
 					+ orderdetails.getExtraFee().getSmellFee() + "</td>" + "</tr>" + "<tr>"
-					+ "<td class=text-left>Insurance Fee: </td>" + "<td class=text-right>$200</td>" + "</tr>" + "<tr>"
-					+ "<th>Total: </th>" + "<td>" + "<h4>$"
+					+ "<td class=text-left>Insurance Fee: </td>" + "<td class=text-right>200,000 VND</td>" + "</tr>"
+					+ "<tr>" + "<th>Total: </th>" + "<td>" + "<h4>$"
 					+ orderdetails.getTotalAndFees()
 							.subtract(BigDecimal.valueOf(orderdetails.getExtraFee().getDeliveryFee()))
 					+ "</h4>" + "</td>" + "</tr>" + "</table>";

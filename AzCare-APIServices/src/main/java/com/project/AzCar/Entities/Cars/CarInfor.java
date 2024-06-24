@@ -11,7 +11,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+
 @Data
+
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
@@ -46,5 +48,6 @@ public class CarInfor implements Serializable {
 	private String rules;
 	private String address;
 	private String status;
+
 
 }

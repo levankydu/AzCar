@@ -26,7 +26,6 @@ import com.project.AzCar.Services.IgnoreKeyword.IIgnoreKeywordService;
 public class ReplyController {
 	
 	// nếu click vào chổ reply thì sẽ hiển thị ra bản để reply sau đó gọi api này để post comments và refesh lại trang
-	// chưa suy nghĩ ra nhưng hiện tại sẽ là như vậy
 	@Autowired
 	ICommentsService cmtService;
 	@Autowired
