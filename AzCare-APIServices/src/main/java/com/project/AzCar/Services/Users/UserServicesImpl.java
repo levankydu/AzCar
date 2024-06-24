@@ -164,4 +164,15 @@ public class UserServicesImpl implements UserServices {
 		return false;
 	}
 
+	@Override
+	public void updateUserStatus(String email, boolean isEnabled) {
+	    Users user = userRepo.findByEmail(email);
+	    if (user != null) {
+	        user.setEnabled(isEnabled);
+	        userRepo.save(user);
+	    } else {
+	        throw new RuntimeException("User not found");
+	    }
+	}
+
 }
