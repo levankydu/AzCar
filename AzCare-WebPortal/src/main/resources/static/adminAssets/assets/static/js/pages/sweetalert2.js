@@ -68,7 +68,7 @@ if (document.getElementById("addLicense-false")) {
 
 	}
 	);
-}if (document.getElementById("addLicense-success")) {
+} if (document.getElementById("addLicense-success")) {
 	document.getElementById("addLicense-success").addEventListener("click", (e) => {
 		Swal.fire({
 			icon: "success",
@@ -348,7 +348,7 @@ if (document.getElementById("accept-carModel")) {
 
 			if (result.value && result.value.toLowerCase() === 'verify') {
 				$('#privateText').val("''Your carModel is verified for booking, check your email for full information''");
-				sendPrivateMessage();
+				/*sendPrivateMessage();*/
 				$('#verify-cModel').submit();
 				$('#loadding-sendEmail').click();
 			} else {
@@ -378,9 +378,12 @@ if (document.getElementById("decline-carModel")) {
 		}).then((result) => {
 			if (result.value && result.value.toLowerCase() != '') {
 				$('#privateText').val("''Your carModel is declined for booking now, check your email for full information''");
-				reason.value = result.value.toLowerCase();
-				sendPrivateMessage();
-				$('#declined-cModel').submit();
+
+				document.getElementById('reason').value = result.value.toLowerCase();
+				console.log(reason.value);
+				console.log(result.value);
+/*				sendPrivateMessage();
+*/				$('#declined-cModel').submit();
 				$('#loadding-sendEmail').click();
 			} else {
 				console.log("User did not enter 'decline' or canceled");

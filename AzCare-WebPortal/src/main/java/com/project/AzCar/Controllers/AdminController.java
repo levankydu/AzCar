@@ -303,6 +303,7 @@ public class AdminController {
 		CarModelDTO itemDto = new CarModelDTO();
 		list.removeIf(i -> i.getStatus() == null);
 		list.removeIf(i -> i.getStatus().equals("accepted"));
+		list.removeIf(i -> i.getStatus().equals("declined"));
 
 		for (var item : list) {
 
@@ -325,34 +326,33 @@ public class AdminController {
 			model.setStatus(status);
 			brandServices.saveBrand(model);
 
+			try {
+				sendEmailAcceptModel(email);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-
-		try {
-			sendEmailAcceptModel(email);
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		if (status.equals("declined")) {
 			model.setStatus(status);
+
 			brandServices.saveBrand(model);
+
+			try {
+				sendEmailDeclineModel(email, reason);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
-		try {
-			sendEmailDeclineModel(email, reason);
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return "redirect:/dashboard/platesVerify/";
+		return "redirect:/dashboard/carModelsVerify/";
 	}
 
 	private static String extractEmail(String input) {
@@ -397,7 +397,7 @@ public class AdminController {
 		List<PlateImages> list = plateImageServices.getAll();
 		List<PlateImages> userImages = list.stream().filter(img -> img.getUserId() == Long.parseLong(userId))
 				.collect(Collectors.toList());
-
+		System.out.println(reason);
 		if (status.equals("accepted")) {
 			for (var item : userImages) {
 				item.setStatus(Constants.plateStatus.ACCEPTED);

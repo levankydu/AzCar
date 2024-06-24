@@ -320,6 +320,8 @@
 														<input id="status" type="hidden" name="status"
 															value="accepted"> <input type="hidden"
 															name="carId" th:value="${car.objectId}">
+															<input
+															id="email" name="email" th:value="${car.emailSender}" type="hidden">
 														<button class="button-54" role="button" value="accepted"
 															name="status" id="accept-carModel">Accept</button>
 													</form>
@@ -328,7 +330,9 @@
 														<input id="status" type="hidden" name="status"
 															value="declined"> <input type="hidden"
 															name="carId" th:value="${car.objectId}"> <input
-															id="reason" name="reason" value="" type="hidden">
+															id="reason" value="" name="reason" type="hidden">
+															<input
+															id="email" name="email" th:value="${car.emailSender}" type="hidden">
 														<button class="button-54" role="button"
 															id="decline-carModel" value="declined" name="decline">Decline</button>
 
@@ -342,7 +346,8 @@
 							</div>
 						</div>
 					</div>
-
+	<button id="loadding-sendEmail" style="display: none;"
+				class="btn btn-outline-success btn-lg btn-block">Success</button>
 				</section>
 				<!-- Basic Tables end -->
 			</div>
