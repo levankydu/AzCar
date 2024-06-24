@@ -31,5 +31,5 @@ public interface UserServices {
 
 	boolean existsByEmail(String email);
 	
-	
+	void updateUserStatus(String email, boolean isEnabled);
 }

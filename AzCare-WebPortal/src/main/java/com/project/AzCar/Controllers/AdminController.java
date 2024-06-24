@@ -852,6 +852,36 @@ public class AdminController {
 		return "admin/ListAccount";
 	}
 
+	@PostMapping("/dashboard/block/{email}")
+	public String blockUser(@PathVariable("email") String email) {
+		userServices.updateUserStatus(email, false);
+		try {
+			sendEmailBlock(email);
+		} catch (UnsupportedEncodingException e) {
+
+			e.printStackTrace();
+		} catch (MessagingException e) {
+
+			e.printStackTrace();
+		}
+		return "redirect:/dashboard/ListAccount";
+	}
+
+	@PostMapping("/dashboard/unblock/{email}")
+	public String unblockUser(@PathVariable("email") String email) {
+		userServices.updateUserStatus(email, true);
+		try {
+			sendEmailUnblock(email);
+		} catch (UnsupportedEncodingException e) {
+			
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			
+			e.printStackTrace();
+		}
+		return "redirect:/dashboard/ListAccount";
+	}
+
 	@GetMapping("/dashboard/ClientService")
 	public String clientService(Model ModelView) {
 		List<ServiceAfterBooking> list = afterBookingRepositories.findAll();
@@ -932,6 +962,37 @@ public class AdminController {
 				+ "</p>" +
 
 				"<p>This is to confirm that we already verify your information</p>"
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
+	}
+
+	private void sendEmailBlock(String email) throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		String subject = "Notifycation your account.";
+		String content = "<p>Hello," + email + "</p>" + "<p>Your account is block</p>"
+				+ "<p>For any further assistance, feel free to contact us.</p>" 
+				+ "<p>Best regards,<br>AzCar Team</p>";
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
+	}
+	
+	private void sendEmailUnblock(String email) throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		String subject = "Notifycation your account.";
+		String content = "<p>Hello," + email + "</p>" + "<p>Your account is unBlock</p>"
 				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
 		helper.setSubject(subject);
 		helper.setText(content, true);
