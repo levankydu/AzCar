@@ -37,7 +37,7 @@
 				<div class="sidebar-header position-relative">
 					<div class="d-flex justify-content-between align-items-center">
 						<div class="logo">
-							<a th:href="@{/}"><img style="width:100%;height:100%"
+							<a th:href="@{/}"><img style="width: 100%; height: 100%"
 								th:src="@{/adminAssets/assets/compiled/svg/logo.svg}" alt="Logo"
 								srcset=""></a>
 						</div>
@@ -85,82 +85,79 @@
 					<ul class="menu">
 						<li class="sidebar-title">Menu</li>
 
-						<li class="sidebar-item"><a th:href="@{/dashboard/}" class='sidebar-link'> <i
-									class="bi bi-grid-fill"></i> <span>Dashboard</span>
-							</a></li>
+						<li class="sidebar-item"><a th:href="@{/dashboard/}"
+							class='sidebar-link'> <i class="bi bi-grid-fill"></i> <span>Dashboard</span>
+						</a></li>
 
-						<li class="sidebar-item  has-sub"><a href="#" class='sidebar-link'> <i
-									class="bi bi-person-lines-fill"></i><span>User
+						<li class="sidebar-item  has-sub"><a href="#"
+							class='sidebar-link'> <i class="bi bi-person-lines-fill"></i><span>User
 									Management</span>
-							</a>
+						</a>
 
 							<ul class="submenu ">
 
-								<li class="submenu-item  "><a href="/dashboard/ListAccount" class="submenu-link">List
-										All User</a></li>
-							</ul>
-						</li>
+								<li class="submenu-item  "><a href="/dashboard/ListAccount"
+									class="submenu-link">List All User</a></li>
+							</ul></li>
 
-						<li class="sidebar-item  has-sub"><a href="#" class='sidebar-link'><i
-									class="bi bi-car-front-fill"></i> <span>Payment
+						<li class="sidebar-item  has-sub"><a href="#"
+							class='sidebar-link'><i class="bi bi-car-front-fill"></i> <span>Payment
 									Management</span> </a>
 							<ul class="submenu ">
 
-								<li class="submenu-item  "><a th:href="@{/dashboard/depositmanager}"
-										class="submenu-link">List
+								<li class="submenu-item  "><a
+									th:href="@{/dashboard/depositmanager}" class="submenu-link">List
 										Payment </a></li>
-								<li class="submenu-item  "><a th:href="@{/dashboard/cardbank}"
-										class="submenu-link">List Payment Card </a></li>
-							</ul>
-						</li>
-						<li class="sidebar-item  has-sub"><a href="#" class='sidebar-link'><i
-									class="bi bi-car-front-fill"></i> <span>Car
+								<li class="submenu-item  "><a
+									th:href="@{/dashboard/cardbank}" class="submenu-link">List
+										Payment Card </a></li>
+							</ul></li>
+						<li class="sidebar-item  has-sub"><a href="#"
+							class='sidebar-link'><i class="bi bi-car-front-fill"></i> <span>Car
 									Management</span> </a>
 							<ul class="submenu ">
 								<li class="submenu-item"><a th:href="@{/dashboard/brands/}"
-										class="submenu-link">Brands</a></li>
-
-								<li class="submenu-item  "><a th:href="@{/dashboard/carverify/}"
-										class="submenu-link">Cars
+									class="submenu-link">Brands</a></li>
+								<li class="submenu-item  "><a
+									th:href="@{/dashboard/carModelsVerify/}" class="submenu-link">Car
+										Model Verify Verify</a></li>
+								<li class="submenu-item  "><a
+									th:href="@{/dashboard/carverify/}" class="submenu-link">Cars
 										Verify</a></li>
-								<li class="submenu-item  "><a th:href="@{/dashboard/platesVerify/}"
-										class="submenu-link">Plates
+								<li class="submenu-item  "><a
+									th:href="@{/dashboard/platesVerify/}" class="submenu-link">Plates
 										Verify</a></li>
-							</ul>
-						</li>
-						<li class="sidebar-item  has-sub"><a href="#" class='sidebar-link'><i
-									class="bi bi-car-front-fill"></i> <span>Review
+							</ul></li>
+						<li class="sidebar-item  has-sub"><a href="#"
+							class='sidebar-link'><i class="bi bi-car-front-fill"></i> <span>Review
 									Management</span> </a>
 							<ul class="submenu ">
 								<li class="submenu-item"><a th:href="@{/dashboard/reviews}"
-										class="submenu-link">Review</a></li>
+									class="submenu-link">Review</a></li>
 
-								<li class="submenu-item  "><a th:href="@{/dashboard/ListIgnoreKey}"
-										class="submenu-link">List
+								<li class="submenu-item  "><a
+									th:href="@{/dashboard/ListIgnoreKey}" class="submenu-link">List
 										Ignore Key</a></li>
-							</ul>
-						</li>
+							</ul></li>
 
-						<li class="sidebar-item has-sub"><a href="#" class='sidebar-link'> <i
-									class="bi bi-bell-fill"></i> <span>Booking
+						<li class="sidebar-item has-sub"><a href="#"
+							class='sidebar-link'> <i class="bi bi-bell-fill"></i> <span>Booking
 									Cars</span>
-							</a>
+						</a>
 							<ul class="submenu ">
-								<li class="submenu-item"><a th:href="@{/dashboard/ClientService}"
-										class="submenu-link">Client
+								<li class="submenu-item"><a
+									th:href="@{/dashboard/ClientService}" class="submenu-link">Client
 										Service</a></li>
-							</ul>
-						</li>
-						<li class="sidebar-item has-sub"><a href="#" class='sidebar-link'> <i
-									class="bi bi-valentine"></i> <span>Profit
+							</ul></li>
+						<li class="sidebar-item has-sub"><a href="#"
+							class='sidebar-link'> <i class="bi bi-valentine"></i> <span>Profit
 									Cars</span>
-							</a>
+						</a>
 							<ul class="submenu ">
 
-								<li class="submenu-item"><a th:href="@{/dashboard/profit/}" class="submenu-link">Profit
-										Business</a></li>
-							</ul>
-						</li>
+								<li class="submenu-item"><a th:href="@{/dashboard/profit/}"
+									class="submenu-link">Profit Business</a></li>
+							</ul></li>
 					</ul>
 				</div>
 			</div>
@@ -251,14 +248,12 @@
 											<tbody>
 												<tr th:each="brand : ${brandsList}">
 													<td th:text="${brand.brandName}"></td>
-													<td> <span
-														th:unless="${brand.brandLogo.contains('null')}"><img 
-															th:src="@{${brand.brandLogo}}" height="60px"></img></span>
-															<span
+													<td><span
+														th:unless="${brand.brandLogo.contains('null')}"><img
+															th:src="@{${brand.brandLogo}}" height="60px"></img></span> <span
 														class="badge bg-warning"><a
 															th:href="@{/dashboard/brands/updateBrandLogo/}+${brand.brandName}">
-																Update</a></span>
-															</td>
+																Update</a></span></td>
 													<td th:text="${brand.numberOfCars}"></td>
 													<td><span class="badge bg-success">Active</span></td>
 												</tr>
@@ -315,8 +310,9 @@
 														<option value="typeCatName">Type A New Category</option>
 														<option th:each="cate : ${categoryList}"
 															th:value="${cate.cateName}" th:text="${cate.cateName}"></option>
-													</select> <input type="text" name="" class="col-md-8 mt-2 form-control"
-														id="categoryText" hidden="true" disabled="disabled"
+													</select> <input type="text" name=""
+														class="col-md-8 mt-2 form-control" id="categoryText"
+														hidden="true" disabled="disabled"
 														placeholder="New Category">
 
 												</div>
@@ -335,8 +331,8 @@
 														<option th:each="car : ${brandsList}"
 															th:value="${car.brandName}" th:text="${car.brandName}"></option>
 													</select> <input type="text" name="brand"
-														class="col-md-8 mt-2 form-control" id="brandText" hidden="true"
-														disabled="disabled" placeholder="New Brand">
+														class="col-md-8 mt-2 form-control" id="brandText"
+														hidden="true" disabled="disabled" placeholder="New Brand">
 												</div>
 
 												<div class="col-md-4">
@@ -432,7 +428,6 @@
 		if (updatedBrandSession != "") {
 			document.getElementById('toast-success-updated-data').click();
 
-			
 		}
 		if (createdCarModelSession.value != "") {
 			document.getElementById('toast-success-created-data').click();

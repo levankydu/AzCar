@@ -17,4 +17,10 @@ public interface PaymentDetailsRepository extends JpaRepository<Deposit, Integer
 
 	@Query(value = "SELECT d FROM Deposit d WHERE d.user.id = :id", nativeQuery = true)
 	List<Deposit> findListUserById(@Param("id") int id);
+	
+	@Query(value ="SELECT * FROM tb_deposit c WHERE c.withdraw IS NOT NULL;",nativeQuery = true)
+	List<Deposit> findListWithDraw();
+	@Query(value ="SELECT * FROM tb_deposit c WHERE c.amount IS NOT NULL;",nativeQuery = true)
+	List<Deposit> findListTransaction();
+	
 }

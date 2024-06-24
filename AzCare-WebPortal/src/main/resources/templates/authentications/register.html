@@ -291,19 +291,24 @@ End Google Tag Manager (noscript)
     }
 
     function validateEmail() {
-        const emailInput = document.getElementById("email");
-        const validationMessage = document.getElementById('validation-email').querySelector('.error-message');
-        const validationIcon = document.getElementById('validation-email').querySelector('i');
+    	 const emailInput = document.getElementById("email");
+         const validationMessage = document.getElementById('validation-email').querySelector('.error-message');
+         const validationIcon = document.getElementById('validation-email').querySelector('i');
+         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (emailInput.value.trim() === "") {
-            validationMessage.textContent = "Email is required";
-            validationIcon.style.display = "inline";
-            return false;
-        } else {
-            validationMessage.textContent = "";
-            validationIcon.style.display = "none";
-            return true;
-        }
+         if (emailInput.value.trim() === "") {
+             validationMessage.textContent = "Email is required";
+             validationIcon.style.display = "inline";
+             return false;
+         } else if (!emailPattern.test(emailInput.value.trim())) {
+             validationMessage.textContent = "Invalid email format";
+             validationIcon.style.display = "inline";
+             return false;
+         } else {
+             validationMessage.textContent = "";
+             validationIcon.style.display = "none";
+             return true;
+         }
     }
 
     function validatePassword() {
@@ -402,6 +407,7 @@ End Google Tag Manager (noscript)
 	    }
 	    return false; 
     }
+    
 </script>
 
 

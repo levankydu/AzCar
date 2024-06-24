@@ -429,17 +429,17 @@
 
 							<li th:if="${plusService}!= null"><span>Delivery Car
 									Fee: </span>
-								<p class="mb-0" th:text="${plusService.fee}+' $'"></p>
+								<p class="mb-0" th:text="${#numbers.formatDecimal(plusService.fee, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND'"></p>
 							</li>
 
 
-							<li th:if="${extraFee}!= null"><span>Cleanning Fee :
+							<li th:if="${extraFee}!= null"><span>Cleaning Fee :
 								</span>
-								<p class="mb-0" th:text="${extraFee.cleanningFee}+' $'"></p>
+								<p class="mb-0" th:text="${#numbers.formatDecimal(extraFee.cleanningFee, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND'"></p>
 							</li>
 							<li th:if="${extraFee}!= null"><span>Decoration Fee:
 								</span>
-								<p class="mb-0" th:text="${extraFee.decorationFee}+' $'"></p>
+								<p class="mb-0" th:text="${#numbers.formatDecimal(extraFee.decorationFee, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND'"></p>
 							</li>
 						</ul>
 					</div>
@@ -646,6 +646,9 @@
 					<h3 class="heading">Reviews Section</h3>
 					<div class="star-ratings">
 						<style>
+						.totalStar{
+						color: rebeccapurple;
+						}
 							.star {
 								color: gold;
 								/* Màu sao */
@@ -673,9 +676,12 @@
 							.rating-count {
 								margin-left: 5px;
 							}
-						</style>
-						<!-- đây sẽ hiển thị tổng số đánh giá theo phần trăm-->
-						<div class="star-statistics" th:if="${not #lists.isEmpty(reviews)}">
+						</style>	  <!-- Cột tính trung bình tổng -->
+   
+   	<div class="row">
+   	
+   	<!-- đây sẽ hiển thị tổng số đánh giá theo phần trăm-->
+						<div class="star-statistics col-9" th:if="${not #lists.isEmpty(reviews)}">
 							<div class="star-rating">
 								<span class="star">★★★★★</span>
 								<div class="rating-bar"
@@ -711,12 +717,23 @@
 								</div>
 								<span class="rating-count" th:text="${oneStar}"></span>
 							</div>
+
 						</div>
+						 <div class="col-3">
+        <span >Total Reviews </span>
+       <h1 class="totalStar" th:text="${totalReviewsCount}"></h1>
+       <div>
+       <h6 th:text="'('+${totalReviews}+') lượt đánh giá '"></h6>
+       </div>
+     
+    </div>
+   	</div>				
 						<div class="star-statistics" th:if="${ #lists.isEmpty(reviews)}">
 							<p>No review</p>
 						</div>
 					</div>
-					<!-- Reviews-->
+					<br/>
+<!-- Reviews-->
 					<div class="comments-section">
 						<ul class="comments" th:each="review : ${reviews}">
 
@@ -742,7 +759,9 @@
 										</div>
 										<div class="clearfix"></div>
 										<div class="comment-body">
-											
+											   <div >
+        <i th:each="i : ${#numbers.sequence(1, review.rating)}" class="fa fa-star"></i>
+    </div>
 											<p th:text="${review.comment}">Lorem ipsum dolor sit
 												amet, consectetur adipiscing elit. Donec luctus tincidunt
 												aliquam. Aliquam gravida massa at sem vulputate interdum et
@@ -785,15 +804,20 @@
 											<div class="comment-body">
 
 												<div class="comment-rating"></div>
-
-												<p th:text="${comment.content}">Nội dung đánh giá</p>
+												<div class="form-group">
+												<p class="comment-text" contenteditable="true" th:text="${comment.content}">Nội dung đánh giá</p>
+												</div>
+												
 											</div>
+
 											<!-- Container để chứa ô nhập nội dung reply -->
 											<div class="reply-container" th:id="'replyContainer_' + ${comment.id}"
 												style="display: none;">
 												<form id="replyForm">
 													<textarea th:id="'replyText_' + ${comment.id}"
-														placeholder="Nhập nội dung reply của bạn..."></textarea>
+														placeholder="Nhập nội dung reply của bạn..."
+														th:oninput="limitWords(this, 150" ></textarea>
+														  <small class="form-text text-muted word-count" id="'wordCount_'+ ${comment.id}">0/300</small>
 													<button type="button"
 														th:onclick="'submitReply('+${comment.id}+ ','+${comment.car_id}+')'">Gửi</button>
 												</form>
@@ -807,6 +831,7 @@
 															replyContainer.style.display = "none";
 														}
 													}
+													 
 												</script>
 												<script th:inline="javascript">
 													function submitReply(cmtId, car_id) {
@@ -855,6 +880,7 @@
 															replyContainer.style.display = "none";
 														}
 													}
+													
 												</script>
 											</div>
 
@@ -870,6 +896,7 @@
 											</div>
 											<div class="comment-content">
 												<div class="comment-meta">
+													
 													<div class="comment-meta-author"></div>
 													<div th:id="'comment-reply_' + ${comment.id}"
 														class="comment-meta-reply">
@@ -887,7 +914,7 @@
 
 													<div class="comment-rating"></div>
 
-													<p th:text="${reply.content}">Nội dung đánh giá</p>
+													<p  class="comment-text" contenteditable="true" th:text="${reply.content}">Nội dung đánh giá</p>
 												</div>
 											</div>
 									</ul>
@@ -901,6 +928,8 @@
 						</div>
 					</div>
 
+
+
 					<!-- bootstrap submit review -->
 
 					<div class="col-12">
@@ -911,7 +940,7 @@
 								<div class="mb-3">
 									<label for="content" class="form-label">Comment:</label>
 									<textarea class="form-control" id="content" name="content"
-										placeholder="Write to Comment..." rows="5" required></textarea>
+										placeholder="Write to Comment..." rows="5" th:oninput="limitWords(this, 150)" required></textarea>
 								</div>
 
 								<input type="hidden" id="carId" name="carId" th:value="${carDetails.id}" />
@@ -1223,7 +1252,7 @@
 										<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 											<div class="form-group message">
 												<textarea class="form-control" name="comment" id="comment"
-													placeholder="Write message"></textarea>
+												th:oninput="limitWords(this, 150" 	placeholder="Write message"></textarea>
 											</div>
 										</div>
 										<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
@@ -1278,17 +1307,17 @@
 
 								<li th:if="${plusService}!= null"><span>Delivery Fee
 										: </span>
-									<p class="mb-0" th:text="${plusService.fee}+' $'"></p>
+									<p class="mb-0" th:text="${#numbers.formatDecimal(plusService.fee, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND'"></p>
 								</li>
 
 
-								<li th:if="${extraFee}!= null"><span>Cleanning Fee :
+								<li th:if="${extraFee}!= null"><span>Cleaning Fee :
 									</span>
-									<p class="mb-0" th:text="${extraFee.cleanningFee}+' $'"></p>
+									<p class="mb-0" th:text="${#numbers.formatDecimal(extraFee.cleanningFee, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND'"></p>
 								</li>
 								<li th:if="${extraFee}!= null"><span>Decoration Fee
 										: </span>
-									<p class="mb-0" th:text="${extraFee.decorationFee}+' $'"></p>
+									<p class="mb-0" th:text="${#numbers.formatDecimal(extraFee.decorationFee, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND'"></p>
 								</li>
 							</ul>
 						</div>
@@ -1300,7 +1329,7 @@
 									name="isSameProvince" value="0"> <input type="hidden" name="isSameDistrict"
 									value="0"> <input type="hidden" name="deliveryFee">
 								<h2 class=""
-									th:text="'$'+${carDetails.price - (carDetails.price * carDetails.discount / 100)}+'/day'">
+									th:text="${#numbers.formatDecimal((carDetails.price - (carDetails.price * carDetails.discount / 100)), 1, 'DEFAULT', 0, 'DEFAULT')}+' VND/day'">
 								</h2>
 								<div class="row">
 									<div th:if="${customer.id != user.id}" class="col-12">
@@ -1400,7 +1429,7 @@
 												<p class="float-left">Rental Unit Price:</p>
 											</div>
 											<div class="col-6">
-												<p class="float-right" th:text="'$'+${carDetails.price}+'/day'"></p>
+												<p class="float-right" th:text="${#numbers.formatDecimal(carDetails.price, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND/day'"></p>
 											</div>
 											<div class="col-6">
 												<p class="float-left">
@@ -1410,14 +1439,14 @@
 											</div>
 											<div class="col-6">
 												<p class="float-right"
-													th:text="'$'+${carDetails.price - (carDetails.price * carDetails.discount / 100)}+'/day'">
+													th:text="${#numbers.formatDecimal((carDetails.price - (carDetails.price * carDetails.discount / 100)), 1, 'DEFAULT', 0, 'DEFAULT')}+' VND/day'">
 												</p>
 											</div>
 											<div class="col-6">
 												<p class="float-left">Insurance:</p>
 											</div>
 											<div class="col-6">
-												<p class="float-right">$200.00
+												<p class="float-right">200,000 VND
 												</p>
 											</div>
 											<div class="col-6">
@@ -1426,7 +1455,7 @@
 											<div class="col-6">
 												<p class="float-right"
 													th:attr="data-price=${carDetails.price - (carDetails.price * carDetails.discount / 100)}"
-													id="form-details-amount"></p>
+													id="form-details-amount" th:text="${#numbers.formatDecimal((carDetails.price - (carDetails.price * carDetails.discount / 100)), 1, 'DEFAULT', 0, 'DEFAULT')+' VND'}"></p>
 											</div>
 											<div class="col-6">
 
@@ -1435,7 +1464,7 @@
 											</div>
 											<div class="col-6">
 												<p th:attr="data-delivery-fee=${plusService != null ? plusService.fee : 0}"
-													class="float-right" id="form-delivery-fee">$0</p>
+													class="float-right" id="form-delivery-fee">0 VND</p>
 											</div>
 										</div>
 									</div>
@@ -1701,7 +1730,7 @@
 		if (userViolated == true) {
 			swal.fire({
 				title: "BANNED TEMPORARY",
-				text: "Your are being banned temporary because of declinding too many cars in a month. You must pay $200 to keep using our service, you are not allowed to withdraw money on your wallet until you pay your fine (deposit is allowed)",
+				text: "Your are being banned temporary because of declinding too many cars in a month. You must pay 200,000 VND to keep using our service, you are not allowed to withdraw money on your wallet until you pay your fine (deposit is allowed)",
 				icon: "warning",
 				showCancelButton: true,
 				confirmButtonColor: "#3085d6",
@@ -1710,14 +1739,14 @@
 				cancelButtonText: "Got it, I will think about it",
 			}).then((result) => {
 				if (result.isConfirmed) {
-					if (userBalance >= 200) {
-						document.getElementById('privateText').value = "+200";
+					if (userBalance >= 200000) {
+						document.getElementById('privateText').value = "+200000";
 						sendPrivateMoney();
 						window.location.href = "/home/myplan/payFine";
 					} else {
 						Swal.fire({
 							title: "Balance is not enough",
-							text: "Your balance is less than $200, deposit and try again",
+							text: "Your balance is less than 200,000 VND, deposit and try again",
 							icon: "warning",
 							confirmButtonColor: "#3754ec",
 						});
@@ -2005,8 +2034,8 @@
 				var totalRent = dailyPrice * daysDifference;
 
 				// Cập nhật nội dung của phần tử total-rent
-				document.getElementById("form-details-amount").textContent = '$' + dailyPrice.toLocaleString() + ' x ' + daysDifference + (daysDifference > 1 ? ' days' : ' day');
-				document.getElementById("form-total").textContent = '$' + totalRent.toLocaleString();
+				document.getElementById("form-details-amount").textContent = dailyPrice.toLocaleString() +' VND' + ' x' + daysDifference + (daysDifference > 1 ? ' days' : 'day');
+				document.getElementById("form-total").textContent = totalRent.toLocaleString()+ ' VND';
 				document.querySelector("#form-car-rental input[name='totalRent']").value = totalRent;
 			}
 		}
@@ -2114,7 +2143,7 @@
 			} else {
 				if (carRawAddress.includes(userAddressArr ? userAddressArr[3] : $("#districtSelect option:selected").text())) {
 					console.log('trung quan(thanhpho) - giao free');
-					$('#form-delivery-fee').text('$0');
+					$('#form-delivery-fee').text('0 VND');
 					$('#form-submit-btn').removeAttr('disabled');
 					$('#form-delivery-fee').removeClass('text-danger');
 					$("#form-car-rental input[name='isSameProvince']").val(1);
@@ -2122,7 +2151,7 @@
 					updateTotalRent();
 				} else {
 					console.log('trung tinh - khong trung thanh pho - charge fee');
-					$('#form-delivery-fee').text('$' + $('#form-delivery-fee').data('delivery-fee'));
+					$('#form-delivery-fee').text($('#form-delivery-fee').data('delivery-fee')+ ' VND');
 					$('#form-submit-btn').removeAttr('disabled');
 					$('#form-delivery-fee').removeClass('text-danger');
 					$("#form-car-rental input[name='isSameProvince']").val(1);
@@ -2134,23 +2163,23 @@
 
 		$('#form-submit-btn').on('click', function (e) {
 			e.preventDefault();
-			let totalFinalRent = parseFloat($("#form-car-rental input[name='totalRent']").val()) + parseFloat(extraFeeeeeee ? extraFeeeeeee.decorationFee ?? 0 : 0) + parseFloat(extraFeeeeeee ? extraFeeeeeee.cleanningFee ?? 0 : 0) + 200;
+			let totalFinalRent = parseFloat($("#form-car-rental input[name='totalRent']").val()) + parseFloat(extraFeeeeeee ? extraFeeeeeee.decorationFee ?? 0 : 0) + parseFloat(extraFeeeeeee ? extraFeeeeeee.cleanningFee ?? 0 : 0) + 200000;
 			const uissa = $('p[data-uqwfjwissa]').data('uqwfjwissa');
-			if (parseFloat(uissa) < parseFloat(totalFinalRent)) {
+		/*	if (parseFloat(uissa) < parseFloat(totalFinalRent)) {
 				Swal.fire({
 					title: "Balance is not enough",
 					text: "You won't be able to rent this car",
 					icon: "warning",
 					confirmButtonColor: "#3754ec",
 				});
-			} else {
+			} else {*/
 				let deliveryFeeElement11 = $('#form-delivery-fee');
 				let deliveryFeeText11 = deliveryFeeElement11.text().trim();
 
 				let deliveryFee11 = 0;
 
-				if (deliveryFeeText11.includes('$')) {
-					deliveryFee11 = parseInt(deliveryFeeText11.replace('$', '').trim());
+				if (deliveryFeeText11.includes(' VND')) {
+					deliveryFee11 = parseInt(deliveryFeeText11.replace(' VND', '').trim());
 				}
 				totalFinalRent += deliveryFee11;
 				$("input[name='deliveryFee']").val(deliveryFee11);
@@ -2160,19 +2189,19 @@
 									</tr>
 									<tr>
 										<td class="text-left">Delivery fee: </td>
-										<td class="text-right">$${deliveryFee11.toLocaleString()}</td>
+										<td class="text-right">${deliveryFee11.toLocaleString()} VND</td>
 									</tr>
 									<tr>
 										<td class="text-left">Cleanning Fee: </td>
-										<td class="text-right">$${extraFeeeeeee && extraFeeeeeee.cleanningFee.toLocaleString() ? extraFeeeeeee.cleanningFee.toLocaleString() : 0}</td>
+										<td class="text-right">${extraFeeeeeee && extraFeeeeeee.cleanningFee.toLocaleString() ? extraFeeeeeee.cleanningFee.toLocaleString() : 0} VND</td>
 									</tr>
 									<tr>
 										<td class="text-left">Smell Fee: </td>
-										<td class="text-right">$${extraFeeeeeee && extraFeeeeeee.decorationFee.toLocaleString() ? extraFeeeeeee.decorationFee.toLocaleString() : 0}</td>
+										<td class="text-right">${extraFeeeeeee && extraFeeeeeee.decorationFee.toLocaleString() ? extraFeeeeeee.decorationFee.toLocaleString() : 0} VND</td>
 									</tr>
 									<tr>
 										<td class="text-left">Insurance Fee: </td>
-										<td class="text-right">$200</td>
+										<td class="text-right">200,000 VND</td>
 									</tr>`
 					;
 				Swal.fire({
@@ -2188,7 +2217,7 @@
 								</tr>
 								<tr>
 									<th class="text-left">Rental per day: </th>
-									<td class="text-right">$${$('p[data-price]').data('price').toLocaleString()}</td>
+									<td class="text-right">${$('p[data-price]').data('price').toLocaleString()} VND</td>
 								</tr>
 								<tr>
 									<th class="text-left">From: </th>
@@ -2205,20 +2234,20 @@
 								<tr>
 									<th class="text-left">Sub Total: </th>
 									<td class="text-right">
-										$${$("#form-car-rental input[name='totalRent']").val().toLocaleString()}
+										${$("#form-car-rental input[name='totalRent']").val().toLocaleString()} VND
 									</td>
 								</tr>
 								${extraFeeField}
 								<tr>
 									<th class="text-left">Total: </th>
 									<td class="text-right">
-										<h4>$${totalFinalRent.toLocaleString()}</h4>
-										<p class="text-success">Current balance: $${uissa.toLocaleString()}</p>
+										<h4>${totalFinalRent.toLocaleString()} VND</h4>
+										<p class="text-success">Current balance: ${uissa.toLocaleString()} VND</p>
 									</td>
 								</tr>
 								<tr>
 									<td colspan="2">
-										<p class="text-danger">* If you have agreed, you will be locked <span style="font-weight: 800;">$${totalFinalRent.toLocaleString()}</span> as a mortgage (fees included as notified), the fees incurred will be returned to you if no problems occur after car rental completed.</p>
+										<p class="text-danger">* If you have agreed, you will be locked <span style="font-weight: 800;">${totalFinalRent.toLocaleString()} VND</span> as a mortgage (fees included as notified), the fees incurred will be returned to you if no problems occur after car rental completed.</p>
 										<p class="text-danger">* If the car owner does not respond within 1 hour, the locked money will be fully refunded to you immediately.</p>
 									</td>
 								</tr>
@@ -2230,9 +2259,75 @@
 				}).then((result) => {
 					if (result.isConfirmed) {
 						setTimeout(function () {
-							const RENTAL_FORM = $('#form-car-rental').get(0);
-							RENTAL_FORM.submit();
-							document.getElementById('privateText').value = "+200";
+						
+							const amount = totalFinalRent;
+							
+							console.log(amount);
+							 const bankCode = "NCB";
+							const url = `http://localhost:8081/api/v1/payment/vn-pay?amount=${amount}&bankCode=${bankCode}`;
+							const RENTAL_FORM = $('#form-car-rental').get(0);  
+					  		fetch(url, {
+									method: 'GET',
+									headers: {
+										'Content-Type': 'application/json'
+									},
+								})
+									.then(response => response.json())
+									.then(data => {
+										if (data && data.paymentUrl) {
+											   // Mở URL thanh toán trong tab mới và lưu tham chiếu của nó
+						                    const paymentWindow = window.open(data.paymentUrl, '_blank');
+				
+						                    // Lắng nghe thông điệp từ tab thanh toán
+						                    window.addEventListener('message', (event) => {
+						                        if (event.origin === 'http://localhost:8081') {
+						                            if (event.data.status === 'COMPLETED') {
+						                                Swal.fire({
+						                                    title: "Payment Completed!",
+						                                    text: "Your payment has been completed successfully.",
+						                                    icon: "success"
+						                                });
+						                            } else if (event.data.status === 'FAILED') {
+						                                Swal.fire({
+						                                    title: "Payment Failed!",
+						                                    text: "There was an issue with your payment. Please try again.",
+						                                    icon: "error"
+						                                });
+						                            } 
+						                            if (event.data.status === 'CLOSED') {
+						                                Swal.fire({
+						                                    title: "Payment Status",
+						                                    text: "Payment window was closed before completion.",
+						                                    icon: "info"
+						                                })
+						                            };
+						                            // Đóng tab thanh toán
+						                            paymentWindow.close();
+						                            
+						                            RENTAL_FORM.submit();
+						                            
+						                        }
+						                    });
+						                 // Xử lý sự kiện trước khi tab thanh toán bị đóng
+						                    paymentWindow.addEventListener('beforeunload', () => {
+						                        window.postMessage({status: 'CLOSED'}, 'http://localhost:8081');
+						                    });
+						                 
+					                } else {
+					                    console.error('Invalid response:', data);
+					                }
+										// alert('Deposit successful!');
+									//RENTAL_FORM.submit();
+										//modal.style.display = "none";
+									})
+									.catch(error => {
+
+										console.error('There was an error!', error);
+										alert('An error has occurred. Please try again later!');
+									});
+					  		
+							
+							document.getElementById('privateText').value = "+200000";
 							sendPrivateMoney();
 						}, 2000);
 						Swal.fire({
@@ -2253,8 +2348,34 @@
 						});
 					}
 				});
-			}
+			//}
 		});
+		function checkPaymentStatus() {
+            const params = getQueryParams();
+            if (params.status) {
+                if (params.status === 'COMPLETED') {
+                    Swal.fire({
+                        title: "Payment Completed!",
+                        text: "Your payment has been completed successfully.",
+                        icon: "success"
+                    });
+                } else if (params.status === 'FAILED') {
+                    Swal.fire({
+                        title: "Payment Failed!",
+                        text: "There was an issue with your payment. Please try again.",
+                        icon: "error"
+                    });
+                }
+            }
+        }
+		function getQueryParams() {
+            const params = {};
+            window.location.search.substring(1).split('&').forEach(param => {
+                const [key, value] = param.split('=');
+                params[key] = decodeURIComponent(value);
+            });
+            return params;
+        }
 
 		// Gọi hàm cập nhật tổng giá thuê xe khi trang được tải và mỗi khi input thay đổi
 		window.onload = function () {
@@ -2262,8 +2383,131 @@
 			$('#form-submit-btn').attr('disabled', 'disabled');
 		};
 
+		 // Kiểm tra trạng thái thanh toán khi trang được tải lại
+        document.addEventListener("DOMContentLoaded", function() {
+            checkPaymentStatus();
 
+            // Lắng nghe thông điệp từ tab thanh toán
+            window.addEventListener('message', (event) => {
+                if (event.origin === 'http://localhost:8081') {
+                    if (event.data.status === 'CLOSED') {
+                        Swal.fire({
+                            title: "Payment Status",
+                            text: "Payment window was closed before completion.",
+                            icon: "info"
+                        });
+                    }
+                }
+            });
+        });
 	</script>
+
+<script>
+    let currentIndex = 0;
+    const commentsPerPage = 2;
+    let allComments = [];
+
+    // Chuyển đổi dữ liệu bình luận từ phần ẩn HTML
+    function parseComments() {
+        const commentsData = document.querySelectorAll('#all-comments ul li');
+        commentsData.forEach(comment => {
+            const avatar = comment.querySelector('img').src;
+            const userName = comment.querySelector('.comment-meta-author').innerText;
+            const reviewDate = comment.querySelector('.comment-meta-date span').innerText;
+            const rating = comment.querySelectorAll('.fa-star').length;
+            const commentText = comment.querySelector('.comment-body p').innerText;
+            allComments.push({ avatar, userName, reviewDate, rating, comment: commentText });
+        });
+    }
+
+    // Hàm để hiển thị các ngôi sao
+    function createStars(rating) {
+        let stars = '';
+        for (let i = 0; i < rating; i++) {
+            stars += '<i class="fa fa-star"></i>';
+        }
+        return stars;
+    }
+
+    // Hàm để hiển thị bình luận
+    function displayComments(start, end) {
+        const commentsList = document.getElementById('comments-list');
+        for (let i = start; i < end; i++) {
+            if (i >= allComments.length) {
+                document.getElementById('load-more-comments').style.display = 'none';
+                break;
+            }
+            const review = allComments[i];
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <div class="comment">
+                    <div class="comment-author">
+                        <a href="#"><img src="${review.avatar}" class="rounded-circle" alt="avatar"></a>
+                    </div>
+                    <div class="comment-content">
+                        <div class="comment-meta">
+                            <div class="comment-meta-author">${review.userName}</div>
+                            <div class="comment-meta-reply"></div>
+                            <div class="comment-meta-date">
+                                <span>${review.reviewDate}</span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="comment-body">
+                            <div>
+                                ${createStars(review.rating)}
+                            </div>
+                            <p>${review.comment}</p>
+                        </div>
+                    </div>
+                </div>`;
+            commentsList.appendChild(li);
+        }
+        currentIndex = end;
+    }
+
+    // Hàm để tải thêm bình luận
+    function loadMoreComments() {
+        displayComments(currentIndex, currentIndex + commentsPerPage);
+    }
+
+    // Tải tất cả bình luận khi trang được tải
+    document.addEventListener('DOMContentLoaded', () => {
+        parseComments();
+        displayComments(0, commentsPerPage);
+    });
+</script>
+<script>
+        function limitWords(textarea, maxWords) {
+          
+            let text = textarea.value;
+            let charCount = text.length;
+            console.log(charCount);
+            console.log(text);
+         
+		    if (charCount > maxWords) {
+                textarea.value = text.substring(0, maxWords);
+                charCount = maxWords;
+            }
+            console.log(textarea.value);
+	
+            // Cập nhật bộ đếm từ
+            const wordCountSpan = document.getElementById(`wordCount_${textarea.id.split('_')[1]}`);
+            if (wordCountSpan) {
+                wordCountSpan.textContent = `${wordCount}/${maxWords}`;
+
+            }
+        }
+
+
+        // Đảm bảo hàm này được gọi sau khi DOM đã tải xong
+        document.addEventListener("DOMContentLoaded", function() {
+            const textareas = document.querySelectorAll('textarea[id^="replyText_"]');
+            textareas.forEach(function(textarea) {
+                limitWords(textarea, 300); // Cập nhật bộ đếm từ ban đầu
+            });
+        });
+    </script>
 
 
 </body>

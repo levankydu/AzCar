@@ -11,7 +11,7 @@ import com.project.AzCar.Entities.Cars.CarModelList;
 @Repository
 public interface BrandRepository extends JpaRepository<CarModelList, String> {
 
-	@Query(value = "SELECT DISTINCT c.brand FROM CarModelList c")
+	@Query(value = "SELECT DISTINCT c.brand FROM CarModelList c WHERE c.status ='accepted' OR c.status IS NULL ")
 	List<String> getBrandList();
 
 	@Query("SELECT c FROM CarModelList c WHERE c.brand = ?1")

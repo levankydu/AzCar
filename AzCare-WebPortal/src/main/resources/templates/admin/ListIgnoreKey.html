@@ -105,7 +105,9 @@
 							<ul class="submenu ">
 								<li class="submenu-item"><a th:href="@{/dashboard/brands/}"
 										class="submenu-link">Brands</a></li>
-
+<li class="submenu-item  "><a
+									th:href="@{/dashboard/carModelsVerify/}" class="submenu-link">Car Model Verify
+										Verify</a></li>
 								<li class="submenu-item  "><a th:href="@{/dashboard/carverify/}"
 										class="submenu-link">Cars
 										Verify</a></li>
@@ -265,7 +267,7 @@
 									</form>
 								</div>
 								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" id="closeChangeBtn"
+									<button type="button" class="btn btn-secondary" id="closeChangeBtn1"
 										data-dismiss="modal">Close</button>
 									<button type="button" class="btn btn-primary" id="savenewkeywordChangesBtn">Save
 										changes</button>
@@ -357,7 +359,7 @@
 								$('#createnewkeyword').modal('show');
 							});
 							//Xử lý khi btn "close" click
-							$('#closeChangeBtn').on('click', function () {
+							$('#closeChangeBtn1').on('click', function () {
 								$('#createnewkeyword').modal('hide'); // Đóng dialog 
 							})
 							// Xử lý khi button "Save changes" trong dialog được bấm

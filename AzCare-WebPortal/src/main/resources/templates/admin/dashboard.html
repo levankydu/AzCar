@@ -233,7 +233,7 @@ input[type="number"] {
 					<ul class="menu">
 						<li class="sidebar-title">Menu</li>
 
-						<li class="sidebar-item"><a th:href="@{/dashboard/}"
+						<li class="sidebar-item "><a th:href="@{/dashboard/}"
 							class='sidebar-link'> <i class="bi bi-grid-fill"></i> <span>Dashboard</span>
 						</a></li>
 
@@ -252,20 +252,29 @@ input[type="number"] {
 							class='sidebar-link'><i class="bi bi-car-front-fill"></i> <span>Payment
 									Management</span> </a>
 							<ul class="submenu ">
-								<li class="submenu-item active "><a
-									th:href="@{/dashboard/depositmanager}" class="submenu-link">List
-										Payment </a></li>
-								<li class="submenu-item  "><a th:href="@{/dashboard/cardbank}"
-										class="submenu-link">List Payment Card </a></li>
-							</ul>
-						</li>
-						<li class="sidebar-item  has-sub"><a href="#" class='sidebar-link'><i
-									class="bi bi-car-front-fill"></i> <span>Car
+								<li class="submenu-item  "><a
+									th:href="@{/dashboard/payment/listwithdraw}"
+									class="submenu-link">List Withdraw </a></li>
+								<li class="submenu-item  "><a
+									th:href="@{/dashboard/payment/deposit}" class="submenu-link">List
+										Deposit </a></li>
+								<li class="submenu-item  "><a
+									th:href="@{/dashboard/payment/transaction}"
+									class="submenu-link">List Transaction </a></li>
+								<li class="submenu-item  "><a
+									th:href="@{/dashboard/cardbank}" class="submenu-link">List
+										Payment Card </a></li>
+							</ul></li>
+						<li class="sidebar-item  has-sub"><a href="#"
+							class='sidebar-link'><i class="bi bi-car-front-fill"></i> <span>Car
+
 									Management</span> </a>
 							<ul class="submenu ">
 								<li class="submenu-item"><a th:href="@{/dashboard/brands/}"
 									class="submenu-link">Brands</a></li>
-
+								<li class="submenu-item  "><a
+									th:href="@{/dashboard/carModelsVerify/}" class="submenu-link">Car Model Verify
+										Verify</a></li>
 								<li class="submenu-item  "><a
 									th:href="@{/dashboard/carverify/}" class="submenu-link">Cars
 										Verify</a></li>
@@ -279,15 +288,11 @@ input[type="number"] {
 							<ul class="submenu ">
 								<li class="submenu-item"><a th:href="@{/dashboard/reviews}"
 									class="submenu-link">Review</a></li>
-
 								<li class="submenu-item  "><a
 									th:href="@{/dashboard/ListIgnoreKey}" class="submenu-link">List
 										Ignore Key</a></li>
-										<li class="submenu-item  "><a th:href="@{/dashboard/comments}"
-										class="submenu-link">List
-										Comment</a></li>
-							</ul>
-						</li>
+							</ul></li>
+
 
 						<li class="sidebar-item has-sub"><a href="#"
 							class='sidebar-link'> <i class="bi bi-bell-fill"></i> <span>Booking
@@ -338,21 +343,21 @@ input[type="number"] {
 				</div>
 			</div>
 			<!-- start component chat -->
-		<div style="display: none">
-		<div id="messages"></div>
-		<button id="sendPrivateMessage" onclick="sendPrivateMessage();">Send
-			Private</button>
-		<input type="text" id="privateText" placeholder="Private Message" />
-		
-			<input type="text" id="contact" value="contact"
-			placeholder="To" />
-			<input type="text" id="from" th:value="${#authentication.principal.Username}" placeholder="To" />
+			<div style="display: none">
+				<div id="messages"></div>
+				<button id="sendPrivateMessage" onclick="sendPrivateMessage();">Send
+					Private</button>
+				<input type="text" id="privateText" placeholder="Private Message" />
+
+				<input type="text" id="contact" value="contact" placeholder="To" />
+				<input type="text" id="from"
+					th:value="${#authentication.principal.Username}" placeholder="To" />
 
 
-			<div id="messages"></div>
-	</div>
-	<!-- End componetChat -->
-			
+				<div id="messages"></div>
+			</div>
+			<!-- End componetChat -->
+
 			<header class="mb-3">
 				<a href="#" class="burger-btn d-block d-xl-none"> <i
 					class="bi bi-justify fs-3"></i>
@@ -400,7 +405,8 @@ input[type="number"] {
 											<div class="text-center">
 
 												<h4>
-													Profit: <span th:text="'$ ' + ${profit} + ''" class="badge"
+													Profit: <span th:text="${profit} +' VND' + ''"
+														class="badge"
 														th:classappend="${profit >0 ? 'bg-success' : 'bg-danger'}"
 														id="profitResult"></span>
 
@@ -498,14 +504,14 @@ input[type="number"] {
 				name : 'Income Value',
 				data : totalIn,
 				tooltip : {
-					valueSuffix : ' $'
+					valueSuffix : ' VND'
 				}
 			}, {
 				name : 'Expense Value',
 				data : totalOut,
 				yAxis : 0,
 				tooltip : {
-					valueSuffix : ' $'
+					valueSuffix : ' VND'
 				}
 			} ]
 
@@ -555,21 +561,25 @@ input[type="number"] {
 	<script type="module">
 
 		import {CountUp} from '../assets/js/countUp.js';
-		let moneyStr = document.getElementById('profitResult').textContent;
+		if(document.getElementById('profitResult')){
+			let moneyStr = document.getElementById('profitResult').textContent;
+			let moneyNumber = parseFloat(moneyStr.replace(/\$|,/g, ''));
+			let demo = new CountUp('profitResult', moneyNumber);
+				console.log(demo);
+					if (!demo.error) {
+						demo.start();
+					} else {
+						console.log('error');
+							}
+			}
+		
+		
 
 
-		let moneyNumber = parseFloat(moneyStr.replace(/\$|,/g, ''));
 
+		
 
-
-		let demo = new CountUp('profitResult', moneyNumber);
-
-		console.log(demo);
-		if (!demo.error) {
-			demo.start();
-		} else {
-			console.log('error');
-		}
+		
 	</script>
 </body>
 

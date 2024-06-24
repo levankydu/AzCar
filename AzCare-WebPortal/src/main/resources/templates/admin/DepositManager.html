@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+myModal123<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
@@ -120,9 +120,15 @@
 									Management</span> </a>
 							<ul class="submenu ">
 
-								<li class="submenu-item  "><a th:href="@{/dashboard/depositmanager}"
+								<li class="submenu-item  "><a th:href="@{/dashboard/payment/listwithdraw}"
 										class="submenu-link">List
-										Payment </a></li>
+										Withdraw </a></li>
+										<li class="submenu-item  "><a th:href="@{/dashboard/payment/deposit}"
+										class="submenu-link">List
+										Deposit </a></li>
+											<li class="submenu-item  "><a th:href="@{/dashboard/payment/transaction}"
+										class="submenu-link">List
+										Transaction </a></li>
 								<li class="submenu-item  "><a th:href="@{/dashboard/cardbank}"
 										class="submenu-link">List Payment Card </a></li>
 							</ul>
@@ -133,6 +139,9 @@
 							<ul class="submenu ">
 								<li class="submenu-item"><a th:href="@{/dashboard/brands/}"
 										class="submenu-link">Brands</a></li>
+										<li class="submenu-item  "><a
+									th:href="@{/dashboard/carModelsVerify/}" class="submenu-link">Car Model Verify
+										Verify</a></li>
 
 								<li class="submenu-item  "><a th:href="@{/dashboard/carverify/}"
 										class="submenu-link">Cars
@@ -189,15 +198,15 @@
 				<div class="page-title">
 					<div class="row">
 						<div class="col-12 col-md-6 order-md-1 order-last">
-							<h3>User Manager</h3>
+							<h3>Withdraw Manager</h3>
 
 						</div>
 						<div class="col-12 col-md-6 order-md-2 order-first">
 							<nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
 								<ol class="breadcrumb">
 									<li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-									<li class="breadcrumb-item active" aria-current="page">DataTable
-										jQuery</li>
+									<li class="breadcrumb-item active" aria-current="page">Payment Manager
+										</li>
 								</ol>
 							</nav>
 						</div>
@@ -216,18 +225,19 @@
 										<tr>
 											<th>Id</th>
 											<th>Email</th>
-											<th>Deposit</th>
+										
 											<th>Withdraw</th>
 											<th>Reference Number</th>
 											<th>Status</th>
 											<th>Action</th>
+												<th>Time</th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr th:each="deposit : ${listDeposit}">
 											<td th:text="${deposit.id}"></td>
 											<td th:text="${deposit.email}"></td>
-											<td  th:id="'amount_'+ ${deposit.id}" th:text="${deposit.amount}"></td>
+											
 											<td th:id="'withdraw_'+ ${deposit.id}" th:text="${deposit.withdraw}"></td>
 											<td th:text="${deposit.referenceNumber}"></td>
 											<td th:id="'status_'+${deposit.id}" th:value="${deposit.Status}"
@@ -246,6 +256,7 @@
 													>Active</button>
 											
 													</td>
+													<td  th:id="'amount_'+ ${deposit.id}" th:text="${deposit.timeCreated}"></td>
 
 										</tr>
 									</tbody>
@@ -274,8 +285,7 @@
 							var depositStatus = document.getElementById('status_'+id);
 							console.log(referenceNumber, "và" , depositStatus);
 							var withdraw = document.getElementById('withdraw_'+id).textContent;
-							var amount = document.getElementById('amount_'+id).textContent;
-							console.log(withdraw, "và" , amount);
+						
 
 							
 		
@@ -288,7 +298,7 @@
 								},
 								 // Truyền dữ liệu vào body của yêu cầu PUT
 								 body: JSON.stringify({ referenceNumber: referenceNumber,
-									withdraw: withdraw , amount:amount})
+									withdraw: withdraw })
 							};
 
 							// Gửi request AJAX để cập nhật status

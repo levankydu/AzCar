@@ -57,7 +57,10 @@ public class SecurityConfig {
 						.requestMatchers("/home/myplan/createpayments/deposit/**").permitAll()
 						.requestMatchers("/getmoneywallet/returnmywallet/**").permitAll()
 						.requestMatchers("/cardBank/**").permitAll()
-
+						.requestMatchers("/reviews/**").permitAll()
+						.requestMatchers("/comments/**").permitAll()
+						
+						.requestMatchers("/reviews/car/**").permitAll()
 						.requestMatchers("/deposits/user/**").permitAll().requestMatchers("/forgot_password/**")
 						.permitAll().requestMatchers("/reset_password/**").permitAll().requestMatchers("/register/**")
 						.permitAll().requestMatchers("/login/**").permitAll().requestMatchers("/oauth2/**").permitAll()
