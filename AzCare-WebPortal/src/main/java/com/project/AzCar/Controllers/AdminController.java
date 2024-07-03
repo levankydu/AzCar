@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -39,6 +40,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 
 import com.project.AzCar.Dto.Brands.BrandsDto;
 import com.project.AzCar.Dto.CarInfos.CarInforDto;
+import com.project.AzCar.Dto.CarModel.CarModelDTO;
 import com.project.AzCar.Dto.Categories.CategoriesDto;
 import com.project.AzCar.Dto.Payments.CarCategoryPie;
 import com.project.AzCar.Dto.Payments.PaymentDTO;
@@ -107,6 +109,8 @@ public class AdminController {
 	private ServiceBookingRepositories afterBookingRepositories;
 	@Autowired
 	private PaymentService paymentService;
+	@Autowired
+	private ModelMapper modelMapper;
 
 	@GetMapping("/dashboard/")
 	public String getDashboard(Model ModelView, Authentication authentication,
@@ -292,6 +296,77 @@ public class AdminController {
 		return ResponseEntity.ok().body(Map.of("result", getDataChart("")));
 	}
 
+	@GetMapping("/dashboard/carModelsVerify/")
+	public String getcarModelVerify(Model ModelView) {
+		List<CarModelList> list = brandServices.findAll();
+		List<CarModelDTO> result = new ArrayList<>();
+		CarModelDTO itemDto = new CarModelDTO();
+		list.removeIf(i -> i.getStatus() == null);
+		list.removeIf(i -> i.getStatus().equals("accepted"));
+		list.removeIf(i -> i.getStatus().equals("declined"));
+
+		for (var item : list) {
+
+			itemDto = modelMapper.map(item, CarModelDTO.class);
+			itemDto.setEmailSender(extractEmail(item.getStatus()));
+			itemDto.setStatus(item.getStatus().replace(extractEmail(item.getStatus()), "").replaceAll("_$", ""));
+			result.add(itemDto);
+		}
+		ModelView.addAttribute("result", result);
+		return "admin/carModelVerify";
+	}
+
+	@PostMapping("/dashboard/carModelsVerify/")
+	public String confirmModelVerify(@ModelAttribute("status") String status, @ModelAttribute("carId") String carId,
+			@ModelAttribute("email") String email, @ModelAttribute("reason") String reason) {
+
+		var model = brandServices.getModel(carId);
+
+		if (status.equals("accepted")) {
+			model.setStatus(status);
+			brandServices.saveBrand(model);
+
+			try {
+				sendEmailAcceptModel(email);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (status.equals("declined")) {
+			model.setStatus(status);
+
+			brandServices.saveBrand(model);
+
+			try {
+				sendEmailDeclineModel(email, reason);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (MessagingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return "redirect:/dashboard/carModelsVerify/";
+	}
+
+	private static String extractEmail(String input) {
+		int index = input.lastIndexOf('_');
+		if (index != -1 && index + 1 < input.length() && input.contains("@")) {
+			String potentialEmail = input.substring(index + 1);
+
+			if (potentialEmail.contains("@")) {
+				return potentialEmail;
+			}
+		}
+		return "";
+	}
+
 	@GetMapping("/dashboard/platesVerify/")
 	public String getPlatesVerifyPage(Model ModelView) {
 
@@ -322,7 +397,7 @@ public class AdminController {
 		List<PlateImages> list = plateImageServices.getAll();
 		List<PlateImages> userImages = list.stream().filter(img -> img.getUserId() == Long.parseLong(userId))
 				.collect(Collectors.toList());
-
+		System.out.println(reason);
 		if (status.equals("accepted")) {
 			for (var item : userImages) {
 				item.setStatus(Constants.plateStatus.ACCEPTED);
@@ -777,6 +852,36 @@ public class AdminController {
 		return "admin/ListAccount";
 	}
 
+	@PostMapping("/dashboard/block/{email}")
+	public String blockUser(@PathVariable("email") String email) {
+		userServices.updateUserStatus(email, false);
+		try {
+			sendEmailBlock(email);
+		} catch (UnsupportedEncodingException e) {
+
+			e.printStackTrace();
+		} catch (MessagingException e) {
+
+			e.printStackTrace();
+		}
+		return "redirect:/dashboard/ListAccount";
+	}
+
+	@PostMapping("/dashboard/unblock/{email}")
+	public String unblockUser(@PathVariable("email") String email) {
+		userServices.updateUserStatus(email, true);
+		try {
+			sendEmailUnblock(email);
+		} catch (UnsupportedEncodingException e) {
+			
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			
+			e.printStackTrace();
+		}
+		return "redirect:/dashboard/ListAccount";
+	}
+
 	@GetMapping("/dashboard/ClientService")
 	public String clientService(Model ModelView) {
 		List<ServiceAfterBooking> list = afterBookingRepositories.findAll();
@@ -863,6 +968,37 @@ public class AdminController {
 		mailSender.send(message);
 	}
 
+	private void sendEmailBlock(String email) throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		String subject = "Notifycation your account.";
+		String content = "<p>Hello," + email + "</p>" + "<p>Your account is block</p>"
+				+ "<p>For any further assistance, feel free to contact us.</p>" 
+				+ "<p>Best regards,<br>AzCar Team</p>";
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
+	}
+	
+	private void sendEmailUnblock(String email) throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		String subject = "Notifycation your account.";
+		String content = "<p>Hello," + email + "</p>" + "<p>Your account is unBlock</p>"
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
+	}
+
 	private void sendEmailDecline(String email, CarInforDto carDetails, String reason)
 			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
 		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
@@ -880,6 +1016,42 @@ public class AdminController {
 				+ carDetails.getLicensePlates() + "</p>" + "<p>" + "Pick-up Location: " + carDetails.getAddress()
 				+ "</p>" + "<p>Reason : <span>" + reason + "</span></p>"
 				+ "<p>This is to confirm that your car is not meet our rules</p>"
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
+	}
+
+	private void sendEmailAcceptModel(String email)
+			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		String subject = "Successfull verify your Car Model";
+		String content = "<p>Hello," + email + "</p>" + "<p>Thank you for registering your Car Model with AzCar.</p>" +
+
+				"<p>This is to confirm that we already verify your information</p>"
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
+	}
+
+	private void sendEmailDeclineModel(String email, String reason)
+			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		String subject = "Verify your Car Model not succesfully";
+		String content = "<p>Hello," + email + "</p>" + "<p>Sorry,Your Car Model is not verified with AzCar.</p>"
+				+ "</p>" + "<p>Reason : <span>" + reason + "</span></p>"
+				+ "<p>This is to confirm that we already verify your information</p>"
 				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
 		helper.setSubject(subject);
 		helper.setText(content, true);

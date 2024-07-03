@@ -62,7 +62,7 @@ public class Users implements Serializable {
 	private List<Roles> roles = new ArrayList<>();
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	private Date dob;
-	private boolean isEnabled;
+	private boolean enabled;
 	private boolean changePassword;
 	private String resetPasswordToken;
 
@@ -102,7 +102,7 @@ public class Users implements Serializable {
 	public String toString() {
 		return "Users [id=" + id + ", cars=" + cars + ", firstName=" + firstName + ", lastName=" + lastName + ", phone="
 				+ phone + ", email=" + email + ", password=" + password + ", roles=" + roles + ", dob=" + dob
-				+ ", isEnabled=" + isEnabled + ", changePassword=" + changePassword + ", resetPasswordToken="
+				+ ", isEnabled=" + enabled + ", changePassword=" + changePassword + ", resetPasswordToken="
 				+ resetPasswordToken + ", gender=" + gender + ", balance=" + balance + ", score=" + score + ", image="
 				+ image + ", address=" + address + "]";
 	}

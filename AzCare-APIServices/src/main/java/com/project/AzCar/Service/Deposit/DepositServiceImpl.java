@@ -44,4 +44,16 @@ public class DepositServiceImpl implements IDepositService {
 		return paymentDetailsRepository.findListUserById(id);
 	}
 
+	@Override
+	public List<Deposit> findListDepositWithDraw() {
+		// TODO Auto-generated method stub
+		return paymentDetailsRepository.findListWithDraw();
+	}
+
+	@Override
+	public List<Deposit> findListDepositTransaction() {
+		// TODO Auto-generated method stub
+		return paymentDetailsRepository.findListTransaction();
+	}
+
 }

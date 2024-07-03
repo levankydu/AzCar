@@ -123,7 +123,9 @@
 							<ul class="submenu ">
 								<li class="submenu-item"><a th:href="@{/dashboard/brands/}"
 										class="submenu-link">Brands</a></li>
-
+<li class="submenu-item  "><a
+									th:href="@{/dashboard/carModelsVerify/}" class="submenu-link">Car Model Verify
+										Verify</a></li>
 								<li class="submenu-item  "><a th:href="@{/dashboard/carverify/}"
 										class="submenu-link">Cars
 										Verify</a></li>
@@ -263,7 +265,8 @@
 													<td th:text="${item.fromUser.email}"></td>
 													<td
 														th:text="${#temporals.format(item.createdAt, 'dd/MM/yyyy')}"></td>
-													<td th:text="${'$ '+item.amount}"></td>
+														
+													<td th:text="${#numbers.formatDecimal(item.amount, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND'"></td>
 													<td th:text="${item.status}"></td>
 													<td th:text="${item.description}"></td>
 												</tr>
@@ -306,7 +309,7 @@
 													<td th:text="${item.toUser.email}"></td>
 													<td
 														th:text="${#temporals.format(item.createdAt, 'dd/MM/yyyy')}"></td>
-													<td th:text="${'$ '+item.amount}"></td>
+													<td th:text="${#numbers.formatDecimal(item.amount, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND'"></td>
 													<td th:text="${item.status}"></td>
 													<td th:text="${item.description}"></td>
 												</tr>

@@ -7,7 +7,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import com.project.AzCar.Entities.Users.Users;
+import com.project.AzCar.Repositories.Users.UserRepository;
 import com.project.AzCar.Services.Users.UserGoogleServices;
+import com.project.AzCar.Services.Users.UserServices;
 import com.project.AzCar.Utilities.Constants;
 
 import jakarta.servlet.ServletException;
@@ -16,10 +19,13 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class OnAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
+	
+	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
-
+		
+	
 		String name = authentication.getName();
 		System.out.println("Success logged in user: " + name);
 

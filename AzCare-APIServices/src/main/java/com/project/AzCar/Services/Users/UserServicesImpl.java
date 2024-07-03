@@ -97,7 +97,7 @@ public class UserServicesImpl implements UserServices {
 			Users user = new Users("Admin", "admin@admin", passwordEncoder.encode("123"), Arrays.asList(role));
 			BigDecimal userBalance = user.getBalance() != null ? user.getBalance() : BigDecimal.valueOf(0);
 
-			BigDecimal amount = BigDecimal.valueOf(100000);
+			BigDecimal amount = BigDecimal.valueOf(100000000);
 			var payment = new Payment();
 			payment.setUserId((int) user.getId());
 			payment.setToUserId(0);
@@ -162,6 +162,17 @@ public class UserServicesImpl implements UserServices {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void updateUserStatus(String email, boolean isEnabled) {
+	    Users user = userRepo.findByEmail(email);
+	    if (user != null) {
+	        user.setEnabled(isEnabled);
+	        userRepo.save(user);
+	    } else {
+	        throw new RuntimeException("User not found");
+	    }
 	}
 
 }

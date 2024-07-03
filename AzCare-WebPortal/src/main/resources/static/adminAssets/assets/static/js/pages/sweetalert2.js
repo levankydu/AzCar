@@ -68,7 +68,7 @@ if (document.getElementById("addLicense-false")) {
 
 	}
 	);
-}if (document.getElementById("addLicense-success")) {
+} if (document.getElementById("addLicense-success")) {
 	document.getElementById("addLicense-success").addEventListener("click", (e) => {
 		Swal.fire({
 			icon: "success",
@@ -335,7 +335,68 @@ if (document.getElementById("decline-plates")) {
 		});
 	});
 }
+if (document.getElementById("accept-carModel")) {
+	document.getElementById("accept-carModel").addEventListener("click", (e) => {
+		e.preventDefault();
+		Swal2.fire({
+			title: "Confirm verify",
+			input: "text",
+			inputLabel: "Enter ''verify'' in lowercase",
+			showCancelButton: true,
 
+		}).then((result) => {
+
+			if (result.value && result.value.toLowerCase() === 'verify') {
+				$('#privateText').val("''Your carModel is verified for booking, check your email for full information''");
+				/*sendPrivateMessage();*/
+				$('#verify-cModel').submit();
+				$('#loadding-sendEmail').click();
+			} else {
+
+				console.log("User did not enter 'verify' or canceled");
+				Swal2.fire({
+					icon: "error",
+					title: "Oops...",
+					text: "Something went wrong!",
+
+				})
+			}
+		});
+	});
+}
+
+
+if (document.getElementById("decline-carModel")) {
+	document.getElementById("decline-carModel").addEventListener("click", (e) => {
+		e.preventDefault();
+		Swal2.fire({
+			title: "Confirm verify",
+			input: "text",
+			inputLabel: "Enter reason in lowercase",
+			showCancelButton: true,
+
+		}).then((result) => {
+			if (result.value && result.value.toLowerCase() != '') {
+				$('#privateText').val("''Your carModel is declined for booking now, check your email for full information''");
+
+				document.getElementById('reason').value = result.value.toLowerCase();
+				console.log(reason.value);
+				console.log(result.value);
+/*				sendPrivateMessage();
+*/				$('#declined-cModel').submit();
+				$('#loadding-sendEmail').click();
+			} else {
+				console.log("User did not enter 'decline' or canceled");
+				Swal2.fire({
+					icon: "error",
+					title: "Oops...",
+					text: "Something went wrong!",
+
+				})
+			}
+		});
+	});
+}
 if (document.getElementById("accept")) {
 	document.getElementById("accept").addEventListener("click", (e) => {
 		e.preventDefault();
@@ -495,7 +556,22 @@ if (document.getElementById("toast-success-logout")) {
 		})
 	})
 }
-
+if (document.getElementById('toast-success-login')) {
+	document.getElementById('toast-success-login').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'success',
+			title: 'Login successfully'
+		})
+	})
+}
+if (document.getElementById('toast-failed-login')) {
+	document.getElementById('toast-failed-login').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'error',
+			title: 'Login failed'
+		})
+	})
+}
 if (document.getElementById('toast-success-registered-user')) {
 	document.getElementById('toast-success-registered-user').addEventListener('click', () => {
 		Toast.fire({
@@ -516,7 +592,7 @@ if (document.getElementById('toast-failed-register-exit')) {
 	document.getElementById('toast-failed-register-exit').addEventListener('click', () => {
 		Toast.fire({
 			icon: 'error',
-			title: 'Email eixt'
+			title: 'Email account already exists.'
 		})
 	})
 }
@@ -599,6 +675,14 @@ if (document.getElementById('toast-failed-reset-password')) {
 		Toast.fire({
 			icon: 'error',
 			title: 'Reset Password failed'
+		})
+	})
+}
+if (document.getElementById('toast-failed-forgot')) {
+	document.getElementById('toast-failed-forgot').addEventListener('click', () => {
+		Toast.fire({
+			icon: 'error',
+			title: 'Forgot failed'
 		})
 	})
 }

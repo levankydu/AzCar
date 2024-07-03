@@ -231,7 +231,9 @@
 							<ul class="submenu ">
 								<li class="submenu-item"><a th:href="@{/dashboard/brands/}"
 										class="submenu-link">Brands</a></li>
-
+<li class="submenu-item  "><a
+									th:href="@{/dashboard/carModelsVerify/}" class="submenu-link">Car Model Verify
+										Verify</a></li>
 								<li class="submenu-item  "><a th:href="@{/dashboard/carverify/}"
 										class="submenu-link">Cars
 										Verify</a></li>
@@ -350,7 +352,7 @@
 											Car Location: <span th:text="${carDetails.address}"></span>
 										</p>
 										<p class="card-text">
-											Price: <span th:text="${carDetails.price+' $/day'}"></span>
+											Price: <span th:text="${#numbers.formatDecimal(carDetails.price, 1, 'DEFAULT', 0, 'DEFAULT')+' VND/day'}"></span>
 										</p>
 										<p class="card-text">
 											Car Description: <span th:text="${carDetails.description}"></span>
@@ -365,18 +367,18 @@
 										<div th:if="${carDetails.isCarPlus}">
 											<p class="card-text">
 												Delivery Fee: <span
-													th:text="${carDetails.carPlusModel.fee+' $'}"></span>
+													th:text="${#numbers.formatDecimal(carDetails.carPlusModel.fee,1, 'DEFAULT', 0, 'DEFAULT')+' VND'}"></span>
 											</p>
 
 										</div>
 										<div th:if="${carDetails.isExtraFee}">
 											<p class="card-text">
 												Cleanning Fee: <span
-													th:text="${carDetails.extraFeeModel.cleanningFee+ ' $'}"></span>
+													th:text="${#numbers.formatDecimal(carDetails.extraFeeModel.cleanningFee, 1, 'DEFAULT', 0, 'DEFAULT')+' VND'}"></span>
 											</p>
 											<p class="card-text">
 												Decoration Fee: <span
-													th:text="${carDetails.extraFeeModel.decorationFee +' $'}"></span>
+													th:text="${#numbers.formatDecimal(carDetails.extraFeeModel.decorationFee, 1, 'DEFAULT', 0, 'DEFAULT') +' VND'}"></span>
 											</p>
 										</div>
 

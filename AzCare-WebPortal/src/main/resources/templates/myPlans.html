@@ -52,6 +52,81 @@
 <script type="text/javascript" src="/assets/js/notiJs.js"></script>
 <style>
 /* CSS */
+.checkbox-wrapper-29 {
+	--size: 1rem;
+	--background: #fff;
+	font-size: var(--size);
+}
+
+.checkbox-wrapper-29 *, .checkbox-wrapper-29 *::after,
+	.checkbox-wrapper-29 *::before {
+	box-sizing: border-box;
+}
+
+.checkbox-wrapper-29 input[type="checkbox"] {
+	visibility: hidden;
+	display: none;
+}
+
+.checkbox-wrapper-29 .checkbox__label {
+	width: var(--size);
+}
+
+.checkbox-wrapper-29 .checkbox__label:before {
+	content: ' ';
+	display: block;
+	height: var(--size);
+	width: var(--size);
+	position: absolute;
+	top: calc(var(--size)* 0.125);
+	left: 0;
+	background: var(--background);
+}
+
+.checkbox-wrapper-29 .checkbox__label:after {
+	content: ' ';
+	display: block;
+	height: var(--size);
+	width: var(--size);
+	border: calc(var(--size)* .14) solid #000;
+	transition: 200ms;
+	position: absolute;
+	top: calc(var(--size)* 0.125);
+	left: 0;
+	background: var(--background);
+}
+
+.checkbox-wrapper-29 .checkbox__label:after {
+	transition: 100ms ease-in-out;
+}
+
+.checkbox-wrapper-29 .checkbox__input:checked ~.checkbox__label:after {
+	border-top-style: none;
+	border-right-style: none;
+	-ms-transform: rotate(-45deg);
+	/* IE9 */
+	transform: rotate(-45deg);
+	height: calc(var(--size)* .5);
+	border-color: green;
+}
+
+.checkbox-wrapper-29 .checkbox {
+	position: relative;
+	display: flex;
+	cursor: pointer;
+	/* Mobile Safari: */
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.checkbox-wrapper-29 .checkbox__label:after:hover, .checkbox-wrapper-29 .checkbox__label:after:active
+	{
+	border-color: green;
+}
+
+.checkbox-wrapper-29 .checkbox__label {
+	margin-right: calc(var(--size)* 0.45);
+}
+
 .button-92 {
 	--c: #fff;
 	/* text color */
@@ -256,31 +331,43 @@
 						Example</p>
 					<h4 class="col-10 offset-md-1"
 						style="text-align: center; font-weight: bold;">
-						Welcome, <span th:text="${session.emailLogin}"></span>
+						Welcome, <span id="emailSpan"  th:text="${session.emailLogin}"></span>
 					</h4>
 					<h4 class="col-4 offset-md-8"
 						style="text-align: center; font-weight: bold;">
-						Your balance: $ <span
-						th:id="balance_123"	th:text="${user.balance!=null?user.balance :'0'}"></span>
-
+						Your balance: <span th:id="balance_123"
+							th:text="${#numbers.formatDecimal((user.balance!=null?user.balance :'0'), 1, 'DEFAULT', 0, 'DEFAULT')} +' VND'"></span>
 					</h4>
+					
+					<!-- <script>
+					  document.addEventListener("DOMContentLoaded", function() {
+					    const balanceElement = document.getElementById("balance_123");
+					    if (balanceElement) {
+					      const balanceText = balanceElement.textContent.trim();
+					      const balanceValue = parseFloat(balanceText.replace(/,/g, ''));
+					      if (!isNaN(balanceValue)) {
+					        balanceElement.textContent = balanceValue.toLocaleString('vi-VN');
+					      }
+					    }
+					  });
+					</script> -->
 					<!-- khi click charge sẽ hiển thị dialog -->
 					<!-- Button to open the modal -->
 					<div class="col-4 offset-md-8">
 						<div class="row">
 							<div class="col-6">
+								
+							</div>
+							<div class="col-6">
 								<button type="button" class="search-button btn-md btn-color"
 									style="border-width: 0; border-radius: 0" id="openModalBtn2">
 									Withdraw</button>
 							</div>
-							<div class="col-6">
-								<button id="openModalBtn" class="search-button btn-md btn-color"
-									style="border-width: 0; border-radius: 0">Deposit</button>
-							</div>
+							
 						</div>
 					</div>
 					<!-- The Modal -->
-					<div id="myModal" class="modal" style="z-index: 9999999">
+						<div id="myModal" class="modal" style="z-index: 9999999">
 						<div class="modal-content">
 							<span class="close">&times;</span>
 							<h2>Deposit</h2>
@@ -296,50 +383,23 @@
 										<label for="amount">Amount:</label>
 										<div>
 											<input type="number" id="customAmount" name="customAmount"
-												min="100" step="1" placeholder="Please enter amount">
+												min="50000" step="1" placeholder="Please enter amount">
 										</div>
 										<div>
-											<button type="button" class="amount-btn" data-amount="500">500$
+											<button type="button" class="amount-btn" data-amount="50000">50,000 VND
 											</button>
-											<button type="button" class="amount-btn" data-amount="1000">1,000$
+											<button type="button" class="amount-btn" data-amount="100000">100,000 VND
 											</button>
-											<button type="button" class="amount-btn" data-amount="2000">2,000$
+											<button type="button" class="amount-btn" data-amount="200000">200,000 VND
 											</button>
 										</div>
 										<input type="hidden" id="amount" name="amount" required>
 										<!-- Field hidden để lưu giá trị số tiền -->
-
-										<label for="referenceNumber">Reference Number:</label> <input
-											type="text" id="referenceNumber" name="referenceNumber"
-											readonly><br> <br>
+	
+										<br> <br>
 										<button type="submit">Deposit</button>
 									</div>
-									<div class="col-md">
-										<div class="form-floating">
-											<label for="floatingInputGrid">Bank NAME</label> <input
-												class="form-control" type="text"
-												th:value="${cardbank.bankName}" readonly>
-
-										</div>
-										<div class="form-floating">
-											<label for="floatingInputGrid">Bank ID</label> <input
-												class="form-control" type="text"
-												th:value="${cardbank.bankNumber}" readonly>
-
-										</div>
-										<div class="form-floating">
-											<label for="floatingInputGrid"> BENEFICIARY NAME</label> <input
-												class="form-control" type="text"
-												th:value="${cardbank.beneficiaryName}" readonly>
-
-										</div>
-										<div class="form-floating">
-											<label for="floatingInputGrid">ADDRESS</label> <input
-												class="form-control" type="text"
-												th:value="${cardbank.addressbank}" readonly>
-
-										</div>
-									</div>
+									
 								</div>
 							</form>
 						</div>
@@ -509,7 +569,7 @@ select {
 
 														<div class="listing-price">
 															Origin Price: <span class="new"
-																th:text="'$' + ${car.price}+'/day'"></span>
+																th:text="${#numbers.formatDecimal(car.price, 1, 'DEFAULT', 0, 'DEFAULT')}+' VND/day'"></span>
 														</div>
 														<div class="listing-price">
 															Current Discount: <span class="new"
@@ -569,16 +629,44 @@ select {
 																						<tr>
 																							<th class="text-left">Old Price:</th>
 																							<td class="text-right"
-																								th:text="${'$'+car.price +'/day'}"></td>
+																								th:text="${#numbers.formatDecimal(car.price, 1, 'DEFAULT', 0, 'DEFAULT') +' VND/day'}"></td>
 																						</tr>
 																						<tr>
 																							<th class="text-left text-success">New Price
-																								($/day):</th>
-																							<td class="text-right"><input type="number"
-																								name="newPrice"
-																								th:id="'newPrice-'+${car.carmodel.objectId}"
-																								th:attr="onkeyup='return checkNewPrice(\'' + ${#strings.escapeJavaScript(car.carmodel.objectId)} + '\')'">
+																								(VND/day):</th>
+																							<td class="text-right">
+																								<div class="row input-group-prepend"
+																									style="flex-direction: row; justify-content: flex-end; padding-right: 12px;">
+																									<input type="number" name="newPrice"
+																										th:id="'newPrice-'+${car.carmodel.objectId}"
+																										th:attr="onkeyup='return checkNewPrice(\'' + ${#strings.escapeJavaScript(car.carmodel.objectId)} + '\')'">
+																									<div class="input-group-text">,000
+																										VND/day</div>
+																								</div>
 																							</td>
+																						</tr>
+																						<tr>
+																							<th class="text-left">
+																								<div class="checkbox-wrapper-29">
+																									<label class="checkbox text-success" id="checkboxLabel"> <input
+																										type="checkbox" name="isUpdateSerivces"
+																										class="checkbox__input" id="isUpdateSerivces" onchange="changeTextColor(this)"
+																										th:checked="true" /> <span
+																										class="checkbox__label "></span> Update new
+																										Service Price
+																									</label>
+																								</div>
+																							</th>
+																							<td class="text-right col-6"></td>
+
+																						</tr>
+																						<tr>
+																							<th colspan="2">
+																								<p class="text-warning">"If enabled, service fees will update to
+																									the latest rental prices (not excluding
+																									discounts). Otherwise, fees remain unchanged."</p>
+
+																							</th>
 																						</tr>
 																						<tr>
 																							<td class="text-right text-danger" colspan="2"
@@ -638,7 +726,7 @@ select {
 																	tabindex="-1" role="dialog"
 																	aria-labelledby="myLargeModalLabel" aria-hidden="true">
 																	<div class="modal-dialog modal-lg">
-																		<div class="modal-content">
+																		<div class="modal-content" style="width:max-content">
 																			<div class="modal-header">
 																				<h5 class="modal-title" id="exampleModalLabel">
 
@@ -676,7 +764,7 @@ select {
 																						<td th:text="${item.differenceDate+' day(s)'}">
 																						</td>
 																						<td style="white-space: nowrap;"
-																							th:text="${'$ '+item.totalRent}"></td>
+																							th:text="${#numbers.formatDecimal(item.totalRent, 1, 'DEFAULT', 0, 'DEFAULT')+' VND'}"></td>
 																						<td th:text="${item.getStatusOnView()}"
 																							th:class="${item.status == 'declined' || item.status == 'rentor_declined' ? 'badge badge-danger text-wrap mt-2' : 'badge badge-success text-wrap mt-2'}">
 
@@ -750,8 +838,12 @@ select {
 																			<td style="white-space: nowrap;"
 																				th:text="${item.dateFormat(item.toDate)}"></td>
 																			<td th:text="${item.differenceDate}"></td>
+																			
+																			
 																			<td style="white-space: nowrap;"
-																				th:text="'$' + ${item.totalRent}"></td>
+																				th:text="${#numbers.formatDecimal(item.totalRent, 1, 'DEFAULT', 0, 'DEFAULT')+' VND'}"></td>
+																				
+																				
 																			<td><a
 																				th:href="@{'/home/myplan/accepted/'+ ${item.id}}"
 																				style="position: relative;"
@@ -892,8 +984,9 @@ select {
 														</h3>
 
 														<div class="listing-price">
+														
 															Price: <span class="new"
-																th:text="'$' + ${item.originPrice - (item.discount * item.originPrice / 100)}+'/day' + (${item.discount} > 0 ? ' (Discounted ' + ${item.discount}+ '%)' : '')"></span>
+																th:text="${#numbers.formatDecimal((item.originPrice - (item.discount * item.originPrice / 100)), 1, 'DEFAULT', 0, 'DEFAULT')}+' VND/day' + (${item.discount} > 0 ? ' (Discounted ' + ${item.discount}+ '%)' : '')"></span>
 														</div>
 														<div class="listing-price">
 															From: <span class="new"
@@ -909,7 +1002,7 @@ select {
 														</div>
 														<div class="listing-price">
 															Total: <span class="new"
-																th:text="'$' + ${item.totalRent}"></span>
+																th:text="${#numbers.formatDecimal(item.totalRent, 1, 'DEFAULT', 0, 'DEFAULT')+' VND'}"></span>
 														</div>
 													</div>
 													<p class="btn text-white"
@@ -1240,15 +1333,15 @@ select {
 							th:value="${user.Id}" readonly hidden><br> <br>
 						<label for="amount">Amount:</label>
 						<div>
-							<input type="number" id="amount123" name="amount123" min="100"
+							<input type="number" id="amount123" name="amount123" min="50000" required="required"
 								step="10" placeholder="Please enter amount">
 						</div>
 						<div>
-							<button type="button" class="amount-btn" data-amount123="500">500$
+							<button type="button" class="amount-btn" data-amount123="50000">50,000 VND
 							</button>
-							<button type="button" class="amount-btn" data-amount123="1000">1,000$
+							<button type="button" class="amount-btn" data-amount123="100000">100,000 VND
 							</button>
-							<button type="button" class="amount-btn" data-amount123="2000">2,000$
+							<button type="button" class="amount-btn" data-amount123="200000">200,000 VND
 							</button>
 						</div>
 						<input type="hidden" id="customAmount123" name="customAmount123"
@@ -1256,30 +1349,39 @@ select {
 							Number:</label> <input type="text" id="referenceNumber123"
 							name="referenceNumber123" readonly><br> <br>
 						<button th:if="${cardbankuser != null }" type="submit">Pay</button>
-						<span th:if="${cardbankuser == null}" class="text-danger">You must add your bank account before withdrawing</span>
-						<p><a class="btn btn-success btn-md" th:if="${cardbankuser == null}" th:href="'/user/profile/' + ${session.user}">Update Bank Account</a></p>
+						<span th:if="${cardbankuser == null}" class="text-danger">You
+							must add your bank account before withdrawing</span>
+						<p>
+							<a class="btn btn-success btn-md" th:if="${cardbankuser == null}"
+								th:href="'/user/profile/' + ${session.user}">Update Bank
+								Account</a>
+						</p>
 					</div>
 
 					<div class="col-md" th:if="${cardbankuser !=null}">
 						<div class="form-floating">
-							<label for="floatingInputGrid">Bank NAME</label>
-							<input class="form-control" type="text" th:value="${cardbankuser.bankName}" readonly>
+							<label for="floatingInputGrid">Bank NAME</label> <input
+								class="form-control" type="text"
+								th:value="${cardbankuser.bankName}" readonly>
 
 						</div>
 						<div class="form-floating">
-							<label for="floatingInputGrid">Bank ID</label>
-							<input class="form-control" type="text" th:value="${cardbankuser.bankNumber}" readonly>
+							<label for="floatingInputGrid">Bank ID</label> <input
+								class="form-control" type="text"
+								th:value="${cardbankuser.bankNumber}" readonly>
 
 						</div>
 						<div class="form-floating">
-							<label for="floatingInputGrid"> BENEFICIARY NAME</label>
-							<input class="form-control" type="text" th:value="${cardbankuser.beneficiaryName}" readonly>
+							<label for="floatingInputGrid"> BENEFICIARY NAME</label> <input
+								class="form-control" type="text"
+								th:value="${cardbankuser.beneficiaryName}" readonly>
 
 						</div>
 						<div class="form-floating">
-							<label for="floatingInputGrid">ADDRESS</label>
-							<input class="form-control" type="text" th:value="${cardbankuser.addressbank}" readonly>
-						</div> 
+							<label for="floatingInputGrid">ADDRESS</label> <input
+								class="form-control" type="text"
+								th:value="${cardbankuser.addressbank}" readonly>
+						</div>
 					</div>
 				</div>
 			</form>
@@ -1327,7 +1429,7 @@ select {
 			$("#openModalBtn2").prop("disabled", true);
 			swal.fire({
 				title: "BANNED TEMPORARY",
-				text: "Your are being banned temporary because of declinding too many cars in a month. You must pay $200 to keep using our service, you are not allowed to withdraw money on your wallet until you pay your fine (deposit is allowed)",
+				text: "Your are being banned temporary because of declinding too many cars in a month. You must pay 200,000 VND to keep using our service, you are not allowed to withdraw money on your wallet until you pay your fine (deposit is allowed)",
 				icon: "warning",
 				//html: `
 				//	<p><img src="/assets/img/logos/200w.gif" alt=""></p>
@@ -1340,14 +1442,14 @@ select {
 				cancelButtonText: "Got it, I will think about it",
 			}).then((result) => {
 				if (result.isConfirmed) {
-					if (userBalance >= 200) {
-						document.getElementById('privateText').value = "+200";
+					if (userBalance >= 200000) {
+						document.getElementById('privateText').value = "+200000";
 						sendPrivateMoney();
 						window.location.href = "/home/myplan/payFine";
 					} else {
 						Swal.fire({
 							title: "Balance is not enough",
-							text: "Your balance is less than $200, deposit and try again",
+							text: "Your balance is less than 200,000 VND, deposit and try again",
 							icon: "warning",
 							confirmButtonColor: "#3754ec",
 						});
@@ -1379,7 +1481,7 @@ select {
 					}
 					if (status == "waiting_for_verify") {
 						var fee = parseFloat(declinedFee) * 0.1;
-						document.getElementById('privateText').value = "-200";
+						document.getElementById('privateText').value = "-200000";
 						sendPrivateMoney();
 					}
 
@@ -1418,7 +1520,7 @@ select {
 			}).then((result) => {
 				if (result.isConfirmed) {
 					// Redirect to cancel action with the provided URL
-					document.getElementById('privateText').value = "-200";
+					document.getElementById('privateText').value = "-200000";
 					sendPrivateMoney();
 					window.location.href = url;
 				}
@@ -1485,12 +1587,12 @@ select {
 		}
 	</script>
 	<script>
+	//sally write
 		var modal = document.getElementById("myModal");
 		var openModalBtn = document.getElementById("openModalBtn");
 		var span = document.getElementsByClassName("close")[0];
 		openModalBtn.onclick = function () {
-			var referenceNumber = generateReferenceNumber();
-			document.getElementById("referenceNumber").value = referenceNumber;
+
 			modal.style.display = "block";
 		}
 		const submitInp = document.getElementById("customAmount");
@@ -1507,15 +1609,7 @@ select {
 				document.getElementById("customAmount").value = amount;
 			});
 		});
-		function generateReferenceNumber() {
-			var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-			var length = 8;
-			var result = '';
-			for (var i = 0; i < length; i++) {
-				result += characters.charAt(Math.floor(Math.random() * characters.length));
-			}
-			return result;
-		}
+		
 		span.onclick = function () {
 			modal.style.display = "none";
 		}
@@ -1524,35 +1618,33 @@ select {
 				modal.style.display = "none";
 			}
 		}
+		
 		var form = document.getElementById("paymentForm");
 		form.addEventListener('submit', function (event) {
 			event.preventDefault();
-			var referenceNumber = document.getElementById("referenceNumber").value;
-			console.log(referenceNumber);
-			var formData = new FormData(form);
-			var jsonObject = {};
-			formData.forEach(function (value, key) {
-				jsonObject[key] = value;
-			});
-			var jsonData = JSON.stringify(jsonObject);
-
-			console.log(jsonData)
-			fetch('createpayments/deposit/' + referenceNumber, {
-				method: 'POST',
-				body: jsonData,
+			 // Xây dựng URL với các tham số query
+			 const amount = document.getElementById('customAmount').value;
+			 const bankCode = "NCB";
+			 const email = document.getElementById('emailSpan').textContent;
+    	
+   	 const url = `http://localhost:8081/api/v1/payment/vn-pay?amount=${amount}&bankCode=${bankCode}`;
+   
+  		fetch(url, {
+				method: 'GET',
 				headers: {
 					'Content-Type': 'application/json'
 				},
-
 			})
-				.then(response => {
-					if (!response.ok) {
-						throw new Error('Network response was not ok');
-					}
-					return response.ok;
-				})
+				.then(response => response.json())
 				.then(data => {
-					alert('Deposit successful!');
+					if (data && data.paymentUrl) {
+                    // Mở URL thanh toán trong tab mới
+                    window.open(data.paymentUrl, '_blank');
+                } else {
+                    console.error('Invalid response:', data);
+                }
+					// alert('Deposit successful!');
+				
 					modal.style.display = "none";
 				})
 				.catch(error => {
@@ -1560,6 +1652,7 @@ select {
 					console.error('There was an error!', error);
 					alert('An error has occurred. Please try again later!');
 				});
+				
 		});
 
 	</script>
@@ -1607,11 +1700,13 @@ select {
 		form123.addEventListener('submit', function (event) {
 			event.preventDefault();
 			var amount = document.getElementById("amount123").value;
+			
 			console.log(amount);
-			var amout1 = document.getElementById("balance_123").textContent;
+			var amout1 = document.getElementById("balance_123").textContent.trim();
 			console.log(amout1);
-		
-			if(	parseFloat(amount) > parseFloat(amout1))
+			   const balanceValue = parseFloat(amount.replace(/,/g, '').replace(/\./g, ''));
+			   const balanceValue1 = parseFloat(amout1.replace(/,/g, '').replace(/\./g, ''));
+			if(	balanceValue > balanceValue1)
 			{
 				alert("Insufficient balance!");
 				return;
@@ -1649,8 +1744,7 @@ select {
 				.then(data => {
 					alert('Withdraw successful!');
 					modal123.style.display = "none";
-				})
-				.catch(error => {
+				}).catch(error => {
 
 					console.error('There was an error!', error);
 					alert('An error has occurred. Please try again later!');
@@ -1661,3 +1755,4 @@ select {
 </body>
 
 </html>
+	

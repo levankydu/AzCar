@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -202,7 +203,7 @@ public class HomeController {
 				Map<String, Object> templateModel = new HashMap<>();
 				templateModel.put("recipientName", userDto.getEmail());
 				templateModel.put("hello", "Welcome to AzCar");
-				templateModel.put("text", "CaÌ‰m Æ¡n BaÌ£n Ä‘aÌƒ sÆ°Ì‰ duÌ£ng diÌ£ch vuÌ£ thuÃª xe cuÌ‰a chuÌ�ng tÃ´i");
+				templateModel.put("text", "Thank you for using our services.");
 				emailService.sendMessageUsingThymeleafTemplate(userDto.getEmail(), "AzCar", templateModel);
 				return ResponseEntity.ok("Registration successful.");
 			} catch (Exception e) {
@@ -333,8 +334,7 @@ public class HomeController {
 	}
 
 	@PostMapping("/forgot_password")
-	public ResponseEntity<String> processForgotPassword(@ModelAttribute("userForgot") UserDto userForgot,
-			HttpServletRequest request) {
+	public ResponseEntity<String> processForgotPassword(@RequestBody UserDto userForgot, HttpServletRequest request) {
 		String email = userForgot.getEmail();
 		if (email == null || email.isEmpty()) {
 			return ResponseEntity.badRequest().body("Email is required.");

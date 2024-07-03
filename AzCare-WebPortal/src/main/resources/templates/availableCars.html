@@ -523,8 +523,8 @@
 												th:text="${car.carmodel.model}"></a>
 										</div>
 										<div class="price pull-right"
-											th:text="'$' + ${car.price - (car.price * car.discount / 100)}">
-
+											th:text="${#numbers.formatDecimal((car.price - (car.price * car.discount / 100)), 1, 'DEFAULT', 0, 'DEFAULT')+ ' VND'}">
+																	
 										</div>
 									</div>
 									<!-- <p th:text="${car.description}"></p> -->

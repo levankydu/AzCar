@@ -3,6 +3,7 @@ package com.project.AzCar.Controllers;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -175,7 +176,7 @@ public class UserSideCarController {
 		return "registerCar";
 	}
 
-	// Chủ xe check khi khách trả
+	// Chá»§ xe check khi khÃ¡ch tráº£
 	@PostMapping("home/myplan/rentalReview")
 	public String retalReview(
 			@RequestParam(name = "clean-check", required = false, defaultValue = "false") boolean cleanCheck,
@@ -201,9 +202,10 @@ public class UserSideCarController {
 			tuReview.setSmelling(true);
 		} else {
 			paymentServices.createNewRefund(order.getUserId(), order.getId(),
-					BigDecimal.valueOf(order.getExtraFee().getSmellFee()));
+					BigDecimal.valueOf(order.getExtraFee().getDeliveryFee()));
 		}
-
+		paymentServices.createNewRefund(car.getCarOwnerId(), order.getId(),
+				BigDecimal.valueOf(order.getExtraFee().getSmellFee()));
 		order.setStatus(Constants.orderStatus.OWNER_TRIP_DONE);
 		orderServices.save(order);
 		tuReview.setOrderId(order.getId());
@@ -311,6 +313,8 @@ public class UserSideCarController {
 		if (isExtraFee) {
 			carInfor.setExtraFee(true);
 			extraFee.setCarRegisterId(number);
+			extraFee.setCleanningFee(extraFee.getCleanningFee() * 10 * 1000 * carInfor.getPrice().longValue() / 100);
+			extraFee.setDecorationFee(extraFee.getDecorationFee() * 10 * 1000 * carInfor.getPrice().longValue() / 100);
 			System.out.println(extraFee);
 			extraFeeServices.save(extraFee);
 
@@ -318,11 +322,13 @@ public class UserSideCarController {
 		if (isCarPlus) {
 			carInfor.setCarPlus(true);
 			plusServices.setCarRegisterId(number);
+			plusServices.setFee(plusServices.getFee() * 10 * 1000 * carInfor.getPrice().longValue() / 100);
 			System.out.println(plusServices);
 			plusServiceServices.save(plusServices);
 		}
 
 		try {
+			carInfor.setPrice(carInfor.getPrice().multiply(BigDecimal.valueOf(1000)));
 			System.out.println(carInfor);
 			carServices.saveCarRegister(carInfor);
 			var carDto = carServices.mapToDto(carInfor.getId());
@@ -396,26 +402,26 @@ public class UserSideCarController {
 		String mailContent = "<p>Below are some main details of your car:</p>" + "<table>" + "<tr>" + "<th>Model: </th>"
 				+ "<td>" + "[" + carDetailsDto.getCarmodel().getBrand() + "] " + carDetailsDto.getCarmodel().getModel()
 				+ "</td>" + "</tr>" + "<tr>" + "<th>Year: </th>" + "<td>" + carDetailsDto.getCarmodel().getYear()
-				+ "</td>" + "</tr>" + "<tr>" + "<th>Rental per day: </th>" + "<td>$" + orderdetails.getOriginPrice()
-				+ "</td>" + "</tr>" + "<tr>" + "<th>Discount: </th>" + "<td>" + orderdetails.getDiscount() + "% </td>"
-				+ "</tr>" + "<tr>" + "<th>Price After Discount: </th>" + "<td>$" + priceAfterDiscount + "</td>"
-				+ "</tr>" + "<tr>" + "<th>From: </th>" + "<td>"
+				+ "</td>" + "</tr>" + "<tr>" + "<th>Rental per day: </th>" + "<td>" + orderdetails.getOriginPrice()
+				+ " VND" + "</td>" + "</tr>" + "<tr>" + "<th>Discount: </th>" + "<td>" + orderdetails.getDiscount()
+				+ "% </td>" + "</tr>" + "<tr>" + "<th>Price After Discount: </th>" + "<td>" + priceAfterDiscount
+				+ " VND" + "</td>" + "</tr>" + "<tr>" + "<th>From: </th>" + "<td>"
 				+ orderdetails.getFromDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "</td>" + "</tr>"
 				+ "<tr>" + "<th>To: </th>" + "<td>"
 				+ orderdetails.getToDate().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")) + "</td>" + "</tr>"
 				+ "<tr>" + "<th>Total days: </th>" + "<td>" + orderdetails.getDifferenceDate() + "</td>" + "</tr>"
-				+ "<tr>" + "<th>Delivery fee: </th>" + "<td>$" + orderdetails.getExtraFee().getDeliveryFee() + "</td>"
-				+ "</tr>" + "<tr>" + "<th>Sub Total: </th>" + "<td> <h4>$" + subTotal + "</h4></td>" + "</tr>" + "<tr>"
-				+ "<td colspan=2 class=text-center>Extra Fee</td>" + "</tr>" + "<tr>"
-				+ "<td class=text-left>Cleanning Fee: </td>" + "<td class=text-right>$"
-				+ orderdetails.getExtraFee().getCleanFee() + "</td>" + "</tr>" + "<tr>"
-				+ "<td class=text-left>Smell Fee: </td>" + "<td class=text-right>$"
-				+ orderdetails.getExtraFee().getSmellFee() + "</td>" + "</tr>" + "<tr>"
-				+ "<td class=text-left>Insurance Fee: </td>" + "<td class=text-right>$200</td>" + "</tr>" + "<tr>"
-				+ "<th>Total: </th>" + "<td>" + "<h4>$"
+				+ "<tr>" + "<th>Delivery fee: </th>" + "<td>" + orderdetails.getExtraFee().getDeliveryFee() + " VND"
+				+ "</td>" + "</tr>" + "<tr>" + "<th>Sub Total: </th>" + "<td> <h4>" + subTotal + " VND" + "</h4></td>"
+				+ "</tr>" + "<tr>" + "<td colspan=2 class=text-center>Extra Fee</td>" + "</tr>" + "<tr>"
+				+ "<td class=text-left>Cleanning Fee: </td>" + "<td class=text-right>"
+				+ orderdetails.getExtraFee().getCleanFee() + " VND" + "</td>" + "</tr>" + "<tr>"
+				+ "<td class=text-left>Smell Fee: </td>" + "<td class=text-right>"
+				+ orderdetails.getExtraFee().getSmellFee() + " VND" + "</td>" + "</tr>" + "<tr>"
+				+ "<td class=text-left>Insurance Fee: </td>" + "<td class=text-right>200,000 VND</td>" + "</tr>"
+				+ "<tr>" + "<th>Total: </th>" + "<td>" + "<h4>"
 				+ orderdetails.getTotalAndFees()
 						.subtract(BigDecimal.valueOf(orderdetails.getExtraFee().getDeliveryFee()))
-				+ "</h4>" + "</td>" + "</tr>" + "</table>";
+				+ " VND" + "</h4>" + "</td>" + "</tr>" + "</table>";
 		orderServices.sendOrderEmail(email, "Place Order Successfully", "<p>Hello," + email + "</p>"
 				+ "<p>Thank you for ordering with AzCar.</p>" + mailContent
 				+ "<p>This is to confirm that we already got your order, We will send you an email after car owner accept or declined your order</p>"
@@ -497,7 +503,7 @@ public class UserSideCarController {
 		ModelView.addAttribute("isKhongHaveBangLai", plates.size() == 0);
 
 		// Sally add
-		// Lấy danh sách các review cho chiếc xe và thêm vào model
+		// Láº¥y danh sÃ¡ch cÃ¡c review cho chiáº¿c xe vÃ  thÃªm vÃ o model
 		List<Reviews> reviews = reviewServices.findAllReviewsByCarId(Integer.parseInt(carId));
 
 		List<ReviewsDTO> listReviewsDTO = new ArrayList<>();
@@ -524,6 +530,7 @@ public class UserSideCarController {
 		ModelView.addAttribute("reviews", listReviewsDTO);
 		System.out.println("list Review" + listReviewsDTO);
 		System.out.println("Order Details: " + model.getId() + " & ");
+		float tbtotal = 0;
 		if (!listReviewsDTO.isEmpty()) {
 			System.out.println("reviews Details: " + listReviewsDTO + " & ");
 			for (ReviewsDTO reviewsDTO : listReviewsDTO) {
@@ -550,6 +557,20 @@ public class UserSideCarController {
 			}
 
 		}
+		System.out.println(listReviewsDTO.size());
+		if (listReviewsDTO.isEmpty()) {
+			tbtotal = 0;
+			ModelView.addAttribute("totalReviews", 0);
+		} else {
+			tbtotal = ((5 * fiveStar) + (4 * fourStar) + (3 * threeStar) + (2 * twoStar) + oneStar)
+					/ (float) listReviewsDTO.size();
+			ModelView.addAttribute("totalReviews", listReviewsDTO.size());
+		}
+
+		String formattedNumber = String.format("%.1f", tbtotal);
+		System.out.println("Total TB: " + formattedNumber);
+
+		ModelView.addAttribute("totalReviewsCount", formattedNumber);
 		ModelView.addAttribute("fiveStar", fiveStar);
 		ModelView.addAttribute("fourStar", fourStar);
 		ModelView.addAttribute("threeStar", threeStar);
@@ -568,7 +589,7 @@ public class UserSideCarController {
 
 		System.out.println("id Car Details: " + model.getId() + " ");
 		OrderDetails order = getOrderDetailsByCaridandUserid(model.getId(), customer.getId());
-		// lấy status
+		// láº¥y status
 
 		System.out.println("Order Details: " + order + " & ");
 		ModelView.addAttribute("Status_detail", order);
@@ -587,7 +608,24 @@ public class UserSideCarController {
 			repDTO.setComment_id(re.getComment_id().getId());
 			repDTO.setCarId(re.getComment_id().getCar_id().getId());
 			repDTO.setContent(re.getContent());
-			repDTO.setUser_name(re.getComment_id().getUser_id().getLastName());
+			String firstName = re.getComment_id().getUser_id().getFirstName();
+			String lastName = re.getComment_id().getUser_id().getLastName();
+
+			if (lastName == null && firstName != null) {
+				repDTO.setUser_name(firstName);
+			} else {
+				if (firstName == null && lastName != null) {
+					repDTO.setUser_name(lastName);
+				} else {
+					if (firstName == null && lastName == null) {
+						repDTO.setUser_name("NgÆ°á»�i tham gia áº©n danh");
+					} else {
+						repDTO.setUser_name(firstName + " " + lastName);
+					}
+
+				}
+			}
+//			
 			lrepDTO.add(repDTO);
 
 		}
@@ -686,7 +724,24 @@ public class UserSideCarController {
 					tempDTO.setId(tempC.getId());
 					tempDTO.setContent(tempC.getContent());
 					tempDTO.setUser_id(tempC.getUser_id().getId());
-					tempDTO.setUser_name(tempC.getUser_id().getFirstName());
+					String firstName = tempC.getUser_id().getFirstName();
+					String lastName = tempC.getUser_id().getLastName();
+					if (lastName == null && firstName != null) {
+						tempDTO.setUser_name(firstName);
+					} else {
+						if (firstName == null && lastName != null) {
+							tempDTO.setUser_name(lastName);
+						} else {
+							if (firstName == null && lastName == null) {
+								tempDTO.setUser_name("NgÆ°á»�i tham gia áº©n danh");
+							} else {
+								tempDTO.setUser_name(firstName + " " + lastName);
+							}
+
+						}
+					}
+
+//					tempDTO.setUser_name(tempC.getUser_id().getFirstName() + " " + tempC.getUser_id().getLastName());
 					tempDTO.setCar_id(car_id);
 					List<ReplyDTO> reply = getAllReplyByComment_id(tempC.getId());
 					tempDTO.setReply(reply);
@@ -707,13 +762,13 @@ public class UserSideCarController {
 		System.out.println("Order Details: " + " & " + carid + " & " + userid);
 		OrderDetails order = orderServices.getOrderDetailsByCarIdandUserId(carid, userid);
 		if (order != null) {
-			System.out.println("Order Details: đây " + order.getStatus());
+			System.out.println("Order Details: Ä‘Ã¢y " + order.getStatus());
 			if (order.getStatus().contains("rentor_trip_done")) {
 				if (order.isReview()) {
-					System.out.println("nếu nó đã review thì ko review nữa" + order.isReview());
+					System.out.println("náº¿u nÃ³ Ä‘Ã£ review thÃ¬ ko review ná»¯a" + order.isReview());
 					return null;
 				}
-				System.out.println("dòng này ");
+				System.out.println("dÃ²ng nÃ y ");
 				return order;
 			}
 			return null;
@@ -847,6 +902,7 @@ public class UserSideCarController {
 	@GetMapping("/home/carregister/addNewModel/")
 	public String getAddNewModelPage(Model ModelView) {
 		List<String> brands = brandServices.getBrandList();
+
 		List<String> categories = brandServices.getCategoryList();
 
 		ModelView.addAttribute("categoryList", categories);
@@ -858,7 +914,9 @@ public class UserSideCarController {
 
 	@PostMapping("/home/carregister/addNewModel")
 	public String postAddNewModelPage(@ModelAttribute("carModel") CarModelList carModel, BindingResult bindingResult,
-			HttpServletRequest request) {
+			HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
+		String email = request.getSession().getAttribute("emailLogin").toString();
+
 		Random random = new Random();
 		StringBuilder sb = new StringBuilder(10);
 		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -875,7 +933,9 @@ public class UserSideCarController {
 			return "redirect:/home/carregister/addNewModel/" + "?error";
 		} else {
 			carModel.setObjectId(resultId);
+			carModel.setStatus("waiting_for_accept_" + email);
 			brandServices.saveBrand(carModel);
+			sendEmailCreateNewCarModel(email, carModel);
 		}
 //		return "";
 		return "redirect:/home/carregister/addNewModel/";
@@ -911,7 +971,7 @@ public class UserSideCarController {
 			vio.setEnabled(false);
 			violationRepo.save(vio);
 		}
-		paymentServices.createNewProfit(owner.getId(), BigDecimal.valueOf(200), new ProfitCallBack() {
+		paymentServices.createNewProfit(owner.getId(), BigDecimal.valueOf(200000), new ProfitCallBack() {
 			@Override
 			public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 				user.setBalance(userBalance.subtract(amount));
@@ -939,7 +999,7 @@ public class UserSideCarController {
 			vio.setEnabled(false);
 			violationRepo.save(vio);
 		}
-		paymentServices.createNewProfit(owner.getId(), BigDecimal.valueOf(400), new ProfitCallBack() {
+		paymentServices.createNewProfit(owner.getId(), BigDecimal.valueOf(400000), new ProfitCallBack() {
 			@Override
 			public void onProcess(Users user, BigDecimal userBalance, BigDecimal amount) {
 				user.setBalance(userBalance.subtract(amount));
@@ -1163,14 +1223,39 @@ public class UserSideCarController {
 
 	@PostMapping("/home/myplan/updateCar")
 	public String updateCar(@ModelAttribute("newDiscount") String newDiscount,
-			@ModelAttribute("newPrice") String newPrice, @ModelAttribute("carId") String carId) {
+			@ModelAttribute("newPrice") String newPrice, @ModelAttribute("carId") String carId,
+			@RequestParam(name = "isUpdateSerivces", required = false, defaultValue = "false") boolean isUpdateSerivces) {
 		CarInfor car = carServices.findById(Integer.parseInt(carId));
 		car.setDiscount(Integer.parseInt(newDiscount));
-		car.setPrice(new BigDecimal(newPrice));
-		carServices.saveCarRegister(car);
+		BigDecimal priceData = new BigDecimal(newPrice).multiply(new BigDecimal(1000));
+
+		if (isUpdateSerivces) {
+			var plusService = plusServiceServices.findByCarId(car.getId());
+			if (plusService != null) {
+				BigDecimal plusOption = car.getPrice().divide(BigDecimal.valueOf(plusService.getFee()), 2,
+						RoundingMode.HALF_UP);
+				BigDecimal newFee = priceData.divide(plusOption, 2, RoundingMode.HALF_UP);
+				plusService.setFee(newFee.longValue());
+				plusServiceServices.save(plusService);
+			}
+			var extraFee = extraFeeServices.findByCarId(car.getId());
+			if (extraFee != null) {
+				BigDecimal cleanOption = car.getPrice().divide(BigDecimal.valueOf(extraFee.getCleanningFee()), 2,
+						RoundingMode.HALF_UP);
+				BigDecimal newClean = priceData.divide(cleanOption, 2, RoundingMode.HALF_UP);
+				extraFee.setCleanningFee(newClean.longValue());
+				BigDecimal decorOption = car.getPrice().divide(BigDecimal.valueOf(extraFee.getDecorationFee()), 2,
+						RoundingMode.HALF_UP);
+				BigDecimal newDecorFee = priceData.divide(decorOption, 2, RoundingMode.HALF_UP);
+				extraFee.setDecorationFee(newDecorFee.longValue());
+				extraFeeServices.save(extraFee);
+			}
+		}
+		car.setPrice(priceData);
 		System.out.println(carId);
-		System.out.println(newPrice);
+		System.out.println(priceData);
 		System.out.println(newDiscount);
+		carServices.saveCarRegister(car);
 		return "redirect:/home/myplan/";
 	}
 
@@ -1475,11 +1560,32 @@ public class UserSideCarController {
 		String content = "<p>Hello," + email + "</p>" + "<p>Thank you for registering your car rental with AzCar.</p>"
 				+ "<p>Below are some main details of your car:</p>" + "<p><b>Car Details:</b></p>" + "<p>" + "Brand: "
 				+ carDetails.getCarmodel().getBrand() + "</p>" + "<p>" + "Model: " + carDetails.getCarmodel().getModel()
-				+ "</p>" + "<p>" + "Price: " + carDetails.getPrice() + " $/day" + "</p>" + "<p>" + "License Plates: "
+				+ "</p>" + "<p>" + "Price: " + carDetails.getPrice() + " VND/day" + "</p>" + "<p>" + "License Plates: "
 				+ carDetails.getLicensePlates() + "</p>" + "<p>" + "Pick-up Location: " + carDetails.getAddress()
 				+ "</p>" +
 
 				"<p>This is to confirm that we already got info of your car, We will send you an email after verify your information</p>"
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
+		helper.setSubject(subject);
+		helper.setText(content, true);
+		mailSender.send(message);
+	}
+
+	private void sendEmailCreateNewCarModel(String email, CarModelList carModel)
+			throws UnsupportedEncodingException, jakarta.mail.MessagingException {
+		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
+				StandardCharsets.UTF_8.name());
+
+		helper.setFrom("AzCar@gmail.com", "AzCar");
+		helper.setTo(email);
+
+		String subject = "Successfull register your car";
+		String content = "<p>Hello," + email + "</p>" + "<p>Thank you for registering your carModel with AzCar.</p>"
+				+ "<p>Below are some main details of your new Models:</p>" + "<p><b>Car Details:</b></p>" + "<p>"
+				+ "Brand: " + carModel.getBrand() + "</p>" + "<p>" + "Model: " + carModel.getModel() + "</p>" + "<p>"
+				+ "Category: " + carModel.getCategory() + "</p>" + "<p>" + "Year: " + carModel.getYear() + "</p>"
+				+ "<p>This is to confirm that we already got info of your car Model, We will send you an email after verify your information</p>"
 				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
 		helper.setSubject(subject);
 		helper.setText(content, true);
