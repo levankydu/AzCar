@@ -17,7 +17,6 @@ import com.project.AzCar.Service.Deposit.IDepositService;
 public class DepositController {
 	@Autowired
 	IDepositService depositService;
-	
 
 	@GetMapping("/dashboard/payment/listwithdraw")
 	public String getdasshboardDeposit(Model model) {
@@ -31,7 +30,8 @@ public class DepositController {
 				dto.setReferenceNumber(d.getReferenceNumber());
 				dto.setStatus(d.getStatus().toString());
 				dto.setWithdraw(d.getWithdraw());
-				  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:m ddMMyy");
+				dto.setDescription(d.getDecription());
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:m ddMMyy");
 				String formatDate = d.getPaymentDateAt().format(formatter);
 				dto.setTimeCreated(formatDate);
 				ldto.add(dto);
@@ -42,6 +42,7 @@ public class DepositController {
 		model.addAttribute("listDeposit", ldto);
 		return "admin/DepositManager";
 	}
+
 	@GetMapping("/dashboard/payment/transaction")
 	public String getdasshboardTransaction(Model model) {
 		List<Deposit> depo = depositService.findListDepositTransaction();
@@ -54,9 +55,9 @@ public class DepositController {
 				dto.setEmail(d.getUser().getEmail());
 				dto.setReferenceNumber(d.getReferenceNumber());
 				dto.setStatus(d.getStatus().toString());
-				 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:m ddMMyy");
-					String formatDate = d.getPaymentDateAt().format(formatter);
-					dto.setTimeCreated(formatDate);
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:m ddMMyy");
+				String formatDate = d.getPaymentDateAt().format(formatter);
+				dto.setTimeCreated(formatDate);
 				ldto.add(dto);
 			}
 
@@ -65,6 +66,7 @@ public class DepositController {
 		model.addAttribute("listtransaction", ldto);
 		return "admin/listTransaction";
 	}
+
 	@GetMapping("/dashboard/payment/deposit")
 	public String getDashboardDeposit(Model model) {
 		List<Deposit> depo = depositService.findListDepositTransaction();
@@ -78,9 +80,9 @@ public class DepositController {
 				dto.setReferenceNumber(d.getReferenceNumber());
 				dto.setStatus(d.getStatus().toString());
 				dto.setWithdraw(d.getWithdraw());
-				 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:m ddMMyy");
-					String formatDate = d.getPaymentDateAt().format(formatter);
-					dto.setTimeCreated(formatDate);
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:m ddMMyy");
+				String formatDate = d.getPaymentDateAt().format(formatter);
+				dto.setTimeCreated(formatDate);
 				ldto.add(dto);
 			}
 

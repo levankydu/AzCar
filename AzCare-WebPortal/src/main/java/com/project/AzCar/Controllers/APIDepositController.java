@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.AzCar.Dto.PaymentDetails.PaymentDetailsDTO;
+import com.project.AzCar.Entities.Deposit.Cardbank;
 import com.project.AzCar.Entities.Deposit.Deposit;
 import com.project.AzCar.Entities.Deposit.EnumDeposit;
 import com.project.AzCar.Entities.Users.Users;
+import com.project.AzCar.Service.Deposit.ICarbankService;
 import com.project.AzCar.Service.Deposit.IDepositService;
 import com.project.AzCar.Services.Orders.OrderDetailsService;
 import com.project.AzCar.Services.Payments.PaymentService;
@@ -26,6 +28,7 @@ import com.project.AzCar.Services.Payments.ProfitCallBack;
 import com.project.AzCar.Services.Users.UserServices;
 
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 public class APIDepositController {
@@ -38,6 +41,8 @@ public class APIDepositController {
 	UserServices userService;
 	@Autowired
 	private OrderDetailsService orderServices;
+	@Autowired
+	private ICarbankService carbankService;
 
 	@GetMapping("/deposits/user/{userId}")
 	public ResponseEntity<List<Deposit>> getDepositsByUserId(@PathVariable String userId) {
@@ -161,7 +166,11 @@ public class APIDepositController {
 	}
 
 	@PostMapping(value = "/getmoneywallet/returnmywallet/{id}")
-	public ResponseEntity<?> returnmywallet(@PathVariable("id") String id, @RequestBody PaymentDetailsDTO dt) {
+	public ResponseEntity<?> returnmywallet(@PathVariable("id") String id, @RequestBody PaymentDetailsDTO dt,
+			HttpServletRequest request) {
+		String email = request.getSession().getAttribute("emailLogin").toString();
+
+		Users user = userService.findUserByEmail(email);
 		Deposit d = depositService.findByRefenceId(id);
 		if (d == null) {
 			Deposit temp = new Deposit();
@@ -170,8 +179,11 @@ public class APIDepositController {
 			temp.setPaymentDateAt(time);
 			temp.setReferenceNumber(id);
 			temp.setStatus(EnumDeposit.Pending);
-			Users user = userService.findById(dt.getUserId());
+
 			if (user != null) {
+				Cardbank c = carbankService.findCardbankByUserId(user.getId());
+				temp.setDecription("Ngân Hàng: " + c.getBankName() + " ,Số thẻ: " + c.getBankNumber() + ", GD: "
+						+ c.getBeneficiaryName());
 				temp.setUser(user);
 			}
 

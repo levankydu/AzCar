@@ -78,11 +78,9 @@ public class vnpayController {
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		System.out.println("email:" + email);
 		Users ownerId = userService.findUserByEmail(email);
-		System.out.println("looix ow dau");
-		Deposit d = new Deposit();
-		d.setUser(ownerId);
-		depositService.savePaymentDetails(d);
-		VnpayDTO.VNPayResponse a = paymentService.createVnPayPayment(request, d);
+		
+		
+		VnpayDTO.VNPayResponse a = paymentService.createVnPayPayment(request);
 
 		return new ResponseEntity<VnpayDTO.VNPayResponse>(a, HttpStatus.OK);
 	}
@@ -199,7 +197,7 @@ public class vnpayController {
 	}
 	@GetMapping("/vn-pay-callback")
 	public ResponseEntity<?> payCallbackHandler(HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
-		String redirectUrl;
+		
 		String status = request.getParameter("vnp_ResponseCode");
 		String vnpNumber= request.getParameter("vnp_TxnRef");
 		
@@ -207,9 +205,45 @@ public class vnpayController {
 		String email = request.getSession().getAttribute("emailLogin").toString();
 		System.out.println("email:" + email);
 		Users user = userService.findUserByEmail(email);
-		Deposit d = depositService.findByRefenceId(vnpNumber);
+		Deposit d = null;
+		try
+		{
+			d = depositService.findByRefenceId(vnpNumber);
+		}
+		catch(Exception c)
+		{
+			System.out.println(c);
+		}
+		
+	
+		if(d==null)
+		{
+			d = new Deposit();
+			d.setStatus(EnumDeposit.Pending);
+			  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+			d.setPaymentDateAt(LocalDateTime.parse(request.getParameter("vnp_PayDate"),formatter));
+			d.setAmount(BigDecimal.valueOf(Integer.parseInt(request.getParameter("vnp_Amount"))));
+			d.setReferenceNumber(request.getParameter("vnp_TxnRef"));
+			d.setDecription(request.getParameter("vnp_OrderInfo"));
+			depositService.savePaymentDetails(d);
+			d.setUser(user);
+			
+			depositService.savePaymentDetails(d);
+		}
 		BigDecimal amount = d.getAmount();
+		if(status.equals("24"))
+		{
+			if(d!=null)
+			{
+				String commentsStatus = depositService.removeDeposit(d);
+				System.out.println("Status : " + commentsStatus );
+			}
+			
+			 String script = "<script>window.opener.postMessage({status: 'CLOSED'}, 'http://localhost:8081'); window.close();</script>";
+		        return ResponseEntity.ok().body(script);
+		}
 		if (status.equals("00")) {
+			
 			
 			if(d !=null)
 			{
@@ -246,8 +280,8 @@ public class vnpayController {
 			
 
 		} else {
-			d.setStatus(EnumDeposit.Decline);
-			depositService.updateDeposit(d);
+			String commentsStatus = depositService.removeDeposit(d);
+			System.out.println("Status : " + commentsStatus );
 			// Redirect URL for failure
 			  // Gửi thông điệp "FAILED" về tab gốc
 	        String script = "<script>window.opener.postMessage({status: 'FAILED'}, 'http://localhost:8081'); window.close();</script>";
