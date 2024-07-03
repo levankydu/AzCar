@@ -847,7 +847,11 @@ public class AdminController {
 
 	@GetMapping("/dashboard/ListAccount")
 	public String getfindAll(Model model) {
-		List<Users> userlists = userServices.findAllUsers();
+		List<Users> allUsers = userServices.findAllUsers();
+
+		List<Users> userlists = allUsers.stream()
+				.filter(user -> user.getRoles().stream().noneMatch(role -> "ROLE_ADMIN".equals(role.getName())))
+				.collect(Collectors.toList());
 		model.addAttribute("userlists", userlists);
 		return "admin/ListAccount";
 	}
@@ -873,10 +877,10 @@ public class AdminController {
 		try {
 			sendEmailUnblock(email);
 		} catch (UnsupportedEncodingException e) {
-			
+
 			e.printStackTrace();
 		} catch (MessagingException e) {
-			
+
 			e.printStackTrace();
 		}
 		return "redirect:/dashboard/ListAccount";
@@ -977,13 +981,12 @@ public class AdminController {
 
 		String subject = "Notifycation your account.";
 		String content = "<p>Hello," + email + "</p>" + "<p>Your account is block</p>"
-				+ "<p>For any further assistance, feel free to contact us.</p>" 
-				+ "<p>Best regards,<br>AzCar Team</p>";
+				+ "<p>For any further assistance, feel free to contact us.</p>" + "<p>Best regards,<br>AzCar Team</p>";
 		helper.setSubject(subject);
 		helper.setText(content, true);
 		mailSender.send(message);
 	}
-	
+
 	private void sendEmailUnblock(String email) throws UnsupportedEncodingException, jakarta.mail.MessagingException {
 		jakarta.mail.internet.MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);

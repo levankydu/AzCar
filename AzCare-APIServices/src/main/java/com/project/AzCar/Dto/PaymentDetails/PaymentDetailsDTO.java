@@ -1,8 +1,6 @@
 package com.project.AzCar.Dto.PaymentDetails;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 import lombok.Data;
 
@@ -16,4 +14,5 @@ public class PaymentDetailsDTO {
 	private String email;
 	private BigDecimal withdraw;
 	private String timeCreated;
+	private String description;
 }

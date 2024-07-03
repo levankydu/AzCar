@@ -56,4 +56,10 @@ public class DepositServiceImpl implements IDepositService {
 		return paymentDetailsRepository.findListTransaction();
 	}
 
+	@Override
+	public String removeDeposit(Deposit c) {
+		paymentDetailsRepository.delete(c);
+		return "Deposit had been deleted";
+	}
+
 }
